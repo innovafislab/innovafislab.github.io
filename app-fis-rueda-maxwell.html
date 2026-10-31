@@ -148,22 +148,22 @@ const sMat=new THREE.MeshBasicMaterial({color:'#6b7280'});const thr=[-0.045,0.04
 // puerta fotoeléctrica en su varilla
 const GX=0.058,RC=RB;
 const gate=new THREE.Group();SC.add(gate);
-const gm=M('#2f343b',{roughness:.5});add(new THREE.BoxGeometry(0.036,0.022,0.012),gm,GX,0,0.022,gate);add(new THREE.BoxGeometry(0.036,0.022,0.012),gm,GX,0,-0.022,gate);
-add(new THREE.BoxGeometry(0.016,0.022,0.056),gm,GX+0.026,0,0,gate);
+const gm=M('#22303f',{roughness:.45});add(new THREE.BoxGeometry(0.04,0.016,0.016),gm,GX+0.002,0,0.024,gate);add(new THREE.BoxGeometry(0.04,0.016,0.016),gm,GX+0.002,0,-0.024,gate);
+add(new THREE.BoxGeometry(0.018,0.016,0.064),gm,GX+0.031,0,0,gate);
 const garm=add(new THREE.CylinderGeometry(0.004,0.004,RC-GX-0.03,10),steel,(RC+GX+0.03)/2,0,0,gate);garm.rotation.z=Math.PI/2;
 add(new THREE.BoxGeometry(0.035,0.035,0.035),navy,RC,0,RZ,gate);
-const beam=add(new THREE.CylinderGeometry(0.0016,0.0016,0.034,8),new THREE.MeshBasicMaterial({color:'#ff2a1a'}),GX-0.008,0,0,gate);beam.rotation.x=Math.PI/2;
+const beam=add(new THREE.CylinderGeometry(0.0014,0.0014,0.032,8),new THREE.MeshBasicMaterial({color:'#ff2a1a'}),GX+0.002,0,0,gate);beam.rotation.x=Math.PI/2;
 // contador digital
 // contador pequeño montado sobre la puerta
-const tim=new THREE.Group();gate.add(tim);tim.position.set(GX+0.012,0.028,0.0);
-add(new THREE.BoxGeometry(0.05,0.026,0.016),M('#2f343b',{roughness:.5}),0,0,0,tim);
+const tim=new THREE.Group();gate.add(tim);tim.position.set(GX+0.012,0,0.0322);
+add(new THREE.CylinderGeometry(0.0022,0.0022,0.001,16),M('#e9edf1'),0.022,0,0.0003,tim).rotation.x=Math.PI/2;
 const dc=document.createElement('canvas');dc.width=512;dc.height=220;const dx=dc.getContext('2d');const dtex=new THREE.CanvasTexture(dc);dtex.encoding=THREE.sRGBEncoding;
-const face=add(new THREE.PlaneGeometry(0.046,0.02),new THREE.MeshBasicMaterial({map:dtex}),0,0,0.0081,tim);
+const face=add(new THREE.PlaneGeometry(0.03,0.0118),new THREE.MeshBasicMaterial({map:dtex}),0,0,0.0002,tim);
 function seg(ch,x,y,w,h,on){const S={0:'abcdef',1:'bc',2:'abged',3:'abgcd',4:'fgbc',5:'afgcd',6:'afgedc',7:'abc',8:'abcdefg',9:'abcdfg','-':'g'}[ch]||'';const tk=w*0.2;
  const P={a:[x+tk,y,w-2*tk,tk],b:[x+w-tk,y+tk,tk,h/2-1.5*tk],c:[x+w-tk,y+h/2+tk/2,tk,h/2-1.5*tk],d:[x+tk,y+h-tk,w-2*tk,tk],e:[x,y+h/2+tk/2,tk,h/2-1.5*tk],f:[x,y+tk,tk,h/2-1.5*tk],g:[x+tk,y+h/2-tk/2,w-2*tk,tk]};
  for(const k in P){dx.fillStyle=S.includes(k)?'#ff2b18':'rgba(255,43,24,.09)';dx.fillRect(...P[k])}}
 let lastShown='';function showTimer(val){const txt=val===null?'0.000':val.toFixed(3);if(txt===lastShown)return;lastShown=txt;
- dx.fillStyle='#2f343b';dx.fillRect(0,0,512,220);dx.fillStyle='#14090a';dx.fillRect(14,14,350,150);
+ dx.fillStyle='#22303f';dx.fillRect(0,0,512,220);dx.fillStyle='#14090a';dx.fillRect(14,14,350,150);
  const digs=txt.replace('.','');let x=40;for(let i=0;i<digs.length;i++){seg(digs[i],x,40,58,100);if(i==0){dx.fillStyle='#ff2b18';dx.fillRect(x+66,132,9,9)}x+=80}
  dx.fillStyle='#ffffff';dx.font='bold 46px Inter,Arial';dx.fillText('Δt',392,90);dx.font='34px Inter,Arial';dx.fillText('s',400,150);dtex.needsUpdate=true}
 // cronómetro de mano para t
