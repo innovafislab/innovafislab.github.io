@@ -118,8 +118,8 @@ mk('rect',{x:-38,y:-38,width:76,height:22,rx:5,fill:'url(#blu)',stroke:'#173f86'
 mk('path',{d:'M38 -26 h8',stroke:'#7d868f','stroke-width':2.4},cart);// gancho con banana
 // dinamómetros de tubo transparente con escala roja
 function dynGroup(par){const G=mk('g',{},par);const rod=mk('path',{stroke:'#7d868f','stroke-width':2.2,fill:'none'},G);const strip=mk('rect',{fill:'#fbfbf7',stroke:'#d5dbe1','stroke-width':.6},G);const sc=mk('g',{},G);const inner=mk('path',{stroke:'#9aa3ad','stroke-width':1.6},G);const spr=mk('path',{stroke:'#6b737c','stroke-width':1.1,fill:'none'},G);const ind=mk('rect',{fill:'#e01b12'},G);const body=mk('rect',{rx:7,fill:'#e8f1f7','fill-opacity':.28,stroke:'#8a94a3','stroke-width':1.1},G);const hl=mk('path',{stroke:'#ffffff','stroke-width':1.6,'stroke-opacity':.8},G);const cap=mk('rect',{rx:2},G);const cap2=mk('rect',{rx:2,fill:'#e9edf1',stroke:'#8a94a3','stroke-width':.8},G);return{G,body,strip,sc,ind,rod,inner,spr,hl,cap,cap2}}
-const D1=dynGroup(PL);
-const D2g=mk('g',{},PL);const D2=dynGroup(D2g);const hand=mk('path',{stroke:K,'stroke-width':2.4},D2g);
+const D1=dynGroup(PL);const tg1=T(0,0,'',{'font-size':13,'font-weight':700,fill:'#d32f2f','text-anchor':'middle'},PL);
+const D2g=mk('g',{},PL);const D2=dynGroup(D2g);const hand=mk('path',{stroke:K,'stroke-width':2.4},D2g);const tg2=T(105,-4,'5 N · mide N',{'font-size':13,'font-weight':700,fill:'#1f6fd1','text-anchor':'middle',transform:'rotate(180 105 -14)'},D2g);
 const vec=mk('g',{});
 function arrow(x1,y1,x2,y2,c,w){const a=Math.atan2(y2-y1,x2-x1),h=11;mk('path',{d:`M${x1} ${y1} L${x2} ${y2} M${x2-h*Math.cos(a-0.4)} ${y2-h*Math.sin(a-0.4)} L${x2} ${y2} L${x2-h*Math.cos(a+0.4)} ${y2-h*Math.sin(a+0.4)}`,stroke:c,'stroke-width':w||2.6,fill:'none','stroke-linecap':'round'},vec)}
 // lupa del dinamómetro
@@ -129,7 +129,7 @@ const zb=mk('rect',{x:ZX,y:ZY,width:44,height:ZH,rx:6,fill:'#fff',stroke:K,'stro
 const zR=T(ZX+40,ZY+ZH+28,'',{'text-anchor':'middle','font-size':17,'font-weight':700,fill:'#c0392b'});
 function zoom(max,div,val){zsc.innerHTML='';const n=Math.round(max/div),maj=max>2?20:10;for(let i=0;i<=n;i++){const y=ZY+8+i/n*(ZH-16),big=i%maj==0,mid=i%(maj/2)==0;
  mk('path',{d:`M${ZX+44} ${y} h${big?-22:mid?-15:-8}`,stroke:K,'stroke-width':1},zsc);if(big)T(ZX+52,y+5,fmt(i*div,max>2?0:1),{'font-size':13},zsc)}
- const v=Math.min(val,max);zind.setAttribute('y',ZY+8+v/max*(ZH-16)-1.5);zT.textContent='Dinamómetro de '+max+' N';
+ const v=Math.min(val,max);zind.setAttribute('y',ZY+8+v/max*(ZH-16)-1.5);zT.textContent='Dinamómetro de '+max+' N';zT.setAttribute('fill',max>2?'#1f6fd1':'#d32f2f');
  zR.textContent=val>max?'fuera de escala':fmt(val,2)+' N'}
 function dyn(D,x0,len,max,val,yoff){// tubo a lo largo del eje x local: x0+len es el extremo fijo; el índice se aleja de él al tirar
  const y=yoff;D.body.setAttribute('x',x0);D.body.setAttribute('y',y-8);D.body.setAttribute('width',len);D.body.setAttribute('height',16);
@@ -147,12 +147,12 @@ function draw(){al=+$('#al').value;m=+$('#M').value;$('#alv').textContent=al+'°
  wts.innerHTML='';const nw=Math.round((m-0.2)/0.05);[-26,-9,9,26].slice(0,nw).forEach(x=>{mk('rect',{x:x-6,y:-47,width:12,height:12,rx:1.5,fill:'#cfd4da',stroke:'#7d868f','stroke-width':.8},wts);mk('rect',{x:x-6,y:-47,width:12,height:3,rx:1.5,fill:'#eef1f4'},wts)});
  {const xr=P0.x+Math.max(120,Math.min(0.62*LP*Math.cos(a),LP*Math.cos(a)-40)),yi=P0.y-(xr-P0.x)*Math.tan(a);frod.setAttribute('x',xr-3.5);frod.setAttribute('y',Math.min(yi-50,P0.y-60));frod.setAttribute('height',P0.y-Math.min(yi-50,P0.y-60));fcl.setAttribute('x',xr-8);fcl.setAttribute('y',yi-4)}
  // dinamómetro 1: del carro (x=DC+36) al tope (x=LP-8)
- const x1=DC+44,x2=LP-12;dyn(D1,x1+30,x2-x1-34,2,F,-26);D1.rod.setAttribute('d',`M${DC+36} -26 H${x1+30} M${x1+30+(x2-x1-34)} -26 H${LP-8}`);
+ const x1=DC+44,x2=LP-12;dyn(D1,x1+30,x2-x1-34,2,F,-26);D1.rod.setAttribute('d',`M${DC+36} -26 H${x1+30} M${x1+30+(x2-x1-34)} -26 H${LP-8}`);tg1.setAttribute('x',x1+30+(x2-x1-34)/2);tg1.setAttribute('y',-40);tg1.textContent=part==1?'2 N · mide F':'2 N';D1.G.setAttribute('opacity',part==1?1:.45);tg1.setAttribute('opacity',part==1?1:.6);
  D2g.setAttribute('visibility',part==2?'visible':'hidden');
  if(part==2){D2g.setAttribute('transform',`translate(${DC} -34) rotate(-90)`);dyn(D2,40,130,5,N,0);D2.rod.setAttribute('d','M0 0 H40');hand.setAttribute('d','M170 0 H200')}
  const r=60;arcA.setAttribute('d',`M${P0.x+r} ${P0.y} A${r} ${r} 0 0 0 ${P0.x+r*Math.cos(a)} ${P0.y-r*Math.sin(a)}`);alT.setAttribute('x',P0.x+r+8);alT.setAttribute('y',P0.y-8);
  // vectores
- vec.innerHTML='';const cx=P0.x+DC*Math.cos(a)+23*Math.sin(a),cy=P0.y-DC*Math.sin(a)-23*Math.cos(a),sc=55;const P=m*g;
+ vec.innerHTML='';const cx=P0.x+DC*Math.cos(a)-27*Math.sin(a),cy=P0.y-DC*Math.sin(a)-27*Math.cos(a),sc=55;const P=m*g;
  arrow(cx,cy,cx,cy+P*sc,K,2.8);T(cx-20,cy+P*sc+4,'P',{'font-style':'italic','font-weight':700},vec);
  const ux=-Math.cos(a),uy=Math.sin(a);if(F>0.02){arrow(cx,cy,cx+F*sc*ux,cy+F*sc*uy,'#1d5fa8');T(cx+F*sc*ux-22,cy+F*sc*uy+4,'F',{'font-style':'italic','font-weight':700,fill:'#1d5fa8'},vec)}
  const nx=Math.sin(a),ny=Math.cos(a);if(N>0.02){arrow(cx,cy,cx+N*sc*nx,cy+N*sc*ny,'#1b7a43');T(cx+N*sc*nx+6,cy+N*sc*ny+16,'N',{'font-style':'italic','font-weight':700,fill:'#1b7a43'},vec)}
