@@ -58,8 +58,22 @@ select.sel{font:inherit;font-weight:600;border:1px solid #c9d3de;border-radius:6
 @media(max-width:820px){html,body{overflow:auto;height:auto}main{grid-template-columns:1fr}svg.sim{height:auto;flex:none}.side{overflow:visible}}
 </style></head><body>
 <header><h1>Principio de Arquímedes</h1><a href="laboratorios.html#fisica">← Laboratorio de Física · INNOVA-FIS-LAB</a></header>
-<main><section class="left"><div class="card"><svg class="sim" viewBox="20 10 840 460"></svg>
-<div class="bar"><div class="ctrl"><button class="btn pt on" data-p="1">Parte I: esferas</button><button class="btn pt" data-p="2">Parte III: cilindros</button><label class="p1">Esfera <select id="E" class="btn"><option value="0">E₁ aluminio</option><option value="1">E₂ hierro</option><option value="2">E₃ latón</option><option value="3">E₄ plomo</option></select></label><label class="p2">Pesas de 20 g <input id="NP" type="range" min="0" max="5" step="1" value="2"><b id="NPv"></b></label><button class="btn" id="go" data-alt="Sacar del agua">Sumergir</button></div><div class="read"><div><span>Dinamómetro</span><b id="rd">–</b></div><div class="p2"><span>Volumen en la probeta</span><b id="rv">–</b></div></div></div></div><p class="note">Valores de ejemplo: esferas de 2,50 cm de diámetro; pesas y portapesas de latón (8400 kg/m³), portapesas de 10 g. · CC BY-NC-SA 4.0</p></section>
+<main><section class="left"><div class="card"><style>
+.sim3{flex:1;min-height:0;position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;touch-action:none;cursor:grab}
+.sim3:active{cursor:grabbing}.sim3 canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.sim3 .hint{position:absolute;left:10px;top:8px;font-size:clamp(11px,1.5vh,13px);color:#4a5566;background:rgba(255,255,255,.85);padding:2px 8px;border-radius:6px;pointer-events:none}
+.sim3 .ins{position:absolute;right:10px;width:31%;border:1px solid var(--line);border-radius:8px;pointer-events:none}
+.sim3 .ins span{position:absolute;left:8px;top:6px;font-size:clamp(11px,1.5vh,13px);font-weight:600;color:#1b2430;background:rgba(255,255,255,.85);padding:1px 6px;border-radius:5px}
+.sim3 .rd{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);background:#fff;border:1px solid currentColor;font-weight:700;border-radius:6px;padding:.1em .7em;font-size:clamp(13px,2.2vh,20px);white-space:nowrap}
+#insD{bottom:10px;height:calc(100% - 20px)}body[data-part="2"] #insD{height:calc(50% - 15px)}#insP{top:10px;height:calc(50% - 15px)}
+@media(max-width:820px){.sim3{flex:none;height:62vh}.sim3 .ins{display:none}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<div class="sim3" id="v3"><canvas id="cv"></canvas>
+<div class="ins p2" id="insP"><span>Detalle: nivel del agua en la probeta</span><div class="rd" style="color:#1d5fa8" id="rdv">70,0 ml</div></div>
+<div class="ins" id="insD"><span>Vista de frente: escala del dinamómetro</span><div class="rd" style="color:#c0392b" id="rdf">0,00 N</div></div>
+<div class="hint">Arrastra para girar la vista · rueda del ratón para acercar</div></div>
+<div class="bar"><div class="ctrl"><button class="btn pt on" data-p="1">Parte I: esferas</button><button class="btn pt" data-p="2">Parte III: cilindros</button><label class="p1">Esfera <select id="E" class="btn"><option value="0">E₁ aluminio</option><option value="1">E₂ hierro</option><option value="2">E₃ latón</option><option value="3">E₄ plomo</option></select></label><label class="p2">Pesas de 20 g <input id="NP" type="range" min="0" max="5" step="1" value="2"><b id="NPv"></b></label><button class="btn" id="go" data-alt="Sacar del agua">Sumergir</button><button class="btn" id="vw">Vista inicial</button></div><div class="read"><div><span>Dinamómetro</span><b id="rd">–</b></div><div class="p2"><span>Volumen en la probeta</span><b id="rv">–</b></div></div></div></div><p class="note">Valores de ejemplo: esferas de 2,50 cm de diámetro; pesas y portapesas de latón (8400 kg/m³), portapesas de 10 g. · CC BY-NC-SA 4.0</p></section>
 <section class="side card"><h2>Qué se observa</h2><p class="p1">Al sumergir la esfera, el dinamómetro marca menos: el agua la empuja hacia arriba con una fuerza, el empuje, igual al peso del agua que desaloja. Las cuatro esferas tienen el mismo volumen, así que todas reciben el mismo empuje aunque pesen distinto.</p><div class="p1"><div class="eq" data-tex="F=P-\rho_a\,g\,V"></div><p>Aquí <i>P</i> es el peso de la esfera en el aire; <i>F</i>, su peso aparente, lo que marca el dinamómetro con la esfera sumergida; ρ<sub>a</sub>, la densidad del agua; y <i>V</i>, el volumen de la esfera, que se calcula con su diámetro <i>D</i>, medido con el calibre.</p></div><p class="p2">Las pesas apiladas en el portapesas forman cilindros cada vez mayores. Al sumergir uno, el agua de la probeta sube: la subida es el volumen del cilindro, <i>V</i> = <i>V</i><sub>f</sub> − <i>V</i><sub>0</sub>. El dinamómetro marca el peso menos el empuje.</p><div class="p2"><div class="eq" data-tex="F=(\rho_s-\rho_a)\,g\,V"></div><p>Aquí <i>F</i> es el peso aparente, lo que marca el dinamómetro con el cilindro sumergido; ρ<sub>s</sub>, la densidad del material de las pesas; ρ<sub>a</sub>, la del agua; y <i>V</i>, el volumen del cilindro.</p></div><h2>Qué hay que medir</h2><ol class="p1"><li>Medir con el calibre el diámetro <i>D</i> de cada esfera.</li><li>Colgarla del dinamómetro y leer su peso <i>P</i>.</li><li>Sumergirla por completo, sin que toque las paredes ni el fondo, y leer <i>F</i>.</li></ol><ol class="p2"><li>Llenar la probeta hasta 70 ml, <i>V</i><sub>0</sub>.</li><li>Sumergir el portapesas solo, sin tocar las paredes ni el fondo, y leer <i>V</i><sub>f</sub> en la probeta y <i>F</i> en el dinamómetro.</li><li>Repetir añadiendo una a una las pesas de 20 g.</li></ol><h2>Tabla de la ficha</h2><div class="p1"><table class="t"><tr><th>Esfera</th><th><i>D</i> (m)</th><th><i>P</i> (N)</th><th><i>F</i> (N)</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table></div><div class="p2"><table class="t"><tr><th>Cilindro</th><th><i>V</i><sub>0</sub> (ml)</th><th><i>V</i><sub>f</sub> (ml)</th><th><i>V</i> (ml)</th><th><i>F</i> (N)</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table></div></section></main>
 <script>
 function fit(){const e=document.querySelector('.side');if(innerWidth<=820){e.style.fontSize='';return}let lo=10,hi=34;for(let i=0;i<10;i++){const m=(lo+hi)/2;e.style.fontSize=m+'px';if(e.scrollHeight>e.clientHeight+1||e.scrollWidth>e.clientWidth+1)hi=m;else lo=m}e.style.fontSize=lo+'px'}
@@ -86,52 +100,100 @@ pp.onclick=()=>set(!playing);document.addEventListener('click',e=>{const t=e.tar
  const st=()=>{const g=document.getElementById('go'),p=document.getElementById('pp');if(g)g.dataset.st=/^(Volver|Sacar)/.test(g.textContent.trim())?'reset':'play';if(p)p.dataset.st=/^Continuar/.test(p.textContent.trim())?'play':'pause'};
  st();new MutationObserver(st).observe(ctrl,{subtree:true,childList:true,characterData:true})})();
 
-const g=9.80,RA=1000,K='#1b2430',BLUE='#cfe6f7';let part=1,u=0,target=0,P=0,lvl=70;
-const T_=(x,y,t,o,p)=>{const e=mk('text',Object.assign({x,y,'font-size':15,fill:K},o||{}),p);e.textContent=t;return e};
-const MAT=[['aluminio',2700,'#b8c0c8'],['hierro',7870,'#5b6676'],['latón',8500,'#c9a24a'],['plomo',11340,'#767c86']],Vs=Math.PI*0.025**3/6;
+const g=9.80,RA=1000,DS=0.08;// el muelle del dinamómetro se alarga 8 cm por newton (2 N = 16 cm)
+const MAT=[['aluminio',2700,'#c3c8ce'],['hierro',7870,'#4d535b'],['latón',8500,'#c9a24a'],['plomo',11340,'#6d727a']],RS=0.0125,VS=4/3*Math.PI*RS**3;
+let part=1,u=0,target=0,P=0,F=0,Vsub=0,lvl=70;
+const box=$('#v3'),cv=$('#cv');
+const R3=new THREE.WebGLRenderer({canvas:cv,antialias:true});R3.setPixelRatio(Math.min(2,devicePixelRatio));R3.outputEncoding=THREE.sRGBEncoding;R3.sortObjects=true;
+const SC=new THREE.Scene();SC.background=new THREE.Color('#ffffff');
+const CAM=new THREE.PerspectiveCamera(32,1,0.01,20),CD=new THREE.PerspectiveCamera(24,1,0.005,5),CP=new THREE.PerspectiveCamera(24,1,0.005,5);
+SC.add(new THREE.HemisphereLight(0xffffff,0xb8c0c8,0.8));const sun=new THREE.DirectionalLight(0xffffff,0.7);sun.position.set(1.2,2.4,1.6);SC.add(sun);
+const M=(c,o)=>new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.5,metalness:.1},o||{}));
+const steel=M('#c7ccd2',{metalness:.6,roughness:.25}),iron=M('#26292e',{roughness:.55});
+const glass=new THREE.MeshStandardMaterial({color:'#e9f3f8',transparent:true,opacity:.2,roughness:.05,side:THREE.DoubleSide,depthWrite:false});
+const waterM=new THREE.MeshStandardMaterial({color:'#7fc4ea',transparent:true,opacity:.38,roughness:.1,depthWrite:false});
+function add(geo,mat,x,y,z,par){const o=new THREE.Mesh(geo,mat);o.position.set(x,y,z);(par||SC).add(o);return o}
+function tex(w,h,draw){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');draw(x,w,h);const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=8;return t}
+// mesa
+const wood=M('#9a6a3e',{roughness:.75}),leg=M('#4b525c',{metalness:.4,roughness:.4});
+add(new THREE.BoxGeometry(0.9,0.035,0.55),wood,-0.08,-0.0175,0.0);add(new THREE.BoxGeometry(0.9,0.06,0.02),M('#9c7146',{roughness:.7}),-0.08,-0.05,0.265);
+[[-0.51,-0.25],[0.35,-0.25],[-0.51,0.25],[0.35,0.25]].forEach(([x,z])=>add(new THREE.BoxGeometry(0.035,0.72,0.035),leg,x,-0.395,z));
 // soporte
-mk('rect',{x:40,y:452,width:360,height:10,rx:2,fill:'#9aa3ae'});mk('rect',{x:62,y:30,width:10,height:424,fill:'#8a94a3'});mk('rect',{x:62,y:30,width:200,height:9,fill:'#8a94a3'});
-const DX=240;mk('path',{d:`M${DX} 39 V52`,stroke:K,'stroke-width':2});
-const dB=mk('rect',{x:DX-11,y:52,width:22,height:150,rx:5,fill:'#f2f4f6',stroke:K,'stroke-width':1.4});for(let i=0;i<=10;i++)mk('path',{d:`M${DX+11} ${60+i*13.4} h${i%5?-5:-9}`,stroke:K});
-const dI=mk('rect',{x:DX-11,width:22,height:3,fill:'#c0392b'});const dR=mk('path',{stroke:K,'stroke-width':2});T_(DX-18,120,'dinamómetro',{'text-anchor':'end'});
-const thr=mk('path',{stroke:K,'stroke-width':1.4});
+const BX=-0.2,BZ=-0.05;
+[[0.6,0.8],[-0.6,0.8],[0,-1]].forEach(([dx,dz])=>{const Lb=0.15,a=add(new THREE.BoxGeometry(0.03,0.022,Lb),iron,BX+dx*Lb/2,0.011,BZ+dz*Lb/2);a.rotation.y=Math.atan2(dx,dz);add(new THREE.CylinderGeometry(0.014,0.016,0.012,16),iron,BX+dx*Lb,0.006,BZ+dz*Lb)});
+add(new THREE.CylinderGeometry(0.03,0.034,0.03,20),iron,BX,0.02,BZ);add(new THREE.CylinderGeometry(0.0065,0.0065,0.72,20),steel,BX,0.36,BZ);
+const clamp=new THREE.Group();SC.add(clamp);
+add(new THREE.BoxGeometry(0.03,0.03,0.03),M('#9aa3ad',{metalness:.5,roughness:.3}),BX,0,BZ,clamp);const kn=add(new THREE.CylinderGeometry(0.012,0.012,0.012,20),M('#1f6fd1'),BX,0,BZ+0.022,clamp);kn.rotation.x=Math.PI/2;
+const arm=add(new THREE.CylinderGeometry(0.004,0.004,Math.hypot(BX,BZ),10),steel,BX/2,0,BZ/2,clamp);arm.rotation.z=Math.PI/2;arm.rotation.y=-Math.atan2(-BZ,-BX);
+// dinamómetro de tubo: escala 0-2 N
+const DT=0.0,DL=0.19;
+add(new THREE.CylinderGeometry(0.0095,0.0095,DL,32,1,true),glass,0,DT-0.012-DL/2,0,clamp);
+add(new THREE.CylinderGeometry(0.0105,0.0105,0.014,24),M('#e9edf1'),0,DT-0.012,0,clamp);add(new THREE.CylinderGeometry(0.0015,0.0015,0.012,8),steel,0,DT-0.003,0,clamp);
+const dtex=tex(96,2048,(x,w,h)=>{x.fillStyle='rgba(255,255,255,.95)';x.fillRect(0,0,w,h);x.fillStyle='#1b2430';const y0=h*0.06,PX=(h*0.88)/2;
+ for(let i=0;i<=100;i++){const yy=y0+i*0.02*PX;const L=i%10==0?48:i%5==0?34:20;x.fillRect(0,yy-1,L,i%10==0?3:2);if(i%10==0){x.font='bold 26px Inter,Arial';x.fillText(fmt(i/50,1),50,yy+9)}}x.font='bold 30px Inter,Arial';x.fillText('N',52,h-20)});
+const SY0=DT-0.012-0.007-DL*0.06,SPX=DL*0.88/2;// y del 0 de la escala y metros por newton en la escala
+add(new THREE.PlaneGeometry(0.014,DL),new THREE.MeshBasicMaterial({map:dtex,transparent:true}),0.0045,DT-0.012-0.007-DL/2+0.007,-0.004,clamp);
+const ind=new THREE.Group();clamp.add(ind);add(new THREE.CylinderGeometry(0.0032,0.0032,0.005,20),M('#e9edf1'),0,0,0,ind);
+add(new THREE.BoxGeometry(0.014,0.0014,0.003),new THREE.MeshBasicMaterial({color:'#e01b12'}),0.004,0,-0.0045,ind);
+const inner=add(new THREE.CylinderGeometry(0.0016,0.0016,1,8),steel,0,0,0,clamp);
+const hk=new THREE.Group();clamp.add(hk);const hko=add(new THREE.TorusGeometry(0.005,0.0012,8,20,Math.PI*1.4),steel,0,-0.004,0,hk);hko.rotation.z=-Math.PI*0.7;
+const thr=add(new THREE.CylinderGeometry(0.0005,0.0005,1,6),new THREE.MeshBasicMaterial({color:'#555b63'}),0,0,0,clamp);
+const obj=new THREE.Group();clamp.add(obj);
 // recipientes
-const vaso=mk('g',{}),prob=mk('g',{});
-const VW=180,VX=DX-VW/2,VT=290,VB=448,VL=322;
-mk('rect',{x:VX,y:VL,width:VW,height:VB-VL,fill:BLUE},vaso);mk('path',{d:`M${VX} ${VT} V${VB} H${VX+VW} V${VT}`,fill:'none',stroke:K,'stroke-width':2.4},vaso);T_(VX+VW+8,VB-6,'vaso con agua',{},vaso);
-const PW=56,PXL=DX-PW/2,PT=222,PB=446,PPM=2.15,Y0ML=PB;// 1 ml = 2,15 px
-const water=mk('rect',{x:PXL,width:PW,fill:BLUE},prob);mk('path',{d:`M${PXL} ${PT} V${PB} H${PXL+PW} V${PT}`,fill:'none',stroke:K,'stroke-width':2.4},prob);
-for(let ml=0;ml<=100;ml+=2){const y=Y0ML-ml*PPM;if(y<PT+4)break;mk('path',{d:`M${PXL+PW} ${y} h${ml%10?-6:-14}`,stroke:K,'stroke-width':ml%10?.8:1.2},prob);if(ml%10==0)T_(PXL+PW+6,y+5,String(ml),{'font-size':12},prob)}
-T_(PXL+PW+34,PT+10,'probeta (ml)',{'font-size':13,fill:'#4a5566'},prob);
-const obj=mk('g',{});
-// paneles ampliados
-const Z1=560,Z2=730,ZY=50,ZH=330;
-function panel(x,title){const G=mk('g',{});mk('rect',{x:x-70,y:ZY-36,width:150,height:ZH+80,rx:10,fill:'#f6f7f9',stroke:'#d9dee5'},G);T_(x+5,ZY-14,title,{'text-anchor':'middle','font-weight':700},G);return G}
-const P1=panel(Z1,'Dinamómetro 2 N');mk('rect',{x:Z1-20,y:ZY,width:40,height:ZH,rx:6,fill:'#fff',stroke:K},P1);
-for(let i=0;i<=100;i++){const y=ZY+8+i/100*(ZH-16);mk('path',{d:`M${Z1+20} ${y} h${i%10==0?-20:i%5==0?-13:-7}`,stroke:K,'stroke-width':i%10==0?1.2:.7},P1);if(i%10==0)T_(Z1+26,y+5,fmt(i/50,1),{'font-size':12},P1)}
-const zI=mk('rect',{x:Z1-26,width:52,height:3,fill:'#c0392b'},P1);const zR=T_(Z1+5,ZY+ZH+28,'',{'text-anchor':'middle','font-size':17,'font-weight':700,fill:'#c0392b'},P1);
-const P2=panel(Z2,'Probeta, ampliada');const ZC=ZY+ZH/2,ZS=16;mk('rect',{x:Z2-40,y:ZY,width:80,height:ZH,fill:'#fff',stroke:K},P2);
-const zW=mk('rect',{x:Z2-40,width:80,fill:BLUE},P2);const zg=mk('g',{},P2);const zR2=T_(Z2+5,ZY+ZH+28,'',{'text-anchor':'middle','font-size':17,'font-weight':700,fill:'#1d5fa8'},P2);
-function setObj(){obj.innerHTML='';if(part==1){const e=MAT[+$('#E').value];P=e[1]*Vs*g;mk('circle',{cx:0,cy:0,r:26,fill:e[2],stroke:K,'stroke-width':1.2},obj);return{top:-26,h:52,V:Vs*1e6}}
- const n=+$('#NP').value;$('#NPv').textContent=n;const mtot=0.010+0.020*n;P=mtot*g;const V=mtot/8400*1e6;// ml
- const ph=10;mk('path',{d:`M0 ${-n*ph-14} V2`,stroke:K,'stroke-width':2.4},obj);for(let i=0;i<n;i++)mk('rect',{x:-17,y:-(i+1)*ph-1,width:34,height:ph-1.5,rx:1.5,fill:'#c9a24a',stroke:'#8a6d2a','stroke-width':.8},obj);mk('rect',{x:-19,y:0,width:38,height:5,rx:1,fill:'#8a6d2a'},obj);
- return{top:-n*ph-14,h:n*ph+19,V}}
-let geo;function upd(){geo=setObj();draw()}
-function sub(yb){// volumen sumergido (ml) con el fondo del objeto en yb
- if(part==1){const r=26,lev=VL,h=Math.max(0,Math.min(2*r,yb-lev));return geo.V*(h*h*(3*r-h))/(4*r**3)}
- let L=Y0ML-70*PPM;for(let k=0;k<8;k++){const h=Math.max(0,Math.min(geo.h,yb-L));const Vsub=geo.V*h/geo.h;L=Y0ML-(70+Vsub)*PPM}return Math.max(0,(Y0ML-L)/PPM-70)}
-function draw(){const top=part==1?296:PT-6,bot=part==1?VB-40:PB-24;const yb=top+(bot-top)*u;const ycen=yb-(part==1?26:5);obj.setAttribute('transform',`translate(${DX} ${ycen})`);
- const Vsub=sub(yb),F=P-RA*g*Vsub*1e-6,ext=F/2*130;dI.setAttribute('y',58+ext);dR.setAttribute('d',`M${DX} ${60+ext} V${210}`);thr.setAttribute('d',`M${DX} 210 V${ycen+geo.top}`);
- zI.setAttribute('y',ZY+8+F/2*(ZH-16)-1.5);zR.textContent=fmt(F,2)+' N';$('#rd').textContent=fmt(F,2)+' N';
- if(part==2){lvl=70+Vsub;const yl=Y0ML-lvl*PPM;water.setAttribute('y',yl);water.setAttribute('height',PB-yl);
-  zg.innerHTML='';zW.setAttribute('y',ZC);zW.setAttribute('height',ZY+ZH-ZC);for(let ml=40;ml<=100;ml++){const y=ZC+(lvl-ml)*ZS;if(y<ZY+4||y>ZY+ZH-4)continue;mk('path',{d:`M${Z2+40} ${y} h${ml%10==0?-34:ml%5==0?-24:-14}`,stroke:K,'stroke-width':ml%5?1:1.6},zg);if(ml%5==0)T_(Z2+46,y+5,String(ml),{'font-size':13},zg)}
-  zR2.textContent=fmt(lvl,1)+' ml';$('#rv').textContent=fmt(lvl,1)+' ml'}}
-function setPart(p){part=p;document.body.dataset.part=p;document.querySelectorAll('.pt').forEach(c=>c.classList.toggle('on',+c.dataset.p===p));
- vaso.setAttribute('visibility',p==1?'visible':'hidden');prob.setAttribute('visibility',p==2?'visible':'hidden');P2.setAttribute('visibility',p==2?'visible':'hidden');
- P1.setAttribute('transform',p==1?`translate(${(Z2-Z1)/2} 0)`:'');u=0;target=0;$('#go').textContent='Sumergir';upd();fixBtn();fit()}
+const VR=0.036,VH=0.115,VL=0.078;const vaso=new THREE.Group();SC.add(vaso);vaso.position.set(0,0,0);
+add(new THREE.CylinderGeometry(VR,VR,VH,48,1,true),glass,0,VH/2,0,vaso);add(new THREE.CylinderGeometry(VR,VR,0.003,48),glass,0,0.0015,0,vaso);
+const vw=add(new THREE.CylinderGeometry(VR-0.001,VR-0.001,VL,48),waterM,0,VL/2,0,vaso);
+const vtex=tex(256,512,(x,w,h)=>{x.fillStyle='#1b2430';x.font='bold 34px Inter,Arial';for(let i=1;i<=4;i++){const yy=h-i*h/5;x.fillRect(20,yy-2,70,4);x.fillText(String(i*50),100,yy+12)}});
+add(new THREE.PlaneGeometry(0.03,VH*0.9),new THREE.MeshBasicMaterial({map:vtex,transparent:true,depthWrite:false}),0.012,VH*0.45,VR+0.001,vaso);
+const PR=0.0138,PH=0.2,PB=0.012;const prob=new THREE.Group();SC.add(prob);
+add(new THREE.CylinderGeometry(0.035,0.035,0.012,6),glass,0,0.006,0,prob);
+add(new THREE.CylinderGeometry(PR,PR,PH,40,1,true),glass,0,PB+PH/2,0,prob);
+const pw=add(new THREE.CylinderGeometry(PR-0.0008,PR-0.0008,1,40),waterM,0,0,0,prob);const A=Math.PI*(PR-0.0008)**2,MLH=1e-6/A;// metros por ml
+const ptex=tex(128,4096,(x,w,h)=>{x.fillStyle='#1b2430';for(let ml=0;ml<=110;ml++){const yy=h-ml*MLH/PH*h;if(yy<4)break;const L=ml%10==0?60:ml%5==0?42:24;x.fillRect(0,yy-1,L,ml%10==0?4:2);if(ml%10==0){x.font='bold 34px Inter,Arial';x.fillText(String(ml),66,yy+12)}}});
+add(new THREE.PlaneGeometry(0.016,PH),new THREE.MeshBasicMaterial({map:ptex,transparent:true,depthWrite:false}),0.004,PB+PH/2,PR+0.0008,prob);
+// objeto colgado
+let geo={};
+function build(){while(obj.children.length)obj.remove(obj.children[0]);
+ if(part==1){const e=MAT[+$('#E').value];P=e[1]*VS*g;add(new THREE.SphereGeometry(RS,40,28),M(e[2],{metalness:.55,roughness:.3}),0,-RS,0,obj);add(new THREE.TorusGeometry(0.003,0.0008,6,14),steel,0,0.002,0,obj).rotation.y=Math.PI/2;geo={h:2*RS,V:VS,top:0}}
+ else{const n=+$('#NP').value;$('#NPv').textContent=n;const mt=0.010+0.020*n;P=mt*g;const V=mt/8400,ph=0.0042;
+  add(new THREE.CylinderGeometry(0.0012,0.0012,n*ph+0.03,8),steel,0,-(n*ph+0.03)/2,0,obj);add(new THREE.TorusGeometry(0.003,0.0008,6,14),steel,0,0.002,0,obj).rotation.y=Math.PI/2;
+  for(let i=0;i<n;i++)add(new THREE.CylinderGeometry(0.0095,0.0095,ph-0.0004,32),M('#c9a24a',{metalness:.55,roughness:.3}),0,-(n*ph+0.03)+0.0035+i*ph+ph/2,0,obj);
+  add(new THREE.CylinderGeometry(0.0105,0.0105,0.0035,32),M('#8a6d2a',{metalness:.5}),0,-(n*ph+0.03)+0.00175,0,obj);geo={h:n*ph+0.0035,V,top:0,len:n*ph+0.03}}}
+// geometría vertical: posición de la nuez arriba y abajo
+const LTH=()=>part==1?0.035:0.03,OL=()=>part==1?2*RS:geo.len,LIN=()=>SY0+0.012+DL+0.01;
+function hookRel(Fv){return SY0-Fv*SPX-LIN()}
+function yDown(){const Fs=P-RA*g*geo.V,tb=part==1?0.022:PB+0.008;return tb-hookRel(Fs)+0.004+LTH()+OL()}
+function yUp(){return yDown()+(part==1?0.125:0.215)}
+function solve(){const Yc=yUp()+(yDown()-yUp())*u;let Fv=P,hy=0;
+ for(let it=0;it<8;it++){hy=Yc+hookRel(Fv);const bot=hy-0.004-LTH()-OL();
+  if(part==1){const h=Math.max(0,Math.min(2*RS,VL-bot));Vsub=VS*(h*h*(3*RS-h))/(4*RS**3)}
+  else{let L=PB+70*MLH;for(let k=0;k<6;k++){const h=Math.max(0,Math.min(geo.h,L-bot));Vsub=geo.V*h/geo.h;L=PB+(70+Vsub*1e6)*MLH}lvl=70+Vsub*1e6}
+  Fv=P-RA*g*Vsub}
+ F=Fv;return{Yc}}
+function draw(){const s=solve();clamp.position.y=s.Yc;const iy=SY0-F*SPX;ind.position.y=iy;
+ const hyL=hookRel(F);inner.scale.y=Math.max(0.001,iy-hyL);inner.position.y=(iy+hyL)/2;hk.position.y=hyL;
+ thr.scale.y=LTH();thr.position.y=hyL-0.004-LTH()/2;obj.position.y=hyL-0.004-LTH();
+ if(part==2){const top=PB+lvl*MLH;pw.scale.y=top-PB;pw.position.y=(top+PB)/2;$('#rv').textContent=fmt(lvl,1)+' ml';$('#rdv').textContent='V = '+fmt(lvl,1)+' ml'}
+ $('#rd').textContent=fmt(F,2)+' N';$('#rdf').textContent='F = '+fmt(F,2)+' N'}
+// cámara
+let az=0.45,el=0.2,dist=1.05;const TG=new THREE.Vector3(-0.08,0.24,0);
+function camSet(){CAM.position.set(TG.x+dist*Math.cos(el)*Math.sin(az),TG.y+dist*Math.sin(el),TG.z+dist*Math.cos(el)*Math.cos(az));CAM.lookAt(TG)}
+let drag=null;box.addEventListener('pointerdown',e=>{drag=[e.clientX,e.clientY];box.setPointerCapture(e.pointerId)});
+box.addEventListener('pointermove',e=>{if(!drag)return;az-=(e.clientX-drag[0])*0.008;el=Math.max(-0.1,Math.min(1.3,el+(e.clientY-drag[1])*0.006));drag=[e.clientX,e.clientY]});
+box.addEventListener('pointerup',()=>drag=null);box.addEventListener('wheel',e=>{e.preventDefault();dist=Math.max(0.25,Math.min(3,dist*Math.exp(e.deltaY*0.001)))},{passive:false});
+function size(){const w=box.clientWidth,h=box.clientHeight;R3.setSize(w,h,false);const kk=w>h*1.3?0.3:0;CAM.aspect=w*(1+kk)/h;CAM.setViewOffset(w*(1+kk),h,w*kk,0,w,h);CAM.updateProjectionMatrix()}new ResizeObserver(size).observe(box);size();
+function setPart(p){part=p;document.body.dataset.part=p;document.querySelectorAll('.pt').forEach(c=>c.classList.toggle('on',+c.dataset.p===p));vaso.visible=p==1;prob.visible=p==2;u=0;target=0;$('#go').textContent='Sumergir';build();draw();fixBtn();fit()}
 document.querySelectorAll('.pt').forEach(b=>b.onclick=()=>setPart(+b.dataset.p));
-$('#E').onchange=()=>{u=0;target=0;$('#go').textContent='Sumergir';upd()};$('#NP').oninput=()=>{u=0;target=0;$('#go').textContent='Sumergir';upd()};
-$('#go').onclick=()=>{target=target?0:1;$('#go').textContent=target?'Sacar del agua':'Sumergir'};setPart(1);
-loop(dt=>{if(u===target)return;u+=Math.sign(target-u)*Math.min(Math.abs(target-u),dt*0.5);draw()});
+const rs=()=>{u=0;target=0;$('#go').textContent='Sumergir';build();draw()};$('#E').onchange=rs;$('#NP').oninput=rs;
+$('#go').onclick=()=>{target=target?0:1;$('#go').textContent=target?'Sacar del agua':'Sumergir'};$('#vw').onclick=()=>{az=0.45;el=0.2;dist=1.05};setPart(1);
+function vp(cam,ix,iy,iw,ih){cam.aspect=iw/ih;cam.updateProjectionMatrix();R3.setScissorTest(true);R3.setViewport(ix,iy,iw,ih);R3.setScissor(ix,iy,iw,ih);R3.setClearColor(0xf6f7f9,1);R3.clear();R3.render(SC,cam);R3.setScissorTest(false)}
+let lt=null;function frame(ts){if(lt===null)lt=ts;const dt=Math.min(0.05,(ts-lt)/1000);lt=ts;
+ if(u!==target){u+=Math.sign(target-u)*Math.min(Math.abs(target-u),dt*0.45);draw()}
+ camSet();const W0=box.clientWidth,H0=box.clientHeight;R3.setViewport(0,0,W0,H0);R3.render(SC,CAM);
+ if(W0>H0*1.3){const iw=Math.round(W0*0.31),ix=W0-iw-10;const iy=clamp.position.y+SY0-F*SPX;
+  const hD=part==1?H0-20:Math.round(H0*0.5-15);CD.position.set(0.008,iy,0.1);CD.lookAt(0.006,iy,-0.004);vp(CD,ix,10,iw,hD);
+  if(part==2){const ly=PB+lvl*MLH,hP=Math.round(H0*0.5-15);CP.position.set(0.012,ly,0.085);CP.lookAt(0.006,ly,0);vp(CP,ix,H0-10-hP,iw,hP)}
+  R3.setViewport(0,0,W0,H0)}
+ requestAnimationFrame(frame)}requestAnimationFrame(frame);
 
 </script></body></html>
