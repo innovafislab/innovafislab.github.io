@@ -88,20 +88,36 @@ pp.onclick=()=>set(!playing);document.addEventListener('click',e=>{const t=e.tar
 
 const g=9.80,K='#1b2430',P0={x:70,y:440},LP=490,DC=240;let al,m,part=1;
 const T=(x,y,t,o,par)=>{const e=mk('text',Object.assign({x,y,'font-size':16,fill:K},o||{}),par);e.textContent=t;return e};
-mk('rect',{x:30,y:P0.y,width:540,height:12,rx:2,fill:'#9aa3ae'});
-// transportador
-const AR=150;let ad='';for(let d=0;d<=90;d+=5){const a=d*Math.PI/180,r1=AR,r2=AR-(d%10?6:12);ad+=`M${P0.x+r1*Math.cos(a)} ${P0.y-r1*Math.sin(a)} L${P0.x+r2*Math.cos(a)} ${P0.y-r2*Math.sin(a)} `}
-mk('path',{d:`M${P0.x+AR} ${P0.y} A${AR} ${AR} 0 0 0 ${P0.x} ${P0.y-AR}`,fill:'none',stroke:'#8a94a3','stroke-width':1.2});mk('path',{d:ad,stroke:'#8a94a3','stroke-width':1});
-for(let d=0;d<=90;d+=30){const a=d*Math.PI/180;T(P0.x+(AR+16)*Math.cos(a),P0.y-(AR+16)*Math.sin(a)+5,d+'°',{'font-size':13,'text-anchor':'middle',fill:'#4a5566'})}
+const defs=mk('defs',{});
+const grad=(id,stops,v)=>{const gg=mk('linearGradient',Object.assign({id},v?{x1:0,y1:0,x2:0,y2:1}:{x1:0,y1:0,x2:1,y2:0}),defs);stops.forEach(([o,c])=>mk('stop',{offset:o,'stop-color':c},gg))};
+grad('alu',[[0,'#f4f6f8'],[0.45,'#cfd5dc'],[1,'#9aa3ad']],1);grad('alu2',[[0,'#e7ebef'],[1,'#aab2bb']],1);grad('rodg',[[0,'#8d969f'],[0.4,'#eef1f4'],[1,'#7d868f']],0);
+grad('blu',[[0,'#3f7fe0'],[1,'#1c4fa8']],1);grad('tub',[[0,'#ffffff'],[0.5,'#e9f2f7'],[1,'#c9d6df']],1);
+// transportador blanco en la bisagra
+const AR=150;mk('path',{d:`M${P0.x} ${P0.y} H${P0.x+AR} A${AR} ${AR} 0 0 0 ${P0.x} ${P0.y-AR} Z`,fill:'#fbfcfd',stroke:'#aab2bb','stroke-width':1.2});
+let ad='';for(let d=0;d<=90;d+=1){const a=d*Math.PI/180,r1=AR-2,r2=AR-(d%10==0?16:d%5==0?11:6);ad+=`M${P0.x+r1*Math.cos(a)} ${P0.y-r1*Math.sin(a)} L${P0.x+r2*Math.cos(a)} ${P0.y-r2*Math.sin(a)} `}
+mk('path',{d:ad,stroke:'#3c4654','stroke-width':.8});
+for(let d=0;d<=90;d+=10){const a=d*Math.PI/180;T(P0.x+(AR-28)*Math.cos(a),P0.y-(AR-28)*Math.sin(a)+4,String(d),{'font-size':11,'text-anchor':'middle',fill:'#3c4654'})}
 const arcA=mk('path',{fill:'none',stroke:'#d9820b','stroke-width':2.4}),alT=T(0,0,'α',{'font-size':20,'font-style':'italic',fill:'#a35f00','font-weight':700});
+// varilla de fijación (detrás del plano)
+const frod=mk('rect',{width:7,fill:'url(#rodg)'}),fcl=mk('rect',{width:16,height:12,rx:2,fill:'#5b6676'});
+// base de aluminio con pies
+mk('rect',{x:30,y:P0.y,width:540,height:14,rx:2,fill:'url(#alu2)',stroke:'#8a94a3','stroke-width':.8});
+mk('rect',{x:36,y:P0.y+14,width:26,height:6,rx:1,fill:'#3c4654'});mk('rect',{x:538,y:P0.y+14,width:26,height:6,rx:1,fill:'#3c4654'});
 const PL=mk('g',{});
-mk('rect',{x:0,y:-10,width:LP,height:10,rx:2,fill:'#c9ced6',stroke:'#8a94a3'},PL);
-mk('rect',{x:LP-8,y:-58,width:8,height:48,fill:'#5b6676'},PL);// tope donde se engancha el dinamómetro
-const cart=mk('g',{},PL);mk('rect',{x:-36,y:-34,width:72,height:22,rx:4,fill:'#c9ced6',stroke:'#5b6676'},cart);
-[-22,22].forEach(x=>{mk('circle',{cx:x,cy:-8,r:7,fill:'#3c4654'},cart);mk('circle',{cx:x,cy:-8,r:2.5,fill:'#c9ced6'},cart)});
-const wts=mk('g',{},cart);
-// dinamómetro paralelo
-function dynGroup(par){const G=mk('g',{},par);const body=mk('rect',{rx:5,fill:'#f2f4f6',stroke:K,'stroke-width':1.4},G);const sc=mk('g',{},G);const ind=mk('rect',{fill:'#c0392b'},G);const rod=mk('path',{stroke:K,'stroke-width':2.4},G);return{G,body,sc,ind,rod}}
+// perfil del plano (aluminio en U) con la ranura del carril
+mk('rect',{x:-6,y:-14,width:LP+6,height:14,rx:1.5,fill:'url(#alu)',stroke:'#8a94a3','stroke-width':.8},PL);
+mk('path',{d:`M0 -11 H${LP-2} M0 -9 H${LP-2}`,stroke:'#9aa3ad','stroke-width':.8},PL);
+mk('circle',{cx:0,cy:-6,r:5,fill:'#5b6676'},PL);mk('circle',{cx:0,cy:-6,r:1.8,fill:'#d6dbe0'},PL);
+// clip de fijación del dinamómetro en el extremo superior
+mk('rect',{x:LP-16,y:-34,width:16,height:22,rx:2,fill:'#f2f4f6',stroke:'#8a94a3'},PL);mk('rect',{x:LP-12,y:-30,width:8,height:4,fill:'#c0392b'},PL);
+// carro azul con ruedas rojas
+const cart=mk('g',{},PL);const wts=mk('g',{},cart);
+mk('rect',{x:-38,y:-38,width:76,height:22,rx:5,fill:'url(#blu)',stroke:'#173f86','stroke-width':1},cart);
+[-20,20].forEach(x=>mk('rect',{x:x-7,y:-36,width:14,height:4,rx:1.5,fill:'#173f86'},cart));
+[-25,25].forEach(x=>{mk('circle',{cx:x,cy:-16,r:9,fill:'#d62828',stroke:'#9e1b1b','stroke-width':1},cart);mk('circle',{cx:x,cy:-16,r:3,fill:'#e6e9ec'},cart)});
+mk('path',{d:'M38 -26 h8',stroke:'#7d868f','stroke-width':2.4},cart);// gancho con banana
+// dinamómetros de tubo transparente con escala roja
+function dynGroup(par){const G=mk('g',{},par);const body=mk('rect',{rx:8,fill:'url(#tub)',stroke:'#8a94a3','stroke-width':1.1,'fill-opacity':.9},G);const strip=mk('rect',{fill:'#d9362b','fill-opacity':.85},G);const sc=mk('g',{},G);const ind=mk('rect',{fill:'#1b2430'},G);const rod=mk('path',{stroke:'#7d868f','stroke-width':2.2,fill:'none'},G);return{G,body,strip,sc,ind,rod}}
 const D1=dynGroup(PL);
 const D2g=mk('g',{},PL);const D2=dynGroup(D2g);const hand=mk('path',{stroke:K,'stroke-width':2.4},D2g);
 const vec=mk('g',{});
@@ -116,13 +132,15 @@ function zoom(max,div,val){zsc.innerHTML='';const n=Math.round(max/div),maj=max>
  const v=Math.min(val,max);zind.setAttribute('y',ZY+8+v/max*(ZH-16)-1.5);zT.textContent='Dinamómetro de '+max+' N';
  zR.textContent=val>max?'fuera de escala':fmt(val,2)+' N'}
 function dyn(D,x0,len,max,val,yoff){// a lo largo del eje x local, desde x0 hacia x0+len
- D.body.setAttribute('x',x0);D.body.setAttribute('y',yoff-9);D.body.setAttribute('width',len);D.body.setAttribute('height',18);
- D.sc.innerHTML='';const n=max>2?5:10;for(let i=0;i<=n;i++){const x=x0+len-10-i/n*(len-20);mk('path',{d:`M${x} ${yoff-9} v${i%(max>2?1:5)?5:9}`,stroke:K,'stroke-width':1},D.sc)}
- const v=Math.min(val,max),xi=x0+len-10-v/max*(len-20);D.ind.setAttribute('x',xi-1.5);D.ind.setAttribute('y',yoff-9);D.ind.setAttribute('width',3);D.ind.setAttribute('height',18)}
+ D.body.setAttribute('x',x0);D.body.setAttribute('y',yoff-8);D.body.setAttribute('width',len);D.body.setAttribute('height',16);
+ D.strip.setAttribute('x',x0+6);D.strip.setAttribute('y',yoff-3);D.strip.setAttribute('width',len-12);D.strip.setAttribute('height',6);
+ D.sc.innerHTML='';const n=max>2?10:20;for(let i=0;i<=n;i++){const x=x0+len-10-i/n*(len-20);mk('path',{d:`M${x} ${yoff-3} v${i%(max>2?2:10)==0?6:3}`,stroke:'#ffffff','stroke-width':1},D.sc)}
+ const v=Math.min(val,max),xi=x0+len-10-v/max*(len-20);D.ind.setAttribute('x',xi-1.2);D.ind.setAttribute('y',yoff-8);D.ind.setAttribute('width',2.4);D.ind.setAttribute('height',16)}
 function draw(){al=+$('#al').value;m=+$('#M').value;$('#alv').textContent=al+'°';$('#Mv').textContent=Math.round(m*1000)+' g';
  const a=al*Math.PI/180,F=m*g*Math.sin(a),N=m*g*Math.cos(a);
  PL.setAttribute('transform',`translate(${P0.x} ${P0.y}) rotate(${-al})`);cart.setAttribute('transform',`translate(${DC} 0)`);
- wts.innerHTML='';const nw=Math.round((m-0.2)/0.05);for(let i=0;i<nw;i++)mk('rect',{x:-30+i*15,y:-46,width:12,height:12,rx:2,fill:'#5b6676'},wts);
+ wts.innerHTML='';const nw=Math.round((m-0.2)/0.05);[-26,-9,9,26].slice(0,nw).forEach(x=>{mk('rect',{x:x-6,y:-47,width:12,height:12,rx:1.5,fill:'#c9a24a',stroke:'#8a6d2a','stroke-width':.8},wts)});
+ {const xr=P0.x+Math.max(120,Math.min(0.62*LP*Math.cos(a),LP*Math.cos(a)-40)),yi=P0.y-(xr-P0.x)*Math.tan(a);frod.setAttribute('x',xr-3.5);frod.setAttribute('y',Math.min(yi-50,P0.y-60));frod.setAttribute('height',P0.y-Math.min(yi-50,P0.y-60));fcl.setAttribute('x',xr-8);fcl.setAttribute('y',yi-4)}
  // dinamómetro 1: del carro (x=DC+36) al tope (x=LP-8)
  const x1=DC+44,x2=LP-12;dyn(D1,x1+30,x2-x1-34,2,F,-26);D1.rod.setAttribute('d',`M${DC+36} -26 H${x1+30} M${x1+30+(x2-x1-34)} -26 H${LP-8}`);
  D2g.setAttribute('visibility',part==2?'visible':'hidden');
