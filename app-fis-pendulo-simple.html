@@ -126,23 +126,23 @@ const hr=add(new THREE.CylinderGeometry(0.005,0.005,0.34,16),steel,BX+0.17,PY+0.
 add(new THREE.BoxGeometry(0.04,0.035,0.03),M('#aab1b9',{metalness:.5,roughness:.3}),0,PY+0.02,0);// portaplacas
 add(new THREE.BoxGeometry(0.03,0.004,0.024),black,0,PY+0.001,0);
 // regla colgada detrás: 0 en el punto de fijación, cm hacia abajo
-const RX=0.075,RZ=-0.03,RL=0.9;
+const RX=-0.04,RZ=0,RL=0.9;
 const rc=document.createElement('canvas');rc.width=160;rc.height=3686;const rx=rc.getContext('2d');rx.fillStyle='#fbfbf7';rx.fillRect(0,0,160,3686);rx.fillStyle='#1b2430';
 for(let mm=0;mm<=900;mm++){const y=mm*4.096;const Lt=mm%100==0?70:mm%10==0?46:mm%5==0?30:18;rx.fillRect(0,y-1,Lt,mm%10==0?3:2);
  if(mm%10==0&&mm>0){rx.font=mm%100==0?'bold 40px Inter,Arial':'26px Inter,Arial';rx.fillText(String(mm/10),mm%100==0?76:56,y+12)}}
 const rtex=new THREE.CanvasTexture(rc);rtex.anisotropy=8;rtex.encoding=THREE.sRGBEncoding;
-add(new THREE.BoxGeometry(0.035,RL,0.006),[M('#eee'),M('#eee'),M('#eee'),M('#eee'),new THREE.MeshStandardMaterial({map:rtex,roughness:.7}),M('#eee')],RX,PY-RL/2,RZ);
-add(new THREE.BoxGeometry(0.09,0.01,0.01),steel,RX-0.03,PY+0.003,RZ);
+add(new THREE.BoxGeometry(0.006,RL,0.035),[new THREE.MeshStandardMaterial({map:rtex,roughness:.7}),M('#eee'),M('#eee'),M('#eee'),M('#eee'),M('#eee')],RX,PY-RL/2,RZ);
+add(new THREE.BoxGeometry(0.05,0.01,0.01),steel,RX+0.02,PY+0.003,RZ);
 // péndulo
 const thr=add(new THREE.CylinderGeometry(0.0007,0.0007,1,6),new THREE.MeshBasicMaterial({color:'#555b63'}),0,0,0);
 const ball=add(new THREE.SphereGeometry(RS,40,28),M('#b9c0c8',{metalness:.75,roughness:.22}),0,0,0);
 // puerta fotoeléctrica: horquilla abierta hacia arriba, la esfera pasa entre sus brazos
 const gate=new THREE.Group();SC.add(gate);const gm=M('#2f343b',{roughness:.5});
-add(new THREE.BoxGeometry(0.03,0.016,0.09),gm,0,-0.034,0,gate);
-[-0.034,0.034].forEach(z=>add(new THREE.BoxGeometry(0.03,0.05,0.016),gm,0,-0.011,z,gate));
-const beamM=new THREE.MeshBasicMaterial({color:'#ff2a1a'});const beam=add(new THREE.CylinderGeometry(0.0015,0.0015,0.052,8),beamM,0,0,0,gate);beam.rotation.x=Math.PI/2;
-const garm=add(new THREE.CylinderGeometry(0.004,0.004,-BX-0.015,10),steel,BX/2-0.008,-0.034,0,gate);garm.rotation.z=Math.PI/2;
-add(new THREE.BoxGeometry(0.04,0.04,0.04),navy,BX,-0.034,BZ,gate);
+add(new THREE.BoxGeometry(0.09,0.016,0.03),gm,0,-0.034,0,gate);
+[-0.034,0.034].forEach(x=>add(new THREE.BoxGeometry(0.016,0.05,0.03),gm,x,-0.011,0,gate));
+const beamM=new THREE.MeshBasicMaterial({color:'#ff2a1a'});const beam=add(new THREE.CylinderGeometry(0.0015,0.0015,0.052,8),beamM,0,0,0,gate);beam.rotation.z=Math.PI/2;
+const garm=add(new THREE.CylinderGeometry(0.004,0.004,-0.042-BX,10),steel,(BX-0.042)/2,-0.02,0,gate);garm.rotation.z=Math.PI/2;
+add(new THREE.BoxGeometry(0.04,0.04,0.04),navy,BX,-0.02,BZ,gate);
 // contador
 const tim=new THREE.Group();SC.add(tim);tim.position.set(-0.62,0,0.14);tim.rotation.y=0.35;
 add(new THREE.BoxGeometry(0.24,0.12,0.16),M('#e9ecef',{roughness:.4}),0,0.06,0,tim);add(new THREE.BoxGeometry(0.24,0.012,0.17),black,0,0.006,0,tim);
@@ -157,23 +157,23 @@ let lastShown='';function showTimer(val){const txt=val.toFixed(3);if(txt===lastS
  dx.fillStyle='#1b2430';dx.font='bold 30px Inter,Arial';dx.fillText('T / s',384,70);dx.font='22px Inter,Arial';dx.fillText('modo periodo',384,110);dx.fillText('Timer 2-1',384,150);dtex.needsUpdate=true}
 // cables
 const cabMat=[M('#d22a1f'),M('#1f6fd1')];let cab=[];
-function cables(){cab.forEach(c=>SC.remove(c));cab=[];const T0=new THREE.Vector3(-0.54,0.07,0.21),gp=new THREE.Vector3(0,gate.position.y-0.034,-0.045);
+function cables(){cab.forEach(c=>SC.remove(c));cab=[];const T0=new THREE.Vector3(-0.54,0.07,0.21),gp=new THREE.Vector3(0.02,gate.position.y-0.042,0.0);
  [0,1].forEach(i=>{const off=i*0.012;const cu=new THREE.CatmullRomCurve3([T0.clone().add(new THREE.Vector3(off,0,0)),new THREE.Vector3(-0.38+off,0.012,0.24),new THREE.Vector3(-0.15+off,0.015,0.05),new THREE.Vector3(0.02+off,gp.y*0.5,-0.08),gp.clone().add(new THREE.Vector3(off,0,0))]);
   const mm=new THREE.Mesh(new THREE.TubeGeometry(cu,60,0.0028,8,false),cabMat[i]);SC.add(mm);cab.push(mm)})}
 // cámara orbital
-let az=0.5,el=0.2,dist=2.25;const TG=new THREE.Vector3(-0.18,0.5,0);
+let az=0.95,el=0.2,dist=2.25;const TG=new THREE.Vector3(-0.18,0.5,0);
 function camSet(){CAM.position.set(TG.x+dist*Math.cos(el)*Math.sin(az),TG.y+dist*Math.sin(el),TG.z+dist*Math.cos(el)*Math.cos(az));CAM.lookAt(TG)}
 let drag=null;box.addEventListener('pointerdown',e=>{drag=[e.clientX,e.clientY];box.setPointerCapture(e.pointerId)});
 box.addEventListener('pointermove',e=>{if(!drag)return;az-=(e.clientX-drag[0])*0.008;el=Math.max(-0.1,Math.min(1.3,el+(e.clientY-drag[1])*0.006));drag=[e.clientX,e.clientY]});
 box.addEventListener('pointerup',()=>drag=null);box.addEventListener('wheel',e=>{e.preventDefault();dist=Math.max(0.45,Math.min(4,dist*Math.exp(e.deltaY*0.001)))},{passive:false});
 function size(){const w=box.clientWidth,h=box.clientHeight;R3.setSize(w,h,false);const k=w>h*1.3?0.3:0;CAM.aspect=w*(1+k)/h;CAM.setViewOffset(w*(1+k),h,w*k,0,w,h);CAM.updateProjectionMatrix()}new ResizeObserver(size).observe(box);size();
 // estado
-function place(){const bx=L*Math.sin(th),by=PY-L*Math.cos(th);ball.position.set(bx,by,0);const lt=L-RS;thr.scale.y=lt;thr.position.set(lt/2*Math.sin(th),PY-lt/2*Math.cos(th),0);thr.rotation.z=th;
+function place(){const bx=L*Math.sin(th),by=PY-L*Math.cos(th);ball.position.set(0,by,bx);const lt=L-RS;thr.scale.y=lt;thr.position.set(0,PY-lt/2*Math.cos(th),lt/2*Math.sin(th));thr.rotation.x=-th;
  const inb=Math.abs(bx)<RS;beamM.color.set(inb?'#ffd400':'#ff2a1a')}
 function setL(){L=+$('#L').value;$('#Lv').textContent=Math.round(L*100)+' cm';gate.position.set(0,PY-L,0);cables()}
 function reset(){setL();th=TH0;w=0;t=0;run=false;lastCross=null;Ts=[];$('#p1').textContent='–';$('#T').textContent='–';$('#go').textContent='Soltar';showTimer(0);place()}
 $('#L').oninput=reset;$('#go').onclick=()=>{if(run){reset()}else{run=true;$('#go').textContent='Volver a empezar'}};
-$('#vw').onclick=()=>{az=0.5;el=0.2;dist=2.25};reset();
+$('#vw').onclick=()=>{az=0.95;el=0.2;dist=2.25};reset();
 let lt=null;function frame(ts){if(lt===null)lt=ts;const dt=Math.min(0.05,(ts-lt)/1000);lt=ts;
  if(run&&playing){const n=20,h=dt/n;for(let i=0;i<n;i++){const f=a=>-g/L*Math.sin(a);
   const k1=w,l1=f(th),k2=w+h/2*l1,l2=f(th+h/2*k1),k3=w+h/2*l2,l3=f(th+h/2*k2),k4=w+h*l3,l4=f(th+h*k3);
@@ -182,7 +182,7 @@ let lt=null;function frame(ts){if(lt===null)lt=ts;const dt=Math.min(0.05,(ts-lt)
   th=thn}place()}
  camSet();const W0=box.clientWidth,H0=box.clientHeight;R3.setViewport(0,0,W0,H0);R3.setScissorTest(false);R3.render(SC,CAM);
  if(W0>H0*1.3){const iw=Math.round(W0*0.31),ih=Math.round(H0*0.68),ix=W0-iw-10,iy=10,gy=PY-L;CAM2.aspect=iw/ih;CAM2.updateProjectionMatrix();
-  CAM2.position.set(-0.12,gy+0.2,0.28);CAM2.lookAt(0,gy-0.01,0);R3.setScissorTest(true);R3.setViewport(ix,iy,iw,ih);R3.setScissor(ix,iy,iw,ih);R3.setClearColor(0xf6f7f9,1);R3.clear();R3.render(SC,CAM2);R3.setScissorTest(false);R3.setViewport(0,0,W0,H0)}
+  CAM2.position.set(0.16,gy+0.12,0.2);CAM2.lookAt(0,gy-0.012,0);R3.setScissorTest(true);R3.setViewport(ix,iy,iw,ih);R3.setScissor(ix,iy,iw,ih);R3.setClearColor(0xf6f7f9,1);R3.clear();R3.render(SC,CAM2);R3.setScissorTest(false);R3.setViewport(0,0,W0,H0)}
  requestAnimationFrame(frame)}requestAnimationFrame(frame);
 
 </script></body></html>
