@@ -62,14 +62,14 @@ select.sel{font:inherit;font-weight:600;border:1px solid #c9d3de;border-radius:6
 .sim3{flex:1;min-height:0;position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;touch-action:none;cursor:grab}
 .sim3:active{cursor:grabbing}.sim3 canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .sim3 .hint{position:absolute;left:10px;top:8px;font-size:clamp(11px,1.5vh,13px);color:#4a5566;background:rgba(255,255,255,.85);padding:2px 8px;border-radius:6px;pointer-events:none}
-.sim3 .gph{position:absolute;right:10px;top:10px;width:31%;height:56%;background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:8px}
+.sim3 .gph{position:absolute;right:10px;top:10px;width:31%;height:calc(100% - 20px);background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:8px}
 .sim3 .ins{position:absolute;right:10px;bottom:10px;width:31%;height:calc(44% - 30px);border:1px solid var(--line);border-radius:8px;pointer-events:none}
 .sim3 .ins span{position:absolute;left:8px;top:6px;font-size:clamp(11px,1.5vh,13px);font-weight:600;color:#1b2430;background:rgba(255,255,255,.85);padding:1px 6px;border-radius:5px}
 @media(max-width:820px){.sim3{flex:none;height:62vh}.sim3 .ins,.sim3 .gph{display:none}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<div class="sim3" id="v3"><canvas id="cv"></canvas><svg class="gph" id="gph" viewBox="0 0 300 300"></svg>
-<div class="ins"><span>Detalle: pantalla del contador</span></div><div class="hint">Arrastra para girar la vista · rueda del ratón para acercar</div></div>
+<div class="sim3" id="v3"><canvas id="cv"></canvas><svg class="gph" id="gph" viewBox="0 0 300 520"></svg>
+<div class="hint">Arrastra para girar la vista · rueda del ratón para acercar</div></div>
 <div class="bar"><div class="ctrl"><label>Distancia <i>s</i> <input id="S" type="range" min="0.10" max="0.80" step="0.05" value="0.50"><b id="Sv"></b></label><label><input type="checkbox" id="slow"> Cámara lenta (×0,1)</label><button class="btn" id="go" data-alt="Volver a colocar">Soltar</button><button class="btn" id="vw">Vista inicial</button></div><div class="read"><div><span>Contador <i>t</i></span><b id="rt" style="min-width:5.5em">0,0000 s</b></div></div></div></div><p class="note">Material Ventus 10170. Valores de ejemplo con g = 9,80 m/s². El contador tiene una precisión de 0,1 ms. · CC BY-NC-SA 4.0</p></section>
 <section class="side card"><h2>Qué se observa</h2><p>El electroimán de la plataforma superior sujeta la bola de acero. Al pulsar el interruptor del contador, el electroimán la suelta y el contador empieza a contar. La bola cae con aceleración constante y, al golpear el sensor de contacto de la plataforma inferior, el contador se para. Si la distancia es cuatro veces mayor, el tiempo solo se duplica: el espacio crece con el cuadrado del tiempo.</p><div class="eq" data-tex="s=\tfrac12\,g\,t^2"></div><p>Aquí <i>s</i> es la distancia que cae la bola, de su posición en el electroimán al sensor, que se lee en el riel graduado; <i>t</i>, el tiempo que marca el contador, con una precisión de 0,1 ms; y <i>g</i>, la aceleración de la gravedad.</p><h2>Qué hay que medir</h2><ol><li>Subir o bajar la plataforma superior por el riel hasta una distancia <i>s</i>, de 10 a 80 cm en pasos de 5 cm.</li><li>Soltar la bola tres veces y anotar los tres tiempos <i>t</i><sub>1</sub>, <i>t</i><sub>2</sub> y <i>t</i><sub>3</sub>.</li><li>Calcular su media <i>t̄</i> y su cuadrado <i>t̄</i>².</li></ol><h2>Tabla de la ficha</h2><table class="t"><tr><th><i>s</i> (m)</th><th><i>t</i>₁ (s)</th><th><i>t</i>₂ (s)</th><th><i>t</i>₃ (s)</th><th><i>t̄</i> (s)</th><th><i>t̄</i>² (s²)</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table></section></main>
 <script>
@@ -97,7 +97,7 @@ pp.onclick=()=>set(!playing);document.addEventListener('click',e=>{const t=e.tar
  const st=()=>{const g=document.getElementById('go'),p=document.getElementById('pp');if(g)g.dataset.st=/^(Volver|Sacar)/.test(g.textContent.trim())?'reset':'play';if(p)p.dataset.st=/^Continuar/.test(p.textContent.trim())?'play':'pause'};
  st();new MutationObserver(st).observe(ctrl,{subtree:true,childList:true,characterData:true})})();
 
-const g=9.80,RB=0.008,Y0=0.054;// Y0: superficie del sensor de contacto
+const g=9.80,RB=0.013,Y0=0.054;// Y0: superficie del sensor de contacto
 let s=0.5,run=false,done=false,t=0,tf=0,hist=[];
 const box=$('#v3'),cv=$('#cv');
 const R3=new THREE.WebGLRenderer({canvas:cv,antialias:true});R3.setPixelRatio(Math.min(2,devicePixelRatio));R3.outputEncoding=THREE.sRGBEncoding;
@@ -115,10 +115,12 @@ add(new THREE.BoxGeometry(1.0,0.035,0.6),wood,-0.2,-0.0175,0);add(new THREE.BoxG
 // base negra
 add(new THREE.BoxGeometry(0.34,0.018,0.2),blk,-0.02,0.009,0.02);
 // riel graduado de 1 m
-const RX=0.05,RZ=-0.04,RH=1.0,RW=0.04;
+const RX=0.05,RZ=-0.04,RH=1.0,RW=0.05;
 add(new THREE.BoxGeometry(RW,RH,RW),M('#e9ebee',{roughness:.45}),RX,0.018+RH/2,RZ);
-const rt=tex(256,8192,(x,w,h)=>{x.fillStyle='#f6f7f8';x.fillRect(0,0,w,h);x.fillStyle='#1b2430';const PX=h/RH;
- for(let mm=0;mm<=1000;mm++){const y=h-(mm/1000)*PX*1.0;const L=mm%100==0?150:mm%10==0?100:mm%5==0?70:40;x.fillRect(0,y-2,L,mm%10==0?5:3);if(mm%10==0&&mm>0&&mm<1000){x.font=mm%100==0?'bold 70px Inter,Arial':'48px Inter,Arial';x.fillText(String(mm/10),mm%100==0?150:105,y+18)}}});
+const rt=tex(512,8192,(x,w,h)=>{x.fillStyle='#ffffff';x.fillRect(0,0,w,h);x.fillStyle='#111';const PX=h/RH;
+ for(let mm=0;mm<=1000;mm++){const y=h-(mm/1000)*PX;const L=mm%100==0?230:mm%50==0?190:mm%10==0?150:mm%5==0?95:55;x.fillRect(0,y-(mm%10==0?3:2),L,mm%10==0?6:4);
+  if(mm%100==0&&mm>0&&mm<1000){x.font='bold 210px Inter,Arial';x.fillText(String(mm/10),240,y+72)}}});
+rt.t.anisotropy=R3.capabilities.getMaxAnisotropy();
 const rail0=0.018;// y del 0 del riel
 add(new THREE.PlaneGeometry(RW*0.9,RH),new THREE.MeshBasicMaterial({map:rt.t}),RX,rail0+RH/2,RZ+RW/2+0.0006);
 // plataforma inferior con el sensor de contacto
@@ -127,7 +129,7 @@ add(new THREE.BoxGeometry(0.11,0.018,0.07),cyan,RX-0.07,0.03,RZ+0.02,LP);
 add(new THREE.BoxGeometry(0.05,0.01,0.05),M('#2f9e4c',{roughness:.4}),0,0.045,0,LP);// sensor de contacto
 add(new THREE.CylinderGeometry(0.012,0.012,0.004,24),M('#c0392b'),0,0.052,0,LP);
 // varilla y recipiente para guardar bolas
-add(new THREE.BoxGeometry(0.05,0.045,0.05),M('#9b59b6',{transparent:true,opacity:.75,roughness:.3}),-0.11,0.04,0.06);
+
 // plataforma superior con electroimán (se desliza por el riel)
 const TP=new THREE.Group();SC.add(TP);
 add(new THREE.BoxGeometry(0.11,0.02,0.07),cyan,RX-0.07,0,RZ+0.02,TP);
@@ -150,11 +152,11 @@ let lastT='';function showT(v){const txt=v.toFixed(4);if(txt===lastT)return;last
 // cables
 const cabM=[M('#d22a1f'),M('#1b1b1b')];let cab=[];
 function cables(){cab.forEach(c=>SC.remove(c));cab=[];const T0=new THREE.Vector3(-0.33,0.06,0.13);const top=new THREE.Vector3(RX+0.03,TP.position.y+0.01,RZ);
- const pts=[[T0,new THREE.Vector3(-0.2,0.012,0.14),new THREE.Vector3(-0.03,0.04,0.06),new THREE.Vector3(0,0.055,0)],
-  [T0.clone().add(new THREE.Vector3(0.01,0,0)),new THREE.Vector3(-0.15,0.012,0.2),new THREE.Vector3(0.15,0.012,0.0),new THREE.Vector3(0.16,top.y*0.6,-0.05),new THREE.Vector3(0.1,top.y+0.04,RZ),top]];
+ const pts=[[T0,new THREE.Vector3(-0.2,0.016,0.14),new THREE.Vector3(-0.05,0.03,0.08),new THREE.Vector3(-0.02,0.045,0.04),new THREE.Vector3(0,0.055,0)],
+  [T0.clone().add(new THREE.Vector3(0.01,0,0)),new THREE.Vector3(-0.2,0.016,0.2),new THREE.Vector3(0.05,0.016,0.2),new THREE.Vector3(0.21,0.016,0.14),new THREE.Vector3(0.22,0.03,-0.02),new THREE.Vector3(0.18,top.y*0.6,-0.06),new THREE.Vector3(0.1,top.y+0.04,RZ),top]];
  pts.forEach((p,i)=>{const m=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(p),60,0.0026,8,false),cabM[i]);SC.add(m);cab.push(m)})}
 // gráfica s(t)
-const G=$('#gph'),gx0=48,gy0=46,gw=236,gh=224,GT=0.42,GS=0.8;
+const G=$("#gph"),gx0=48,gy0=50,gw=236,gh=430,GT=0.42,GS=0.8;
 const gk=(tag,at)=>{const e=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const q in at)e.setAttribute(q,at[q]);G.appendChild(e);return e};
 const gt=(x,y,t,o)=>{const e=gk('text',Object.assign({x,y,'font-size':14,fill:'#1b2430','font-family':'Inter,sans-serif'},o||{}));e.textContent=t;return e};
 gt(150,22,'Posición de la bola durante la caída',{'text-anchor':'middle','font-weight':700});
@@ -164,7 +166,7 @@ for(let i=1;i<=8;i++){const y=gy0+i/10/GS*gh;gk('path',{d:`M${gx0} ${y} H${gx0+g
 gt(gx0+gw,gy0+16,'t (s)',{'text-anchor':'end','font-style':'italic','font-size':13});gt(gx0-6,gy0+gh+20,'s (m)',{'text-anchor':'end','font-style':'italic','font-size':13});
 const gs=gk('path',{stroke:'#d9820b','stroke-width':1.4,'stroke-dasharray':'5 4'});const gtr=gk('path',{fill:'none',stroke:'#1d5fa8','stroke-width':2.4});
 // cámara
-let az=0.4,el=0.12,dist=2.3;const TG=new THREE.Vector3(-0.15,0.52,0);
+let az=0.35,el=0.12,dist=2.05;const TG=new THREE.Vector3(-0.12,0.5,0);
 function camSet(){CAM.position.set(TG.x+dist*Math.cos(el)*Math.sin(az),TG.y+dist*Math.sin(el),TG.z+dist*Math.cos(el)*Math.cos(az));CAM.lookAt(TG)}
 let drag=null;box.addEventListener('pointerdown',e=>{drag=[e.clientX,e.clientY];box.setPointerCapture(e.pointerId)});
 box.addEventListener('pointermove',e=>{if(!drag)return;az-=(e.clientX-drag[0])*0.008;el=Math.max(-0.1,Math.min(1.3,el+(e.clientY-drag[1])*0.006));drag=[e.clientX,e.clientY]});
@@ -175,15 +177,12 @@ const yTop=()=>Y0+RB+s;// centro de la bola sujeta
 function setS(){s=+$('#S').value;$('#Sv').textContent=Math.round(s*100)+' cm';TP.position.y=yTop()+RB+0.034;cables();const y=gy0+s/GS*gh;gs.setAttribute('d',`M${gx0} ${y} H${gx0+gw}`)}
 function reset(){setS();run=false;done=false;t=0;hist=[];gtr.setAttribute('d','');ball.position.set(0,yTop(),0);showT(0);$('#rt').textContent='0,0000 s';$('#go').textContent='Soltar'}
 $('#S').oninput=reset;$('#go').onclick=()=>{if(run||done){reset();return}run=true;tf=Math.sqrt(2*s/g)+0.0003*(Math.random()-0.5);$('#go').textContent='Volver a colocar'};
-$('#vw').onclick=()=>{az=0.4;el=0.12;dist=2.3};reset();
+$('#vw').onclick=()=>{az=0.35;el=0.12;dist=2.05};reset();
 let lt=null;function frame(ts){if(lt===null)lt=ts;const dt=Math.min(0.05,(ts-lt)/1000);lt=ts;
  if(run){t+=dt*($('#slow').checked?0.1:1);if(t>=tf){t=tf;run=false;done=true}const d=Math.min(s,0.5*g*t*t);ball.position.y=yTop()-d;
   hist.push([t,d]);gtr.setAttribute('d',hist.map((q,i)=>(i?'L':'M')+(gx0+q[0]/GT*gw).toFixed(1)+' '+(gy0+q[1]/GS*gh).toFixed(1)).join(''));
   const v=Math.floor(t*1e4)/1e4;showT(v);$('#rt').textContent=fmt(v,4)+' s'}
  camSet();const W0=box.clientWidth,H0=box.clientHeight;R3.setViewport(0,0,W0,H0);R3.setScissorTest(false);R3.render(SC,CAM);
- if(W0>H0*1.3){const iw=Math.round(W0*0.31),ih=Math.round(H0*0.44-30),ix=W0-iw-10,iy=10;CAM2.aspect=iw/ih;CAM2.updateProjectionMatrix();
-  const p=new THREE.Vector3(-0.015,0.063,0.0805).applyMatrix4(TM.matrixWorld),n=new THREE.Vector3(0,0,1).applyQuaternion(TM.quaternion);
-  CAM2.position.copy(p).addScaledVector(n,0.42);CAM2.lookAt(p);R3.setScissorTest(true);R3.setViewport(ix,iy,iw,ih);R3.setScissor(ix,iy,iw,ih);R3.setClearColor(0xf6f7f9,1);R3.clear();R3.render(SC,CAM2);R3.setScissorTest(false);R3.setViewport(0,0,W0,H0)}
  requestAnimationFrame(frame)}requestAnimationFrame(frame);
 
 </script></body></html>
