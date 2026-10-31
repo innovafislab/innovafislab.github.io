@@ -68,22 +68,22 @@ T_(RX+48,Y0+5,'cm',{'font-size':13,fill:'#4a5566'});
 const gate=mk('g',{});mk('rect',{x:X+RW+8,y:-14,width:26,height:28,rx:3,fill:'#5b6676'},gate);mk('path',{d:`M${X-RW-30} 0 H${X+RW+8}`,stroke:'#c0392b','stroke-width':1.6,'stroke-dasharray':'5 4'},gate);T_(X-RW-34,5,'haz',{'text-anchor':'end',fill:'#c0392b','font-size':13},gate);
 const dim=mk('path',{stroke:'#1d5fa8','stroke-width':1.6,fill:'none'}),dimt=T_(0,0,'s',{'font-style':'italic','font-size':20,'font-weight':700,fill:'#1d5fa8'});
 // gráfica
-const GX=470,GW=360,GT=7;mk('path',{d:`M${GX} ${Y0} V${Y0+LMAX*S} M${GX} ${Y0} H${GX+GW}`,stroke:K,'stroke-width':1.3});
+const GX=440,GW=255,GT=7;mk('path',{d:`M${GX} ${Y0} V${Y0+LMAX*S} M${GX} ${Y0} H${GX+GW}`,stroke:K,'stroke-width':1.3});
 for(let i=1;i<=7;i++){const x=GX+i/GT*GW;mk('path',{d:`M${x} ${Y0} v-5`,stroke:K});T_(x,Y0-9,String(i),{'text-anchor':'middle','font-size':13})}
 for(let i=1;i<=6;i++)mk('path',{d:`M${GX} ${Y0+i/10*S} H${GX+GW}`,stroke:'#e3e7ec'});
-T_(GX+GW,Y0+20,'t (s)',{'text-anchor':'end','font-style':'italic','font-size':14});T_(GX+GW-4,Y0+44,'posición del eje mientras baja',{'text-anchor':'end','font-size':14,fill:'#4a5566'});
+T_(GX+GW,Y0+20,'t (s)',{'text-anchor':'end','font-style':'italic','font-size':14});T_(GX+GW-4,Y0+44,'posición del eje',{'text-anchor':'end','font-size':14,fill:'#4a5566'});T_(GX+GW-4,Y0+62,'mientras baja',{'text-anchor':'end','font-size':14,fill:'#4a5566'});
 const tr=mk('path',{fill:'none',stroke:'#1d5fa8','stroke-width':2.4}),hl=mk('path',{stroke:'#9aa3ae','stroke-width':1,'stroke-dasharray':'4 4'});
 // contadores
-const CX=GX+12,CY=Y0+0.42*S;const bg=mk('rect',{x:CX,y:CY,width:232,height:84,rx:8,fill:'#e6e8eb',stroke:'#8a94a3'});
-const box=(x,lab,G)=>{mk('rect',{x,y:CY+10,width:100,height:42,rx:4,fill:'#1e1314'},G);const e=T_(x+50,CY+42,'0,000',{'text-anchor':'middle','font-size':24,'font-family':'IBM Plex Mono,monospace',fill:'#ff3b2a'},G);T_(x+50,CY+74,lab,{'text-anchor':'middle','font-size':14,'font-style':'italic'},G);return e};
-const D1=box(CX+10,'t (s)'),D2g=mk('g',{});const D2=box(CX+122,'Δt (s)',D2g);
+const CX=715,CY=Y0+60;const bg=mk('rect',{x:CX,y:CY,width:130,height:172,rx:8,fill:'#e6e8eb',stroke:'#8a94a3'});
+const box=(y,lab,G)=>{mk('rect',{x:CX+10,y,width:110,height:42,rx:4,fill:'#1e1314'},G);const e=T_(CX+65,y+32,'0,000',{'text-anchor':'middle','font-size':24,'font-family':'IBM Plex Mono,monospace',fill:'#ff3b2a'},G);T_(CX+65,y+62,lab,{'text-anchor':'middle','font-size':14,'font-style':'italic'},G);return e};
+const D1=box(CY+10,'t (s)'),D2g=mk('g',{});const D2=box(CY+96,'Δt (s)',D2g);
 function setS(){s=+$('#S').value;$('#Sv').textContent=Math.round(s*100)+' cm';const yg=Y0+s*S;gate.setAttribute('transform',`translate(0 ${yg})`);
  dim.setAttribute('d',`M${X-RW-14} ${Y0} V${yg} M${X-RW-20} ${Y0} h12 M${X-RW-20} ${yg} h12`);dimt.setAttribute('x',X-RW-36);dimt.setAttribute('y',Y0+s*S/2+6);hl.setAttribute('d',`M${RX+46} ${yg} H${GX+GW}`)}
 function draw(){const y=Y0+d*S;W.setAttribute('transform',`translate(${X} ${y}) rotate(${-d/r*180/Math.PI})`);str.setAttribute('d',`M${X-9} 40 V${y}`)}
 function show(){D1.textContent=fmt(tg===null?Math.floor(t*1000)/1000:tg,3);$('#rt').textContent=tg===null?(run?fmt(t,2)+' s':'–'):fmt(tg,3)+' s';
  D2.textContent=dtg===null?'0,000':fmt(dtg,3);$('#rdt').textContent=dtg===null?'–':fmt(dtg,3)+' s';$('#rv').textContent=dtg===null?'–':fmt(phi/dtg,3)+' m/s'}
 function reset(){setS();run=false;t=0;d=0;tg=null;dtg=null;hist=[];tr.setAttribute('d','');$('#go').textContent='Soltar';draw();show()}
-function setPart(p){part=p;document.body.dataset.part=p;document.querySelectorAll('.pt').forEach(c=>c.classList.toggle('on',+c.dataset.p===p));D2g.setAttribute('visibility',p==2?'visible':'hidden');bg.setAttribute('width',p==2?232:120);reset();fixBtn();fit()}
+function setPart(p){part=p;document.body.dataset.part=p;document.querySelectorAll('.pt').forEach(c=>c.classList.toggle('on',+c.dataset.p===p));D2g.setAttribute('visibility',p==2?'visible':'hidden');bg.setAttribute('height',p==2?172:84);reset();fixBtn();fit()}
 document.querySelectorAll('.pt').forEach(b=>b.onclick=()=>setPart(+b.dataset.p));
 $('#S').oninput=reset;$('#go').onclick=()=>{if(run||d>0){reset();return}run=true;$('#go').textContent='Volver a enrollar'};setPart(1);
 loop(dt=>{if(!run)return;t+=dt;d=Math.min(LMAX,0.5*a*t*t);if(tg===null&&d>=s){tg=Math.floor(Math.sqrt(2*s/a)*1000)/1000;if(part==2)dtg=Math.round(phi/(a*Math.sqrt(2*s/a))*1000)/1000}

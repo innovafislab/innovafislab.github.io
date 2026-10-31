@@ -69,22 +69,22 @@ const czt=T(X,0,'cazoleta',{'text-anchor':'middle','font-size':15});
 const dim=mk('path',{stroke:'#1d5fa8','stroke-width':1.6,fill:'none'}),dimt=T(0,0,'s',{'font-style':'italic','font-size':20,fill:'#1d5fa8','font-weight':700});
 const ball=mk('circle',{cx:X,r:R,fill:'#1d5fa8'});
 // cronómetro
-const CX=500,CY=300;mk('rect',{x:CX,y:CY,width:200,height:74,rx:8,fill:'#e6e8eb',stroke:'#8a94a3'});mk('rect',{x:CX+12,y:CY+10,width:176,height:42,rx:4,fill:'#1e1314'});
-const disp=T(CX+100,CY+42,'0,000',{'text-anchor':'middle','font-size':30,'font-family':'IBM Plex Mono,monospace',fill:'#ff3b2a'});T(CX+100,CY+68,'cronómetro (s)',{'text-anchor':'middle','font-size':13,fill:'#4a5566'});
-mk('path',{d:`M${CX} ${CY+30} C420 ${CY+30} 420 ${Y0-17} 246 ${Y0-17}`,stroke:K,'stroke-width':1.4,fill:'none'});
+const CX=708,CY=150;mk('rect',{x:CX,y:CY,width:140,height:74,rx:8,fill:'#e6e8eb',stroke:'#8a94a3'});mk('rect',{x:CX+10,y:CY+10,width:120,height:42,rx:4,fill:'#1e1314'});
+const disp=T(CX+70,CY+42,'0,000',{'text-anchor':'middle','font-size':28,'font-family':'IBM Plex Mono,monospace',fill:'#ff3b2a'});T(CX+70,CY+68,'cronómetro (s)',{'text-anchor':'middle','font-size':13,fill:'#4a5566'});
+mk('path',{d:`M246 ${Y0-17} C320 ${Y0-17} 330 12 400 12 H${CX+70} V${CY}`,stroke:K,'stroke-width':1.4,fill:'none'});
 const cab2=mk('path',{stroke:K,'stroke-width':1.4,fill:'none'});
 // gráfica s(t) con la misma escala vertical
-const GX=470,GW=360,GT=0.42;mk('path',{d:`M${GX} ${Y0} V${Y0+0.8*S+8} M${GX} ${Y0} H${GX+GW}`,stroke:K,'stroke-width':1.3});
+const GX=430,GW=255,GT=0.42;mk('path',{d:`M${GX} ${Y0} V${Y0+0.8*S+8} M${GX} ${Y0} H${GX+GW}`,stroke:K,'stroke-width':1.3});
 for(let i=1;i<=4;i++){const x=GX+i*0.1/GT*GW;mk('path',{d:`M${x} ${Y0} v-5`,stroke:K});T(x,Y0-9,fmt(i*0.1,1),{'text-anchor':'middle','font-size':13})}
 T(GX+GW,Y0+22,'t (s)',{'text-anchor':'end','font-size':14,'font-style':'italic'});
 T(GX+8,Y0+0.8*S+4,'s (m)',{'font-size':14,'font-style':'italic'});
 for(let i=1;i<=8;i++)mk('path',{d:`M${GX} ${Y0+i/10*S} H${GX+GW}`,stroke:'#e3e7ec'});
-const tl=T(GX+GW-4,Y0+48,'posición de la bola durante la caída',{'font-size':14,fill:'#4a5566','text-anchor':'end'});
+const tl=T(GX+GW-4,Y0+48,'posición de la bola',{'font-size':14,fill:'#4a5566','text-anchor':'end'});T(GX+GW-4,Y0+66,'durante la caída',{'font-size':14,fill:'#4a5566','text-anchor':'end'});
 const tr=mk('path',{fill:'none',stroke:'#1d5fa8','stroke-width':2.4});const hl=mk('path',{stroke:'#9aa3ae','stroke-width':1,'stroke-dasharray':'4 4'});
 function setS(){s=+$('#S').value;$('#Sv').textContent=Math.round(s*100)+' cm';$('#rs').textContent=Math.round(s*100)+' cm';
  const yc=B0+s*S;cz.setAttribute('transform',`translate(0 ${yc})`);czt.setAttribute('y',yc+30);
  dim.setAttribute('d',`M${X+28} ${B0} V${yc} M${X+22} ${B0} h12 M${X+22} ${yc} h12`);dimt.setAttribute('x',X+36);dimt.setAttribute('y',B0+s*S/2+6);
- cab2.setAttribute('d',`M${CX} ${CY+50} C440 ${CY+50} 400 ${yc+30} ${X+30} ${yc+8}`);hl.setAttribute('d',`M${X+40} ${yc-R} H${GX+GW}`)}
+ cab2.setAttribute('d',`M${X+36} ${yc+5} C380 ${yc+5} 380 ${yc+30} 380 ${yc+60} V466 H${CX+70} V${CY+74}`);hl.setAttribute('d',`M${X+40} ${yc-R} H${GX+GW}`)}
 let tf=0;
 function reset(){setS();run=false;done=false;t=0;hist=[];tr.setAttribute('d','');ball.setAttribute('cy',Y0+R);disp.textContent='0,000';$('#rt').textContent='0,000 s';$('#go').textContent='Soltar'}
 $('#S').oninput=reset;
