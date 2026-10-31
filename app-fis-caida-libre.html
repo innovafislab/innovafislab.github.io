@@ -153,8 +153,8 @@ let lastT='';function showT(v){const txt=v.toFixed(4);if(txt===lastT)return;last
 const cabM=[M('#d22a1f'),M('#1b1b1b')];let cab=[];
 function cables(){cab.forEach(c=>SC.remove(c));cab=[];const T0=new THREE.Vector3(-0.33,0.06,0.13);const top=new THREE.Vector3(RX+0.03,TP.position.y+0.01,RZ);
  const pts=[[T0,new THREE.Vector3(-0.2,0.016,0.14),new THREE.Vector3(-0.05,0.03,0.08),new THREE.Vector3(-0.02,0.045,0.04),new THREE.Vector3(0,0.055,0)],
-  [T0.clone().add(new THREE.Vector3(0.01,0,0)),new THREE.Vector3(-0.2,0.016,0.2),new THREE.Vector3(0.05,0.016,0.2),new THREE.Vector3(0.21,0.016,0.14),new THREE.Vector3(0.22,0.03,-0.02),new THREE.Vector3(0.18,top.y*0.6,-0.06),new THREE.Vector3(0.1,top.y+0.04,RZ),top]];
- pts.forEach((p,i)=>{const m=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(p),60,0.0026,8,false),cabM[i]);SC.add(m);cab.push(m)})}
+  [T0.clone().add(new THREE.Vector3(0.01,0,0)),new THREE.Vector3(-0.2,0.016,0.2),new THREE.Vector3(0.05,0.016,0.2),new THREE.Vector3(0.21,0.016,0.14),new THREE.Vector3(0.22,0.03,-0.02),new THREE.Vector3(0.2,top.y*0.55,-0.05),new THREE.Vector3(0.17,top.y-0.03,-0.045),new THREE.Vector3(0.12,top.y+0.006,RZ),top]];
+ pts.forEach((p,i)=>{const m=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(p,false,'centripetal'),300,0.0026,10,false),cabM[i]);SC.add(m);cab.push(m)})}
 // gráfica s(t)
 const G=$("#gph"),gx0=48,gy0=50,gw=236,gh=430,GT=0.42,GS=0.8;
 const gk=(tag,at)=>{const e=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const q in at)e.setAttribute(q,at[q]);G.appendChild(e);return e};
