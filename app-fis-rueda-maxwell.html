@@ -154,17 +154,18 @@ const garm=add(new THREE.CylinderGeometry(0.004,0.004,RC-GX-0.03,10),steel,(RC+G
 add(new THREE.BoxGeometry(0.035,0.035,0.035),navy,RC,0,RZ,gate);
 const beam=add(new THREE.CylinderGeometry(0.0016,0.0016,0.034,8),new THREE.MeshBasicMaterial({color:'#ff2a1a'}),GX-0.008,0,0,gate);beam.rotation.x=Math.PI/2;
 // contador digital
-const tim=new THREE.Group();SC.add(tim);tim.position.set(-0.44,0,0.08);tim.rotation.y=0.35;
-add(new THREE.BoxGeometry(0.24,0.12,0.16),M('#e9ecef',{roughness:.4}),0,0.06,0,tim);add(new THREE.BoxGeometry(0.24,0.012,0.17),black,0,0.006,0,tim);
+// contador pequeño montado sobre la puerta
+const tim=new THREE.Group();gate.add(tim);tim.position.set(GX+0.012,0.028,0.0);
+add(new THREE.BoxGeometry(0.05,0.026,0.016),M('#2f343b',{roughness:.5}),0,0,0,tim);
 const dc=document.createElement('canvas');dc.width=512;dc.height=220;const dx=dc.getContext('2d');const dtex=new THREE.CanvasTexture(dc);dtex.encoding=THREE.sRGBEncoding;
-const face=add(new THREE.PlaneGeometry(0.22,0.095),new THREE.MeshBasicMaterial({map:dtex}),0,0.065,0.0805,tim);
+const face=add(new THREE.PlaneGeometry(0.046,0.02),new THREE.MeshBasicMaterial({map:dtex}),0,0,0.0081,tim);
 function seg(ch,x,y,w,h,on){const S={0:'abcdef',1:'bc',2:'abged',3:'abgcd',4:'fgbc',5:'afgcd',6:'afgedc',7:'abc',8:'abcdefg',9:'abcdfg','-':'g'}[ch]||'';const tk=w*0.2;
  const P={a:[x+tk,y,w-2*tk,tk],b:[x+w-tk,y+tk,tk,h/2-1.5*tk],c:[x+w-tk,y+h/2+tk/2,tk,h/2-1.5*tk],d:[x+tk,y+h-tk,w-2*tk,tk],e:[x,y+h/2+tk/2,tk,h/2-1.5*tk],f:[x,y+tk,tk,h/2-1.5*tk],g:[x+tk,y+h/2-tk/2,w-2*tk,tk]};
  for(const k in P){dx.fillStyle=S.includes(k)?'#ff2b18':'rgba(255,43,24,.09)';dx.fillRect(...P[k])}}
 let lastShown='';function showTimer(val){const txt=val===null?'0.000':val.toFixed(3);if(txt===lastShown)return;lastShown=txt;
- dx.fillStyle='#e9ecef';dx.fillRect(0,0,512,220);dx.fillStyle='#14090a';dx.fillRect(14,14,350,150);
+ dx.fillStyle='#2f343b';dx.fillRect(0,0,512,220);dx.fillStyle='#14090a';dx.fillRect(14,14,350,150);
  const digs=txt.replace('.','');let x=40;for(let i=0;i<digs.length;i++){seg(digs[i],x,40,58,100);if(i==0){dx.fillStyle='#ff2b18';dx.fillRect(x+66,132,9,9)}x+=80}
- dx.fillStyle='#1b2430';dx.font='bold 30px Inter,Arial';dx.fillText('Δt / s',384,70);dx.font='22px Inter,Arial';dx.fillText('Timer 2-1',384,150);dx.fillText('puerta',384,110);dtex.needsUpdate=true}
+ dx.fillStyle='#ffffff';dx.font='bold 46px Inter,Arial';dx.fillText('Δt',392,90);dx.font='34px Inter,Arial';dx.fillText('s',400,150);dtex.needsUpdate=true}
 // cronómetro de mano para t
 const sw=new THREE.Group();SC.add(sw);sw.position.set(-0.17,0.02,0.22);sw.rotation.set(-0.55,0.3,0);sw.scale.setScalar(1.6);
 const swb=add(new THREE.CylinderGeometry(0.038,0.038,0.018,40),M('#f2c21a',{roughness:.45}),0,0,0,sw);swb.rotation.x=Math.PI/2;
@@ -174,7 +175,7 @@ add(new THREE.PlaneGeometry(0.052,0.026),new THREE.MeshBasicMaterial({map:stex})
 let swLast='';function showSW(val){const txt=fmt(val,2);if(txt===swLast)return;swLast=txt;sx.fillStyle='#c9d4b6';sx.fillRect(0,0,256,128);sx.fillStyle='#1d2318';sx.font='bold 84px "IBM Plex Mono",monospace';sx.textAlign='center';sx.fillText(txt,128,98);stex.needsUpdate=true}
 // cables
 const cabMat=[M('#d22a1f'),M('#1f6fd1'),M('#f2c21a')];let cab=[];
-function cables(){cab.forEach(c=>SC.remove(c));cab=[];const T0=new THREE.Vector3(-0.36,0.07,0.15);
+function cables(){return;cab.forEach(c=>SC.remove(c));cab=[];const T0=new THREE.Vector3(-0.36,0.07,0.15);
  const gp=new THREE.Vector3(RC,gate.position.y,RZ+0.02);
  [[gp,0],[gp,1]].forEach(([p,c],i)=>{const off=i*0.012;const cu=new THREE.CatmullRomCurve3([T0.clone().add(new THREE.Vector3(off,0,0)),new THREE.Vector3(-0.3+off,0.012,0.3),new THREE.Vector3((p.x-0.3)/2+off,0.02,0.2),new THREE.Vector3(p.x-0.02+off,p.y*0.45,p.z+0.08),p.clone().add(new THREE.Vector3(0,-0.01,0))]);
   const mm=new THREE.Mesh(new THREE.TubeGeometry(cu,60,0.0028,8,false),cabMat[c]);mm.castShadow=true;SC.add(mm);cab.push(mm)})}
