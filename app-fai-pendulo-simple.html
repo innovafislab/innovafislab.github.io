@@ -172,11 +172,11 @@ function place(){const bx=L*Math.sin(th),by=PY-L*Math.cos(th);ball.position.set(
  const inb=Math.abs(bx)<RS;if(window.xArr)xArr(bx,by);beamM.color.set(inb?'#ffd400':'#ff2a1a')}
 function setL(){L=+$('#L').value;const X=Math.min(+$('#X').value,0.95*L);TH0=Math.asin(X/L);$('#Lv').textContent=Math.round(L*100)+' cm';$('#Xv').textContent=Math.round(X*100)+' cm';$('#th').textContent=fmt(TH0*180/Math.PI,1)+'°';gate.position.set(0,PY-L,0);cables()}
 // flecha de la separación x (antes de soltar)
-const XG=new THREE.Group();SC.add(XG);const xm=new THREE.MeshBasicMaterial({color:'#d9820b'});
+const XG=new THREE.Group();SC.add(XG);const xm=new THREE.MeshBasicMaterial({color:'#3c4654'});
 const xs=new THREE.Mesh(new THREE.CylinderGeometry(0.0022,0.0022,1,8),xm);xs.rotation.x=Math.PI/2;XG.add(xs);
 const xh1=new THREE.Mesh(new THREE.ConeGeometry(0.008,0.022,12),xm),xh2=xh1.clone();XG.add(xh1,xh2);
 const vl=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0),new THREE.Vector3(0,-1,0)]),new THREE.LineDashedMaterial({color:'#8a94a3',dashSize:.012,gapSize:.008}));vl.position.set(0,PY,0);SC.add(vl);
-const lc=document.createElement('canvas');lc.width=128;lc.height=128;const lx=lc.getContext('2d');lx.fillStyle='#a35f00';lx.font='italic bold 96px serif';lx.textAlign='center';lx.fillText('x',64,92);
+const lc=document.createElement('canvas');lc.width=128;lc.height=128;const lx=lc.getContext('2d');lx.fillStyle='#2b323c';lx.font='italic bold 96px serif';lx.textAlign='center';lx.fillText('x',64,92);
 const xl=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(lc),depthTest:false}));xl.scale.set(0.05,0.05,1);XG.add(xl);
 window.xArr=(bz,by)=>{const show=!run&&t===0;XG.visible=show;vl.visible=show;if(!show)return;vl.scale.y=L+0.04;vl.computeLineDistances();
  const z0=0,z1=bz-RS*Math.sign(bz),len=Math.abs(z1-z0);xs.scale.y=Math.max(0.001,len-0.04);xs.position.set(0,by,(z0+z1)/2);
