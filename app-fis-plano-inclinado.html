@@ -117,7 +117,7 @@ mk('rect',{x:-38,y:-38,width:76,height:22,rx:5,fill:'url(#blu)',stroke:'#173f86'
 [-25,25].forEach(x=>{mk('circle',{cx:x,cy:-16,r:9,fill:'#d62828',stroke:'#9e1b1b','stroke-width':1},cart);mk('circle',{cx:x,cy:-16,r:3,fill:'#e6e9ec'},cart)});
 mk('path',{d:'M38 -26 h8',stroke:'#7d868f','stroke-width':2.4},cart);// gancho con banana
 // dinamómetros de tubo transparente con escala roja
-function dynGroup(par){const G=mk('g',{},par);const body=mk('rect',{rx:8,fill:'url(#tub)',stroke:'#8a94a3','stroke-width':1.1,'fill-opacity':.9},G);const strip=mk('rect',{fill:'#d9362b','fill-opacity':.85},G);const sc=mk('g',{},G);const ind=mk('rect',{fill:'#1b2430'},G);const rod=mk('path',{stroke:'#7d868f','stroke-width':2.2,fill:'none'},G);return{G,body,strip,sc,ind,rod}}
+function dynGroup(par){const G=mk('g',{},par);const rod=mk('path',{stroke:'#7d868f','stroke-width':2.2,fill:'none'},G);const strip=mk('rect',{fill:'#fbfbf7',stroke:'#d5dbe1','stroke-width':.6},G);const sc=mk('g',{},G);const inner=mk('path',{stroke:'#9aa3ad','stroke-width':1.6},G);const spr=mk('path',{stroke:'#6b737c','stroke-width':1.1,fill:'none'},G);const ind=mk('rect',{fill:'#e01b12'},G);const body=mk('rect',{rx:7,fill:'#e8f1f7','fill-opacity':.28,stroke:'#8a94a3','stroke-width':1.1},G);const hl=mk('path',{stroke:'#ffffff','stroke-width':1.6,'stroke-opacity':.8},G);const cap=mk('rect',{rx:2},G);const cap2=mk('rect',{rx:2,fill:'#e9edf1',stroke:'#8a94a3','stroke-width':.8},G);return{G,body,strip,sc,ind,rod,inner,spr,hl,cap,cap2}}
 const D1=dynGroup(PL);
 const D2g=mk('g',{},PL);const D2=dynGroup(D2g);const hand=mk('path',{stroke:K,'stroke-width':2.4},D2g);
 const vec=mk('g',{});
@@ -131,15 +131,20 @@ function zoom(max,div,val){zsc.innerHTML='';const n=Math.round(max/div),maj=max>
  mk('path',{d:`M${ZX+44} ${y} h${big?-22:mid?-15:-8}`,stroke:K,'stroke-width':1},zsc);if(big)T(ZX+52,y+5,fmt(i*div,max>2?0:1),{'font-size':13},zsc)}
  const v=Math.min(val,max);zind.setAttribute('y',ZY+8+v/max*(ZH-16)-1.5);zT.textContent='Dinamómetro de '+max+' N';
  zR.textContent=val>max?'fuera de escala':fmt(val,2)+' N'}
-function dyn(D,x0,len,max,val,yoff){// a lo largo del eje x local, desde x0 hacia x0+len
- D.body.setAttribute('x',x0);D.body.setAttribute('y',yoff-8);D.body.setAttribute('width',len);D.body.setAttribute('height',16);
- D.strip.setAttribute('x',x0+6);D.strip.setAttribute('y',yoff-3);D.strip.setAttribute('width',len-12);D.strip.setAttribute('height',6);
- D.sc.innerHTML='';const n=max>2?10:20;for(let i=0;i<=n;i++){const x=x0+len-10-i/n*(len-20);mk('path',{d:`M${x} ${yoff-3} v${i%(max>2?2:10)==0?6:3}`,stroke:'#ffffff','stroke-width':1},D.sc)}
- const v=Math.min(val,max),xi=x0+len-10-v/max*(len-20);D.ind.setAttribute('x',xi-1.2);D.ind.setAttribute('y',yoff-8);D.ind.setAttribute('width',2.4);D.ind.setAttribute('height',16)}
+function dyn(D,x0,len,max,val,yoff){// tubo a lo largo del eje x local: x0+len es el extremo fijo; el índice se aleja de él al tirar
+ const y=yoff;D.body.setAttribute('x',x0);D.body.setAttribute('y',y-8);D.body.setAttribute('width',len);D.body.setAttribute('height',16);
+ D.hl.setAttribute('d',`M${x0+8} ${y-5} H${x0+len-12}`);
+ D.cap.setAttribute('x',x0+len-8);D.cap.setAttribute('y',y-9);D.cap.setAttribute('width',12);D.cap.setAttribute('height',18);D.cap.setAttribute('fill',max>2?'#1f6fd1':'#d32f2f');
+ D.cap2.setAttribute('x',x0-3);D.cap2.setAttribute('y',y-8.5);D.cap2.setAttribute('width',7);D.cap2.setAttribute('height',17);
+ const z0=x0+len-14,L=len-28;D.strip.setAttribute('x',x0+10);D.strip.setAttribute('y',y+1.5);D.strip.setAttribute('width',len-22);D.strip.setAttribute('height',5.5);
+ D.sc.innerHTML='';const n=max>2?50:100,maj=max>2?10:10;for(let i=0;i<=n;i++){const x=z0-i/n*L;if(i%(max>2?5:5)&&i%2)continue;mk('path',{d:`M${x} ${y+1.5} v${i%maj==0?5.5:i%5==0?4:2.5}`,stroke:'#1b2430','stroke-width':i%maj==0?.9:.5},D.sc)}
+ const v=Math.min(val,max),xi=z0-v/max*L;D.ind.setAttribute('x',xi-1);D.ind.setAttribute('y',y-7);D.ind.setAttribute('width',2);D.ind.setAttribute('height',14);
+ let d=`M${x0+len-8} ${y-2}`;const N=22;for(let k=1;k<=N;k++){d+=` L${x0+len-8+(xi-(x0+len-8))*k/N} ${y-2+(k%2?-3.2:3.2)}`}D.spr.setAttribute('d',d);
+ D.inner.setAttribute('d',`M${xi} ${y-2} H${x0-3}`)}
 function draw(){al=+$('#al').value;m=+$('#M').value;$('#alv').textContent=al+'°';$('#Mv').textContent=Math.round(m*1000)+' g';
  const a=al*Math.PI/180,F=m*g*Math.sin(a),N=m*g*Math.cos(a);
  PL.setAttribute('transform',`translate(${P0.x} ${P0.y}) rotate(${-al})`);cart.setAttribute('transform',`translate(${DC} 0)`);
- wts.innerHTML='';const nw=Math.round((m-0.2)/0.05);[-26,-9,9,26].slice(0,nw).forEach(x=>{mk('rect',{x:x-6,y:-47,width:12,height:12,rx:1.5,fill:'#c9a24a',stroke:'#8a6d2a','stroke-width':.8},wts)});
+ wts.innerHTML='';const nw=Math.round((m-0.2)/0.05);[-26,-9,9,26].slice(0,nw).forEach(x=>{mk('rect',{x:x-6,y:-47,width:12,height:12,rx:1.5,fill:'#cfd4da',stroke:'#7d868f','stroke-width':.8},wts);mk('rect',{x:x-6,y:-47,width:12,height:3,rx:1.5,fill:'#eef1f4'},wts)});
  {const xr=P0.x+Math.max(120,Math.min(0.62*LP*Math.cos(a),LP*Math.cos(a)-40)),yi=P0.y-(xr-P0.x)*Math.tan(a);frod.setAttribute('x',xr-3.5);frod.setAttribute('y',Math.min(yi-50,P0.y-60));frod.setAttribute('height',P0.y-Math.min(yi-50,P0.y-60));fcl.setAttribute('x',xr-8);fcl.setAttribute('y',yi-4)}
  // dinamómetro 1: del carro (x=DC+36) al tope (x=LP-8)
  const x1=DC+44,x2=LP-12;dyn(D1,x1+30,x2-x1-34,2,F,-26);D1.rod.setAttribute('d',`M${DC+36} -26 H${x1+30} M${x1+30+(x2-x1-34)} -26 H${LP-8}`);
