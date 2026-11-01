@@ -219,7 +219,7 @@ function build(){while(obj.children.length)obj.remove(obj.children[0]);
   for(let i=0;i<n;i++)add(new THREE.CylinderGeometry(0.0095,0.0095,ph-0.0004,32),M('#c9a24a',{metalness:.55,roughness:.3}),0,-(n*ph+0.03)+0.0035+i*ph+ph/2,0,obj);
   add(new THREE.CylinderGeometry(0.0105,0.0105,0.0035,32),M('#8a6d2a',{metalness:.5}),0,-(n*ph+0.03)+0.00175,0,obj);geo={h:n*ph+0.0035,V,top:0,len:n*ph+0.03}}}
 // geometría vertical: posición de la nuez arriba y abajo
-const LTH=()=>part==1?0.035:0.03,OL=()=>part==1?2*RS:geo.len,LIN=()=>SY0+0.012+DL+0.01;
+const LTH=()=>part==1?Math.max(0.035,VH+0.025-0.022-2*RS-0.004):Math.max(0.03,PB+PH+0.025-(PB+0.008)-geo.len-0.004),OL=()=>part==1?2*RS:geo.len,LIN=()=>SY0+0.012+DL+0.01;
 function hookRel(Fv){return SY0-Fv*SPX-LIN()}
 function yDown(){const Fs=P-RA*g*geo.V,tb=part==1?0.022:PB+0.008;return tb-hookRel(Fs)+0.004+LTH()+OL()}
 function yUp(){return yDown()+(part==1?0.125:0.215)}
