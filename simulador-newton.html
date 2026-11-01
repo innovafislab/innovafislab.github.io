@@ -405,9 +405,37 @@ table.ft th .u{font-size:.85em}
 table.ft td{text-align:center;font-family:var(--f-num);height:1.6em}
 table.ft td .pm{display:block;font-size:.85em}
 table.ft .emptyrow td{padding:.8em;font-family:var(--f-ui)}
-@media(max-width:820px),(max-height:520px){html,body{overflow-x:hidden;overflow-y:auto;height:auto}body{display:block}main.app{display:block;padding:8px}.left{margin-bottom:10px}:root{--W:min(calc(100vw - 42px),calc((100vh - 20px)*1.29))}.left .card{display:flex;flex-direction:column;align-items:center}.side{overflow:visible;overflow-x:auto;font-size:15.5px!important;max-width:760px;margin:0 auto}table.ft{font-size:12px}.panel{font-size:13px!important;min-width:0}.rd{grid-template-columns:1fr}.rd div{white-space:normal}header.top{padding:6px 12px;gap:6px 12px}header.top h1{font-size:18px}.partbtn{font-size:13px}}
+header.top .gbtn,.mgo,.side .mnote{display:none}
+@media(max-width:820px),(max-height:520px){
+html,body{height:100vh;height:100dvh;overflow:hidden}body{display:flex;flex-direction:column}
+header.top{flex:none;display:grid;grid-template-columns:40px minmax(0,1fr) auto;grid-template-areas:"back title guide" "parts parts parts";align-items:center;gap:2px 4px;padding:3px 8px 6px 2px}
+header.top .hl{display:contents}header.top h1{grid-area:title;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header.top>a{grid-area:back;font-size:0;width:40px;height:40px;display:grid;place-items:center}header.top>a::before{content:'\2190';font-size:22px;font-weight:600;color:var(--navy)}
+header.top .parts{grid-area:parts;display:flex;width:100%}header.top .partbtn{flex:1;font-size:13px;padding:6px 4px;line-height:1.2}
+header.top .vthumb.hv{display:none}
+header.top .gbtn{grid-area:guide;display:inline-flex;align-items:center;gap:.4em;font:inherit;font-size:14px;font-weight:600;color:var(--navy);background:#fff;border:1px solid #9fb0c2;border-radius:8px;padding:.42em .8em;cursor:pointer}
+header.top .gbtn::before{content:'i';display:inline-grid;place-items:center;width:1.15em;height:1.15em;border-radius:50%;border:1.5px solid currentColor;font-size:.8em;font-weight:800;font-style:italic;font-family:Georgia,serif}
+body.guide header.top .gbtn{background:var(--navy);color:#fff;border-color:var(--navy)}body.guide header.top .gbtn::before{content:'\2715';border:0;font-style:normal;font-family:inherit}
+main.app{flex:1;min-height:0;display:block;padding:6px}
+.left{height:100%}.left>.card{height:100%;padding:6px;display:flex;flex-direction:column;align-items:center;overflow:hidden}
+.side{display:none}
+body.guide .side{display:block;position:fixed;left:0;right:0;top:var(--hh,90px);bottom:0;z-index:30;overflow-y:auto;border:0;border-top:1px solid var(--line);border-radius:0;background:#fff;padding:14px 16px 48px;font-size:16px!important}
+body.guide .side>*{max-width:680px;margin-left:auto;margin-right:auto}.side .mnote{display:block;font-size:.82em;color:var(--muted);margin-top:1.2em}
+.side{overflow-x:hidden}table.ft{font-size:12px}.side .eq{overflow-x:auto}
+.panel{font-size:13.5px!important;min-width:0;justify-content:flex-start;gap:7px}
+.rd{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.rd div{flex-direction:column;align-items:flex-start;gap:0;overflow:hidden;padding:.2em .55em}.rd .l{font-size:11.5px;white-space:nowrap}.rd b{font-size:15px}
+.panel .note{display:none}.datos2{font-size:12.5px}
+.mgo{display:block;font:inherit;font-weight:600;font-size:15px;background:var(--navy);color:#fff;border:1px solid var(--navy);border-radius:8px;padding:.5em 1em;cursor:pointer}
+.mgo::before{content:'\25B6';font-size:.72em;margin-right:.5em;vertical-align:.08em}.mgo:disabled{background:#c9d3de;border-color:#c9d3de}}
+@media(max-width:820px) and (orientation:portrait){:root{--W:min(calc(100vw - 30px),calc((100dvh - 130px)*.95))}.left>.card{height:auto;max-height:100%}}
+@media(orientation:landscape) and (max-height:520px){
+header.top{grid-template-columns:40px auto minmax(0,1fr) auto;grid-template-areas:"back title parts guide";padding:2px 8px 2px 2px;gap:4px 10px}header.top .parts{max-width:460px;justify-self:center}
+:root{--Wr:min(calc(100vw - 360px),calc((100dvh - 64px)/.78));--W:var(--Wr)}
+.left>.card{align-items:stretch}.rig{width:100%;grid-template-columns:var(--Wr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"rail panel" "fall panel";column-gap:10px;height:100%;border:0;background:transparent}
+#railSvg,#fallSvg{background:#fff}#fallSvg{justify-self:end;width:calc(var(--Wr)/6);align-self:start}
+.panel{overflow-y:auto;padding:4px 2px}}
 </style></head><body data-part="1">
-<header class="top"><div class="hl"><h1>Leyes de Newton</h1>
+<header class="top"><div class="hl"><h1>Leyes de Newton</h1><button class="gbtn" type="button">Guía</button>
 <div class="parts" role="tablist" aria-label="Parte de la práctica"><button class="partbtn" id="part1" role="tab" data-part="1">1.ª parte: espacio y tiempo</button><button class="partbtn" id="part2" role="tab" data-part="2">2.ª parte: velocidad y tiempo</button></div>
 <button type="button" class="vthumb hv" data-src="videos/newton1.mp4">Vídeo: cómo se usa</button></div>
 <a href="laboratorios.html#fisica">← Laboratorio de Física · INNOVA-FIS-LAB</a></header>
@@ -464,7 +492,7 @@ table.ft .emptyrow td{padding:.8em;font-family:var(--f-ui)}
 <input type="range" id="gate" min="50" max="70" step="1" value="50" aria-describedby="gateReadout">
 <div class="ctl-row"><div class="chips" id="chips"><span class="t"><i style="font-family:var(--f-math)">s</i> (cm)</span></div><label class="switch" style="margin-left:.8em"><input type="checkbox" id="slow"> Cámara lenta (×0,2)</label></div>
 </div>
-<div class="rd"><div><span class="l">Distancia \(s\)</span><b id="rS">–</b></div><div><span class="l">Contador izq., \(t\)</span><b id="rT">–</b></div><div><span class="l">Contador dcho., \(\Delta t\)</span><b id="rDT">–</b></div><div class="p1only"><span class="l">\(t'=t+\Delta t/2\)</span><b id="rTp">–</b></div><div class="p2only"><span class="l">\(v=\Delta s/\Delta t\)</span><b id="rV">–</b></div></div>
+<button class="mgo" id="mGo" type="button">Soltar</button><div class="rd"><div><span class="l">Distancia \(s\)</span><b id="rS">–</b></div><div><span class="l">Contador izq., \(t\)</span><b id="rT">–</b></div><div><span class="l">Contador dcho., \(\Delta t\)</span><b id="rDT">–</b></div><div class="p1only"><span class="l">\(t'=t+\Delta t/2\)</span><b id="rTp">–</b></div><div class="p2only"><span class="l">\(v=\Delta s/\Delta t\)</span><b id="rV">–</b></div></div>
 <dl class="datos2"><dt>Masa colgante</dt><dd>\(m_1\) = 20 g + 1 g del portapesas = 21 g</dd><dt>Deslizador</dt><dd>\(m_2\) = 400 g, sin pesas</dd>
 <dt class="p2only">Pantalla</dt><dd class="p2only" id="dsCell"><button class="linkbtn" id="calibre">Medir Δs con el calibre</button></dd></dl>
 <p class="note">Se pulsa el botón verde SOLTAR o la barra espaciadora. Los valores de los contadores son de ejemplo. · CC BY-NC-SA 4.0</p>
@@ -489,7 +517,7 @@ table.ft .emptyrow td{padding:.8em;font-family:var(--f-ui)}
 <th class="calc">\(t'\)<span class="u">s</span></th>
 <th class="calc p1only">\(t'^2\)<span class="u">s²</span></th>
 <th class="calc p2only">\(v\)<span class="u">m/s</span></th>
-</tr></thead><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table></section></main>
+</tr></thead><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p class="mnote">Se pulsa el botón Soltar (en el ordenador, el botón verde SOLTAR o la barra espaciadora). Los valores de los contadores son de ejemplo. · CC BY-NC-SA 4.0</p></section></main>
 <div hidden><table id="tbl"><tbody id="tbody"></tbody></table><input type="checkbox" id="showCalc" checked><button id="copy"></button><button id="undo"></button><button id="clear"></button><span id="copied"></span><div id="fallbackBox"><textarea id="fallbackTa"></textarea></div></div>
 <script>
 function fitSide(){const e=document.querySelector('.side');if(matchMedia('(max-width:820px),(max-height:520px)').matches){e.style.fontSize='';return}let lo=9,hi=30;for(let i=0;i<10;i++){const m=(lo+hi)/2;e.style.fontSize=m+'px';if(e.scrollHeight>e.clientHeight+1||e.scrollWidth>e.clientWidth+1)hi=m;else lo=m}e.style.fontSize=lo+'px'}
@@ -1150,5 +1178,7 @@ function close(){if(document.fullscreenElement&&document.exitFullscreen)document
 function open(src){v.src=src;box.classList.add("on");var p=v.play();if(p&&p.catch)p.catch(function(){v.muted=true;v.play().catch(function(){})});}
 document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest(".vthumb");if(b){e.preventDefault();open(b.getAttribute("data-src"));}});
 box.addEventListener("click",function(e){if(e.target===box||e.target.classList.contains("x"))close()});
-document.addEventListener("keydown",function(e){if(!box.classList.contains("on"))return;if(e.key==="Escape")close();else if(e.key===" "){e.preventDefault();tog()}});})();</script>
+document.addEventListener("keydown",function(e){if(!box.classList.contains("on"))return;if(e.key==="Escape")close();else if(e.key===" "){e.preventDefault();tog()}});})();</script><script>(function(){const g=document.querySelector('header.top .gbtn'),hd=document.querySelector('header.top');const hh=()=>document.documentElement.style.setProperty('--hh',hd.offsetHeight+'px');hh();addEventListener('resize',hh);
+g.onclick=()=>{const on=document.body.classList.toggle('guide');g.textContent=on?'Simulación':'Guía';hh();if(on)document.querySelector('.side').scrollTop=0};
+const pb=document.getElementById('pbGo'),mg=document.getElementById('mGo');mg.onclick=()=>pb.dispatchEvent(new MouseEvent('click',{bubbles:true}));const sy=()=>{mg.disabled=pb.classList.contains('off')};new MutationObserver(sy).observe(pb,{attributes:true,attributeFilter:['class']});sy()})();</script>
 </body></html>

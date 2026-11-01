@@ -55,18 +55,41 @@ select.sel{font:inherit;font-weight:600;border:1px solid #c9d3de;border-radius:6
 .pp::before{content:'\275A\275A';font-size:.62em;letter-spacing:-.1em;margin-right:.55em;vertical-align:.12em}.pp[data-st=play]::before{content:'\25B6';letter-spacing:0;font-size:.72em}
 .vw::before{content:'\27F2';margin-right:.35em}
 .side .note{font-size:.85em;margin:-.3em 0 .6em}
-@media(max-width:820px),(max-height:520px){html,body{overflow-x:hidden;overflow-y:auto;height:auto}body{display:block}
-header{padding:6px 12px;gap:10px;align-items:center}header h1{font-size:17px;line-height:1.2}header a{font-size:12px}
-main{display:block;padding:8px}.left{margin-bottom:10px}.card{padding:8px}
-.side{overflow:visible;font-size:15.5px!important;max-width:760px;margin:0 auto}
-.bar{font-size:14px;gap:6px 10px}.bar input[type=range]{width:clamp(110px,34vw,220px)}
-.read div{white-space:normal}.read b{min-width:0}.acts{margin-left:0}
-.eq{overflow-x:auto;overflow-y:hidden}table.t{font-size:.8em}}
-@media(max-width:820px) and (orientation:portrait){header{flex-direction:column-reverse;align-items:flex-start;gap:2px}svg.sim{height:auto;flex:none}}
-@media(orientation:landscape) and (max-height:520px){header h1{font-size:15px}header{padding:4px 12px}
-.left .card{flex:none;height:calc(100vh - 40px);height:calc(100svh - 40px)}svg.sim{flex:1;min-height:0;height:auto}.bar{font-size:13px;margin-top:4px}.tabs{margin-bottom:4px}.left .note{display:none}}
+header .gbtn{display:none}.side .mnote{display:none}
+@media(max-width:820px),(max-height:520px){
+html,body{height:100vh;height:100dvh;overflow:hidden}body{display:flex;flex-direction:column}
+header{flex:none;height:46px;padding:0 8px 0 2px;gap:4px;align-items:center;flex-wrap:nowrap}
+header a{order:-1;flex:none;font-size:0;width:40px;height:40px;display:grid;place-items:center;border-radius:8px}header a::before{content:'\2190';font-size:22px;font-weight:600;color:var(--navy)}
+header h1{flex:1;min-width:0;font-size:16px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header .gbtn{display:inline-flex;align-items:center;gap:.4em;flex:none;font:inherit;font-size:14px;font-weight:600;color:var(--navy);background:#fff;border:1px solid #9fb0c2;border-radius:8px;padding:.42em .8em;cursor:pointer}
+header .gbtn::before{content:'i';display:inline-grid;place-items:center;width:1.15em;height:1.15em;border-radius:50%;border:1.5px solid currentColor;font-size:.8em;font-weight:800;font-style:italic;font-family:Georgia,serif}
+body.guide header .gbtn{background:var(--navy);color:#fff;border-color:var(--navy)}body.guide header .gbtn::before{content:'\2715';border:0;font-style:normal;font-family:inherit}
+main{flex:1;min-height:0;display:flex;flex-direction:column;padding:6px}
+.left{flex:1;min-height:0}.left .note{display:none}
+.left .card{flex:1;height:100%;padding:6px;border-radius:10px}
+.side{display:none}
+body.guide .side{display:block;position:fixed;left:0;right:0;top:46px;bottom:0;z-index:30;overflow-y:auto;-webkit-overflow-scrolling:touch;border:0;border-top:1px solid var(--line);border-radius:0;background:#fff;padding:14px 16px 48px;font-size:16px!important}
+body.guide .side>*{max-width:680px;margin-left:auto;margin-right:auto}
+.side .mnote{display:block;font-size:.82em;color:var(--slate);margin-top:1.2em}
+.eq{overflow-x:auto;overflow-y:hidden}table.t{font-size:.82em}
+.tabs{align-self:stretch;display:flex;margin-bottom:6px;font-size:13.5px}.tab{flex:1;padding:.45em .4em}
+.bar{flex:none;display:flex;flex-direction:column;align-items:stretch;gap:6px;margin-top:6px;font-size:14px}
+.ctrl{display:flex;flex-direction:column;gap:6px}
+.params{gap:6px 12px}.params label{gap:8px}.params label:has(input[type=range]){flex:1 1 100%}
+.bar input[type=range]{flex:1;width:auto;min-width:0;height:26px}
+.acts{margin-left:0;gap:6px;flex-wrap:wrap}.acts>*{flex:none}.vw{font-size:0;padding:.3em .6em}.vw::before{font-size:19px;margin:0}
+.go,.md,.pp,.vw{padding:.5em .85em}.acts .go{flex:1 1 0;min-width:0!important;text-align:center;overflow:hidden;text-overflow:ellipsis}
+.read{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+.read div{flex-direction:column;align-items:flex-start;gap:0;padding:3px 9px;min-width:0;overflow:hidden}
+.read span{font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.read b{font-size:15.5px;min-width:0}.read div.w2{grid-column:1/-1}.vw.ov{position:absolute;left:8px;top:8px;z-index:4;width:38px;height:38px;padding:0;display:grid;place-items:center;background:rgba(255,255,255,.92);border:1px solid #c9d3de;border-radius:9px}
+.seg button{padding:.38em .7em}select.sel{padding:.3em .4em}}
+@media(max-width:820px) and (orientation:portrait){.left .card{display:flex;flex-direction:column}svg.sim{flex:1;min-height:0;height:auto}}
+@media(orientation:landscape) and (max-height:520px){header{height:40px}body.guide .side{top:40px}header a{height:36px}
+main{padding:4px 6px 6px}.left .card{display:grid;grid-template-columns:minmax(0,1fr) min(330px,42vw);grid-template-rows:auto minmax(0,1fr);column-gap:8px;padding:5px}
+.left .card>svg.sim,.left .card>.sim3{grid-column:1;grid-row:1/3;height:100%;min-height:0}
+.tabs{grid-column:2;grid-row:1;margin:0 0 6px}.bar{grid-column:2;grid-row:2;margin:0;min-height:0;overflow-y:auto;justify-content:flex-start;font-size:13.5px}}
 </style></head><body>
-<header><h1>Ley de Hooke</h1><a href="laboratorios.html#fisica">← Laboratorio de Física · INNOVA-FIS-LAB</a></header>
+<header><h1>Ley de Hooke</h1><button class="gbtn" type="button">Guía</button><a href="laboratorios.html#fisica" aria-label="Volver">← Laboratorio de Física · INNOVA-FIS-LAB</a></header>
 <main><section class="left"><div class="card"><style>
 .sim3{flex:1;min-height:0;position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;touch-action:none;cursor:grab}
 .sim3:active{cursor:grabbing}.sim3 canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -76,7 +99,7 @@ main{display:block;padding:8px}.left{margin-bottom:10px}.card{padding:8px}
 body[data-part="1"] .sim3 .ins{height:calc(100% - 20px)}
 .sim3 .ins span{position:absolute;left:8px;top:6px;font-size:clamp(11px,1.5vh,13px);font-weight:600;color:#1b2430;background:rgba(255,255,255,.85);padding:1px 6px;border-radius:5px}
 .sim3 .rd{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);background:#fff;border:1px solid #c0392b;color:#c0392b;font-weight:700;border-radius:6px;padding:.1em .7em;font-size:clamp(13px,2.2vh,20px);white-space:nowrap}
-@media(max-width:820px) and (orientation:portrait){.sim3{flex:none;height:min(84vh,150vw);height:min(84svh,150vw)}.sim3 .gph{left:10px;right:auto;top:auto;bottom:10px;width:calc(50% - 15px);height:36%}.sim3 .ins{right:10px;bottom:10px;width:calc(50% - 15px);height:36%!important}.sim3 .rd{bottom:auto;top:8px}}
+@media(max-width:820px) and (orientation:portrait){.sim3{flex:1;min-height:0;height:auto}.sim3 .ins span{display:none}.sim3 .gph{left:10px;right:auto;top:auto;bottom:10px;width:calc(50% - 15px);height:36%}.sim3 .ins{right:10px;bottom:10px;width:calc(50% - 15px);height:36%!important}.sim3 .rd{bottom:auto;top:8px}}
 @media(hover:none){.sim3 .hint{display:none}}
 @media(orientation:landscape) and (max-height:520px){.sim3 .hint{display:none}}
 </style>
@@ -85,17 +108,19 @@ body[data-part="1"] .sim3 .ins{height:calc(100% - 20px)}
 <div class="ins"><span>Detalle: el índice rojo sobre la escala</span><div class="rd p1" id="rdx">x = 0 mm</div></div>
 <div class="hint">Arrastra para girar la vista · rueda del ratón para acercar</div></div>
 <div class="bar"><div class="ctrl"><button class="btn pt on" data-p="1">Parte I: alargamiento</button><button class="btn pt" data-p="2">Parte II: periodo</button><label>Muelle <select id="K" class="btn"><option value="10">rojo</option><option value="20">azul</option></select></label><label>Pesas de 10 g <input id="N" type="range" min="0" max="8" step="1" value="3"><b id="Nv"></b></label><button class="btn p2" id="go" data-alt="Volver a empezar">Bajar y soltar</button><button class="btn p2" id="pp" data-alt="Continuar">Parar</button><button class="btn" id="vw">Vista inicial</button></div><div class="read"><div><span>Masa colgada <i>m</i></span><b id="rm">–</b></div><div class="p1"><span>Fuerza <i>F</i> = <i>mg</i></span><b id="rF" style="min-width:7.6em">–</b></div><div class="p1"><span>Alargamiento <i>x</i></span><b id="rx">–</b></div><div class="p2"><span>Oscilaciones</span><b id="cnt">0</b></div><div class="p2"><span>Cronómetro</span><b id="tt">0,00 s</b></div></div></div></div><p class="note">Material Ventus 10132. Valores de ejemplo: portapesas de 10 g, muelle rojo k = 10 N/m y azul k = 20 N/m. · CC BY-NC-SA 4.0</p></section>
-<section class="side card"><h2>Qué se observa</h2><p class="p1">Al colgar pesas, el muelle se alarga y el índice rojo baja por la escala del tubo. El alargamiento es proporcional a la fuerza: con el doble de peso, el muelle se alarga el doble. El muelle azul es más duro que el rojo y se alarga menos.</p><div class="p1"><div class="eq" data-tex="F=k\,x"></div><p>Aquí <i>F</i> = <i>mg</i> es el peso de lo que cuelga, portapesas incluido; <i>x</i>, el alargamiento, que se lee directamente en la escala en mm porque el índice marca 0 sin carga; y <i>k</i>, la constante elástica del muelle.</p></div><p class="p2">Si se baja un poco la masa y se suelta, oscila arriba y abajo. Con más masa oscila más despacio; con el muelle más duro, más deprisa.</p><div class="p2"><div class="eq" data-tex="T=2\pi\sqrt{\frac{m}{k}}"></div><p>Aquí <i>T</i> es el periodo, el tiempo de una oscilación completa; <i>m</i>, la masa colgada, portapesas incluido; y <i>k</i>, la constante elástica. Una oscilación se cuenta cada vez que la masa vuelve al punto más bajo.</p></div><h2>Qué hay que medir</h2><ol><li>Pesar el portapesas en la báscula y colgarlo.</li><li class="p1">Leer el alargamiento <i>x</i> en la escala.</li><li class="p1">Añadir una a una las 8 pesas de 10 g, pesando cada vez la masa total y leyendo <i>x</i>.</li><li class="p2">Bajar un poco la masa, soltarla y medir con el cronómetro el tiempo de 30 oscilaciones, <i>t</i><sub>30</sub>. El periodo es <i>T</i> = <i>t</i><sub>30</sub>/30.</li><li class="p2">Repetir añadiendo una a una las 8 pesas de 10 g.</li></ol><h2>Tabla de la ficha</h2><div class="p1"><table class="t"><tr><th><i>m</i> (kg)</th><th><i>F</i> (N)</th><th><i>x</i> (m)</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table></div><div class="p2"><table class="t"><tr><th><i>m</i> (kg)</th><th><i>t</i>₃₀ (s)</th><th><i>T</i> (s)</th><th><i>T</i>² (s²)</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table></div></section></main>
+<section class="side card"><h2>Qué se observa</h2><p class="p1">Al colgar pesas, el muelle se alarga y el índice rojo baja por la escala del tubo. El alargamiento es proporcional a la fuerza: con el doble de peso, el muelle se alarga el doble. El muelle azul es más duro que el rojo y se alarga menos.</p><div class="p1"><div class="eq" data-tex="F=k\,x"></div><p>Aquí <i>F</i> = <i>mg</i> es el peso de lo que cuelga, portapesas incluido; <i>x</i>, el alargamiento, que se lee directamente en la escala en mm porque el índice marca 0 sin carga; y <i>k</i>, la constante elástica del muelle.</p></div><p class="p2">Si se baja un poco la masa y se suelta, oscila arriba y abajo. Con más masa oscila más despacio; con el muelle más duro, más deprisa.</p><div class="p2"><div class="eq" data-tex="T=2\pi\sqrt{\frac{m}{k}}"></div><p>Aquí <i>T</i> es el periodo, el tiempo de una oscilación completa; <i>m</i>, la masa colgada, portapesas incluido; y <i>k</i>, la constante elástica. Una oscilación se cuenta cada vez que la masa vuelve al punto más bajo.</p></div><h2>Qué hay que medir</h2><ol><li>Pesar el portapesas en la báscula y colgarlo.</li><li class="p1">Leer el alargamiento <i>x</i> en la escala.</li><li class="p1">Añadir una a una las 8 pesas de 10 g, pesando cada vez la masa total y leyendo <i>x</i>.</li><li class="p2">Bajar un poco la masa, soltarla y medir con el cronómetro el tiempo de 30 oscilaciones, <i>t</i><sub>30</sub>. El periodo es <i>T</i> = <i>t</i><sub>30</sub>/30.</li><li class="p2">Repetir añadiendo una a una las 8 pesas de 10 g.</li></ol><h2>Tabla de la ficha</h2><div class="p1"><table class="t"><tr><th><i>m</i> (kg)</th><th><i>F</i> (N)</th><th><i>x</i> (m)</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table></div><div class="p2"><table class="t"><tr><th><i>m</i> (kg)</th><th><i>t</i>₃₀ (s)</th><th><i>T</i> (s)</th><th><i>T</i>² (s²)</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table></div><p class="mnote">Material Ventus 10132. Valores de ejemplo: portapesas de 10 g, muelle rojo k = 10 N/m y azul k = 20 N/m. · CC BY-NC-SA 4.0</p></section></main>
 <script>
 const MOB=()=>matchMedia('(max-width:820px),(max-height:520px)').matches;
 function fit(){const e=document.querySelector('.side');if(MOB()){e.style.fontSize='';return}let lo=10,hi=34;for(let i=0;i<10;i++){const m=(lo+hi)/2;e.style.fontSize=m+'px';if(e.scrollHeight>e.clientHeight+1||e.scrollWidth>e.clientWidth+1)hi=m;else lo=m}e.style.fontSize=lo+'px'}
 if(document.fonts)document.fonts.ready.then(()=>{fixBtn();fit()});
-function lockBar(){const bar=document.querySelector('.bar');if(!bar||!document.querySelector('.pt'))return;bar.style.minHeight='';if(MOB())return;const cur=document.body.dataset.part;let h=0;['1','2'].forEach(p=>{document.body.dataset.part=p;h=Math.max(h,bar.offsetHeight)});document.body.dataset.part=cur;bar.style.minHeight=h+'px'}
+function lockBar(){const bar=document.querySelector('.bar');if(!bar||!document.querySelector('.pt'))return;bar.style.minHeight='';if(matchMedia('(orientation:landscape) and (max-height:520px)').matches)return;const cur=document.body.dataset.part;let h=0;['1','2'].forEach(p=>{document.body.dataset.part=p;h=Math.max(h,bar.offsetHeight)});document.body.dataset.part=cur;bar.style.minHeight=h+'px'}
 function fixBtn(){document.querySelectorAll('[data-alt]').forEach(e=>{e.style.minWidth='';const t=e.textContent;const w1=e.offsetWidth;e.textContent=e.dataset.alt;const w2=e.offsetWidth;e.textContent=t;e.style.minWidth=Math.max(w1,w2)+'px'});lockBar()}
 let rzT,rzW=innerWidth;addEventListener('resize',()=>{if(MOB()&&innerWidth===rzW)return;rzW=innerWidth;clearTimeout(rzT);rzT=setTimeout(()=>{fixBtn();fit()},120)});setTimeout(fixBtn,0);setTimeout(fixBtn,500);setTimeout(fit,50);setTimeout(fit,600);
 document.querySelectorAll('[data-tex]').forEach(e=>{try{katex.render(e.dataset.tex,e,{displayMode:e.classList.contains('eq'),throwOnError:false})}catch(x){e.textContent=e.dataset.tex}});
+(function(){const g=document.querySelector('header .gbtn');if(!g)return;g.onclick=()=>{const on=document.body.classList.toggle('guide');g.textContent=on?'Simulación':'Guía';if(on)document.querySelector('.side').scrollTop=0};addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('guide'))g.click()})})();
 const $=s=>document.querySelector(s),NS='http://www.w3.org/2000/svg';
-function mk(tag,at,par){const e=document.createElementNS(NS,tag);for(const k in at)e.setAttribute(k,at[k]);(par||$('svg.sim')).appendChild(e);return e}
+const _SIM=document.querySelector('svg.sim');let _SC=null,_R0=null;if(_SIM){_R0=document.createElementNS(NS,'g');_SC=document.createElementNS(NS,'g');_SC.id='sc';_R0.appendChild(_SC);_SIM.appendChild(_R0)}
+function mk(tag,at,par){const e=document.createElementNS(NS,tag);for(const k in at)e.setAttribute(k,at[k]);(par||_SC||$('svg.sim')).appendChild(e);return e}
 function fmt(x,d){return x.toFixed(d).replace('.',',')}
 let playing=true,last=null;function loop(step){function f(ts){if(last===null)last=ts;let dt=Math.min(0.05,(ts-last)/1000);last=ts;if(playing&&!document.hidden)step(dt);requestAnimationFrame(f)}requestAnimationFrame(f)}
 (function(){const pp=document.getElementById('pp');if(!pp)return;const set=p=>{playing=p;pp.textContent=p?'Parar':'Continuar';pp.classList.toggle('on',!p)};
@@ -176,7 +201,7 @@ function camSet(){CAM.position.set(TG.x+dist*Math.cos(el)*Math.sin(az),TG.y+dist
 let drag=null;box.addEventListener('pointerdown',e=>{drag=[e.clientX,e.clientY];box.setPointerCapture(e.pointerId)});
 box.addEventListener('pointermove',e=>{if(!drag)return;az-=(e.clientX-drag[0])*0.008;el=Math.max(-0.1,Math.min(1.3,el+(e.clientY-drag[1])*0.006));drag=[e.clientX,e.clientY]});
 box.addEventListener('pointerup',()=>drag=null);box.addEventListener('wheel',e=>{e.preventDefault();dist=Math.max(0.3,Math.min(4,dist*Math.exp(e.deltaY*0.001)))},{passive:false});
-function size(){const w=box.clientWidth,h=box.clientHeight;R3.setSize(w,h,false);if(CAM.f0===undefined)CAM.f0=CAM.fov;if(w<h&&w<=820){const hs=h*0.6,Hf=2*h-hs;CAM.fov=2*Math.atan(Math.tan(CAM.f0*Math.PI/360)*Hf/hs)*180/Math.PI;CAM.aspect=w/Hf;CAM.setViewOffset(w,Hf,0,h-hs,w,h)}else{const kk=w>h*1.3?0.3:0;CAM.fov=CAM.f0;CAM.aspect=w*(1+kk)/h;CAM.setViewOffset(w*(1+kk),h,w*kk,0,w,h)}CAM.updateProjectionMatrix()}let needSz=false;function eR(e){const b=box.getBoundingClientRect(),r=e.getBoundingClientRect(),x0=b.left+box.clientLeft,y1=b.top+box.clientTop+box.clientHeight;return [Math.round(r.left-x0),Math.round(y1-r.bottom),Math.round(r.width),Math.round(r.height)]};new ResizeObserver(()=>needSz=true).observe(box);size();
+function size(){const w=box.clientWidth,h=box.clientHeight;R3.setSize(w,h,false);if(CAM.f0===undefined)CAM.f0=CAM.fov;if(matchMedia('(max-width:820px) and (orientation:portrait)').matches){const hs=h*0.6,Hf=2*h-hs;CAM.fov=2*Math.atan(Math.tan(CAM.f0*Math.PI/360)*Hf/hs)*180/Math.PI;CAM.aspect=w/Hf;CAM.setViewOffset(w,Hf,0,h-hs,w,h)}else{const kk=w>h*1.3?0.3:0;CAM.fov=CAM.f0;CAM.aspect=w*(1+kk)/h;CAM.setViewOffset(w*(1+kk),h,w*kk,0,w,h)}CAM.updateProjectionMatrix()}let needSz=false;function eR(e){const b=box.getBoundingClientRect(),r=e.getBoundingClientRect(),x0=b.left+box.clientLeft,y1=b.top+box.clientTop+box.clientHeight;return [Math.round(r.left-x0),Math.round(y1-r.bottom),Math.round(r.width),Math.round(r.height)]};new ResizeObserver(()=>needSz=true).observe(box);size();
 // estado
 function setm(){k=+$('#K').value;const n=+$('#N').value;m=MP+0.010*n;$('#Nv').textContent=n;$('#rm').textContent=Math.round(m*1000)+' g';
  cap.material.color.set(k==10?'#d32f2f':'#1f6fd1');wts.forEach((w,i)=>w.visible=i<n);const x=m*g/k;$('#rF').textContent=fmt(m*g,3)+' N';$('#rx').textContent=Math.round(x*1000)+' mm';$('#rdx').textContent='x = '+Math.round(x*1000)+' mm'}
@@ -194,4 +219,20 @@ let lt=null;function frame(ts){if(lt===null)lt=ts;const dt=Math.min(0.05,(ts-lt)
   CAM2.position.set(0.016,iy0+0.004,0.12);CAM2.lookAt(0.008,iy0,-0.008);R3.setScissorTest(true);R3.setViewport(ix,iy,iw,ih);R3.setScissor(ix,iy,iw,ih);R3.setClearColor(0xf6f7f9,1);R3.clear();R3.render(SC,CAM2);R3.setScissorTest(false);R3.setViewport(0,0,W0,H0)}
  requestAnimationFrame(frame)}requestAnimationFrame(frame);
 
+(function(){const v=document.getElementById('vw');if(!v)return;const home=()=>document.querySelector('.acts');const f=()=>{const s=document.querySelector('.sim3');if(!s)return;if(MOB()){if(v.parentNode!==s){s.appendChild(v);v.classList.add('ov');v.title='Vista inicial'}}else if(v.classList.contains('ov')){v.classList.remove('ov');home()&&home().appendChild(v)}};f();addEventListener('resize',f)})();
+(function(){const f=()=>{document.querySelectorAll('.read>div').forEach(d=>{d.classList.remove('w2');if(MOB()&&d.scrollWidth>d.clientWidth+1)d.classList.add('w2')})};addEventListener('load',f);setTimeout(f,300);addEventListener('resize',()=>setTimeout(f,150))})();
+
+(function(){if(!_SIM)return;const vb0=_SIM.getAttribute('viewBox'),mq=matchMedia('(max-width:820px) and (orientation:portrait)');
+function lay(){_SIM.querySelectorAll('.pr').forEach(e=>e.remove());_R0.removeAttribute('transform');_R0.removeAttribute('clip-path');
+ const L=window.PORT;if(!L||!mq.matches){_SIM.setAttribute('viewBox',vb0);return}
+ const gap=window.PORTGAP||14,W=Math.max(...L.map(o=>o.r[2]*(o.s||1)));let y=0;
+ const df=document.createElementNS(NS,'defs');df.setAttribute('class','pr');_SIM.insertBefore(df,_SIM.firstChild);
+ L.forEach((o,i)=>{const s=o.s||1,[x0,y0,w,h]=o.r,dx=o.at?o.at[0]:(W-w*s)/2+(o.dx||0),yy=o.at?o.at[1]:y;const cp=document.createElementNS(NS,'clipPath');cp.id='pc'+i;const rc=document.createElementNS(NS,'rect');
+  rc.setAttribute('x',x0);rc.setAttribute('y',y0);rc.setAttribute('width',w);rc.setAttribute('height',h);cp.appendChild(rc);df.appendChild(cp);
+  const tf=`translate(${dx} ${yy}) scale(${s}) translate(${-x0} ${-y0})`;
+  if(i===0){_R0.setAttribute('transform',tf);_R0.setAttribute('clip-path','url(#pc0)')}
+  else{const g=document.createElementNS(NS,'g');g.setAttribute('class','pr');g.setAttribute('transform',tf);g.setAttribute('clip-path','url(#pc'+i+')');const u=document.createElementNS(NS,'use');u.setAttribute('href','#sc');g.appendChild(u);if(o.under)_SIM.insertBefore(g,_R0);else _SIM.appendChild(g)}
+  if(!o.at)y+=h*s+gap});
+ _SIM.setAttribute('viewBox',`0 0 ${W} ${y-gap}`)}
+window.relayout=lay;(mq.addEventListener?mq.addEventListener('change',lay):mq.addListener(lay));lay()})();
 </script></body></html>
