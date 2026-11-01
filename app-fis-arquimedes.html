@@ -207,7 +207,7 @@ add(new THREE.PlaneGeometry(0.03,VH*0.9),new THREE.MeshBasicMaterial({map:vtex,t
 const PR=0.0138,PH=0.2,PB=0.012;const prob=new THREE.Group();SC.add(prob);
 add(new THREE.CylinderGeometry(0.035,0.035,0.012,6),glass,0,0.006,0,prob);
 add(new THREE.CylinderGeometry(PR,PR,PH,40,1,true),glass,0,PB+PH/2,0,prob);add(new THREE.TorusGeometry(PR,0.0008,8,48),new THREE.MeshStandardMaterial({color:'#b9cfdb',roughness:.2}),0,PB+PH,0,prob).rotation.x=Math.PI/2;
-const pw=add(new THREE.CylinderGeometry(PR-0.0008,PR-0.0008,1,40),waterM,0,0,0,prob);const A=Math.PI*(PR-0.0008)**2,MLH=1e-6/A;// metros por ml
+const pw=add(new THREE.CylinderGeometry(PR-0.0008,PR-0.0008,1,40),waterM,0,0,0,prob);const wl=add(new THREE.TorusGeometry(PR-0.0009,0.00045,8,48),new THREE.MeshBasicMaterial({color:'#2a86c9'}),0,0,0,prob);wl.rotation.x=Math.PI/2;const A=Math.PI*(PR-0.0008)**2,MLH=1e-6/A;// metros por ml
 const ptex=tex(128,4096,(x,w,h)=>{x.fillStyle='#1b2430';for(let ml=0;ml<=110;ml++){const yy=h-ml*MLH/PH*h;if(yy<4)break;const L=ml%10==0?60:ml%5==0?42:24;x.fillRect(0,yy-1,L,ml%10==0?4:2);if(ml%10==0){x.font='bold 34px Inter,Arial';x.fillText(String(ml),66,yy+12)}}});
 add(new THREE.PlaneGeometry(0.016,PH),new THREE.MeshBasicMaterial({map:ptex,transparent:true,depthWrite:false}),0.004,PB+PH/2,PR+0.0008,prob);
 // objeto colgado
@@ -232,7 +232,7 @@ function solve(){const Yc=yUp()+(yDown()-yUp())*u;let Fv=P,hy=0;
 function draw(){const s=solve();clamp.position.y=s.Yc;const iy=SY0-F*SPX;ind.position.y=iy;
  const hyL=hookRel(F);inner.scale.y=Math.max(0.001,iy-hyL);inner.position.y=(iy+hyL)/2;hk.position.y=hyL;
  thr.scale.y=LTH();thr.position.y=hyL-0.004-LTH()/2;obj.position.y=hyL-0.004-LTH();
- if(part==2){const top=PB+lvl*MLH;pw.scale.y=top-PB;pw.position.y=(top+PB)/2;$('#rv').textContent=fmt(lvl,1)+' ml';$('#rdv').textContent='V = '+fmt(lvl,1)+' ml'}
+ if(part==2){const top=PB+lvl*MLH;pw.scale.y=top-PB;pw.position.y=(top+PB)/2;wl.position.y=top;$('#rv').textContent=fmt(lvl,1)+' ml';$('#rdv').textContent='V = '+fmt(lvl,1)+' ml'}
  $('#rd').textContent=fmt(F,2)+' N';$('#rdf').textContent='F = '+fmt(F,2)+' N'}
 // cámara
 let az=0.45,el=0.2,dist=1.05;const TG=new THREE.Vector3(-0.08,0.24,0);const CAMP={1:[0.4,0.22,0.62,0.15],2:[0.4,0.2,0.72,0.19]};function camPart(p){[az,el,dist,TG.y]=CAMP[p];TG.x=-0.02}
@@ -251,7 +251,7 @@ let lt=null;function frame(ts){if(lt===null)lt=ts;const dt=Math.min(0.05,(ts-lt)
  if(needSz){needSz=false;size()}camSet();const W0=box.clientWidth,H0=box.clientHeight;R3.setViewport(0,0,W0,H0);R3.render(SC,CAM);
  if(true){const R1=eR(document.querySelector('.sim3 .ins:not(.p2)')),ix=R1[0],iw=R1[2];const iy=clamp.position.y+SY0-F*SPX;
   const hD=R1[3];CD.position.set(0.012,iy,0.1);CD.lookAt(0.011,iy,-0.005);vp(CD,ix,R1[1],iw,hD);
-  if(part==2){const ly=PB+lvl*MLH,R2=eR(document.querySelector('.sim3 .ins.p2'));const lc=PB+74.5*MLH;CP.position.set(0.012,lc,0.105);CP.lookAt(0.006,lc,0);obj.visible=false;thr.visible=false;vp(CP,R2[0],R2[1],R2[2],R2[3]);obj.visible=true;thr.visible=true}
+  if(part==2){const ly=PB+lvl*MLH,R2=eR(document.querySelector('.sim3 .ins.p2'));const lc=PB+74.5*MLH;CP.position.set(0.012,lc,0.105);CP.lookAt(0.006,lc,0);vp(CP,R2[0],R2[1],R2[2],R2[3])}
   R3.setViewport(0,0,W0,H0)}
  requestAnimationFrame(frame)}requestAnimationFrame(frame);
 
