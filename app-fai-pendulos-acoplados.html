@@ -142,7 +142,10 @@ pp.onclick=()=>set(!playing);document.addEventListener('click',e=>{const t=e.tar
  ctrl.innerHTML='';ctrl.appendChild(P);if(Ac.children.length)ctrl.appendChild(Ac);
  const st=()=>{const g=document.getElementById('go'),p=document.getElementById('pp');if(g)g.dataset.st=/^(Volver|Sacar)/.test(g.textContent.trim())?'reset':'play';if(p)p.dataset.st=/^Continuar/.test(p.textContent.trim())?'play':'pause'};
  st();new MutationObserver(st).observe(ctrl,{subtree:true,childList:true,characterData:true})})();
-window.PORT=[{r:[100,40,330,420],s:1.15},{r:[432,30,500,195]}];
+window.PORT=[{r:[100,40,330,420],s:1.15},{r:[458,28,450,242]}];
+
+(function(){const st=document.createElement('style');st.textContent='@media(max-width:820px),(max-height:520px){.acts>span{display:none}.acts{flex-wrap:nowrap;align-items:stretch}.acts .md{flex:1 1 0;min-width:0;padding:.45em .3em;font-size:12.5px;line-height:1.2;text-align:center;white-space:normal}.acts .md::before{margin-right:.3em}.read>#pp,.read>label{align-self:stretch;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:600;font-size:13.5px}.read>label{background:#fff;border:1px solid var(--line);border-radius:8px;padding:3px 9px;flex-direction:column;align-items:flex-start;justify-content:center;gap:1px;font-size:11.5px;color:var(--slate)}.read>label select{font-size:14px;padding:1px 4px}}';document.head.appendChild(st);
+ const pp=document.getElementById('pp'),sl=document.getElementById('sp').closest('label');const f=()=>{const rd=document.querySelector('.read'),ac=document.querySelector('.acts'),pa=document.querySelector('.params');if(MOB()){if(pp.parentNode!==rd){rd.insertBefore(sl,rd.firstChild);rd.insertBefore(pp,rd.firstChild)}}else if(pp.parentNode===rd){ac&&ac.appendChild(pp);pa&&pa.appendChild(sl)}};f();addEventListener('resize',f)})();
 
 const L=0.78,g=9.81,w1=Math.sqrt(g/L),c=0.0387,S=330,ax=[200,360],TOP=50,la=0.6,A0=0.02,EX=3;let M,w2,q1=0,q2=0,ph=0,t=0,mode=0,hist=[];
 mk('path',{d:'M120 50 H440',stroke:'#1b2430','stroke-width':3});for(let i=0;i<19;i++)mk('path',{d:`M${124+i*17} 50 l-8 -9`,stroke:'#1b2430','stroke-width':1.2});
