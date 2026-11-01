@@ -214,7 +214,7 @@ add(new THREE.PlaneGeometry(0.016,PH),new THREE.MeshBasicMaterial({map:ptex,tran
 let geo={};
 function build(){while(obj.children.length)obj.remove(obj.children[0]);
  if(part==1){const e=MAT[+$('#E').value];P=e[1]*VS*g;add(new THREE.SphereGeometry(RS,40,28),M(e[2],{metalness:.55,roughness:.3}),0,-RS,0,obj);add(new THREE.TorusGeometry(0.003,0.0008,6,14),steel,0,0.002,0,obj).rotation.y=Math.PI/2;geo={h:2*RS,V:VS,top:0}}
- else{const n=+$('#NP').value;$('#NPv').textContent=n;const mt=0.010+0.020*n;P=mt*g;const V=mt/8400,ph=0.0042;
+ else{const n=+$('#NP').value;$('#NPv').textContent=n;const mt=0.010+0.020*n;P=mt*g;const V=mt/8400,ph=0.020/8400/(Math.PI*0.0095**2);// altura de cada pesa de latón de 20 g y 1,9 cm de diámetro
   add(new THREE.CylinderGeometry(0.0012,0.0012,n*ph+0.03,8),steel,0,-(n*ph+0.03)/2,0,obj);add(new THREE.TorusGeometry(0.003,0.0008,6,14),steel,0,0.002,0,obj).rotation.y=Math.PI/2;
   for(let i=0;i<n;i++)add(new THREE.CylinderGeometry(0.0095,0.0095,ph-0.0004,32),M('#c9a24a',{metalness:.55,roughness:.3}),0,-(n*ph+0.03)+0.0035+i*ph+ph/2,0,obj);
   add(new THREE.CylinderGeometry(0.0105,0.0105,0.0035,32),M('#8a6d2a',{metalness:.5}),0,-(n*ph+0.03)+0.00175,0,obj);geo={h:n*ph+0.0035,V,top:0,len:n*ph+0.03}}}
@@ -222,15 +222,17 @@ function build(){while(obj.children.length)obj.remove(obj.children[0]);
 const LTH=()=>part==1?Math.max(0.035,VH+0.025-0.022-2*RS-0.004):0.03,OL=()=>part==1?2*RS:geo.len,LIN=()=>SY0+0.012+DL+0.01;
 function hookRel(Fv){return SY0-Fv*SPX-LIN()}
 function yDown(){const Fs=P-RA*g*geo.V,tb=part==1?0.022:PB+(70+geo.V*1e6)*MLH-0.006-geo.h;return tb-hookRel(Fs)+0.004+LTH()+OL()}
-function yUp(){return yDown()+(part==1?0.125:0.14)}
+function yUp(){return yDown()+(part==1?0.125:0.09)}
 function subAt(Yc,Fv){const bot=Yc+hookRel(Fv)-0.004-LTH()-OL();let V=0,L=0;
  if(part==1){const h=Math.max(0,Math.min(2*RS,VL-bot));V=VS*(h*h*(3*RS-h))/(4*RS**3)}
  else{L=PB+70*MLH;for(let k=0;k<12;k++){const h=Math.max(0,Math.min(geo.h,L-bot));V=geo.V*h/geo.h;L=PB+(70+V*1e6)*MLH}}
  return [V,bot,L]}
-function solve(){const Yc=yUp()+(yDown()-yUp())*u;const Vmax=part==1?VS:geo.V;let lo=P-RA*g*Vmax,hi=P;
- // equilibrio del muelle: F = P - empuje(F); se busca por bisección (la función es monótona)
- for(let it=0;it<40;it++){const m=(lo+hi)/2;const e=m-(P-RA*g*subAt(Yc,m)[0]);if(e>0)hi=m;else lo=m}
- F=(lo+hi)/2;const r=subAt(Yc,F);Vsub=r[0];if(part==2){lvl=70+Vsub*1e6;bg=r[1]-r[2]}return{Yc}}
+function solve(){// se mueve la pieza colgada a velocidad constante; la nuez se coloca donde el muelle la deja en equilibrio
+ const bU=part==2?PB+PH+0.008:yUp()+hookRel(P)-0.004-LTH()-OL(),bD=yDown()+hookRel(P-RA*g*(part==1?VS:geo.V))-0.004-LTH()-OL(),bot=bU+(bD-bU)*u;
+ let V=0,L=0;if(part==1){const h=Math.max(0,Math.min(2*RS,VL-bot));V=VS*(h*h*(3*RS-h))/(4*RS**3)}
+ else{L=PB+70*MLH;for(let k=0;k<12;k++){const h=Math.max(0,Math.min(geo.h,L-bot));V=geo.V*h/geo.h;L=PB+(70+V*1e6)*MLH}}
+ Vsub=V;F=P-RA*g*V;if(part==2){lvl=70+V*1e6;bg=bot-L}
+ return{Yc:bot+0.004+LTH()+OL()-hookRel(F)}}
 function draw(){const s=solve();clamp.position.y=s.Yc;const iy=SY0-F*SPX;ind.position.y=iy;
  const hyL=hookRel(F);inner.scale.y=Math.max(0.001,iy-hyL);inner.position.y=(iy+hyL)/2;hk.position.y=hyL;
  thr.scale.y=LTH();thr.position.y=hyL-0.004-LTH()/2;obj.position.y=hyL-0.004-LTH();
@@ -249,8 +251,7 @@ const rs=()=>{u=0;target=0;$('#go').textContent='Sumergir';build();draw()};$('#E
 $('#go').onclick=()=>{target=target?0:1;$('#go').textContent=target?'Sacar del agua':'Sumergir'};$('#vw').onclick=()=>camPart(part);setPart(1);
 function vp(cam,ix,iy,iw,ih){cam.aspect=iw/ih;cam.updateProjectionMatrix();R3.setScissorTest(true);R3.setViewport(ix,iy,iw,ih);R3.setScissor(ix,iy,iw,ih);R3.setClearColor(0xf6f7f9,1);R3.clear();R3.render(SC,cam);R3.setScissorTest(false)}
 let lt=null;function frame(ts){if(lt===null)lt=ts;const dt=Math.min(0.05,(ts-lt)/1000);lt=ts;
- if(u!==target){// se baja deprisa al principio y cada vez más despacio al acercarse al agua, como a mano
- u+=Math.sign(target-u)*Math.min(Math.abs(target-u),dt*0.65*Math.max(0.12,1-u));draw()}
+ if(u!==target){ u+=Math.sign(target-u)*Math.min(Math.abs(target-u),dt*0.2);draw()}
  if(needSz){needSz=false;size()}camSet();const W0=box.clientWidth,H0=box.clientHeight;R3.setViewport(0,0,W0,H0);R3.render(SC,CAM);
  if(true){const R1=eR(document.querySelector('.sim3 .ins:not(.p2)')),ix=R1[0],iw=R1[2];const iy=clamp.position.y+SY0-F*SPX;
   const hD=R1[3];CD.position.set(0.012,iy,0.1);CD.lookAt(0.011,iy,-0.005);vp(CD,ix,R1[1],iw,hD);
