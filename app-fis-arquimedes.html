@@ -161,7 +161,7 @@ pp.onclick=()=>set(!playing);document.addEventListener('click',e=>{const t=e.tar
 
 const g=9.80,RA=1000,DS=0.08;// el muelle del dinamómetro se alarga 8 cm por newton (2 N = 16 cm)
 const MAT=[['aluminio',2700,'#c3c8ce'],['hierro',7870,'#4d535b'],['latón',8500,'#c9a24a'],['plomo',11340,'#6d727a']],RS=0.0125,VS=4/3*Math.PI*RS**3;
-let part=1,u=0,target=0,P=0,F=0,Vsub=0,lvl=70;
+let part=1,u=0,target=0,P=0,F=0,Vsub=0,lvl=70,bg=1;
 const box=$('#v3'),cv=$('#cv');
 const R3=new THREE.WebGLRenderer({canvas:cv,antialias:true});R3.setPixelRatio(Math.min(2,devicePixelRatio));R3.outputEncoding=THREE.sRGBEncoding;R3.sortObjects=true;
 const SC=new THREE.Scene();SC.background=new THREE.Color('#ffffff');
@@ -228,7 +228,7 @@ function solve(){const Yc=yUp()+(yDown()-yUp())*u;let Fv=P,hy=0;
   if(part==1){const h=Math.max(0,Math.min(2*RS,VL-bot));Vsub=VS*(h*h*(3*RS-h))/(4*RS**3)}
   else{let L=PB+70*MLH;for(let k=0;k<6;k++){const h=Math.max(0,Math.min(geo.h,L-bot));Vsub=geo.V*h/geo.h;L=PB+(70+Vsub*1e6)*MLH}lvl=70+Vsub*1e6}
   Fv=P-RA*g*Vsub}
- F=Fv;return{Yc}}
+ F=Fv;if(part==2)bg=(Yc+hookRel(Fv)-0.004-LTH()-OL())-(PB+lvl*MLH);return{Yc}}
 function draw(){const s=solve();clamp.position.y=s.Yc;const iy=SY0-F*SPX;ind.position.y=iy;
  const hyL=hookRel(F);inner.scale.y=Math.max(0.001,iy-hyL);inner.position.y=(iy+hyL)/2;hk.position.y=hyL;
  thr.scale.y=LTH();thr.position.y=hyL-0.004-LTH()/2;obj.position.y=hyL-0.004-LTH();
@@ -247,11 +247,11 @@ const rs=()=>{u=0;target=0;$('#go').textContent='Sumergir';build();draw()};$('#E
 $('#go').onclick=()=>{target=target?0:1;$('#go').textContent=target?'Sacar del agua':'Sumergir'};$('#vw').onclick=()=>camPart(part);setPart(1);
 function vp(cam,ix,iy,iw,ih){cam.aspect=iw/ih;cam.updateProjectionMatrix();R3.setScissorTest(true);R3.setViewport(ix,iy,iw,ih);R3.setScissor(ix,iy,iw,ih);R3.setClearColor(0xf6f7f9,1);R3.clear();R3.render(SC,cam);R3.setScissorTest(false)}
 let lt=null;function frame(ts){if(lt===null)lt=ts;const dt=Math.min(0.05,(ts-lt)/1000);lt=ts;
- if(u!==target){u+=Math.sign(target-u)*Math.min(Math.abs(target-u),dt*0.45);draw()}
+ if(u!==target){const wet=part==2&&bg<0.0012&&Vsub<geo.V*0.999;u+=Math.sign(target-u)*Math.min(Math.abs(target-u),dt*(wet?0.025:0.45));draw()}
  if(needSz){needSz=false;size()}camSet();const W0=box.clientWidth,H0=box.clientHeight;R3.setViewport(0,0,W0,H0);R3.render(SC,CAM);
  if(true){const R1=eR(document.querySelector('.sim3 .ins:not(.p2)')),ix=R1[0],iw=R1[2];const iy=clamp.position.y+SY0-F*SPX;
   const hD=R1[3];CD.position.set(0.012,iy,0.1);CD.lookAt(0.011,iy,-0.005);vp(CD,ix,R1[1],iw,hD);
-  if(part==2){const ly=PB+lvl*MLH,R2=eR(document.querySelector('.sim3 .ins.p2'));CP.position.set(0.012,ly,0.085);CP.lookAt(0.006,ly,0);vp(CP,R2[0],R2[1],R2[2],R2[3])}
+  if(part==2){const ly=PB+lvl*MLH,R2=eR(document.querySelector('.sim3 .ins.p2'));const lc=PB+74.5*MLH;CP.position.set(0.012,lc,0.105);CP.lookAt(0.006,lc,0);obj.visible=false;thr.visible=false;vp(CP,R2[0],R2[1],R2[2],R2[3]);obj.visible=true;thr.visible=true}
   R3.setViewport(0,0,W0,H0)}
  requestAnimationFrame(frame)}requestAnimationFrame(frame);
 
