@@ -1,2 +1,3 @@
 User-agent: *
 Allow: /
+Sitemap: https://innovafislab.github.io/sitemap.xml
