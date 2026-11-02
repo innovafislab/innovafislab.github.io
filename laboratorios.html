@@ -285,8 +285,9 @@
  .practice .body{padding:8px 8px 10px!important}
  .practice h4{font-size:13.5px!important;line-height:1.25;margin:0 0 4px!important}
  .practice .body>p{display:none}
- .practice .plinks{gap:4px!important;margin-top:auto!important;padding-top:4px}
- .practice .plinks a,.practice .plinks button{padding:4px 7px!important;font-size:11.5px!important;gap:4px!important;white-space:normal!important;line-height:1.15}
+ .practice .plinks{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px!important;margin-top:auto!important;padding-top:4px}
+ .practice .plinks a,.practice .plinks button{justify-content:center;min-width:0;padding:4px 3px!important;font-size:11.5px!important;gap:3px!important;white-space:nowrap!important;line-height:1.15;overflow:hidden}
+ .practice .plinks a.simlink+a.simlink{grid-column:1/-1}
  .practice .plinks svg{width:11px!important;height:11px!important}
 }
 </style></head>
