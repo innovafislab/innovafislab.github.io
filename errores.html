@@ -376,7 +376,8 @@ function tog(){if(v.paused)v.play();else v.pause()}
 pp.addEventListener("click",tog);var vw=box.querySelector(".vw");box.querySelector(".fs").addEventListener("click",function(){if(document.fullscreenElement){document.exitFullscreen();return}if(vw.requestFullscreen)vw.requestFullscreen().catch(function(){});else if(vw.webkitRequestFullscreen)vw.webkitRequestFullscreen();else if(v.webkitEnterFullscreen)v.webkitEnterFullscreen()});v.addEventListener("dblclick",function(){box.querySelector(".fs").click()});v.addEventListener("click",tog);
 var drag=false,was=false,tx=0,raf=0;function pos(e){var r=bar.getBoundingClientRect();return Math.min(1,Math.max(0,(e.clientX-r.left)/r.width))}
 function show(x){var d=v.duration||0;fill.style.width=100*x+"%";tm.textContent=f(x*d)+" / "+f(d)}
-function go(){raf=0;if(!v.duration)return;if(v.fastSeek&&drag)v.fastSeek(tx*v.duration);else v.currentTime=tx*v.duration}
+var busy=0,pend=false;function go(){raf=0;if(!v.duration)return;if(busy&&Date.now()-busy<700){pend=true;return}busy=Date.now();pend=false;var t=tx*v.duration;if(v.fastSeek&&drag)v.fastSeek(t);else v.currentTime=t}
+v.addEventListener("seeked",function(){busy=0;if(pend&&drag)go()});
 function want(x){tx=x;show(x);if(!raf)raf=requestAnimationFrame(go)}
 bar.addEventListener("pointerdown",function(e){e.preventDefault();drag=true;was=!v.paused;if(was)v.pause();bar.classList.add("dr");try{bar.setPointerCapture(e.pointerId)}catch(_){}want(pos(e))});
 bar.addEventListener("pointermove",function(e){if(drag){e.preventDefault();want(pos(e))}});
