@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8"><script id="thm">try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dk")}catch(e){}</script><style id="darkcss">html.dk .practice .fig{background:var(--bg)!important}
+<meta charset="utf-8"><script id="thm">(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dk")}catch(e){}})()</script><style id="darkcss">html.dk .practice .fig{background:var(--bg)!important}
 html.dk .snav{background:var(--bg)!important;border-bottom-color:var(--line)!important}
 html.dk .snav .br{color:var(--ink)!important}
 html.dk .snav .fi{color:var(--slate)!important}
@@ -17,10 +17,15 @@ html.dk .itabs .ii{background:var(--paper)!important}
 html.dk .itabs a[aria-current="page"] .ii{background:var(--bg)!important}
 html.dk .labgrid .lab{background:var(--bg)!important}
 html.dk .simlink{background:var(--bg)!important;color:var(--acc-ink)!important}
+html.dk .simlink:hover{background:var(--paper)!important}
 html.dk .video{background:var(--bg)!important;color:var(--acc-ink)!important}
+html.dk .video:hover{background:var(--paper)!important}
 html.dk .ficha{background:var(--bg)!important}
+html.dk .ficha:hover{background:var(--paper)!important}
 html.dk .fv-box{background:var(--bg)!important}
 html.dk .fv-bar{border-bottom-color:var(--line)!important}
+html.dk .fv-x{background:var(--paper)!important;color:var(--ink)!important}
+html.dk .fv-x:hover{background:var(--paper)!important}
 html.dk .lab.aux{background:var(--paper)!important;border-color:#2c3a4a!important}
 html.dk .lab.aux .kind{color:var(--acc-ink)!important}
 html.dk .lab.aux .go{color:var(--acc-ink)!important}
@@ -46,6 +51,12 @@ html.dk .snav .br svg rect:first-child{stroke:#2a3442;stroke-width:1}
 html.dk .gleg .sw.dot{background:var(--ink)!important}
 html.dk{background:#0f141a}
 html.dk [style*="color:#111"],html.dk [style*="color: #111"],html.dk [style*="color:#1b2430"]{color:var(--ink)!important}
+html.dk{--navy:#2b5784!important}
+html.dk header h1{color:var(--ink)!important}
+html.dk .sim,html.dk svg.sim{filter:invert(.9) hue-rotate(180deg) saturate(1.1)}
+html.dk [style*="#fff0c1"]{background:#2b2617!important}
+html.dk .read>label{background:var(--paper)!important}
+html.dk .sim3 .gph,html.dk .sim3 .per{background:rgba(255,255,255,.94)!important;border-color:#e2e6eb!important;filter:invert(.88) hue-rotate(180deg)}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Laboratorios · INNOVA-FIS-LAB</title>
@@ -1388,5 +1399,5 @@ if(dl){fetch("fichas/"+f+".b64.txt").then(function(r){if(!r.ok)throw 0;return r.
 fetch("fichas/"+f+".docx").then(function(r){if(!r.ok)throw 0;return r.blob()}).then(function(b){var u=URL.createObjectURL(new Blob([b],{type:"application/vnd.openxmlformats-officedocument.wordprocessingml.document"})),x=document.createElement("a");x.href=u;x.download=nm;document.body.appendChild(x);x.click();x.remove();setTimeout(function(){URL.revokeObjectURL(u)},60000);done()}).catch(fail)})})();</script>
 <style>.practice .fig.go{cursor:pointer;transition:transform .15s,box-shadow .15s;border-radius:10px}.practice .fig.go:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(23,50,77,.14)}.practice .fig.go:focus-visible{outline:2px solid #17324d;outline-offset:3px}</style>
 <script>document.querySelectorAll('article.practice').forEach(a=>{const l=a.querySelector('a.simlink'),f=a.querySelector('.fig');if(!l||!f)return;f.classList.add('go');f.setAttribute('role','link');f.setAttribute('tabindex','0');f.removeAttribute('aria-hidden');f.setAttribute('aria-label','Abrir la app: '+(a.querySelector('h4')?.textContent||''));f.title='Abrir la app';const go=()=>{location.href=l.href};f.addEventListener('click',go);f.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});</script>
-<script>document.querySelectorAll('a.lab h3').forEach(function(h){var m=h.textContent.match(/^(Laboratorio( de)? )(.*)$/);if(m){h.innerHTML='<span class="lp">'+m[1]+'</span>'+m[3]}});</script><script id="thmjs">document.querySelectorAll(".thm").forEach(function(b){b.addEventListener("click",function(){var d=document.documentElement.classList.toggle("dk");try{localStorage.setItem("theme",d?"dark":"light")}catch(e){}})});</script></body>
+<script>document.querySelectorAll('a.lab h3').forEach(function(h){var m=h.textContent.match(/^(Laboratorio( de)? )(.*)$/);if(m){h.innerHTML='<span class="lp">'+m[1]+'</span>'+m[3]}});</script><script id="thmjs">(function(){document.querySelectorAll(".thm").forEach(function(b){b.addEventListener("click",function(){var d=document.documentElement.classList.toggle("dk");try{localStorage.setItem("theme",d?"dark":"light")}catch(e){}})})})();</script></body>
 </html>

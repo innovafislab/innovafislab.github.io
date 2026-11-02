@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8"><script id="thm">try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dk")}catch(e){}</script><style id="darkcss">html.dk .snav{background:var(--bg)!important;border-bottom-color:var(--line)!important}
+<meta charset="utf-8"><script id="thm">(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dk")}catch(e){}})()</script><style id="darkcss">html.dk .snav{background:var(--bg)!important;border-bottom-color:var(--line)!important}
 html.dk .snav .br{color:var(--ink)!important}
 html.dk .snav .fi{color:var(--slate)!important}
 html.dk .snav .fi:hover{color:var(--ink)!important}
@@ -37,6 +37,12 @@ html.dk .snav .br svg rect:first-child{stroke:#2a3442;stroke-width:1}
 html.dk .gleg .sw.dot{background:var(--ink)!important}
 html.dk{background:#0f141a}
 html.dk [style*="color:#111"],html.dk [style*="color: #111"],html.dk [style*="color:#1b2430"]{color:var(--ink)!important}
+html.dk{--navy:#2b5784!important}
+html.dk header h1{color:var(--ink)!important}
+html.dk .sim,html.dk svg.sim{filter:invert(.9) hue-rotate(180deg) saturate(1.1)}
+html.dk [style*="#fff0c1"]{background:#2b2617!important}
+html.dk .read>label{background:var(--paper)!important}
+html.dk .sim3 .gph,html.dk .sim3 .per{background:rgba(255,255,255,.94)!important;border-color:#e2e6eb!important;filter:invert(.88) hue-rotate(180deg)}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Equipo · INNOVA-FIS-LAB</title>
@@ -318,5 +324,5 @@ html.dk [style*="color:#111"],html.dk [style*="color: #111"],html.dk [style*="co
 
 
 <!--sfoot--><footer class="sfoot"><div class="in" style="max-width:1240px"><span>INNOVA-FIS-LAB · Grupo de Innovación Docente en Laboratorios de Física · Universidad Rey Juan Carlos</span><span>Materiales con licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a></span></div></footer><!--/sfoot-->
-<script id="thmjs">document.querySelectorAll(".thm").forEach(function(b){b.addEventListener("click",function(){var d=document.documentElement.classList.toggle("dk");try{localStorage.setItem("theme",d?"dark":"light")}catch(e){}})});</script></body>
+<script id="thmjs">(function(){document.querySelectorAll(".thm").forEach(function(b){b.addEventListener("click",function(){var d=document.documentElement.classList.toggle("dk");try{localStorage.setItem("theme",d?"dark":"light")}catch(e){}})})})();</script></body>
 </html>
