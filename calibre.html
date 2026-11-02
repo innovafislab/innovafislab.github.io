@@ -22,6 +22,7 @@
   body { margin: 0; background: var(--bg); color: var(--ink); font-family: "InterT", "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; font-size: 17px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
   .wrap { max-width: 1240px; margin: 0 auto; padding: 14px 28px 32px; }
   @media (max-width: 640px) { .wrap { padding: 24px 16px 36px; } }
+@media (max-width: 640px) and (orientation: portrait) { .wrap .panel { padding: 8px 4px 12px; } .wrap .panel .ctl { padding: 0 10px; } }
   .kicker { margin: 0 0 6px; color: var(--slate); font-weight: 600; }
   h1 { font-family: "InterD", "InterT", sans-serif; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; margin: 0 0 10px; font-size: clamp(1.9rem, 3.6vw, 2.6rem); }
   .toprow { display: flex; align-items: center; gap: 8px 24px; flex-wrap: wrap; margin-bottom: 10px; }
@@ -295,6 +296,8 @@
   }
 
   var $ = function (id) { return document.getElementById(id); };
+  var MQ = matchMedia("(max-width: 640px) and (orientation: portrait)");
+  if (MQ.addEventListener) MQ.addEventListener("change", function () { if (pos !== null) draw(pos, split(tgt)); });
   var pos = null, tgt = null, raf = 0;
   function render() {
     tgt = split(parseFloat($("slide").value)).L;
@@ -308,9 +311,10 @@
     raf = pos === tgt ? 0 : requestAnimationFrame(step);
   }
   function draw(P, r) {
-    var z = zoom(P), zx = 440, zy = 156, zw = 352, zh = zw * z.H / z.W;
+    var z = zoom(P), mob = MQ.matches, zx = mob ? 50 : 440, zy = mob ? 276 : 156, zw = mob ? 372 : 352, zh = zw * z.H / z.W;
+    $("cal").setAttribute("viewBox", mob ? "50 6 372 " + (zy + zh - 4) : "0 0 800 258");
     var h = caliper(P, { obj: "ext", lens: true, id: "p" });
-    h += '<text x="' + zx + '" y="' + (zy - 6) + '" font-size="11" font-weight="600" font-family="InterT,sans-serif" fill="' + SLATE + '">Detalle del nonio</text>';
+    h += '<text x="' + zx + '" y="' + (zy - 7) + '" font-size="' + (mob ? 14 : 11) + '" font-weight="600" font-family="InterT,sans-serif" fill="' + SLATE + '">Detalle del nonio</text>';
     h += '<svg x="' + zx + '" y="' + zy + '" width="' + zw + '" height="' + zh + '" viewBox="0 0 ' + z.W + ' ' + z.H + '">' + z.svg + '</svg>';
     h += '<rect x="' + zx + '" y="' + zy + '" width="' + zw + '" height="' + zh + '" rx="4" fill="none" stroke="' + RED + '" stroke-width="1"/>';
     $("cal").innerHTML = h;
