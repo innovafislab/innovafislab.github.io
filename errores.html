@@ -354,6 +354,20 @@ html.dk .sim3 .gph,html.dk .sim3 .per{background:rgba(255,255,255,.94)!important
 .exa .res2 .katex{font-size:1.1em}
 .exa .concl{margin:14px 0 0;color:var(--slate);font-size:.95rem}
 @media (max-width:640px){.exa{padding:18px 14px 16px;border-radius:14px}.exa .steps>li{padding-left:20px}.exa .res2{grid-template-columns:1fr}.exa .fx .katex{font-size:1em}.exa table.apt th,.exa table.apt td{padding:3px 6px;font-size:.85rem}}
+.exa .gwrap{margin:6px 0 10px;max-width:560px}
+.exa svg.gfit{display:block;width:100%;height:auto;font-family:"CMMain","Times New Roman",serif}
+.gfit .gr{stroke:var(--line);stroke-width:1}
+.gfit .ax{fill:none;stroke:var(--ink);stroke-width:1.2}
+.gfit .tk{font-family:InterT,Inter,sans-serif;font-size:17px;fill:var(--slate)}
+.gfit .lb{font-size:20px;font-style:normal;fill:var(--ink)}
+.gfit .fl{font-size:20px;font-style:italic;fill:var(--acc)}
+.gfit .fit{stroke:var(--acc);stroke-width:2}
+.gfit .eb{fill:none;stroke:var(--ink);stroke-width:1.3}
+.gfit .pt{fill:var(--ink)}
+.exa .res1{margin-top:6px;background:var(--acc-soft);border-radius:12px;padding:12px 16px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.exa .res1 small{color:var(--slate);font-size:.8rem;font-weight:600}
+.exa .res1 .katex{font-size:1.2em}
+.exa table.apt thead th{background:var(--paper);font-weight:400}
 </style></head>
 <body>
 <!--snav--><header class="snav"><div class="in" style="max-width:1240px"><div class="bl"><a class="br" href="index.html"><svg width="28" height="28" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="8" fill="#070c15"/><rect x="7" y="7" width="2.4" height="20" fill="#7a5cff"/><rect x="11.5" y="7" width="2.4" height="20" fill="#2fb7e8"/><rect x="17" y="7" width="2.4" height="20" fill="#57d163"/><rect x="21" y="7" width="2.4" height="20" fill="#f4a62a"/><rect x="25.5" y="7" width="2.4" height="20" fill="#ff4d4d"/></svg>INNOVA-FIS-LAB</a></div><nav aria-label="Secciones de la web"><a href="index.html">Inicio</a><a href="equipo.html">Equipo</a><a href="novedades.html">Novedades</a><a href="colaboracion.html">Colaboración</a></nav><button type="button" class="thm" aria-label="Cambiar entre modo claro y oscuro" title="Modo claro / oscuro"><svg class="moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg></button></div></header><!--/snav-->
@@ -408,34 +422,32 @@ html.dk .sim3 .gph,html.dk .sim3 .per{background:rgba(255,255,255,.94)!important
     </div>
     <h2 class="sec" id="ejemplo">Ejemplo completo: la gravedad con un péndulo</h2>
     <div class="exa">
-      <p class="goal">Se obtiene <span data-tex="g"></span> a partir del periodo de un péndulo simple, <span data-tex="T = 2\pi\sqrt{L/g}"></span>, usando los cuatro tipos de error.</p>
+      <p class="goal">Se obtiene <span data-tex="g"></span> midiendo el periodo de un péndulo simple para varias longitudes, <span data-tex="T = 2\pi\sqrt{L/g}"></span>. Aparecen los cuatro tipos de error.</p>
       <ol class="steps">
-        <li><h3><span class="tag">Directo</span>Longitud del hilo</h3>
-          <p class="data">Cinta métrica, analógica, con división de 1 mm.</p>
-          <span class="fx" data-tex="L = (500{,}0 \pm 0{,}5)\ \text{mm}"></span></li>
-        <li><h3><span class="tag">Media</span>Periodo</h3>
-          <p class="data">Cinco veces el tiempo de 10 oscilaciones, con un cronómetro de 0,01 s: 14,21; 14,16; 14,22; 14,18; 14,20 s.</p>
-          <span class="fx" data-tex="\bar t_{10} = 14{,}194\ \text{s} \qquad s = 0{,}024\ \text{s}"></span>
-          <span class="fx" data-tex="\varepsilon_{\bar t} = \dfrac{3s}{\sqrt5} = 0{,}032\ \text{s}"></span>
-          <span class="fx" data-tex="t_{10} = (14{,}19 \pm 0{,}03)\ \text{s}"></span>
-          <span class="fx" data-tex="T = \dfrac{t_{10}}{10} = (1{,}419 \pm 0{,}003)\ \text{s}"></span></li>
-        <li><h3><span class="tag">Indirecto</span>Gravedad con una longitud</h3>
-          <span class="fx" data-tex="g = \dfrac{4\pi^2 L}{T^2} = 9{,}798\ \text{m/s}^2"></span>
-          <span class="fx" data-tex="\varepsilon_g = \dfrac{4\pi^2}{T^2}\,\varepsilon_L + \dfrac{8\pi^2 L}{T^3}\,\varepsilon_T"></span>
-          <span class="fx" data-tex="\phantom{\varepsilon_g} = 0{,}010 + 0{,}045 = 0{,}055\ \text{m/s}^2"></span>
-          <p class="data">El error del periodo es el que más pesa.</p></li>
-        <li><h3><span class="tag">Ajuste lineal</span>Gravedad con cinco longitudes</h3>
-          <div class="tw"><table class="apt"><tr><th><span data-tex="L\ (\text{m})"></span></th><td>0,30</td><td>0,40</td><td>0,50</td><td>0,60</td><td>0,70</td></tr><tr><th><span data-tex="T^2\ (\text{s}^2)"></span></th><td>1,217</td><td>1,603</td><td>2,014</td><td>2,430</td><td>2,809</td></tr></table></div>
-          <p class="data"><span data-tex="T^2 = \tfrac{4\pi^2}{g}\,L"></span> es una recta <span data-tex="y = A + B\,x"></span> de pendiente <span data-tex="B = 4\pi^2/g"></span>. El ajuste da:</p>
-          <span class="fx" data-tex="B = (4{,}01 \pm 0{,}04)\ \text{s}^2/\text{m}"></span>
-          <span class="fx" data-tex="g = \dfrac{4\pi^2}{B} = 9{,}84\ \text{m/s}^2"></span>
-          <span class="fx" data-tex="\varepsilon_g = \dfrac{4\pi^2}{B^2}\,\varepsilon_B = 0{,}09\ \text{m/s}^2"></span></li>
+        <li><h3><span class="tag">Directo</span>Longitudes</h3>
+          <p class="data">Con la cinta métrica, analógica y con división de 1 mm, se miden cinco longitudes, de 0,30 a 0,70 m. Cada una tiene el error de la resolución:</p>
+          <span class="fx" data-tex="\varepsilon_L = \tfrac{1\ \text{mm}}{2} = 0{,}5\ \text{mm}"></span>
+          <span class="fx" data-tex="L = (0{,}5000 \pm 0{,}0005)\ \text{m}"></span></li>
+        <li><h3><span class="tag">Media</span>Periodo de cada longitud</h3>
+          <p class="data">Para <span data-tex="L = 0{,}50\ \text{m}"></span>, cinco veces el tiempo de 10 oscilaciones con el cronómetro: 14,35; 14,05; 14,28; 14,02; 14,26 s.</p>
+          <span class="fx" data-tex="\bar t_{10} = 14{,}192\ \text{s} \qquad s = 0{,}148\ \text{s}"></span>
+          <span class="fx" data-tex="\varepsilon_{\bar t} = \dfrac{3s}{\sqrt5} = 0{,}20\ \text{s}"></span>
+          <span class="fx" data-tex="t_{10} = (14{,}2 \pm 0{,}2)\ \text{s}"></span>
+          <span class="fx" data-tex="T = \dfrac{t_{10}}{10} = (1{,}42 \pm 0{,}02)\ \text{s}"></span>
+          <p class="data">Igual para las demás longitudes. La última columna es el error de <span data-tex="T^2"></span>, <span data-tex="\varepsilon_{T^2} = 2T\,\varepsilon_T"></span>:</p>
+          <div class="tw"><table class="apt"><thead><tr><th><span data-tex="L\ (\text{m})"></span></th><th><span data-tex="T\ (\text{s})"></span></th><th><span data-tex="T^2\ (\text{s}^2)"></span></th><th><span data-tex="\varepsilon_{T^2}\ (\text{s}^2)"></span></th></tr></thead><tbody><tr><td>0,30</td><td>1,10</td><td>1,210</td><td>0,044</td></tr><tr><td>0,40</td><td>1,27</td><td>1,613</td><td>0,051</td></tr><tr><td>0,50</td><td>1,42</td><td>2,016</td><td>0,057</td></tr><tr><td>0,60</td><td>1,56</td><td>2,434</td><td>0,062</td></tr><tr><td>0,70</td><td>1,68</td><td>2,822</td><td>0,067</td></tr></tbody></table></div></li>
+        <li><h3><span class="tag">Ajuste lineal</span><span data-tex="T^2"></span> frente a <span data-tex="L"></span></h3>
+          <p class="data"><span data-tex="T^2 = \tfrac{4\pi^2}{g}\,L"></span> es una recta <span data-tex="y = A + B\,x"></span>. La gráfica lleva las barras de error de <span data-tex="T^2"></span> y la recta de ajuste:</p>
+          <figure class="gwrap"><svg class="gfit" viewBox="-10 -6 556 330" role="img" aria-label="Gráfica de T al cuadrado frente a L con barras de error y recta de ajuste"><line x1="62" x2="515" y1="268.0" y2="268.0" class="gr"/><text x="54" y="272.0" class="tk" text-anchor="end">1,0</text><line x1="62" x2="515" y1="208.5" y2="208.5" class="gr"/><text x="54" y="212.5" class="tk" text-anchor="end">1,5</text><line x1="62" x2="515" y1="149.0" y2="149.0" class="gr"/><text x="54" y="153.0" class="tk" text-anchor="end">2,0</text><line x1="62" x2="515" y1="89.5" y2="89.5" class="gr"/><text x="54" y="93.5" class="tk" text-anchor="end">2,5</text><line x1="62" x2="515" y1="30.0" y2="30.0" class="gr"/><text x="54" y="34.0" class="tk" text-anchor="end">3,0</text><line x1="107.3" x2="107.3" y1="30" y2="268" class="gr"/><text x="107.3" y="286" class="tk" text-anchor="middle">0,3</text><line x1="197.9" x2="197.9" y1="30" y2="268" class="gr"/><text x="197.9" y="286" class="tk" text-anchor="middle">0,4</text><line x1="288.5" x2="288.5" y1="30" y2="268" class="gr"/><text x="288.5" y="286" class="tk" text-anchor="middle">0,5</text><line x1="379.1" x2="379.1" y1="30" y2="268" class="gr"/><text x="379.1" y="286" class="tk" text-anchor="middle">0,6</text><line x1="469.7" x2="469.7" y1="30" y2="268" class="gr"/><text x="469.7" y="286" class="tk" text-anchor="middle">0,7</text><path d="M62 30 V268 H515" class="ax"/><line x1="80.1" y1="257.5" x2="496.9" y2="36.0" class="fit"/><path d="M107.3 237.8 V248.2 M101.3 237.8 h12 M101.3 248.2 h12" class="eb"/><circle cx="107.3" cy="243.0" r="3.4" class="pt"/><path d="M197.9 189.0 V201.1 M191.9 189.0 h12 M191.9 201.1 h12" class="eb"/><circle cx="197.9" cy="195.1" r="3.4" class="pt"/><path d="M288.5 140.3 V153.8 M282.5 140.3 h12 M282.5 153.8 h12" class="eb"/><circle cx="288.5" cy="147.0" r="3.4" class="pt"/><path d="M379.1 90.0 V104.8 M373.1 90.0 h12 M373.1 104.8 h12" class="eb"/><circle cx="379.1" cy="97.4" r="3.4" class="pt"/><path d="M469.7 43.1 V59.1 M463.7 43.1 h12 M463.7 59.1 h12" class="eb"/><circle cx="469.7" cy="51.1" r="3.4" class="pt"/><text x="515" y="306" class="lb" text-anchor="end"><tspan font-style="italic">L</tspan> (m)</text><text x="62" y="18" class="lb" text-anchor="middle"><tspan font-style="italic">T</tspan>² (s²)</text><text x="98.2" y="75.2" class="fl">T² = B L + A</text></svg></figure>
+          <span class="fx" data-tex="B = (4{,}05 \pm 0{,}02)\ \text{s}^2/\text{m}"></span>
+          <span class="fx" data-tex="A = (-0{,}004 \pm 0{,}011)\ \text{s}^2"></span>
+          <p class="data">La ordenada <span data-tex="A"></span> es compatible con cero, como predice la fórmula.</p></li>
+        <li><h3><span class="tag">Indirecto</span><span data-tex="g"></span> a partir de la pendiente</h3>
+          <p class="data">La pendiente es <span data-tex="B = 4\pi^2/g"></span>, así que <span data-tex="g"></span> se calcula con <span data-tex="B"></span> y su error con la derivada:</p>
+          <span class="fx" data-tex="g = \dfrac{4\pi^2}{B} = 9{,}759\ \text{m/s}^2"></span>
+          <span class="fx" data-tex="\varepsilon_g = \left|\dfrac{\partial g}{\partial B}\right|\varepsilon_B = \dfrac{4\pi^2}{B^2}\,\varepsilon_B = 0{,}053\ \text{m/s}^2"></span></li>
       </ol>
-      <div class="res2">
-        <div><small>Con una longitud</small><span data-tex="g = (9{,}80 \pm 0{,}05)\ \text{m/s}^2"></span></div>
-        <div><small>Con el ajuste</small><span data-tex="g = (9{,}84 \pm 0{,}09)\ \text{m/s}^2"></span></div>
-      </div>
-      <p class="concl">Los dos resultados son compatibles: sus intervalos de error se solapan.</p>
+      <div class="res1"><small>Resultado</small><span data-tex="g = (9{,}76 \pm 0{,}05)\ \text{m/s}^2"></span></div>
     </div>
   </div>
 </section>
