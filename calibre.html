@@ -292,9 +292,9 @@
       if (lab) h += '<text x="' + xv + '" y="' + (base + 61) + '" text-anchor="middle" font-size="27" font-family="CMMain,serif" fill="' + (hk ? RED : INK) + '">' + (i / 2) + '</text>';
     }
     var xe = X(r.e), le = r.e % 10 === 0 ? 40 : (r.e % 5 === 0 ? 28 : 18);
-    if (r.e % 10 === 0) h += '<text x="' + (xe - 7) + '" y="' + (base - 22) + '" text-anchor="end" font-size="18" font-weight="600" font-family="InterT,sans-serif" fill="' + RED + '">' + r.e + '</text>';
-    else h += '<text x="' + xe + '" y="' + (base - le - 6) + '" text-anchor="middle" font-size="18" font-weight="600" font-family="InterT,sans-serif" fill="' + RED + '">' + r.e + '</text>';
-    h += '<text x="' + X(L + r.k * 0.95) + '" y="' + (base + 92) + '" text-anchor="middle" font-size="18" font-weight="600" font-family="InterT,sans-serif" fill="' + RED + '">+' + fmt(r.d, 2) + '</text>';
+    if (r.e % 10 === 0) h += '<text x="' + (xe - 8) + '" y="' + (base - 21) + '" text-anchor="end" font-size="27" font-weight="700" font-family="InterT,sans-serif" fill="' + RED + '">' + r.e + '</text>';
+    else h += '<text x="' + xe + '" y="' + (base - le - 6) + '" text-anchor="middle" font-size="27" font-weight="700" font-family="InterT,sans-serif" fill="' + RED + '">' + r.e + '</text>';
+    h += '<text x="' + X(L + r.k * 0.95) + '" y="' + (base + 99) + '" text-anchor="middle" font-size="27" font-weight="700" font-family="InterT,sans-serif" fill="' + RED + '">+' + fmt(r.d, 2) + '</text>';
     h += '<circle cx="' + X(r.e + r.k) + '" cy="' + base + '" r="9" fill="none" stroke="' + RED + '" stroke-width="2"/>';
     return { svg: h, W: W, H: 210 };
   }
