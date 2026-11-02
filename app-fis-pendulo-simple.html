@@ -27,7 +27,7 @@ svg.sim{flex:1;min-height:0;width:100%;height:100%;display:block;background:#fff
 .side{min-height:0;overflow:hidden;font-size:16px}
 h2{font-size:1.15em;margin:0 0 .3em;color:var(--navy)}
 .side p{margin:0 0 .6em}.side ol{margin:0 0 .7em;padding-left:1.4em}.side li{margin-bottom:.3em}
-.eq{text-align:center;font-size:1.2em;margin:.2em 0 .6em}.eq .katex-display{margin:0}
+.eq{text-align:center;font-size:1.2em;margin:.2em 0 .6em;padding:.25em 0}.eq+.eq{margin-top:.4em}.eq .katex-display{margin:0}
 table.t{border-collapse:collapse;width:100%;background:#fff;font-size:.88em}
 table.t th,table.t td{border:1px solid #9aa3ae;padding:.3em .3em;text-align:center}table.t th{background:#fff0c1}
 .nb{display:inline-grid;place-items:center;width:1.35em;height:1.35em;border-radius:50%;background:#d9820b;color:#fff;font-weight:800;font-size:.85em;vertical-align:.08em}
@@ -222,9 +222,9 @@ function cables(){cab.forEach(c=>SC.remove(c));cab=[];const T0=new THREE.Vector3
 // cámara orbital
 let az=0.95,el=0.2,dist=2.25;const TG=new THREE.Vector3(-0.18,0.5,0);
 function camSet(){CAM.position.set(TG.x+dist*Math.cos(el)*Math.sin(az),TG.y+dist*Math.sin(el),TG.z+dist*Math.cos(el)*Math.cos(az));CAM.lookAt(TG)}
-let drag=null;box.addEventListener('pointerdown',e=>{drag=[e.clientX,e.clientY];box.setPointerCapture(e.pointerId)});
-box.addEventListener('pointermove',e=>{if(!drag)return;az-=(e.clientX-drag[0])*0.008;el=Math.max(-0.1,Math.min(1.3,el+(e.clientY-drag[1])*0.006));drag=[e.clientX,e.clientY]});
-box.addEventListener('pointerup',()=>drag=null);box.addEventListener('wheel',e=>{e.preventDefault();dist=Math.max(0.45,Math.min(4,dist*Math.exp(e.deltaY*0.001)))},{passive:false});const PTR=new Map();let pd0=0;const pdist=()=>{const p=[...PTR.values()];return Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1])};box.addEventListener('pointerdown',e=>{PTR.set(e.pointerId,[e.clientX,e.clientY]);if(PTR.size>=2){drag=null;pd0=pdist()}});box.addEventListener('pointermove',e=>{if(!PTR.has(e.pointerId))return;PTR.set(e.pointerId,[e.clientX,e.clientY]);if(PTR.size>=2){drag=null;const d1=pdist();if(pd0>0&&d1>0)dist=Math.max(0.45,Math.min(4,dist*pd0/d1));pd0=d1}});['pointerup','pointercancel','pointerleave'].forEach(k=>box.addEventListener(k,e=>{PTR.delete(e.pointerId);pd0=PTR.size>=2?pdist():0}));
+let drag=null;box.addEventListener('contextmenu',e=>e.preventDefault());box.addEventListener('pointerdown',e=>{drag=[e.clientX,e.clientY,e.button===2||e.shiftKey];box.setPointerCapture(e.pointerId)});
+box.addEventListener('pointermove',e=>{if(!drag)return;if(drag[2]){pan(e.clientX-drag[0],e.clientY-drag[1]);drag=[e.clientX,e.clientY,true];return}az-=(e.clientX-drag[0])*0.008;el=Math.max(-0.1,Math.min(1.3,el+(e.clientY-drag[1])*0.006));drag=[e.clientX,e.clientY]});
+box.addEventListener('pointerup',()=>drag=null);box.addEventListener('wheel',e=>{e.preventDefault();dist=Math.max(0.45,Math.min(4,dist*Math.exp(e.deltaY*0.001)))},{passive:false});const PTR=new Map();let pd0=0,pm0=null;const TG0=TG.clone();const pmid=()=>{const p=[...PTR.values()];return[(p[0][0]+p[1][0])/2,(p[0][1]+p[1][1])/2]};function pan(dx,dy){const H=(CAM.view&&CAM.view.enabled)?CAM.view.fullHeight:box.clientHeight;const k=2*dist*Math.tan(CAM.fov*Math.PI/360)/H,ca=Math.cos(az),sa=Math.sin(az),ce=Math.cos(el),se=Math.sin(el),L=0.9,c=(v,v0)=>Math.max(v0-L,Math.min(v0+L,v));TG.x=c(TG.x+k*(-dx*ca-dy*se*sa),TG0.x);TG.y=c(TG.y+k*dy*ce,TG0.y);TG.z=c(TG.z+k*(dx*sa-dy*se*ca),TG0.z)}const pdist=()=>{const p=[...PTR.values()];return Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1])};box.addEventListener('pointerdown',e=>{PTR.set(e.pointerId,[e.clientX,e.clientY]);if(PTR.size>=2){drag=null;pd0=pdist();pm0=pmid()}});box.addEventListener('pointermove',e=>{if(!PTR.has(e.pointerId))return;PTR.set(e.pointerId,[e.clientX,e.clientY]);if(PTR.size>=2){drag=null;const d1=pdist();if(pd0>0&&d1>0)dist=Math.max(0.45,Math.min(4,dist*pd0/d1));pd0=d1;const m1=pmid();if(pm0)pan(m1[0]-pm0[0],m1[1]-pm0[1]);pm0=m1}});['pointerup','pointercancel','pointerleave'].forEach(k=>box.addEventListener(k,e=>{PTR.delete(e.pointerId);pd0=PTR.size>=2?pdist():0;pm0=PTR.size>=2?pmid():null}));
 function size(){const w=box.clientWidth,h=box.clientHeight;R3.setSize(w,h,false);if(CAM.f0===undefined)CAM.f0=CAM.fov;if(matchMedia('(max-width:820px) and (orientation:portrait)').matches){const hs=h*0.6,Hf=2*h-hs;CAM.fov=2*Math.atan(Math.tan(CAM.f0*Math.PI/360)*Hf/hs)*180/Math.PI;CAM.aspect=w/Hf;CAM.setViewOffset(w,Hf,0,h-hs,w,h)}else{const k=w>h*1.3?0.3:0;CAM.fov=CAM.f0;CAM.aspect=w*(1+k)/h;CAM.setViewOffset(w*(1+k),h,w*k,0,w,h)}CAM.updateProjectionMatrix()}let needSz=false;function eR(e){const b=box.getBoundingClientRect(),r=e.getBoundingClientRect(),x0=b.left+box.clientLeft,y1=b.top+box.clientTop+box.clientHeight;return [Math.round(r.left-x0),Math.round(y1-r.bottom),Math.round(r.width),Math.round(r.height)]};new ResizeObserver(()=>needSz=true).observe(box);size();
 // estado
 function place(){const bx=L*Math.sin(th),by=PY-L*Math.cos(th);ball.position.set(0,by,bx);const lt=L-RS;thr.scale.y=lt;thr.position.set(0,PY-lt/2*Math.cos(th),lt/2*Math.sin(th));thr.rotation.x=-th;
@@ -232,7 +232,7 @@ function place(){const bx=L*Math.sin(th),by=PY-L*Math.cos(th);ball.position.set(
 function setL(){L=+$('#L').value;$('#Lv').textContent=Math.round(L*100)+' cm';gate.position.set(0,PY-L,0);cables()}
 function reset(){setL();th=TH0;w=0;t=0;run=false;lastCross=null;Ts=[];$('#p1').textContent='–';$('#T').textContent='–';$('#go').textContent='Soltar';showTimer(0);place()}
 $('#L').oninput=reset;$('#go').onclick=()=>{if(run){reset()}else{run=true;$('#go').textContent='Volver a empezar'}};
-$('#vw').onclick=()=>{az=0.95;el=0.2;dist=2.25};reset();
+$('#vw').onclick=()=>{TG.copy(TG0);az=0.95;el=0.2;dist=2.25};reset();
 let lt=null;function frame(ts){if(lt===null)lt=ts;const dt=Math.min(0.05,(ts-lt)/1000);lt=ts;
  if(run&&playing){const n=20,h=dt/n;for(let i=0;i<n;i++){const f=a=>-g/L*Math.sin(a);
   const k1=w,l1=f(th),k2=w+h/2*l1,l2=f(th+h/2*k1),k3=w+h/2*l2,l3=f(th+h/2*k2),k4=w+h*l3,l4=f(th+h*k3);
