@@ -241,7 +241,7 @@ function upd(){const f=+$('#F').value;$('#Fv').textContent=fmt(f,1)+' Hz';lcd.te
  const k=2*Math.PI*f/v,den=csin(k*Lm,-kap*Lm);prof=[];let mx=0;for(let i=0;i<=300;i++){const u=i/300,c=cdiv(csin(k*Lm*(1-u),-kap*Lm*(1-u)),den);prof.push(c);mx=Math.max(mx,Math.hypot(c[0],c[1]))}
  const n=Math.round(f/f1);$('#nv').textContent=(n>=1&&mx*A>12)?n:'–'}
 $('#F').oninput=upd;$('#m').onclick=()=>{$('#F').value=(+$('#F').value-0.1).toFixed(1);upd()};$('#p').onclick=()=>{$('#F').value=(+$('#F').value+0.1).toFixed(1);upd()};upd();
-loop(dt=>{ph+=dt*2*Math.PI*1.0;const c=Math.cos(ph),s=Math.sin(ph);let d='';
+loop(dt=>{ph+=dt*2*Math.PI*(+$('#F').value)/20;const c=Math.cos(ph),s=Math.sin(ph);let d='';
  prof.forEach((p,i)=>{const y=A*(p[0]*c-p[1]*s);d+=(i?'L':'M')+(x0+i/300*(x1-x0)).toFixed(1)+' '+(yc-y).toFixed(1)});str.setAttribute('d',d);
  const y0=A*c;rod.setAttribute('y',yc-y0);rod.setAttribute('height',206-(yc-y0));tip.setAttribute('cy',yc-y0)});
 

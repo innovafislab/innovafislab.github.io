@@ -294,7 +294,7 @@ function upd(){const f=+$('#F').value;$('#Fv').textContent=fmt(f,1)+' Hz';lcd.te
  const k=2*Math.PI*f/v,den=csin(k*Lm,-kap*Lm);prof=[];for(let i=0;i<=300;i++){const u=i/300;prof.push(cdiv(csin(k*Lm*(1-u),-kap*Lm*(1-u)),den))}}
 const stp=s=>{$('#F').value=Math.min(100,Math.max(10,+$('#F').value+s)).toFixed(1);upd()};
 $('#F').oninput=upd;$('#m').onclick=()=>stp(-0.1);$('#p').onclick=()=>stp(0.1);upd();
-loop(dt=>{ph+=dt*2*Math.PI*1.0;const c=Math.cos(ph),s=Math.sin(ph);let d='';
+loop(dt=>{ph+=dt*2*Math.PI*(+$('#F').value)/20;const c=Math.cos(ph),s=Math.sin(ph);let d='';
  prof.forEach((p,i)=>{const y=Math.max(-120,Math.min(120,A*(p[0]*c-p[1]*s)));d+=(i?'L':'M')+(x0+i/300*(x1-x0)).toFixed(1)+' '+(yc-y).toFixed(1)});str.setAttribute('d',d);
  const y0=A*c;rod.setAttribute('y',yc-y0);rod.setAttribute('height',206-(yc-y0));tip.setAttribute('cy',yc-y0)});
 
