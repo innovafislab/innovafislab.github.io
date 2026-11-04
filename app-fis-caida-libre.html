@@ -39,6 +39,7 @@ html.dk .sim3{background:var(--bg)!important}
 html.dk .sim3 .hint{color:var(--slate)!important;background:rgba(22,29,38,.85)!important}
 html.dk .sim3 .gph{background:rgba(22,29,38,.94)!important}
 html.dk .sim3 .ins span{color:var(--ink)!important;background:rgba(22,29,38,.85)!important}
+html.dk .sim3 .zm span{color:var(--ink)!important;background:rgba(22,29,38,.88)!important}
 html.dk{color-scheme:dark;--bg:#0f141a!important;--paper:#161d26!important;--ink:#e3e8ee!important;--slate:#9aa5b2!important;--line:#27313c!important;--grid:#232c37!important;--acc:#3b78b0!important;--acc-ink:#8fbde8!important;--acc-soft:#16212d!important;--ok:#5cc08a!important;--ok-soft:#14261d!important;--bad:#ef7a72!important;--bad-soft:#2c1715!important;--warn:#e8a64a!important;--warn-soft:#2a2013!important}
 html.dk *{--c-ink:color-mix(in srgb,var(--c) 70%,#fff)!important;--fis-ink:color-mix(in srgb,var(--fis) 70%,#fff)!important;--amp-ink:color-mix(in srgb,var(--amp) 70%,#fff)!important;--c-soft:color-mix(in srgb,var(--c) 13%,#0f141a)!important;--fis-soft:color-mix(in srgb,var(--fis) 13%,#0f141a)!important;--amp-soft:color-mix(in srgb,var(--amp) 13%,#0f141a)!important}
 html.dk body{background:var(--bg)!important;color:var(--ink)}
@@ -169,6 +170,7 @@ header .code b{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:1.1e
 .read div.sw{align-items:center}.read div.sw b{min-width:7.2em}.read div:has(#Ts){grid-column:1/-1}
 .swb{font:inherit;font-size:.85em;font-weight:600;border:1px solid #9fb0c2;background:#fff;color:var(--navy);border-radius:7px;padding:.15em .7em;cursor:pointer}.swb.on{background:var(--navy);color:#fff;border-color:var(--navy)}
 header .code i{font-style:normal}header .code .cm{display:none}@media(max-width:820px),(max-height:520px){header .code .cu{display:none}header .code .cm{display:inline}}
+.read .ins2{grid-column:1/-1;flex:1 1 100%;width:100%;flex-direction:column!important;align-items:stretch!important;gap:2px!important}.read .ins2 span{display:block}.isvg{width:100%;height:auto;max-height:27vh;display:block;background:#fff;border-radius:6px}#prot{max-height:16vh}
 .gem{background:#fff8e1;border:1px solid #ecd58f;border-radius:10px;padding:.55em .8em;margin:0 0 .8em}.gem p{margin:0 0 .35em}.gem p:last-child{margin:0}
 .gate{position:fixed;inset:0;z-index:60;display:none;place-items:center;background:rgba(246,247,249,.9);backdrop-filter:blur(3px);padding:16px}.gate.on{display:grid;grid-template-columns:minmax(0,440px);justify-content:center}.gate{overflow-y:auto;align-content:safe center}#gin{min-width:0;width:100%;box-sizing:border-box}
 .gcard{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px rgba(23,50,77,.18);padding:22px 24px;max-width:440px;width:100%;display:flex;flex-direction:column;gap:12px;font-size:16px}
@@ -188,12 +190,12 @@ header .code i{font-style:normal}header .code .cm{display:none}@media(max-width:
 @media(max-width:820px) and (orientation:portrait){.sim3{flex:1;min-height:0;height:auto}.sim3 .gph{left:10px;right:auto;top:auto;bottom:10px;width:calc(100% - 20px);height:37%}}
 @media(hover:none){.sim3 .hint{display:none}}
 @media(orientation:landscape) and (max-height:520px){.sim3 .hint{display:none}}
-</style>
+.sim3 .zm{position:absolute;right:10px;width:31%;border:1px solid var(--line);border-radius:8px;pointer-events:none}.sim3 .zm span{position:absolute;left:8px;top:6px;font-size:clamp(11px,1.5vh,13px);font-weight:600;color:#1b2430;background:rgba(255,255,255,.88);padding:1px 6px;border-radius:5px}@media(max-width:820px) and (orientation:portrait){.sim3 .zm{width:calc(50% - 15px);top:auto!important;bottom:10px;height:34%!important}#zR{left:10px;right:auto!important}}</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<div class="sim3" id="v3"><canvas id="cv"></canvas><svg class="gph" id="gph"></svg>
+<div class="sim3" id="v3"><canvas id="cv"></canvas><div class="zm" id="zR" style="top:10px;height:calc(58% - 15px)"><span>Detalle: regla e índice de la plataforma superior</span></div><div class="zm" id="zT" style="bottom:10px;height:calc(42% - 15px)"><span>Contador</span></div>
 <div class="hint">Arrastra para girar la vista · rueda del ratón para acercar</div></div>
-<div class="bar"><div class="ctrl"><label>Distancia <i>s</i> <input id="S" type="range" min="0.10" max="0.80" step="0.05" value="0.50"><b id="Sv"></b></label><label><input type="checkbox" id="slow"> Cámara lenta (×0,1)</label><button class="btn" id="go" data-alt="Volver a colocar">Soltar</button><button class="btn" id="vw">Vista inicial</button></div><div class="read"><div><span>Contador <i>t</i></span><b id="rt" style="min-width:9.5em">0,0000 ± 0,0001 s</b></div></div></div></div><p class="note">Gemelo de la práctica: el montaje depende del código · CC BY-NC-SA 4.0</p></section>
-<section class="side card"><div class="gem"><p><b>Gemelo de la práctica.</b> Montaje: <b class="codeg"></b>. Sin código, el montaje es el genérico, para practicar. Si tu profesor te ha dado un código, pulsa «Usar código», arriba a la derecha: el montaje pasa a ser el tuyo; haz con él todas las medidas y escríbelo en tu ficha.</p></div><h2>Qué se observa</h2><p>El electroimán sujeta la bola. Al pulsar «Soltar», la suelta y el contador empieza a contar; al llegar la bola al sensor de la plataforma inferior, el contador se para.</p><div class="eq" data-tex="s=\tfrac12\,g\,t^2"></div><p>Aquí <i>s</i> es la distancia que cae la bola, que se elige con el deslizador; <i>t</i>, el tiempo que marca el contador; y <i>g</i>, la aceleración de la gravedad.</p><h2>Qué hay que medir</h2><p>Para <i>s</i> de 10 a 80 cm, en pasos de 5 cm, suelta la bola tres veces y anota los tres tiempos. Pulsa «Volver a colocar» entre una medida y la siguiente.</p><h2>Errores y datos</h2><p>Errores de las medidas directas: distancia <i>s</i>, ± 0,05 cm; tiempo <i>t</i> del contador, ± 0,0001 s.</p><p>Los errores de las medias, de las magnitudes indirectas y de los ajustes los calculas tú, como se explica en la <a href="https://innovafislab.github.io/errores.html" target="_blank">página de errores</a>.</p><p class="mnote">Gemelo de la práctica: el montaje depende del código · CC BY-NC-SA 4.0</p></section></main>
+<div class="bar"><div class="ctrl"><label>Distancia <i>s</i> <input id="S" type="range" min="0.10" max="0.80" step="0.05" value="0.50"><b id="Sv" style="display:none"></b></label><label><input type="checkbox" id="slow"> Cámara lenta (×0,1)</label><button class="btn" id="go" data-alt="Volver a colocar">Soltar</button><button class="btn" id="vw">Vista inicial</button></div><div class="read"><b id="rt" style="display:none"></b></div></div></div><p class="note">Gemelo de la práctica: el montaje depende del código · CC BY-NC-SA 4.0</p></section>
+<section class="side card"><div class="gem"><p><b>Gemelo de la práctica.</b> Montaje: <b class="codeg"></b>. Sin código, el montaje es el genérico, para practicar. Si tu profesor te ha dado un código, pulsa «Usar código», arriba a la derecha: el montaje pasa a ser el tuyo; haz con él todas las medidas y escríbelo en tu ficha.</p></div><h2>Qué se observa</h2><p>El electroimán sujeta la bola. Al pulsar «Soltar», la suelta y el contador empieza a contar; al llegar la bola al sensor de la plataforma inferior, el contador se para.</p><div class="eq" data-tex="s=\tfrac12\,g\,t^2"></div><p>Aquí <i>s</i> es la distancia que cae la bola; <i>t</i>, el tiempo que marca el contador; y <i>g</i>, la aceleración de la gravedad.</p><h2>Qué hay que medir</h2><p>Mueve la plataforma superior con el deslizador, de 10 a 80 cm en pasos de 5 cm. Lee la distancia <i>s</i> en el detalle de la regla: es donde marca el índice rojo de la plataforma, a la altura de la parte baja de la bola. El 0 de la regla está en el sensor. Suelta la bola tres veces y lee cada tiempo <i>t</i> en el contador. Pulsa «Volver a colocar» entre una medida y la siguiente.</p><h2>Errores y datos</h2><p>Todo lo que mides lo lees en los aparatos de la simulación, como en el laboratorio: el error de cada medida directa lo deduces tú del aparato con el que la haces (su división más pequeña o su última cifra).</p><p>Los errores de las medias, de las magnitudes indirectas y de los ajustes también los calculas tú, como se explica en la <a href="https://innovafislab.github.io/errores.html" target="_blank">página de errores</a>.</p><p class="mnote">Gemelo de la práctica: el montaje depende del código · CC BY-NC-SA 4.0</p></section></main>
 <script>(()=>{
 const MOB=()=>matchMedia('(max-width:820px),(max-height:520px)').matches;
 function fit(){const e=document.querySelector('.side');if(MOB()){e.style.fontSize='';return}let lo=15,hi=34;for(let i=0;i<10;i++){const m=(lo+hi)/2;e.style.fontSize=m+'px';if(e.scrollHeight>e.clientHeight+1||e.scrollWidth>e.clientWidth+1)hi=m;else lo=m}e.style.fontSize=lo+'px'}
@@ -229,7 +231,7 @@ function mkGraph(G,o){const N='http://www.w3.org/2000/svg';const el=(t,a,p)=>{co
  new ResizeObserver(axes).observe(G);axes();
  return {set(p){pts=p;draw()},hline(v){hv=v;draw()}}}
 function fmt(x,d){return x.toFixed(d).replace('.',',')}
-function normCode(v){return String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}const _Q=(function(){function a(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19}h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return(h^h>>>16)>>>0}function b(x){return()=>{x|=0;x=x+0x6D2B79F5|0;let t=Math.imul(x^x>>>15,1|x);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}return c=>{const k=b(1924323464),d=atob('zb538vK9r1hgEWFz0noEdb1syTgn4tCVcZin4dH9xODPk5zyPTzbcbmfmIc2FDUSy83fPL7z5vcsBVI='),u=new Uint8Array(d.length);for(let i=0;i<d.length;i++)u[i]=d.charCodeAt(i)^(k()*256&255);const r=c?b(a(['f','is:','caida',':'].join('')+c)):()=>.5;return Function(new TextDecoder().decode(u))()((p,q)=>p+(q-p)*r())}})();
+function normCode(v){return String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}const _Q=(function(){function a(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19}h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return(h^h>>>16)>>>0}function b(x){return()=>{x|=0;x=x+0x6D2B79F5|0;let t=Math.imul(x^x>>>15,1|x);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}return c=>{const k=b(401288560),d=atob('Z6YkxxLxj3Z9lqpjm9uAUxUA2XBWLKKemz1IZKZ8T3SRo1NYvdeOx0GejzEDLCEjVtoeBL4+lZlmMac='),u=new Uint8Array(d.length);for(let i=0;i<d.length;i++)u[i]=d.charCodeAt(i)^(k()*256&255);const r=c?b(a(['f','is:','caida',':'].join('')+c)):()=>.5;return Function(new TextDecoder().decode(u))()((p,q)=>p+(q-p)*r())}})();
 let CODE=null,GEN=false;
 try{const q=normCode(new URLSearchParams(location.search).get('c'));if(q.length>=4)CODE=q}catch(e){}
 if(!CODE)try{const o=JSON.parse(localStorage.getItem('fisgemelo')||'null');if(o&&normCode(o.c).length>=4&&Date.now()-o.t<8*36e5)CODE=o.c}catch(e){}
@@ -244,8 +246,22 @@ document.querySelectorAll('.codev').forEach(e=>e.textContent=CODE||'Usar código
   try{localStorage.setItem('fisgemelo',JSON.stringify({c,t:Date.now()}));0}catch(e){}location.search='?c='+c};
  G.querySelector('#gno').onclick=()=>{try{localStorage.removeItem('fisgemelo')}catch(e){}if(CODE){location.search=''}else show(false)};G.onclick=e=>{if(e.target===G)show(false)};addEventListener('keydown',e=>{if(e.key==='Escape')show(false)});
  const pill=document.querySelector('header .code');if(pill)pill.onclick=()=>show(true);show(false)})();
+
+function svgI(el,vb,h){el.setAttribute('viewBox',vb);el.setAttribute('preserveAspectRatio','xMidYMid meet');el.innerHTML=h}
+const IK=()=>'#1b2430';
+function VERN(el,v){if(!el)return;const K=IK(),a=Math.floor(v)-3,b=a+25,ln=(x,y1,y2,w)=>`<path d="M${x.toFixed(3)} ${y1}V${y2}" stroke="${K}" stroke-width="${w||1}" vector-effect="non-scaling-stroke"/>`;let h=`<rect x="${a}" y="0" width="25" height="5.2" fill="#eceff2" stroke="#9aa3ad" stroke-width="1" vector-effect="non-scaling-stroke"/><rect x="${v-2}" y="5.2" width="23" height="4.6" fill="#dfe7ee" stroke="#9aa3ad" stroke-width="1" vector-effect="non-scaling-stroke"/>`;
+ for(let mm=a;mm<=b;mm++){const L=mm%10==0?2.6:mm%5==0?1.9:1.3;h+=ln(mm,5.2,5.2-L,mm%10==0?1.6:1);if(mm%10==0)h+=`<text x="${mm}" y="1.9" font-size="1.7" text-anchor="middle" fill="${K}" font-family="Inter,Arial" font-weight="700">${mm/10}</text>`}
+ for(let i=0;i<=20;i++){const x=v+i*0.95,L=i%2==0?1.9:1.2;h+=ln(x,5.2,5.2+L,i%2==0?1.4:1);if(i%2==0)h+=`<text x="${x.toFixed(3)}" y="9.2" font-size="1.2" text-anchor="middle" fill="${K}" font-family="Inter,Arial">${i/2}</text>`}
+ h+=`<text x="${a-0.4}" y="4.6" font-size="1.1" text-anchor="end" fill="${K}" font-family="Inter,Arial">cm</text><text x="${a-0.4}" y="8.2" font-size="1.1" text-anchor="end" fill="${K}" font-family="Inter,Arial">1/20</text>`;svgI(el,`${a-2.6} -0.3 27.9 10.4`,h)}
+function RULER(el,c,mark,lab){if(!el)return;const K=IK(),a=c-25,b=c+25;let h=`<rect x="${a}" y="0" width="50" height="9" fill="#fbfbf7" stroke="#9aa3ad" stroke-width="1" vector-effect="non-scaling-stroke"/>`;
+ for(let mm=Math.ceil(a);mm<=b;mm++){const L=mm%10==0?5:mm%5==0?3.6:2.4;h+=`<path d="M${mm} 9V${9-L}" stroke="${K}" stroke-width="${mm%10==0?1.6:1}" vector-effect="non-scaling-stroke"/>`;if(mm%10==0)h+=`<text x="${mm}" y="2.9" font-size="3" text-anchor="middle" fill="${K}" font-family="Inter,Arial" font-weight="700">${mm/10}</text>`}
+ h+=`<path d="M${mark} 1V13.5" stroke="#d6261b" stroke-width="2.2" vector-effect="non-scaling-stroke"/><text x="${mark+0.8}" y="13.3" font-size="2.6" fill="#d6261b" font-family="Inter,Arial" font-weight="700">${lab||''}</text>`;svgI(el,`${a} -0.5 50 15`,h)}
+function PROT(el,deg){if(!el)return;const K=IK(),a=deg-8,b=deg+8;let h=`<rect x="${a}" y="0" width="16" height="4" fill="#fbfcfd" stroke="#aab2bb" stroke-width="1" vector-effect="non-scaling-stroke"/>`;
+ for(let d=Math.ceil(a);d<=b;d++){const L=d%10==0?2.4:d%5==0?1.7:1.1;h+=`<path d="M${d} 0V${L}" stroke="${K}" stroke-width="${d%10==0?1.6:1}" vector-effect="non-scaling-stroke"/>`;if(d%5==0)h+=`<text x="${d}" y="3.5" font-size="1.05" text-anchor="middle" fill="${K}" font-family="Inter,Arial" font-weight="${d%10==0?700:400}">${d}</text>`}
+ h+=`<path d="M${deg} -0.4V5.6" stroke="#d9820b" stroke-width="2.4" vector-effect="non-scaling-stroke"/><text x="${deg+0.25}" y="5.5" font-size="0.95" fill="#a35f00" font-family="Inter,Arial" font-weight="700">borde del plano</text>`;svgI(el,`${a} -0.6 16 6.4`,h)}
+
 function gauss(s){let u=0,v=0;while(u===0)u=Math.random();while(v===0)v=Math.random();return s*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
-const SW={on:false,t:0};function swShow(){const b=document.getElementById('swv');if(b)b.textContent=fmt(SW.t,2)+' ± 0,01 s';const s=document.getElementById('sws');if(s){s.textContent=SW.on?'Parar':'Iniciar';s.classList.toggle('on',SW.on)}}
+const SW={on:false,t:0};function swShow(){const b=document.getElementById('swv');if(b)b.textContent=fmt(SW.t,2)+' s';const s=document.getElementById('sws');if(s){s.textContent=SW.on?'Parar':'Iniciar';s.classList.toggle('on',SW.on)}}
 function swTick(dt){if(SW.on){SW.t+=dt;swShow()}}
 function swToggle(){SW.on=!SW.on;swShow()}
 function swStart(){SW.t=0;SW.on=true;swShow()}function swReset(){SW.on=false;SW.t=0;swShow()}
@@ -295,7 +311,7 @@ const rt=tex(512,8192,(x,w,h)=>{x.fillStyle='#ffffff';x.fillRect(0,0,w,h);x.fill
  for(let mm=0;mm<=1000;mm++){const y=h-(mm/1000)*PX;const L=mm%100==0?230:mm%50==0?190:mm%10==0?150:mm%5==0?95:55;x.fillRect(0,y-(mm%10==0?3:2),L,mm%10==0?6:4);
   if(mm%100==0&&mm>0&&mm<1000){x.font='bold 210px Inter,Arial';x.fillText(String(mm/10),240,y+72)}}});
 rt.t.anisotropy=R3.capabilities.getMaxAnisotropy();
-const rail0=0.018;// y del 0 del riel
+const rail0=Y0;// y del 0 del riel
 add(new THREE.PlaneGeometry(RW*0.9,RH),new THREE.MeshBasicMaterial({map:rt.t}),RX,rail0+RH/2,RZ+RW/2+0.0006);
 // plataforma inferior con el sensor de contacto
 const LP=new THREE.Group();SC.add(LP);
@@ -310,6 +326,7 @@ add(new THREE.BoxGeometry(0.11,0.02,0.07),cyan,RX-0.07,0,RZ+0.02,TP);
 add(new THREE.BoxGeometry(0.048,0.03,0.05),cyan,RX,0,RZ,TP);
 const knob=add(new THREE.CylinderGeometry(0.009,0.009,0.02,16),blk,RX+0.03,0,RZ,TP);knob.rotation.z=Math.PI/2;
 add(new THREE.CylinderGeometry(0.011,0.011,0.024,24),M('#7d868f',{metalness:.6,roughness:.3}),0,-0.022,0,TP);// electroimán
+add(new THREE.BoxGeometry(RW*0.98,0.0008,0.001),new THREE.MeshBasicMaterial({color:'#e0261b'}),RX,-(2*RB+0.034),RZ+RW/2+0.0016,TP);add(new THREE.BoxGeometry(0.004,0.0008,0.012),new THREE.MeshBasicMaterial({color:'#e0261b'}),RX-RW/2-0.001,-(2*RB+0.034),RZ+RW/2-0.004,TP);
 // bola
 const ball=add(new THREE.SphereGeometry(RB,32,20),steel,0,0,0);
 // contador digital 0,1 ms
@@ -330,7 +347,7 @@ function cables(){cab.forEach(c=>SC.remove(c));cab=[];const T0=new THREE.Vector3
   [T0.clone().add(new THREE.Vector3(0.01,0,0)),new THREE.Vector3(-0.2,0.016,0.2),new THREE.Vector3(0.05,0.016,0.2),new THREE.Vector3(0.21,0.016,0.14),new THREE.Vector3(0.22,0.03,-0.02),new THREE.Vector3(0.2,top.y*0.55,-0.05),new THREE.Vector3(0.17,top.y-0.03,-0.045),new THREE.Vector3(0.12,top.y+0.006,RZ),top]];
  pts.forEach((p,i)=>{const m=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(p,false,'centripetal'),300,0.0026,10,false),cabM[i]);SC.add(m);cab.push(m)})}
 // gráfica s(t)
-const GR=mkGraph($('#gph'),{title:'Distancia caída frente al tiempo',xmax:0.42,xstep:0.1,xd:1,ymax:0.8,ystep:0.2,yd:1,xl:'t (s)',yl:'s (m)',hlab:'sensor'});
+const GR={set(){},hline(){}};
 // cámara
 let az=0.35,el=0.12,dist=2.05;const TG=new THREE.Vector3(-0.12,0.5,0);
 function camSet(){CAM.position.set(TG.x+dist*Math.cos(el)*Math.sin(az),TG.y+dist*Math.sin(el),TG.z+dist*Math.cos(el)*Math.cos(az));CAM.lookAt(TG)}
@@ -340,16 +357,23 @@ box.addEventListener('pointerup',()=>drag=null);box.addEventListener('wheel',e=>
 function size(){const w=box.clientWidth,h=box.clientHeight;R3.setSize(w,h,false);if(CAM.f0===undefined)CAM.f0=CAM.fov;if(matchMedia('(max-width:820px) and (orientation:portrait)').matches){const hs=h*0.6,Hf=2*h-hs;CAM.fov=2*Math.atan(Math.tan(CAM.f0*Math.PI/360)*Hf/hs)*180/Math.PI;CAM.aspect=w/Hf;CAM.setViewOffset(w,Hf,0,h-hs,w,h)}else{const k=w>h*1.3?0.3:0;CAM.fov=CAM.f0;CAM.aspect=w*(1+k)/h;CAM.setViewOffset(w*(1+k),h,w*k,0,w,h)}CAM.updateProjectionMatrix()}let needSz=false;function eR(e){const b=box.getBoundingClientRect(),r=e.getBoundingClientRect(),x0=b.left+box.clientLeft,y1=b.top+box.clientTop+box.clientHeight;return [Math.round(r.left-x0),Math.round(y1-r.bottom),Math.round(r.width),Math.round(r.height)]};new ResizeObserver(()=>needSz=true).observe(box);size();
 // estado
 const yTop=()=>Y0+RB+s;// centro de la bola sujeta
-function setS(){s=+$('#S').value;$('#Sv').textContent=fmt(s*100,2)+' ± 0,05 cm';TP.position.y=yTop()+RB+0.034;cables();GR.hline(s)}
-function reset(){setS();run=false;done=false;t=0;hist=[];GR.set([]);ball.position.set(0,yTop(),0);showT(0);$('#rt').textContent='0,0000 ± 0,0001 s';$('#go').textContent='Soltar'}
+function setS(){s=+$('#S').value;TP.position.y=yTop()+RB+0.034;cables();GR.hline(s)}
+function reset(){setS();run=false;done=false;t=0;hist=[];GR.set([]);ball.position.set(0,yTop(),0);showT(0);$('#go').textContent='Soltar'}
 $('#S').oninput=reset;$('#go').onclick=()=>{if(run||done){reset();return}run=true;tf=Math.sqrt(2*Math.max(0.001,s+HP.ds)/g)+HP.t0+gauss(0.0002);$('#go').textContent='Volver a colocar'};
 $('#vw').onclick=()=>{TG.copy(TG0);az=0.35;el=0.12;dist=2.05};reset();
 let lt=null;function frame(ts){if(lt===null)lt=ts;const dt=Math.min(0.05,(ts-lt)/1000);lt=ts;
  if(run){t+=dt*($('#slow').checked?0.1:1);if(t>=tf){t=tf;run=false;done=true}const d=Math.min(s,0.5*g*t*t);ball.position.y=yTop()-d;
   hist.push([t,d]);GR.set(hist);
-  const v=Math.floor(t*1e4)/1e4;showT(v);$('#rt').textContent=fmt(v,4)+' ± 0,0001 s'}
- if(needSz){needSz=false;size()}camSet();const W0=box.clientWidth,H0=box.clientHeight;R3.setViewport(0,0,W0,H0);R3.setScissorTest(false);R3.render(SC,CAM);
+  const v=Math.floor(t*1e4)/1e4;showT(v);0}
+ if(needSz){needSz=false;size()}camSet();const W0=box.clientWidth,H0=box.clientHeight;R3.setViewport(0,0,W0,H0);R3.setScissorTest(false);R3.render(SC,CAM);zr(W0,H0);
  requestAnimationFrame(frame)}requestAnimationFrame(frame);
+
+const ZI=[];function zoom(sel,f){ZI.push([document.querySelector(sel),new THREE.PerspectiveCamera(20,1,0.002,8),f])}
+function zr(W0,H0){for(const [el,C,f] of ZI){if(!el||el.offsetWidth===0)continue;const [ix,iy,iw,ih]=eR(el);const o=f();C.aspect=iw/ih;if(o.w){const d=o.p.distanceTo(o.t),hh=Math.max(o.w/C.aspect,o.h||0);C.fov=2*Math.atan(hh/2/d)*180/Math.PI}else C.fov=o.fov||20;C.updateProjectionMatrix();C.position.copy(o.p);C.lookAt(o.t);
+ R3.setScissorTest(true);R3.setViewport(ix,iy,iw,ih);R3.setScissor(ix,iy,iw,ih);R3.setClearColor(document.documentElement.classList.contains('dk')?0x161d26:0xf6f7f9,1);R3.clear();R3.render(SC,C);R3.setScissorTest(false);R3.setViewport(0,0,W0,H0)}}
+
+zoom('#zR',()=>{const y=Y0+s;return{t:new THREE.Vector3(0.036,y,RZ+RW/2),p:new THREE.Vector3(0.036,y,RZ+RW/2+0.3),w:0.065,h:0.04}});
+zoom('#zT',()=>{const t=TM.localToWorld(new THREE.Vector3(0,0.063,0.0805)),n=new THREE.Vector3(Math.sin(TM.rotation.y),0,Math.cos(TM.rotation.y));return{t,p:t.clone().add(n.multiplyScalar(0.42)),w:0.26,h:0.11}});
 
 (function(){const v=document.getElementById('vw');if(!v)return;const home=()=>document.querySelector('.acts');const f=()=>{const s=document.querySelector('.sim3');if(!s)return;if(MOB()){if(v.parentNode!==s){s.appendChild(v);v.classList.add('ov');v.title='Vista inicial'}}else if(v.classList.contains('ov')){v.classList.remove('ov');home()&&home().appendChild(v)}};f();addEventListener('resize',f)})();
 (function(){const f=()=>{const B=document.body,cur=B.dataset.part,ps=document.querySelector('.tab')?['1','2']:[cur];ps.forEach(p=>{if(p!==undefined)B.dataset.part=p;document.querySelectorAll('.read>div').forEach(d=>{if(!d.offsetParent)return;d.classList.remove('w2','w15');if(!MOB())return;const v=d.querySelector('b'),s=d.querySelector('span');if(v&&v.offsetWidth>d.clientWidth-14)d.classList.add('w2');else if(s&&s.scrollWidth>s.clientWidth+1)d.classList.add('w15')})});if(cur!==undefined)B.dataset.part=cur;if(typeof lockBar==='function')lockBar()};addEventListener('load',f);setTimeout(f,300);setTimeout(f,900);addEventListener('resize',()=>setTimeout(f,200))})();
