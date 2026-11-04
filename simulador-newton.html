@@ -604,27 +604,15 @@ function fitSide(){const e=document.querySelector('.side');if(matchMedia('(max-w
 function tex(){if(window.renderMathInElement)renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],throwOnError:false})}
 tex();addEventListener('resize',fitSide);if(document.fonts)document.fonts.ready.then(fitSide);setTimeout(fitSide,60);setTimeout(fitSide,700);
 </script><script>
-const GPR='newton';
-const PARS={
-caida:U=>({t0:U(0.004,0.012),ds:U(-0.002,0.002),g:9.80}),
-pendulo:U=>({dL:U(0.008,0.025),g:9.80}),
-hooke:U=>{const kr=U(8.5,11.5);return{kr,kb:2*kr*U(0.95,1.05),mp:U(0.0095,0.0115),w:[0,1,2,3,4,5,6,7].map(()=>0.010*U(0.99,1.01)),m0r:U(0.002,0.006),m0b:U(0.003,0.008)}},
-plano:U=>({mc:U(0.196,0.205),w:[0,1,2,3].map(()=>0.050*U(0.995,1.005)),da:U(-0.4,0.4)}),
-arquimedes:U=>({rhoA:U(995,999.5),D:[0,1,2,3].map(()=>U(0.0248,0.0252)),rhoE:[U(2650,2750),U(7700,7900),U(8400,8800),U(11000,11400)],mp:U(0.0095,0.0105),w:[0,1,2,3,4].map(()=>0.020*U(0.99,1.01)),rhoS:U(8300,8600)}),
-maxwell:U=>({m:0.520,r:U(0.00240,0.00260),Iz:U(9.0e-4,10.5e-4)}),
-newton:U=>({mp1:U(0.0198,0.0202),mh:U(0.0009,0.0011),m2:U(0.397,0.403),ds:U(0.0995,0.1005),fric:U(0.0003,0.0009)})
-};
-function h32(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19}h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return(h^h>>>16)>>>0}
-function rng(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
-function normCode(v){return String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}
-function PAR(pr,code){if(!code)return PARS[pr]((a,b)=>(a+b)/2);const r=rng(h32('fis:'+pr+':'+code));const U=(a,b)=>a+(b-a)*r();return PARS[pr](U)}
-
+(function(){
+'use strict';
+function normCode(v){return String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}const _Q=(function(){function a(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19}h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return(h^h>>>16)>>>0}function b(x){return()=>{x|=0;x=x+0x6D2B79F5|0;let t=Math.imul(x^x>>>15,1|x);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}return c=>{const k=b(1839624245),d=atob('1OAPJlWVb/MuCh/F2MeD4VzcpQdpH+yuTnAAmvzIOLfTwucz+3/xhdUrd7uggKEvKJnryPLZ9YqaM5izAx/m7UDZLIGDTGDycGAtbeZNz2dPGlZi8AnuEv1QKXmTRUPEWgfJb2UnxVGurnYV3csw8Xs/QC8='),u=new Uint8Array(d.length);for(let i=0;i<d.length;i++)u[i]=d.charCodeAt(i)^(k()*256&255);const r=c?b(a(['f','is:','newton',':'].join('')+c)):()=>.5;return Function(new TextDecoder().decode(u))()((p,q)=>p+(q-p)*r())}})();
 let CODE=null,GEN=false;
 try{const q=normCode(new URLSearchParams(location.search).get('c'));if(q.length>=4)CODE=q}catch(e){}
 if(!CODE)try{const o=JSON.parse(localStorage.getItem('fisgemelo')||'null');if(o&&normCode(o.c).length>=4&&Date.now()-o.t<8*36e5)CODE=o.c}catch(e){}
 if(CODE)try{localStorage.setItem('fisgemelo',JSON.stringify({c:CODE,t:Date.now()}))}catch(e){}
 try{GEN=!CODE&&sessionStorage.getItem('fisgemelo-gen')==='1'}catch(e){}
-const HP=PAR(GPR,CODE);
+const HP=_Q(CODE);
 document.querySelectorAll('.codev').forEach(e=>e.textContent=CODE||'Usar código');document.querySelectorAll('.codeg').forEach(e=>e.textContent=CODE?'el de tu código, '+CODE:'genérico');if(!CODE){document.querySelectorAll('header .code span').forEach(e=>e.remove());document.querySelectorAll('header .code b').forEach(b=>b.innerHTML='<i class="cu">Usar c</i><i class="cm">C</i>ódigo')}
 (function(){const G=document.createElement('div');G.className='gate';G.innerHTML='<form class="gcard" autocomplete="off"><h2>Laboratorio de Física</h2><p>Si tu profesor te ha dado un código, escríbelo aquí. Con él, el montaje pasa a ser el tuyo.</p><input id="gin" aria-label="Código" spellcheck="false" maxlength="20"><div class="gbt"><button class="go" type="submit">Empezar con código</button></div><button class="gno" type="button" id="gno">Seguir sin código</button><p id="gmsg"></p></form>';
  document.body.appendChild(G);const f=G.querySelector('form'),i=G.querySelector('#gin'),m=G.querySelector('#gmsg');
@@ -636,9 +624,7 @@ document.querySelectorAll('.codev').forEach(e=>e.textContent=CODE||'Usar código
 
 (function(){const g=v=>(v*1000).toFixed(1).replace('.',',')+' ± 0,1 g';const s=(i,v)=>{const e=document.getElementById(i);if(e)e.textContent=v};
  s('gm1',g(HP.mp1));s('gmh',g(HP.mh));s('gm2',g(HP.m2))})();
-</script><script>
-(function(){
-'use strict';
+
 
 /* ---------- Física del montaje ---------- */
 const P = {
