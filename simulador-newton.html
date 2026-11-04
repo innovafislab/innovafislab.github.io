@@ -579,7 +579,7 @@ body.noside{--W:min(calc(100vw - 60px),calc((100vh - 100px)*1800/1400))}body.nos
 <p class="note">Se pulsa el botón verde SOLTAR o la barra espaciadora. · CC BY-NC-SA 4.0</p>
 </div>
 </div></div></section>
-<section class="side card"><div class="gem"><p><b>Gemelo de la práctica.</b> Montaje: <b class="codeg"></b>. Sin código, el montaje es el genérico, para practicar. Si tu profesor te ha dado un código, pulsa «Usar código», arriba a la derecha: el montaje pasa a ser el tuyo; haz con él todas las medidas y escríbelo en tu ficha.</p></div><h2>Qué se observa</h2>
+<section class="side card"><div class="gem"><p><b>Gemelo de la práctica.</b> Montaje: <b class="codeg"></b>. Sin código, el montaje es el genérico, para practicar. Si tu profesor te ha dado un código, pulsa «Usar código», arriba a la derecha: el montaje pasa a ser el tuyo; haz con él todas las medidas y escríbelo en tu ficha.</p><p>Las ventanas de detalle y el calibre se pueden ampliar con la rueda del ratón o con dos dedos, y desplazar arrastrando; con doble clic vuelven a su tamaño.</p></div><h2>Qué se observa</h2>
 <p>La masa colgante \(m_1\) cae y, por el hilo y la polea, arrastra al deslizador \(m_2\), que flota sobre el colchón de aire. El peso \(m_1g\) es constante, así que el deslizador sale del reposo con aceleración constante</p>
 <div class="eq">\[a=\frac{m_1\,g}{m_1+m_2}\]</div>
 <div class="p1only"><p>y el espacio recorrido crece con el cuadrado del tiempo:</p><div class="eq">\[s=\tfrac12\,a\,t'^2\]</div></div>
@@ -607,7 +607,7 @@ tex();addEventListener('resize',fitSide);if(document.fonts)document.fonts.ready.
 </script><script>
 (function(){
 'use strict';
-function normCode(v){return String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}const _Q=(function(){function a(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19}h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return(h^h>>>16)>>>0}function b(x){return()=>{x|=0;x=x+0x6D2B79F5|0;let t=Math.imul(x^x>>>15,1|x);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}return c=>{const k=b(575806309),d=atob('mLcUKaLT/vZnpk1rvT3s4a9jab+NexxuZRKWPxDgB8GKX6pxC0LgIYGibIdN081KUCGdYgRpmkJ0hNX60zv/iOmQdD9sW+fHvDB5VeRWQSWqjxlav1C8UFysdREHpCZQhxN8Dc24BU0euh1STWfI3Sa0548='),u=new Uint8Array(d.length);for(let i=0;i<d.length;i++)u[i]=d.charCodeAt(i)^(k()*256&255);const r=b(a(['f','is:','newton',':'].join('')+(c||'GENERICO')));return Function(new TextDecoder().decode(u))()((p,q)=>p+(q-p)*r())}})();
+function normCode(v){return String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}const _Q=(function(){function a(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19}h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return(h^h>>>16)>>>0}function b(x){return()=>{x|=0;x=x+0x6D2B79F5|0;let t=Math.imul(x^x>>>15,1|x);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}return c=>{const k=b(681350642),d=atob('Sb/MX14aQC0RUmpe51W8ACeDroxS2s2Hmj5f0/l9wlgzLQtjOonoOA0yY7ck/hVpv4TMG0JnquKusYGKHM2ncKO0t9PsFxTdt6LVWixA1RV3Ii9vNby+wBB1OjwurG6jXMbHh4jrpEUfGPhRkLahGlA2kaM='),u=new Uint8Array(d.length);for(let i=0;i<d.length;i++)u[i]=d.charCodeAt(i)^(k()*256&255);const r=b(a(['f','is:','newton',':'].join('')+(c||'GENERICO')));return Function(new TextDecoder().decode(u))()((p,q)=>p+(q-p)*r())}})();
 let CODE=null,GEN=false;
 try{const q=normCode(new URLSearchParams(location.search).get('c'));if(q.length>=4)CODE=q}catch(e){}
 if(!CODE)try{const o=JSON.parse(localStorage.getItem('fisgemelo')||'null');if(o&&normCode(o.c).length>=4&&Date.now()-o.t<8*36e5)CODE=o.c}catch(e){}
@@ -623,7 +623,15 @@ document.querySelectorAll('.codev').forEach(e=>e.textContent=CODE||'Usar código
  G.querySelector('#gno').onclick=()=>{try{localStorage.removeItem('fisgemelo')}catch(e){}if(CODE){location.search=''}else show(false)};G.onclick=e=>{if(e.target===G)show(false)};addEventListener('keydown',e=>{if(e.key==='Escape')show(false)});
  const pill=document.querySelector('header .code');if(pill)pill.onclick=()=>show(true);show(false)})();
 
-function svgI(el,vb,h){el.setAttribute('viewBox',vb);el.setAttribute('preserveAspectRatio','xMidYMid meet');el.innerHTML=h}
+function zoomable(el,apply){if(el._zb)return;el._zb=1;el._z=1;el._px=0;el._py=0;el.style.touchAction='none';const P=new Map();let d0=0;
+ const cl=()=>{const m=0.5-0.5/el._z;el._px=Math.max(-m,Math.min(m,el._px));el._py=Math.max(-m,Math.min(m,el._py));apply()};
+ el.addEventListener('wheel',e=>{e.preventDefault();e.stopPropagation();el._z=Math.max(1,Math.min(8,el._z*Math.exp(-e.deltaY*0.0015)));cl()},{passive:false});
+ el.addEventListener('pointerdown',e=>{e.stopPropagation();P.set(e.pointerId,[e.clientX,e.clientY]);try{el.setPointerCapture(e.pointerId)}catch(_){}if(P.size==2){const p=[...P.values()];d0=Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1])}});
+ el.addEventListener('pointermove',e=>{if(!P.has(e.pointerId))return;e.stopPropagation();const o=P.get(e.pointerId);P.set(e.pointerId,[e.clientX,e.clientY]);
+  if(P.size>=2){const p=[...P.values()],d=Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1]);if(d0>0)el._z=Math.max(1,Math.min(8,el._z*d/d0));d0=d}
+  else if(el._z>1){el._px-=(e.clientX-o[0])/el.clientWidth/el._z;el._py-=(e.clientY-o[1])/el.clientHeight/el._z}cl()});
+ const up=e=>{P.delete(e.pointerId);d0=0};el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);el.addEventListener('dblclick',()=>{el._z=1;el._px=el._py=0;apply()})}
+function svgI(el,vb,h){el._vb=vb;el.setAttribute('preserveAspectRatio','xMidYMid meet');el.innerHTML=h;const ap=()=>{const v=el._vb.split(/[ ,]+/).map(Number),Z=el._z||1,w=v[2]/Z,hh=v[3]/Z,cx=v[0]+v[2]*(0.5+(el._px||0)),cy=v[1]+v[3]*(0.5+(el._py||0));el.setAttribute('viewBox',(cx-w/2)+' '+(cy-hh/2)+' '+w+' '+hh)};zoomable(el,ap);ap()}
 const IK=()=>'#1b2430';
 function VERN(el,v){if(!el)return;const K=IK(),a=Math.floor(v)-3,b=a+25,ln=(x,y1,y2,w)=>`<path d="M${x.toFixed(3)} ${y1}V${y2}" stroke="${K}" stroke-width="${w||1}" vector-effect="non-scaling-stroke"/>`;let h=`<rect x="${a}" y="0" width="25" height="5.2" fill="#eceff2" stroke="#9aa3ad" stroke-width="1" vector-effect="non-scaling-stroke"/><rect x="${v-2}" y="5.2" width="23" height="4.6" fill="#dfe7ee" stroke="#9aa3ad" stroke-width="1" vector-effect="non-scaling-stroke"/>`;
  for(let mm=a;mm<=b;mm++){const L=mm%10==0?2.6:mm%5==0?1.9:1.3;h+=ln(mm,5.2,5.2-L,mm%10==0?1.6:1);if(mm%10==0)h+=`<text x="${mm}" y="1.9" font-size="1.7" text-anchor="middle" fill="${K}" font-family="Inter,Arial" font-weight="700">${mm/10}</text>`}
