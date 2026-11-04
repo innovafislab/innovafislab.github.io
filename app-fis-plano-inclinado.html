@@ -27,6 +27,14 @@ html.dk .vw:hover{color:var(--acc-ink)!important}
 @media(max-width:820px),(max-height:520px){html.dk header .gbtn{color:var(--acc-ink)!important;background:var(--bg)!important}}
 @media(max-width:820px),(max-height:520px){html.dk body.guide .side{background:var(--bg)!important}}
 @media(max-width:820px),(max-height:520px){html.dk .vw.ov{background:rgba(22,29,38,.92)!important}}
+@media(min-width:821px) and (min-height:521px){html.dk header .gbtn{color:var(--acc-ink)!important;background:var(--bg)!important}}
+html.dk header .code b{color:var(--acc-ink)!important;background:#2b2617!important}
+html.dk .swb{background:var(--bg)!important;color:var(--acc-ink)!important}
+html.dk .gem{background:var(--paper)!important}
+html.dk .gcard{background:var(--bg)!important}
+html.dk #gin{background:var(--paper)!important;color:var(--acc-ink)!important}
+html.dk .gno{color:var(--acc-ink)!important}
+html.dk #gmsg{color:var(--bad)!important}
 html.dk{color-scheme:dark;--bg:#0f141a!important;--paper:#161d26!important;--ink:#e3e8ee!important;--slate:#9aa5b2!important;--line:#27313c!important;--grid:#232c37!important;--acc:#3b78b0!important;--acc-ink:#8fbde8!important;--acc-soft:#16212d!important;--ok:#5cc08a!important;--ok-soft:#14261d!important;--bad:#ef7a72!important;--bad-soft:#2c1715!important;--warn:#e8a64a!important;--warn-soft:#2a2013!important}
 html.dk *{--c-ink:color-mix(in srgb,var(--c) 70%,#fff)!important;--fis-ink:color-mix(in srgb,var(--fis) 70%,#fff)!important;--amp-ink:color-mix(in srgb,var(--amp) 70%,#fff)!important;--c-soft:color-mix(in srgb,var(--c) 13%,#0f141a)!important;--fis-soft:color-mix(in srgb,var(--fis) 13%,#0f141a)!important;--amp-soft:color-mix(in srgb,var(--amp) 13%,#0f141a)!important}
 html.dk body{background:var(--bg)!important;color:var(--ink)}
@@ -55,6 +63,10 @@ html.dk .sim,html.dk svg.sim{filter:invert(.9) hue-rotate(180deg) saturate(1.1)}
 html.dk [style*="#fff0c1"]{background:#2b2617!important}
 html.dk .read>label{background:var(--paper)!important}
 html.dk .sim3 .gph,html.dk .sim3 .per{background:rgba(255,255,255,.94)!important;border-color:#e2e6eb!important;filter:invert(.88) hue-rotate(180deg)}
+html{scrollbar-gutter:stable}
+.snav .in{max-width:1240px!important}
+.sfoot .in{max-width:1240px!important}
+main.wrap,.wrap{max-width:1240px!important}
 </style><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Plano inclinado · INNOVA-FIS-LAB</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -145,14 +157,28 @@ body.guide .side>*{max-width:680px;margin-left:auto;margin-right:auto}
 main{padding:4px 6px 6px}.left .card{display:grid;grid-template-columns:minmax(0,1fr) min(330px,42vw);grid-template-rows:auto minmax(0,1fr);column-gap:8px;padding:5px}
 .left .card>svg.sim,.left .card>.sim3{grid-column:1;grid-row:1/3;height:100%;min-height:0}
 .tabs{grid-column:2;grid-row:1;margin:0 0 6px}.bar{grid-column:2;grid-row:2;margin:0;min-height:0;overflow-y:auto;justify-content:flex-start;font-size:13.5px}}
-</style><script data-goatcounter="https://innovafislab.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script></head><body>
-<header><h1>Plano inclinado</h1><button class="gbtn" type="button">Guía</button><a href="laboratorios.html#fisica" aria-label="Volver">← Laboratorio de Física · INNOVA-FIS-LAB</a></header>
+</style><script data-goatcounter="https://innovafislab.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script><style>
+header{align-items:center}.side{overflow-y:auto!important}
+@media(min-width:821px) and (min-height:521px){header .gbtn{display:inline-flex;align-items:center;font:inherit;font-size:clamp(12px,1.7vh,15px);font-weight:600;color:var(--navy);background:#fff;border:1px solid #9fb0c2;border-radius:8px;padding:.25em .8em;cursor:pointer;white-space:nowrap;flex:none}header .gbtn::before{content:none}body.noside main{grid-template-columns:minmax(0,1fr)}body.noside .side{display:none}}
+header .code{flex:none;margin-left:auto;margin-right:14px;font-size:clamp(13px,1.9vh,16px);color:var(--slate);font-weight:600;white-space:nowrap;cursor:pointer;background:none;border:0;font-family:inherit}
+header .code b{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:1.1em;letter-spacing:.05em;color:var(--navy);background:#fff0c1;border:1px solid #e2c770;border-radius:6px;padding:1px 8px;margin-left:6px}
+.read div.sw{align-items:center}.read div.sw b{min-width:7.2em}.read div:has(#Ts){grid-column:1/-1}
+.swb{font:inherit;font-size:.85em;font-weight:600;border:1px solid #9fb0c2;background:#fff;color:var(--navy);border-radius:7px;padding:.15em .7em;cursor:pointer}.swb.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.gem{background:#fff8e1;border:1px solid #ecd58f;border-radius:10px;padding:.55em .8em;margin:0 0 .8em}.gem p{margin:0 0 .35em}.gem p:last-child{margin:0}
+.gate{position:fixed;inset:0;z-index:60;display:none;place-items:center;background:rgba(246,247,249,.9);backdrop-filter:blur(3px);padding:16px}.gate.on{display:grid;grid-template-columns:minmax(0,440px);justify-content:center}.gate{overflow-y:auto;align-content:safe center}#gin{min-width:0;width:100%;box-sizing:border-box}
+.gcard{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px rgba(23,50,77,.18);padding:22px 24px;max-width:440px;width:100%;display:flex;flex-direction:column;gap:12px;font-size:16px}
+.gcard h2{margin:0;font-size:1.3em}.gcard p{margin:0;color:var(--slate)}#gin{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:1.6em;letter-spacing:.12em;text-align:center;text-transform:uppercase;padding:.25em;border:1.5px solid #e2c770;background:#fff8e1;border-radius:10px;color:var(--navy)}
+.gbt{display:flex}.gbt .go{flex:1;font-size:1.05em;padding:.5em}.gno{font:inherit;background:none;border:0;color:var(--navy);text-decoration:underline;cursor:pointer;padding:.2em}#gmsg{color:#b3261e;min-height:1.2em}
+@media(max-width:820px),(max-height:520px){header{padding-left:10px!important}header .code{margin-right:4px;font-size:13px}header .code span{display:none}.read div.sw{grid-column:1/-1;flex-direction:row!important;align-items:center!important;gap:8px!important}.read div.sw span{display:inline}}
+@media(max-height:520px){.gcard{padding:12px 18px;gap:7px;font-size:14px}.gcard h2{font-size:1.15em}#gin{font-size:1.3em;padding:.15em}.gbt .go{padding:.35em}}
+</style></head><body>
+<header><h1>Plano inclinado</h1><button class="code" type="button" title="Cambiar código"><span>Código</span><b class="codev"></b></button><button class="gbtn" type="button">Guía</button><a href="laboratorios.html#fisica" aria-label="Volver">← Laboratorio de Física · INNOVA-FIS-LAB</a></header>
 <main><section class="left"><div class="card"><svg class="sim" viewBox="20 10 840 455"></svg>
-<div class="bar"><div class="ctrl"><button class="btn pt on" data-p="1">Parte I: fuerza tangencial</button><button class="btn pt" data-p="2">Parte II: fuerza normal</button><label>Ángulo α <input id="al" type="range" min="0" max="60" step="1" value="20"><b id="alv"></b></label><label>Masa del carro <i>m</i> <input id="M" type="range" min="0.20" max="0.40" step="0.05" value="0.20"><b id="Mv"></b></label></div><div class="read"><div class="p1"><span>Dinamómetro de 2 N, <i>F</i></span><b id="rF" style="min-width:7.6em">–</b></div><div class="p2"><span>Dinamómetro de 5 N, <i>N</i></span><b id="rN" style="min-width:7.6em">–</b></div></div></div></div><p class="note">Las flechas son las componentes del peso: P en negro, la tangencial F en azul y la normal N en verde. Valores de ejemplo con g = 9,80 m/s². · CC BY-NC-SA 4.0</p></section>
-<section class="side card"><h2>Qué se observa</h2><p>El peso del carro, <i>P</i> = <i>mg</i>, se descompone en una parte paralela al plano, que tira del carro cuesta abajo, y otra perpendicular, que lo aprieta contra el plano. Al subir el ángulo crece la primera y disminuye la segunda.</p><p class="p1">El dinamómetro paralelo al plano sujeta el carro y mide la componente tangencial:</p><div class="p1"><div class="eq" data-tex="F=m\,g\,\mathrm{sen}\,\alpha"></div></div><p class="p2">El segundo dinamómetro, perpendicular al plano, mide la fuerza necesaria para despegar el carro, igual a la componente normal:</p><div class="p2"><div class="eq" data-tex="N=m\,g\cos\alpha"></div></div><p>Aquí <i>m</i> es la masa del carro con sus pesas, <i>g</i> la aceleración de la gravedad y α el ángulo del plano, que se lee en la escala graduada.</p><h2>Qué hay que medir</h2><ol><li>Fijar un ángulo α y poner a cero el dinamómetro en esa posición.</li><li class="p1">Medir <i>F</i> con el carro solo, de 200 g, y añadiendo una a una las pesas de 50 g, hasta 400 g.</li><li class="p2">Tirar del carro con el dinamómetro de 5 N, perpendicular al plano, y anotar <i>N</i> cuando el carro empieza a despegarse. Repetir añadiendo pesas de 50 g, hasta 400 g.</li></ol><h2>Tabla de la ficha</h2><div class="p1"><table class="t"><tr><th><i>m</i> (kg)</th><th><i>F</i> (N)</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></table></div><div class="p2"><table class="t"><tr><th><i>m</i> (kg)</th><th><i>N</i> (N)</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></table></div><p class="mnote">Las flechas son las componentes del peso: P en negro, la tangencial F en azul y la normal N en verde. Valores de ejemplo con g = 9,80 m/s². · CC BY-NC-SA 4.0</p></section></main>
+<div class="bar"><div class="ctrl"><button class="btn pt on" data-p="1">Parte I: fuerza tangencial</button><button class="btn pt" data-p="2">Parte II: fuerza normal</button><label>Ángulo α <input id="al" type="range" min="0" max="60" step="1" value="20"><b id="alv"></b></label><label>Pesas de 50 g <input id="M" type="range" min="0.20" max="0.40" step="0.05" value="0.20"><b id="Mv"></b></label></div><div class="read"><div><span>Báscula, masa del carro con sus pesas</span><b id="rm" style="min-width:7.5em">–</b></div><b id="rF" style="display:none"></b><b id="rN" style="display:none"></b></div></div></div><p class="note">Gemelo de la práctica: el carro y las pesas dependen del código · CC BY-NC-SA 4.0</p></section>
+<section class="side card"><div class="gem"><p><b>Gemelo de la práctica.</b> Código: <b class="codev"></b>. Con código, el montaje es el tuyo: escribe el código en tu ficha y haz todas las medidas con él. Sin código, el montaje es el genérico, para practicar. Para cambiarlo, pulsa el código de arriba a la derecha.</p></div><h2>Qué se observa</h2><p>El peso del carro se descompone en una parte paralela al plano, que tira del carro cuesta abajo, y otra perpendicular, que lo aprieta contra el plano.</p><div class="p1"><div class="eq" data-tex="F=m\,g\,\mathrm{sen}\,\alpha"></div></div><div class="p2"><div class="eq" data-tex="N=m\,g\cos\alpha"></div></div><p>Aquí <i>m</i> es la masa del carro con sus pesas, <i>g</i> la aceleración de la gravedad y α el ángulo del plano.</p><h2>Qué hay que medir</h2><p>Elige un ángulo α y déjalo fijo. La báscula da la masa del carro. Ve añadiendo pesas de 50 g, de 0 a 4.</p><p class="p1">Para cada masa, lee la fuerza <i>F</i> en la escala ampliada del dinamómetro de 2 N.</p><p class="p2">Para cada masa, lee la fuerza <i>N</i> en la escala ampliada del dinamómetro de 5 N.</p><h2>Errores</h2><p>Cada medida directa aparece con su error. Los errores de las medias, de las magnitudes indirectas y de los ajustes los calculas tú, como se explica en la <a href="https://innovafislab.github.io/errores.html" target="_blank">página de errores</a>. La lectura de cada dinamómetro tiene un error de media división, indicado bajo su escala ampliada.</p><p class="mnote">Gemelo de la práctica: el carro y las pesas dependen del código · CC BY-NC-SA 4.0</p></section></main>
 <script>
 const MOB=()=>matchMedia('(max-width:820px),(max-height:520px)').matches;
-function fit(){const e=document.querySelector('.side');if(MOB()){e.style.fontSize='';return}let lo=10,hi=34;for(let i=0;i<10;i++){const m=(lo+hi)/2;e.style.fontSize=m+'px';if(e.scrollHeight>e.clientHeight+1||e.scrollWidth>e.clientWidth+1)hi=m;else lo=m}e.style.fontSize=lo+'px'}
+function fit(){const e=document.querySelector('.side');if(MOB()){e.style.fontSize='';return}let lo=15,hi=34;for(let i=0;i<10;i++){const m=(lo+hi)/2;e.style.fontSize=m+'px';if(e.scrollHeight>e.clientHeight+1||e.scrollWidth>e.clientWidth+1)hi=m;else lo=m}e.style.fontSize=lo+'px'}
 if(document.fonts)document.fonts.ready.then(()=>{fixBtn();fit()});
 function lockBar(){const bar=document.querySelector('.bar');if(!bar||!document.querySelector('.pt'))return;bar.style.minHeight='';if(matchMedia('(orientation:landscape) and (max-height:520px)').matches)return;const cur=document.body.dataset.part;let h=0;['1','2'].forEach(p=>{document.body.dataset.part=p;h=Math.max(h,bar.offsetHeight)});document.body.dataset.part=cur;bar.style.minHeight=h+'px'}
 function fixBtn(){document.querySelectorAll('[data-alt]').forEach(e=>{e.style.minWidth='';const t=e.textContent;const w1=e.offsetWidth;e.textContent=e.dataset.alt;const w2=e.offsetWidth;e.textContent=t;e.style.minWidth=Math.max(w1,w2)+'px'});lockBar()}
@@ -185,9 +211,50 @@ function mkGraph(G,o){const N='http://www.w3.org/2000/svg';const el=(t,a,p)=>{co
  new ResizeObserver(axes).observe(G);axes();
  return {set(p){pts=p;draw()},hline(v){hv=v;draw()}}}
 function fmt(x,d){return x.toFixed(d).replace('.',',')}
+const GPR='plano';
+const PARS={
+caida:U=>({t0:U(0.004,0.012),ds:U(-0.002,0.002),g:9.80}),
+pendulo:U=>({dL:U(0.008,0.025),g:9.80}),
+hooke:U=>{const kr=U(8.5,11.5);return{kr,kb:2*kr*U(0.95,1.05),mp:U(0.0095,0.0115),w:[0,1,2,3,4,5,6,7].map(()=>0.010*U(0.99,1.01)),m0r:U(0.002,0.006),m0b:U(0.003,0.008)}},
+plano:U=>({mc:U(0.196,0.205),w:[0,1,2,3].map(()=>0.050*U(0.995,1.005)),da:U(-0.4,0.4)}),
+arquimedes:U=>({rhoA:U(995,999.5),D:[0,1,2,3].map(()=>U(0.0248,0.0252)),rhoE:[U(2650,2750),U(7700,7900),U(8400,8800),U(11000,11400)],mp:U(0.0095,0.0105),w:[0,1,2,3,4].map(()=>0.020*U(0.99,1.01)),rhoS:U(8300,8600)}),
+maxwell:U=>({m:0.520,r:U(0.00240,0.00260),Iz:U(9.0e-4,10.5e-4)}),
+newton:U=>({mp1:U(0.0198,0.0202),mh:U(0.0009,0.0011),m2:U(0.397,0.403),ds:U(0.0995,0.1005),fric:U(0.0003,0.0009)})
+};
+function h32(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19}h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return(h^h>>>16)>>>0}
+function rng(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function normCode(v){return String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}
+function PAR(pr,code){if(!code)return PARS[pr]((a,b)=>(a+b)/2);const r=rng(h32('fis:'+pr+':'+code));const U=(a,b)=>a+(b-a)*r();return PARS[pr](U)}
+
+let CODE=null,GEN=false;
+try{const q=normCode(new URLSearchParams(location.search).get('c'));if(q.length>=4)CODE=q}catch(e){}
+if(!CODE)try{const o=JSON.parse(localStorage.getItem('fisgemelo')||'null');if(o&&normCode(o.c).length>=4&&Date.now()-o.t<8*36e5)CODE=o.c}catch(e){}
+if(CODE)try{localStorage.setItem('fisgemelo',JSON.stringify({c:CODE,t:Date.now()}))}catch(e){}
+try{GEN=!CODE&&sessionStorage.getItem('fisgemelo-gen')==='1'}catch(e){}
+const HP=PAR(GPR,CODE);
+document.querySelectorAll('.codev').forEach(e=>e.textContent=CODE||'sin código');
+(function(){const G=document.createElement('div');G.className='gate';G.innerHTML='<form class="gcard" autocomplete="off"><h2>Laboratorio de Física</h2><p>Si tu profesor te ha pedido hacer esta práctica con la simulación, escribe el código que te haya indicado, por ejemplo tu DNI o tu número de expediente.</p><input id="gin" aria-label="Código" spellcheck="false" maxlength="20"><div class="gbt"><button class="go" type="submit">Empezar con código</button></div><button class="gno" type="button" id="gno">Continuar sin código, para practicar</button><p id="gmsg"></p></form>';
+ document.body.appendChild(G);const f=G.querySelector('form'),i=G.querySelector('#gin'),m=G.querySelector('#gmsg');
+ const show=on=>{G.classList.toggle('on',on);if(on){i.value=CODE||'';m.textContent='';setTimeout(()=>i.focus(),50)}};
+ f.onsubmit=e=>{e.preventDefault();const c=normCode(i.value);if(c.length<4){m.textContent='Escribe el código completo: al menos 4 letras o números.';return}
+  try{localStorage.setItem('fisgemelo',JSON.stringify({c,t:Date.now()}));sessionStorage.removeItem('fisgemelo-gen')}catch(e){}location.search='?c='+c};
+ G.querySelector('#gno').onclick=()=>{try{localStorage.removeItem('fisgemelo');sessionStorage.setItem('fisgemelo-gen','1')}catch(e){}if(CODE){location.search=''}else show(false)};
+ const pill=document.querySelector('header .code');if(pill)pill.onclick=()=>show(true);show(!CODE&&!GEN)})();
+function gauss(s){let u=0,v=0;while(u===0)u=Math.random();while(v===0)v=Math.random();return s*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+const SW={on:false,t:0};function swShow(){const b=document.getElementById('swv');if(b)b.textContent=fmt(SW.t,2)+' ± 0,01 s';const s=document.getElementById('sws');if(s){s.textContent=SW.on?'Parar':'Iniciar';s.classList.toggle('on',SW.on)}}
+function swTick(dt){if(SW.on){SW.t+=dt;swShow()}}
+function swToggle(){SW.on=!SW.on;swShow()}
+function swStart(){SW.t=0;SW.on=true;swShow()}function swReset(){SW.on=false;SW.t=0;swShow()}
+(function(){const s=document.getElementById('sws'),r=document.getElementById('swr');if(!s)return;s.onclick=()=>{swToggle();s.blur()};r.onclick=()=>{swReset();r.blur()};
+ addEventListener('keydown',e=>{if(e.code==='Space'&&!e.target.closest('input,select,textarea')){e.preventDefault();if(e.target.blur)e.target.blur();if(!e.repeat)swToggle()}});swShow()})();
+(function(){const g=document.querySelector('header .gbtn');if(!g)return;const lab=()=>{if(!MOB())g.textContent=document.body.classList.contains('noside')?'Mostrar guía':'Ocultar guía'};
+ g.onclick=()=>{if(MOB()){const on=document.body.classList.toggle('guide');g.textContent=on?'Simulación':'Guía';if(on)document.querySelector('.side').scrollTop=0;return}
+  document.body.classList.toggle('noside');lab();dispatchEvent(new Event('resize'));setTimeout(()=>dispatchEvent(new Event('resize')),60)};
+ const fix=()=>{if(MOB()){document.body.classList.remove('noside');if(!document.body.classList.contains('guide'))g.textContent='Guía'}else{document.body.classList.remove('guide');lab()}};addEventListener('resize',fix);fix()})();
+
 let playing=true,last=null;function loop(step){function f(ts){if(last===null)last=ts;let dt=Math.min(0.05,(ts-last)/1000);last=ts;if(playing&&!document.hidden)step(dt);requestAnimationFrame(f)}requestAnimationFrame(f)}
 (function(){const pp=document.getElementById('pp');if(!pp)return;const set=p=>{playing=p;pp.textContent=p?'Parar':'Continuar';pp.classList.toggle('on',!p)};
-pp.onclick=()=>set(!playing);document.addEventListener('click',e=>{const t=e.target.closest('button');if(t&&t!==pp)set(true)},true)})();
+pp.onclick=()=>set(!playing);document.addEventListener('click',e=>{const t=e.target.closest('button');if(t&&t!==pp&&!t.closest('.sw'))set(true)},true)})();
 (function(){const card=document.querySelector('.left .card'),ctrl=document.querySelector('.ctrl');if(!ctrl)return;
  const pts=[...document.querySelectorAll('.pt')];if(pts.length){const tb=document.createElement('div');tb.className='tabs';pts.forEach(b=>{b.classList.remove('btn');b.classList.add('tab');tb.appendChild(b)});card.insertBefore(tb,card.firstChild)}
  const P=document.createElement('div');P.className='params';const Ac=document.createElement('div');Ac.className='acts';
@@ -248,11 +315,11 @@ const hT=T(22,514,'',{'font-size':18,'font-weight':700}),hR=T(560,514,'',{'text-
 mk('rect',{x:HX-10,y:HY,width:HL+20,height:34,rx:6,fill:'#fff',stroke:K,'stroke-width':1.4});const hsc=mk('g',{}),hind=mk('rect',{y:HY-6,width:3.5,height:46,fill:'#c0392b'});
 function zoomH(max,div,val){hsc.innerHTML='';const n=Math.round(max/div),maj=max>2?20:10;for(let i=0;i<=n;i++){const x=HX+i/n*HL,big=i%maj==0,mid=i%(maj/2)==0;
  mk('path',{d:`M${x} ${HY+34} v${big?-20:mid?-13:-7}`,stroke:K,'stroke-width':1},hsc);if(big)T(x,HY+58,fmt(i*div,max>2?0:1),{'font-size':17,'text-anchor':'middle'},hsc)}
- const v=Math.min(val,max);hind.setAttribute('x',HX+v/max*HL-1.75);hT.textContent='Dinamómetro de '+max+' N';hT.setAttribute('fill',max>2?'#1f6fd1':'#d32f2f');hR.textContent=val>max?'fuera de escala':fmt(val,2)+' N'}
+ const v=Math.min(val,max);hind.setAttribute('x',HX+v/max*HL-1.75);hT.textContent='Dinamómetro de '+max+' N';hT.setAttribute('fill',max>2?'#1f6fd1':'#d32f2f');hR.textContent=val>max?'fuera de escala':'error de lectura: ± '+fmt(div/2,div<0.05?2:3)+' N'}
 function zoom(max,div,val){zoomH(max,div,val);zsc.innerHTML='';const n=Math.round(max/div),maj=max>2?20:10;for(let i=0;i<=n;i++){const y=ZY+8+i/n*(ZH-16),big=i%maj==0,mid=i%(maj/2)==0;
  mk('path',{d:`M${ZX+44} ${y} h${big?-22:mid?-15:-8}`,stroke:K,'stroke-width':1},zsc);if(big)T(ZX+52,y+5,fmt(i*div,max>2?0:1),{'font-size':13},zsc)}
  const v=Math.min(val,max);zind.setAttribute('y',ZY+8+v/max*(ZH-16)-1.5);zT.textContent='Dinamómetro de '+max+' N';zT.setAttribute('fill',max>2?'#1f6fd1':'#d32f2f');
- zR.textContent=val>max?'fuera de escala':fmt(val,2)+' N'}
+ zR.textContent=val>max?'fuera de escala':'error de lectura: ± '+fmt(div/2,div<0.05?2:3)+' N'}
 function dyn(D,x0,len,max,val,yoff){// tubo a lo largo del eje x local: x0+len es el extremo fijo; el índice se aleja de él al tirar
  const y=yoff;D.body.setAttribute('x',x0);D.body.setAttribute('y',y-8);D.body.setAttribute('width',len);D.body.setAttribute('height',16);
  D.hl.setAttribute('d',`M${x0+8} ${y-5} H${x0+len-12}`);
@@ -263,7 +330,7 @@ function dyn(D,x0,len,max,val,yoff){// tubo a lo largo del eje x local: x0+len e
  const v=Math.min(val,max),xi=z0-v/max*L;D.ind.setAttribute('x',xi-1);D.ind.setAttribute('y',y-7);D.ind.setAttribute('width',2);D.ind.setAttribute('height',14);
  let d=`M${x0+len-8} ${y-2}`;const N=22;for(let k=1;k<=N;k++){d+=` L${x0+len-8+(xi-(x0+len-8))*k/N} ${y-2+(k%2?-3.2:3.2)}`}D.spr.setAttribute('d',d);
  D.inner.setAttribute('d',`M${xi} ${y-2} H${x0-3}`)}
-function draw(){al=+$('#al').value;m=+$('#M').value;$('#alv').textContent=al+'°';$('#Mv').textContent=Math.round(m*1000)+' g';
+function draw(){const al0=+$('#al').value;al=al0+HP.da;const np=Math.round((+$('#M').value-0.20)/0.05);m=HP.mc;for(let i=0;i<np;i++)m+=HP.w[i];$('#alv').textContent=al0+' ± 0,5°';$('#Mv').textContent=np+' × 50 g';$('#rm').textContent=fmt(m*1000,1)+' ± 0,1 g';
  const a=al*Math.PI/180,F=m*g*Math.sin(a),N=m*g*Math.cos(a);
  PL.setAttribute('transform',`translate(${P0.x} ${P0.y}) rotate(${-al})`);cart.setAttribute('transform',`translate(${DC} 0)`);
  wts.innerHTML='';const nw=Math.round((m-0.2)/0.05);[-26,-9,9,26].slice(0,nw).forEach(x=>{mk('rect',{x:x-6,y:-47,width:12,height:12,rx:1.5,fill:'#cfd4da',stroke:'#7d868f','stroke-width':.8},wts);mk('rect',{x:x-6,y:-47,width:12,height:3,rx:1.5,fill:'#eef1f4'},wts)});
@@ -278,7 +345,7 @@ function draw(){al=+$('#al').value;m=+$('#M').value;$('#alv').textContent=al+'°
  arrow(cx,cy,cx,cy+P*sc,K,2.8);T(cx-20,cy+P*sc+4,'P',{'font-style':'italic','font-weight':700},vec);
  const ux=-Math.cos(a),uy=Math.sin(a);if(F>0.02){arrow(cx,cy,cx+F*sc*ux,cy+F*sc*uy,'#1d5fa8');T(cx+F*sc*ux-22,cy+F*sc*uy+4,'F',{'font-style':'italic','font-weight':700,fill:'#1d5fa8'},vec)}
  const nx=Math.sin(a),ny=Math.cos(a);if(N>0.02){arrow(cx,cy,cx+N*sc*nx,cy+N*sc*ny,'#1b7a43');T(cx+N*sc*nx+6,cy+N*sc*ny+16,'N',{'font-style':'italic','font-weight':700,fill:'#1b7a43'},vec)}
- if(part==1){zoom(2,0.02,F);$('#rF').textContent=F>2?'fuera de escala':fmt(F,2)+' N'}else{zoom(5,0.05,N);$('#rN').textContent=fmt(N,2)+' N'}}
+ if(part==1){zoom(2,0.02,F)}else{zoom(5,0.05,N)}}
 document.querySelectorAll('.pt').forEach(b=>b.onclick=()=>{part=+b.dataset.p;document.body.dataset.part=part;document.querySelectorAll('.pt').forEach(c=>c.classList.toggle('on',c===b));draw();fit()});
 document.body.dataset.part=1;$('#al').oninput=draw;$('#M').oninput=draw;draw();
 

@@ -27,6 +27,14 @@ html.dk .vw:hover{color:var(--acc-ink)!important}
 @media(max-width:820px),(max-height:520px){html.dk header .gbtn{color:var(--acc-ink)!important;background:var(--bg)!important}}
 @media(max-width:820px),(max-height:520px){html.dk body.guide .side{background:var(--bg)!important}}
 @media(max-width:820px),(max-height:520px){html.dk .vw.ov{background:rgba(22,29,38,.92)!important}}
+@media(min-width:821px) and (min-height:521px){html.dk header .gbtn{color:var(--acc-ink)!important;background:var(--bg)!important}}
+html.dk header .code b{color:var(--acc-ink)!important;background:#2b2617!important}
+html.dk .swb{background:var(--bg)!important;color:var(--acc-ink)!important}
+html.dk .gem{background:var(--paper)!important}
+html.dk .gcard{background:var(--bg)!important}
+html.dk #gin{background:var(--paper)!important;color:var(--acc-ink)!important}
+html.dk .gno{color:var(--acc-ink)!important}
+html.dk #gmsg{color:var(--bad)!important}
 html.dk .sim3{background:var(--bg)!important}
 html.dk .sim3 .hint{color:var(--slate)!important;background:rgba(22,29,38,.85)!important}
 html.dk .sim3 .gph{background:rgba(22,29,38,.94)!important}
@@ -60,6 +68,10 @@ html.dk .sim,html.dk svg.sim{filter:invert(.9) hue-rotate(180deg) saturate(1.1)}
 html.dk [style*="#fff0c1"]{background:#2b2617!important}
 html.dk .read>label{background:var(--paper)!important}
 html.dk .sim3 .gph,html.dk .sim3 .per{background:rgba(255,255,255,.94)!important;border-color:#e2e6eb!important;filter:invert(.88) hue-rotate(180deg)}
+html{scrollbar-gutter:stable}
+.snav .in{max-width:1240px!important}
+.sfoot .in{max-width:1240px!important}
+main.wrap,.wrap{max-width:1240px!important}
 </style><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Ley de Hooke · INNOVA-FIS-LAB</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -150,8 +162,22 @@ body.guide .side>*{max-width:680px;margin-left:auto;margin-right:auto}
 main{padding:4px 6px 6px}.left .card{display:grid;grid-template-columns:minmax(0,1fr) min(330px,42vw);grid-template-rows:auto minmax(0,1fr);column-gap:8px;padding:5px}
 .left .card>svg.sim,.left .card>.sim3{grid-column:1;grid-row:1/3;height:100%;min-height:0}
 .tabs{grid-column:2;grid-row:1;margin:0 0 6px}.bar{grid-column:2;grid-row:2;margin:0;min-height:0;overflow-y:auto;justify-content:flex-start;font-size:13.5px}}
-</style><script data-goatcounter="https://innovafislab.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script></head><body>
-<header><h1>Ley de Hooke</h1><button class="gbtn" type="button">Guía</button><a href="laboratorios.html#fisica" aria-label="Volver">← Laboratorio de Física · INNOVA-FIS-LAB</a></header>
+</style><script data-goatcounter="https://innovafislab.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script><style>
+header{align-items:center}.side{overflow-y:auto!important}
+@media(min-width:821px) and (min-height:521px){header .gbtn{display:inline-flex;align-items:center;font:inherit;font-size:clamp(12px,1.7vh,15px);font-weight:600;color:var(--navy);background:#fff;border:1px solid #9fb0c2;border-radius:8px;padding:.25em .8em;cursor:pointer;white-space:nowrap;flex:none}header .gbtn::before{content:none}body.noside main{grid-template-columns:minmax(0,1fr)}body.noside .side{display:none}}
+header .code{flex:none;margin-left:auto;margin-right:14px;font-size:clamp(13px,1.9vh,16px);color:var(--slate);font-weight:600;white-space:nowrap;cursor:pointer;background:none;border:0;font-family:inherit}
+header .code b{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:1.1em;letter-spacing:.05em;color:var(--navy);background:#fff0c1;border:1px solid #e2c770;border-radius:6px;padding:1px 8px;margin-left:6px}
+.read div.sw{align-items:center}.read div.sw b{min-width:7.2em}.read div:has(#Ts){grid-column:1/-1}
+.swb{font:inherit;font-size:.85em;font-weight:600;border:1px solid #9fb0c2;background:#fff;color:var(--navy);border-radius:7px;padding:.15em .7em;cursor:pointer}.swb.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.gem{background:#fff8e1;border:1px solid #ecd58f;border-radius:10px;padding:.55em .8em;margin:0 0 .8em}.gem p{margin:0 0 .35em}.gem p:last-child{margin:0}
+.gate{position:fixed;inset:0;z-index:60;display:none;place-items:center;background:rgba(246,247,249,.9);backdrop-filter:blur(3px);padding:16px}.gate.on{display:grid;grid-template-columns:minmax(0,440px);justify-content:center}.gate{overflow-y:auto;align-content:safe center}#gin{min-width:0;width:100%;box-sizing:border-box}
+.gcard{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px rgba(23,50,77,.18);padding:22px 24px;max-width:440px;width:100%;display:flex;flex-direction:column;gap:12px;font-size:16px}
+.gcard h2{margin:0;font-size:1.3em}.gcard p{margin:0;color:var(--slate)}#gin{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:1.6em;letter-spacing:.12em;text-align:center;text-transform:uppercase;padding:.25em;border:1.5px solid #e2c770;background:#fff8e1;border-radius:10px;color:var(--navy)}
+.gbt{display:flex}.gbt .go{flex:1;font-size:1.05em;padding:.5em}.gno{font:inherit;background:none;border:0;color:var(--navy);text-decoration:underline;cursor:pointer;padding:.2em}#gmsg{color:#b3261e;min-height:1.2em}
+@media(max-width:820px),(max-height:520px){header{padding-left:10px!important}header .code{margin-right:4px;font-size:13px}header .code span{display:none}.read div.sw{grid-column:1/-1;flex-direction:row!important;align-items:center!important;gap:8px!important}.read div.sw span{display:inline}}
+@media(max-height:520px){.gcard{padding:12px 18px;gap:7px;font-size:14px}.gcard h2{font-size:1.15em}#gin{font-size:1.3em;padding:.15em}.gbt .go{padding:.35em}}
+</style></head><body>
+<header><h1>Ley de Hooke</h1><button class="code" type="button" title="Cambiar código"><span>Código</span><b class="codev"></b></button><button class="gbtn" type="button">Guía</button><a href="laboratorios.html#fisica" aria-label="Volver">← Laboratorio de Física · INNOVA-FIS-LAB</a></header>
 <main><section class="left"><div class="card"><style>
 .sim3{flex:1;min-height:0;position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;touch-action:none;cursor:grab}
 .sim3:active{cursor:grabbing}.sim3 canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -164,16 +190,16 @@ body[data-part="1"] .sim3 .ins{height:calc(100% - 20px)}
 @media(max-width:820px) and (orientation:portrait){.sim3{flex:1;min-height:0;height:auto}.sim3 .ins span{display:none}.sim3 .gph{left:10px;right:auto;top:auto;bottom:10px;width:calc(50% - 15px);height:36%}.sim3 .ins{right:10px;bottom:10px;width:calc(50% - 15px);height:36%!important}.sim3 .rd{bottom:auto;top:8px}}
 @media(hover:none){.sim3 .hint{display:none}}
 @media(orientation:landscape) and (max-height:520px){.sim3 .hint{display:none}}
-</style>
+.sim3 .rd{display:none!important}</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <div class="sim3" id="v3"><canvas id="cv"></canvas><svg class="gph p2" id="gph" viewBox="0 0 300 200"></svg>
 <div class="ins"><span>Detalle: el índice rojo sobre la escala</span><div class="rd p1" id="rdx">x = 0 mm</div></div>
 <div class="hint">Arrastra para girar la vista · rueda del ratón para acercar</div></div>
-<div class="bar"><div class="ctrl"><button class="btn pt on" data-p="1">Parte I: alargamiento</button><button class="btn pt" data-p="2">Parte II: periodo</button><label>Muelle <select id="K" class="btn"><option value="10">rojo</option><option value="20">azul</option></select></label><label>Pesas de 10 g <input id="N" type="range" min="0" max="8" step="1" value="3"><b id="Nv"></b></label><button class="btn p2" id="go" data-alt="Volver a empezar">Bajar y soltar</button><button class="btn p2" id="pp" data-alt="Continuar">Parar</button><button class="btn" id="vw">Vista inicial</button></div><div class="read"><div><span>Masa colgada <i>m</i></span><b id="rm">–</b></div><div class="p1"><span>Fuerza <i>F</i> = <i>mg</i></span><b id="rF" style="min-width:7.6em">–</b></div><div class="p1"><span>Alargamiento <i>x</i></span><b id="rx">–</b></div><div class="p2"><span>Oscilaciones</span><b id="cnt">0</b></div><div class="p2"><span>Cronómetro</span><b id="tt">0,00 s</b></div></div></div></div><p class="note">Material Ventus 10132. Valores de ejemplo: portapesas de 10 g, muelle rojo k = 10 N/m y azul k = 20 N/m. · CC BY-NC-SA 4.0</p></section>
-<section class="side card"><h2>Qué se observa</h2><p class="p1">Al colgar pesas, el muelle se alarga y el índice rojo baja por la escala del tubo. El alargamiento es proporcional a la fuerza: con el doble de peso, el muelle se alarga el doble. El muelle azul es más duro que el rojo y se alarga menos.</p><div class="p1"><div class="eq" data-tex="F=k\,x"></div><p>Aquí <i>F</i> = <i>mg</i> es el peso de lo que cuelga, portapesas incluido; <i>x</i>, el alargamiento, que se lee directamente en la escala en mm porque el índice marca 0 sin carga; y <i>k</i>, la constante elástica del muelle.</p></div><p class="p2">Si se baja un poco la masa y se suelta, oscila arriba y abajo. Con más masa oscila más despacio; con el muelle más duro, más deprisa.</p><div class="p2"><div class="eq" data-tex="T=2\pi\sqrt{\frac{m}{k}}"></div><p>Aquí <i>T</i> es el periodo, el tiempo de una oscilación completa; <i>m</i>, la masa colgada, portapesas incluido; y <i>k</i>, la constante elástica. Una oscilación se cuenta cada vez que la masa vuelve al punto más bajo.</p></div><h2>Qué hay que medir</h2><ol><li>Pesar el portapesas en la báscula y colgarlo.</li><li class="p1">Leer el alargamiento <i>x</i> en la escala.</li><li class="p1">Añadir una a una las 8 pesas de 10 g, pesando cada vez la masa total y leyendo <i>x</i>.</li><li class="p2">Bajar un poco la masa, soltarla y medir con el cronómetro el tiempo de 30 oscilaciones, <i>t</i><sub>30</sub>. El periodo es <i>T</i> = <i>t</i><sub>30</sub>/30.</li><li class="p2">Repetir añadiendo una a una las 8 pesas de 10 g.</li></ol><h2>Tabla de la ficha</h2><div class="p1"><table class="t"><tr><th><i>m</i> (kg)</th><th><i>F</i> (N)</th><th><i>x</i> (m)</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table></div><div class="p2"><table class="t"><tr><th><i>m</i> (kg)</th><th><i>t</i>₃₀ (s)</th><th><i>T</i> (s)</th><th><i>T</i>² (s²)</th></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table></div><p class="mnote">Material Ventus 10132. Valores de ejemplo: portapesas de 10 g, muelle rojo k = 10 N/m y azul k = 20 N/m. · CC BY-NC-SA 4.0</p></section></main>
+<div class="bar"><div class="ctrl"><button class="btn pt on" data-p="1">Parte I: alargamiento</button><button class="btn pt" data-p="2">Parte II: periodo</button><label>Muelle <select id="K" class="btn"><option value="10">rojo</option><option value="20">azul</option></select></label><label>Pesas de 10 g <input id="N" type="range" min="0" max="8" step="1" value="3"><b id="Nv"></b></label><button class="btn p2" id="go" data-alt="Volver a empezar">Bajar y soltar</button><button class="btn p2" id="pp" data-alt="Continuar">Parar</button><button class="btn" id="vw">Vista inicial</button></div><div class="read"><div><span>Báscula, masa colgada <i>m</i></span><b id="rm">–</b></div><b id="rF" style="display:none"></b><b id="rx" style="display:none"></b><div class="p2"><span>Oscilaciones</span><b id="cnt">0</b></div><b id="tt" style="display:none"></b><div class="p2 sw"><span>Cronómetro</span><b id="swv">0,00 s</b><button class="swb" id="sws" type="button">Iniciar</button><button class="swb" id="swr" type="button">A cero</button></div></div></div></div><p class="note">Gemelo de la práctica: el muelle y las pesas dependen del código · CC BY-NC-SA 4.0</p></section>
+<section class="side card"><div class="gem"><p><b>Gemelo de la práctica.</b> Código: <b class="codev"></b>. Con código, el montaje es el tuyo: escribe el código en tu ficha y haz todas las medidas con él. Sin código, el montaje es el genérico, para practicar. Para cambiarlo, pulsa el código de arriba a la derecha.</p></div><h2>Qué se observa</h2><p class="p1">Al colgar pesas, el muelle se alarga y el índice rojo baja por la escala. El alargamiento es proporcional a la fuerza.</p><div class="p1"><div class="eq" data-tex="F=k\,x"></div><p>Aquí <i>F</i> = <i>mg</i> es el peso de lo que cuelga, portapesas incluido, con <i>g</i> = 9,80 m/s²; <i>x</i>, el alargamiento, que se lee en la escala del recuadro de detalle porque el índice marca 0 sin carga; y <i>k</i>, la constante del muelle.</p></div><p class="p2">Si se baja un poco la masa y se suelta, oscila arriba y abajo. Con más masa oscila más despacio.</p><div class="p2"><div class="eq" data-tex="T=2\pi\sqrt{\frac{m}{k}}"></div><p>Aquí <i>T</i> es el periodo; <i>m</i>, la masa colgada; y <i>k</i>, la constante del muelle. El contador suma una oscilación cada vez que la masa vuelve al punto más bajo.</p></div><h2>Qué hay que medir</h2><p>Elige el muelle y anótalo. La báscula da la masa colgada, portapesas más pesas. Ve añadiendo una a una las 8 pesas de 10 g.</p><p class="p1">Para cada masa, lee el alargamiento <i>x</i> en la escala del detalle.</p><p class="p2">Para cada masa, pulsa «Bajar y soltar»: el cronómetro se pone en marcha solo. Páralo cuando el contador llegue a 30 y anota <i>t</i><sub>30</sub>. El cronómetro se para también con la barra espaciadora.</p><h2>Errores</h2><p>Cada medida directa aparece con su error. Los errores de las medias, de las magnitudes indirectas y de los ajustes los calculas tú, como se explica en la <a href="https://innovafislab.github.io/errores.html" target="_blank">página de errores</a>. El alargamiento se lee en una escala de milímetros, así que su error es 0,5 mm.</p><p class="mnote">Gemelo de la práctica: el muelle y las pesas dependen del código · CC BY-NC-SA 4.0</p></section></main>
 <script>
 const MOB=()=>matchMedia('(max-width:820px),(max-height:520px)').matches;
-function fit(){const e=document.querySelector('.side');if(MOB()){e.style.fontSize='';return}let lo=10,hi=34;for(let i=0;i<10;i++){const m=(lo+hi)/2;e.style.fontSize=m+'px';if(e.scrollHeight>e.clientHeight+1||e.scrollWidth>e.clientWidth+1)hi=m;else lo=m}e.style.fontSize=lo+'px'}
+function fit(){const e=document.querySelector('.side');if(MOB()){e.style.fontSize='';return}let lo=15,hi=34;for(let i=0;i<10;i++){const m=(lo+hi)/2;e.style.fontSize=m+'px';if(e.scrollHeight>e.clientHeight+1||e.scrollWidth>e.clientWidth+1)hi=m;else lo=m}e.style.fontSize=lo+'px'}
 if(document.fonts)document.fonts.ready.then(()=>{fixBtn();fit()});
 function lockBar(){const bar=document.querySelector('.bar');if(!bar||!document.querySelector('.pt'))return;bar.style.minHeight='';if(matchMedia('(orientation:landscape) and (max-height:520px)').matches)return;const cur=document.body.dataset.part;let h=0;['1','2'].forEach(p=>{document.body.dataset.part=p;h=Math.max(h,bar.offsetHeight)});document.body.dataset.part=cur;bar.style.minHeight=h+'px'}
 function fixBtn(){document.querySelectorAll('[data-alt]').forEach(e=>{e.style.minWidth='';const t=e.textContent;const w1=e.offsetWidth;e.textContent=e.dataset.alt;const w2=e.offsetWidth;e.textContent=t;e.style.minWidth=Math.max(w1,w2)+'px'});lockBar()}
@@ -206,9 +232,50 @@ function mkGraph(G,o){const N='http://www.w3.org/2000/svg';const el=(t,a,p)=>{co
  new ResizeObserver(axes).observe(G);axes();
  return {set(p){pts=p;draw()},hline(v){hv=v;draw()}}}
 function fmt(x,d){return x.toFixed(d).replace('.',',')}
+const GPR='hooke';
+const PARS={
+caida:U=>({t0:U(0.004,0.012),ds:U(-0.002,0.002),g:9.80}),
+pendulo:U=>({dL:U(0.008,0.025),g:9.80}),
+hooke:U=>{const kr=U(8.5,11.5);return{kr,kb:2*kr*U(0.95,1.05),mp:U(0.0095,0.0115),w:[0,1,2,3,4,5,6,7].map(()=>0.010*U(0.99,1.01)),m0r:U(0.002,0.006),m0b:U(0.003,0.008)}},
+plano:U=>({mc:U(0.196,0.205),w:[0,1,2,3].map(()=>0.050*U(0.995,1.005)),da:U(-0.4,0.4)}),
+arquimedes:U=>({rhoA:U(995,999.5),D:[0,1,2,3].map(()=>U(0.0248,0.0252)),rhoE:[U(2650,2750),U(7700,7900),U(8400,8800),U(11000,11400)],mp:U(0.0095,0.0105),w:[0,1,2,3,4].map(()=>0.020*U(0.99,1.01)),rhoS:U(8300,8600)}),
+maxwell:U=>({m:0.520,r:U(0.00240,0.00260),Iz:U(9.0e-4,10.5e-4)}),
+newton:U=>({mp1:U(0.0198,0.0202),mh:U(0.0009,0.0011),m2:U(0.397,0.403),ds:U(0.0995,0.1005),fric:U(0.0003,0.0009)})
+};
+function h32(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19}h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return(h^h>>>16)>>>0}
+function rng(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function normCode(v){return String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}
+function PAR(pr,code){if(!code)return PARS[pr]((a,b)=>(a+b)/2);const r=rng(h32('fis:'+pr+':'+code));const U=(a,b)=>a+(b-a)*r();return PARS[pr](U)}
+
+let CODE=null,GEN=false;
+try{const q=normCode(new URLSearchParams(location.search).get('c'));if(q.length>=4)CODE=q}catch(e){}
+if(!CODE)try{const o=JSON.parse(localStorage.getItem('fisgemelo')||'null');if(o&&normCode(o.c).length>=4&&Date.now()-o.t<8*36e5)CODE=o.c}catch(e){}
+if(CODE)try{localStorage.setItem('fisgemelo',JSON.stringify({c:CODE,t:Date.now()}))}catch(e){}
+try{GEN=!CODE&&sessionStorage.getItem('fisgemelo-gen')==='1'}catch(e){}
+const HP=PAR(GPR,CODE);
+document.querySelectorAll('.codev').forEach(e=>e.textContent=CODE||'sin código');
+(function(){const G=document.createElement('div');G.className='gate';G.innerHTML='<form class="gcard" autocomplete="off"><h2>Laboratorio de Física</h2><p>Si tu profesor te ha pedido hacer esta práctica con la simulación, escribe el código que te haya indicado, por ejemplo tu DNI o tu número de expediente.</p><input id="gin" aria-label="Código" spellcheck="false" maxlength="20"><div class="gbt"><button class="go" type="submit">Empezar con código</button></div><button class="gno" type="button" id="gno">Continuar sin código, para practicar</button><p id="gmsg"></p></form>';
+ document.body.appendChild(G);const f=G.querySelector('form'),i=G.querySelector('#gin'),m=G.querySelector('#gmsg');
+ const show=on=>{G.classList.toggle('on',on);if(on){i.value=CODE||'';m.textContent='';setTimeout(()=>i.focus(),50)}};
+ f.onsubmit=e=>{e.preventDefault();const c=normCode(i.value);if(c.length<4){m.textContent='Escribe el código completo: al menos 4 letras o números.';return}
+  try{localStorage.setItem('fisgemelo',JSON.stringify({c,t:Date.now()}));sessionStorage.removeItem('fisgemelo-gen')}catch(e){}location.search='?c='+c};
+ G.querySelector('#gno').onclick=()=>{try{localStorage.removeItem('fisgemelo');sessionStorage.setItem('fisgemelo-gen','1')}catch(e){}if(CODE){location.search=''}else show(false)};
+ const pill=document.querySelector('header .code');if(pill)pill.onclick=()=>show(true);show(!CODE&&!GEN)})();
+function gauss(s){let u=0,v=0;while(u===0)u=Math.random();while(v===0)v=Math.random();return s*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+const SW={on:false,t:0};function swShow(){const b=document.getElementById('swv');if(b)b.textContent=fmt(SW.t,2)+' ± 0,01 s';const s=document.getElementById('sws');if(s){s.textContent=SW.on?'Parar':'Iniciar';s.classList.toggle('on',SW.on)}}
+function swTick(dt){if(SW.on){SW.t+=dt;swShow()}}
+function swToggle(){SW.on=!SW.on;swShow()}
+function swStart(){SW.t=0;SW.on=true;swShow()}function swReset(){SW.on=false;SW.t=0;swShow()}
+(function(){const s=document.getElementById('sws'),r=document.getElementById('swr');if(!s)return;s.onclick=()=>{swToggle();s.blur()};r.onclick=()=>{swReset();r.blur()};
+ addEventListener('keydown',e=>{if(e.code==='Space'&&!e.target.closest('input,select,textarea')){e.preventDefault();if(e.target.blur)e.target.blur();if(!e.repeat)swToggle()}});swShow()})();
+(function(){const g=document.querySelector('header .gbtn');if(!g)return;const lab=()=>{if(!MOB())g.textContent=document.body.classList.contains('noside')?'Mostrar guía':'Ocultar guía'};
+ g.onclick=()=>{if(MOB()){const on=document.body.classList.toggle('guide');g.textContent=on?'Simulación':'Guía';if(on)document.querySelector('.side').scrollTop=0;return}
+  document.body.classList.toggle('noside');lab();dispatchEvent(new Event('resize'));setTimeout(()=>dispatchEvent(new Event('resize')),60)};
+ const fix=()=>{if(MOB()){document.body.classList.remove('noside');if(!document.body.classList.contains('guide'))g.textContent='Guía'}else{document.body.classList.remove('guide');lab()}};addEventListener('resize',fix);fix()})();
+
 let playing=true,last=null;function loop(step){function f(ts){if(last===null)last=ts;let dt=Math.min(0.05,(ts-last)/1000);last=ts;if(playing&&!document.hidden)step(dt);requestAnimationFrame(f)}requestAnimationFrame(f)}
 (function(){const pp=document.getElementById('pp');if(!pp)return;const set=p=>{playing=p;pp.textContent=p?'Parar':'Continuar';pp.classList.toggle('on',!p)};
-pp.onclick=()=>set(!playing);document.addEventListener('click',e=>{const t=e.target.closest('button');if(t&&t!==pp)set(true)},true)})();
+pp.onclick=()=>set(!playing);document.addEventListener('click',e=>{const t=e.target.closest('button');if(t&&t!==pp&&!t.closest('.sw'))set(true)},true)})();
 (function(){const card=document.querySelector('.left .card'),ctrl=document.querySelector('.ctrl');if(!ctrl)return;
  const pts=[...document.querySelectorAll('.pt')];if(pts.length){const tb=document.createElement('div');tb.className='tabs';pts.forEach(b=>{b.classList.remove('btn');b.classList.add('tab');tb.appendChild(b)});card.insertBefore(tb,card.firstChild)}
  const P=document.createElement('div');P.className='params';const Ac=document.createElement('div');Ac.className='acts';
@@ -287,17 +354,17 @@ box.addEventListener('pointermove',e=>{if(!drag)return;if(drag[2]){pan(e.clientX
 box.addEventListener('pointerup',()=>drag=null);box.addEventListener('wheel',e=>{e.preventDefault();dist=Math.max(0.3,Math.min(4,dist*Math.exp(e.deltaY*0.001)))},{passive:false});const PTR=new Map();let pd0=0,pm0=null;const TG0=TG.clone();const pmid=()=>{const p=[...PTR.values()];return[(p[0][0]+p[1][0])/2,(p[0][1]+p[1][1])/2]};function pan(dx,dy){const H=(CAM.view&&CAM.view.enabled)?CAM.view.fullHeight:box.clientHeight;const k=2*dist*Math.tan(CAM.fov*Math.PI/360)/H,ca=Math.cos(az),sa=Math.sin(az),ce=Math.cos(el),se=Math.sin(el),L=0.9,c=(v,v0)=>Math.max(v0-L,Math.min(v0+L,v));TG.x=c(TG.x+k*(-dx*ca-dy*se*sa),TG0.x);TG.y=c(TG.y+k*dy*ce,TG0.y);TG.z=c(TG.z+k*(dx*sa-dy*se*ca),TG0.z)}const pdist=()=>{const p=[...PTR.values()];return Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1])};box.addEventListener('pointerdown',e=>{PTR.set(e.pointerId,[e.clientX,e.clientY]);if(PTR.size>=2){drag=null;pd0=pdist();pm0=pmid()}});box.addEventListener('pointermove',e=>{if(!PTR.has(e.pointerId))return;PTR.set(e.pointerId,[e.clientX,e.clientY]);if(PTR.size>=2){drag=null;const d1=pdist();if(pd0>0&&d1>0)dist=Math.max(0.3,Math.min(4,dist*pd0/d1));pd0=d1;const m1=pmid();if(pm0)pan(m1[0]-pm0[0],m1[1]-pm0[1]);pm0=m1}});['pointerup','pointercancel','pointerleave'].forEach(k=>box.addEventListener(k,e=>{PTR.delete(e.pointerId);pd0=PTR.size>=2?pdist():0;pm0=PTR.size>=2?pmid():null}));
 function size(){const w=box.clientWidth,h=box.clientHeight;R3.setSize(w,h,false);if(CAM.f0===undefined)CAM.f0=CAM.fov;if(matchMedia('(max-width:820px) and (orientation:portrait)').matches){const hs=h*0.6,Hf=2*h-hs;CAM.fov=2*Math.atan(Math.tan(CAM.f0*Math.PI/360)*Hf/hs)*180/Math.PI;CAM.aspect=w/Hf;CAM.setViewOffset(w,Hf,0,h-hs,w,h)}else{const kk=w>h*1.3?0.3:0;CAM.fov=CAM.f0;CAM.aspect=w*(1+kk)/h;CAM.setViewOffset(w*(1+kk),h,w*kk,0,w,h)}CAM.updateProjectionMatrix()}let needSz=false;function eR(e){const b=box.getBoundingClientRect(),r=e.getBoundingClientRect(),x0=b.left+box.clientLeft,y1=b.top+box.clientTop+box.clientHeight;return [Math.round(r.left-x0),Math.round(y1-r.bottom),Math.round(r.width),Math.round(r.height)]};new ResizeObserver(()=>needSz=true).observe(box);size();
 // estado
-function setm(){k=+$('#K').value;const n=+$('#N').value;m=MP+0.010*n;$('#Nv').textContent=n;$('#rm').textContent=Math.round(m*1000)+' g';
- cap.material.color.set(k==10?'#d32f2f':'#1f6fd1');wts.forEach((w,i)=>w.visible=i<n);const x=m*g/k;$('#rF').textContent=fmt(m*g,3)+' N';$('#rx').textContent=Math.round(x*1000)+' mm';$('#rdx').textContent='x = '+Math.round(x*1000)+' mm'}
+let m0=0;function setm(){const red=$('#K').value=='10';k=red?HP.kr:HP.kb;m0=red?HP.m0r:HP.m0b;const n=+$('#N').value;m=HP.mp;for(let i=0;i<n;i++)m+=HP.w[i];$('#Nv').textContent=n;$('#rm').textContent=fmt(m*1000,1)+' ± 0,1 g';
+ cap.material.color.set(red?'#d32f2f':'#1f6fd1');wts.forEach((w,i)=>w.visible=i<n);const x=m*g/k;$('#rF').textContent=fmt(m*g,3)+' N';$('#rx').textContent=Math.round(x*1000)+' mm';$('#rdx').textContent='x = '+Math.round(x*1000)+' mm'}
 function place(){const x=m*g/k+y,iy=Y0-x;idx.position.y=iy;const top=TT-0.005;coil.scale.y=Math.max(0.01,top-iy-0.002)}
-function reset(){setm();y=0;v=0;t=0;cnt=0;run=false;hist=[];gtr.setAttribute('d','');$('#cnt').textContent='0';$('#tt').textContent='0,00 s';showSW(0);if($('#go'))$('#go').textContent='Bajar y soltar';place()}
+function reset(){setm();y=0;v=0;t=0;cnt=0;run=false;hist=[];gtr.setAttribute('d','');$('#cnt').textContent='0';swReset();showSW(0);if($('#go'))$('#go').textContent='Bajar y soltar';place()}
 function setPart(p){part=p;document.body.dataset.part=p;document.querySelectorAll('.tab,.pt').forEach(c=>c.classList.toggle('on',+c.dataset.p===p));reset();fixBtn();fit()}
 document.querySelectorAll('.pt').forEach(b=>b.onclick=()=>setPart(+b.dataset.p));
-$('#N').oninput=reset;$('#K').onchange=reset;$('#go').onclick=()=>{if(run){reset()}else{y=0.012;v=0;run=true;$('#go').textContent='Volver a empezar'}};
+$('#N').oninput=reset;$('#K').onchange=reset;$('#go').onclick=()=>{if(run){reset()}else{y=0.012;v=0;run=true;swStart();$('#go').textContent='Volver a empezar'}};
 $('#vw').onclick=()=>{TG.copy(TG0);az=0.5;el=0.12;dist=1.25};setPart(1);
 let lt=null;function frame(ts){if(lt===null)lt=ts;const dt=Math.min(0.05,(ts-lt)/1000);lt=ts;
- if(run&&playing){const n=20,h=dt/n,om2=k/m;for(let i=0;i<n;i++){const vn=v-om2*y*h,yn=y+vn*h;if(v>0&&vn<=0){cnt++;$('#cnt').textContent=cnt}v=vn;y=yn;t+=h}
-  $('#tt').textContent=fmt(t,2)+' s';showSW(t);hist.push([t,y]);if(hist.length>900)hist.shift();let d='';hist.forEach(p=>{if(p[0]>=t-6)d+=(d?'L':'M')+(gx0+(p[0]-Math.max(0,t-6))/6*gw).toFixed(1)+' '+(gy0+gh/2+p[1]/0.014*gh/2).toFixed(1)});gtr.setAttribute('d',d);place()}
+ if(run&&playing){swTick(dt);const n=20,h=dt/n,om2=k/(m+m0);for(let i=0;i<n;i++){const vn=v-om2*y*h,yn=y+vn*h;if(v>0&&vn<=0){cnt++;$('#cnt').textContent=cnt}v=vn;y=yn;t+=h}
+  showSW(SW.t);hist.push([t,y]);if(hist.length>900)hist.shift();let d='';hist.forEach(p=>{if(p[0]>=t-6)d+=(d?'L':'M')+(gx0+(p[0]-Math.max(0,t-6))/6*gw).toFixed(1)+' '+(gy0+gh/2+p[1]/0.014*gh/2).toFixed(1)});gtr.setAttribute('d',d);place()}
  if(needSz){needSz=false;size()}camSet();const W0=box.clientWidth,H0=box.clientHeight;R3.setViewport(0,0,W0,H0);R3.setScissorTest(false);R3.render(SC,CAM);
  if($('.sim3 .ins').offsetWidth>0){const [ix,iy,iw,ih]=eR($('.sim3 .ins')),iy0=Y0-m*g/k;CAM2.aspect=iw/ih;CAM2.updateProjectionMatrix();
   CAM2.position.set(0.016,iy0+0.004,0.12);CAM2.lookAt(0.008,iy0,-0.008);R3.setScissorTest(true);R3.setViewport(ix,iy,iw,ih);R3.setScissor(ix,iy,iw,ih);R3.setClearColor(document.documentElement.classList.contains('dk')?0x161d26:0xf6f7f9,1);R3.clear();R3.render(SC,CAM2);R3.setScissorTest(false);R3.setViewport(0,0,W0,H0)}
