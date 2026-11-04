@@ -495,6 +495,7 @@ header .code{flex:none;margin-left:auto;margin-right:14px;font-size:clamp(13px,1
 header .code b{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:1.1em;letter-spacing:.05em;color:var(--navy);background:#fff0c1;border:1px solid #e2c770;border-radius:6px;padding:1px 8px;margin-left:6px}
 .read div.sw{align-items:center}.read div.sw b{min-width:7.2em}.read div:has(#Ts){grid-column:1/-1}
 .swb{font:inherit;font-size:.85em;font-weight:600;border:1px solid #9fb0c2;background:#fff;color:var(--navy);border-radius:7px;padding:.15em .7em;cursor:pointer}.swb.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+header .code i{font-style:normal}header .code .cm{display:none}@media(max-width:820px),(max-height:520px){header .code .cu{display:none}header .code .cm{display:inline}}
 .gem{background:#fff8e1;border:1px solid #ecd58f;border-radius:10px;padding:.55em .8em;margin:0 0 .8em}.gem p{margin:0 0 .35em}.gem p:last-child{margin:0}
 .gate{position:fixed;inset:0;z-index:60;display:none;place-items:center;background:rgba(246,247,249,.9);backdrop-filter:blur(3px);padding:16px}.gate.on{display:grid;grid-template-columns:minmax(0,440px);justify-content:center}.gate{overflow-y:auto;align-content:safe center}#gin{min-width:0;width:100%;box-sizing:border-box}
 .gcard{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px rgba(23,50,77,.18);padding:22px 24px;max-width:440px;width:100%;display:flex;flex-direction:column;gap:12px;font-size:16px}
@@ -577,7 +578,7 @@ body.noside{--W:min(calc(100vw - 60px),calc((100vh - 100px)*1800/1400))}body.nos
 <p class="note">Se pulsa el botón verde SOLTAR o la barra espaciadora. · CC BY-NC-SA 4.0</p>
 </div>
 </div></div></section>
-<section class="side card"><div class="gem"><p><b>Gemelo de la práctica.</b> Código: <b class="codev"></b>. Con código, el montaje es el tuyo: escribe el código en tu ficha y haz todas las medidas con él. Sin código, el montaje es el genérico, para practicar. Para cambiarlo, pulsa el código de arriba a la derecha.</p></div><h2>Qué se observa</h2>
+<section class="side card"><div class="gem"><p><b>Gemelo de la práctica.</b> Montaje: <b class="codeg"></b>. Sin código, el montaje es el genérico, para practicar. Si tu profesor te ha dado un código, pulsa «Usar código», arriba a la derecha: el montaje pasa a ser el tuyo; haz con él todas las medidas y escríbelo en tu ficha.</p></div><h2>Qué se observa</h2>
 <p>La masa colgante \(m_1\) cae y, por el hilo y la polea, arrastra al deslizador \(m_2\), que flota sobre el colchón de aire. El peso \(m_1g\) es constante, así que el deslizador sale del reposo con aceleración constante</p>
 <div class="eq">\[a=\frac{m_1\,g}{m_1+m_2}\]</div>
 <div class="p1only"><p>y el espacio recorrido crece con el cuadrado del tiempo:</p><div class="eq">\[s=\tfrac12\,a\,t'^2\]</div></div>
@@ -624,14 +625,14 @@ if(!CODE)try{const o=JSON.parse(localStorage.getItem('fisgemelo')||'null');if(o&
 if(CODE)try{localStorage.setItem('fisgemelo',JSON.stringify({c:CODE,t:Date.now()}))}catch(e){}
 try{GEN=!CODE&&sessionStorage.getItem('fisgemelo-gen')==='1'}catch(e){}
 const HP=PAR(GPR,CODE);
-document.querySelectorAll('.codev').forEach(e=>e.textContent=CODE||'sin código');
-(function(){const G=document.createElement('div');G.className='gate';G.innerHTML='<form class="gcard" autocomplete="off"><h2>Laboratorio de Física</h2><p>Si tu profesor te ha pedido hacer esta práctica con la simulación, escribe el código que te haya indicado, por ejemplo tu DNI o tu número de expediente.</p><input id="gin" aria-label="Código" spellcheck="false" maxlength="20"><div class="gbt"><button class="go" type="submit">Empezar con código</button></div><button class="gno" type="button" id="gno">Continuar sin código, para practicar</button><p id="gmsg"></p></form>';
+document.querySelectorAll('.codev').forEach(e=>e.textContent=CODE||'Usar código');document.querySelectorAll('.codeg').forEach(e=>e.textContent=CODE?'el de tu código, '+CODE:'genérico');if(!CODE){document.querySelectorAll('header .code span').forEach(e=>e.remove());document.querySelectorAll('header .code b').forEach(b=>b.innerHTML='<i class="cu">Usar c</i><i class="cm">C</i>ódigo')}
+(function(){const G=document.createElement('div');G.className='gate';G.innerHTML='<form class="gcard" autocomplete="off"><h2>Laboratorio de Física</h2><p>Si tu profesor te ha dado un código, escríbelo aquí. Con él, el montaje pasa a ser el tuyo.</p><input id="gin" aria-label="Código" spellcheck="false" maxlength="20"><div class="gbt"><button class="go" type="submit">Empezar con código</button></div><button class="gno" type="button" id="gno">Seguir sin código</button><p id="gmsg"></p></form>';
  document.body.appendChild(G);const f=G.querySelector('form'),i=G.querySelector('#gin'),m=G.querySelector('#gmsg');
  const show=on=>{G.classList.toggle('on',on);if(on){i.value=CODE||'';m.textContent='';setTimeout(()=>i.focus(),50)}};
  f.onsubmit=e=>{e.preventDefault();const c=normCode(i.value);if(c.length<4){m.textContent='Escribe el código completo: al menos 4 letras o números.';return}
-  try{localStorage.setItem('fisgemelo',JSON.stringify({c,t:Date.now()}));sessionStorage.removeItem('fisgemelo-gen')}catch(e){}location.search='?c='+c};
- G.querySelector('#gno').onclick=()=>{try{localStorage.removeItem('fisgemelo');sessionStorage.setItem('fisgemelo-gen','1')}catch(e){}if(CODE){location.search=''}else show(false)};
- const pill=document.querySelector('header .code');if(pill)pill.onclick=()=>show(true);show(!CODE&&!GEN)})();
+  try{localStorage.setItem('fisgemelo',JSON.stringify({c,t:Date.now()}));0}catch(e){}location.search='?c='+c};
+ G.querySelector('#gno').onclick=()=>{try{localStorage.removeItem('fisgemelo')}catch(e){}if(CODE){location.search=''}else show(false)};G.onclick=e=>{if(e.target===G)show(false)};addEventListener('keydown',e=>{if(e.key==='Escape')show(false)});
+ const pill=document.querySelector('header .code');if(pill)pill.onclick=()=>show(true);show(false)})();
 
 (function(){const g=v=>(v*1000).toFixed(1).replace('.',',')+' ± 0,1 g';const s=(i,v)=>{const e=document.getElementById(i);if(e)e.textContent=v};
  s('gm1',g(HP.mp1));s('gmh',g(HP.mh));s('gm2',g(HP.m2))})();
