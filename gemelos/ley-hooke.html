@@ -170,11 +170,12 @@ header .code b{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:1.1e
 .read div.sw{align-items:center}.read div.sw b{min-width:7.2em}.read div:has(#Ts){grid-column:1/-1}
 .swb{font:inherit;font-size:.85em;font-weight:600;border:1px solid #9fb0c2;background:#fff;color:var(--navy);border-radius:7px;padding:.15em .7em;cursor:pointer}.swb.on{background:var(--navy);color:#fff;border-color:var(--navy)}
 .gem{background:#fff8e1;border:1px solid #ecd58f;border-radius:10px;padding:.55em .8em;margin:0 0 .8em}.gem p{margin:0 0 .35em}.gem p:last-child{margin:0}
-.gate{position:fixed;inset:0;z-index:60;display:none;place-items:center;background:rgba(246,247,249,.9);backdrop-filter:blur(3px);padding:16px}.gate.on{display:grid}
+.gate{position:fixed;inset:0;z-index:60;display:none;place-items:center;background:rgba(246,247,249,.9);backdrop-filter:blur(3px);padding:16px}.gate.on{display:grid;grid-template-columns:minmax(0,440px);justify-content:center}.gate{overflow-y:auto;align-content:safe center}#gin{min-width:0;width:100%;box-sizing:border-box}
 .gcard{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px rgba(23,50,77,.18);padding:22px 24px;max-width:440px;width:100%;display:flex;flex-direction:column;gap:12px;font-size:16px}
 .gcard h2{margin:0;font-size:1.3em}.gcard p{margin:0;color:var(--slate)}#gin{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:1.6em;letter-spacing:.12em;text-align:center;text-transform:uppercase;padding:.25em;border:1.5px solid #e2c770;background:#fff8e1;border-radius:10px;color:var(--navy)}
 .gbt{display:flex}.gbt .go{flex:1;font-size:1.05em;padding:.5em}.gno{font:inherit;background:none;border:0;color:var(--navy);text-decoration:underline;cursor:pointer;padding:.2em}#gmsg{color:#b3261e;min-height:1.2em}
 @media(max-width:820px),(max-height:520px){header{padding-left:10px!important}header .code{margin-right:4px;font-size:13px}header .code span{display:none}.read div.sw{grid-column:1/-1;flex-direction:row!important;align-items:center!important;gap:8px!important}.read div.sw span{display:inline}}
+@media(max-height:520px){.gcard{padding:12px 18px;gap:7px;font-size:14px}.gcard h2{font-size:1.15em}#gin{font-size:1.3em;padding:.15em}.gbt .go{padding:.35em}}
 </style><meta name="robots" content="noindex"></head><body>
 <header><h1>Ley de Hooke</h1><button class="code" type="button" title="Cambiar código"><span>Código</span><b class="codev"></b></button><button class="gbtn" type="button">Guía</button><a href="laboratorios.html#fisica" aria-label="Volver">← Laboratorio de Física · INNOVA-FIS-LAB</a></header>
 <main><section class="left"><div class="card"><style>
@@ -239,7 +240,7 @@ hooke:U=>{const kr=U(8.5,11.5);return{kr,kb:2*kr*U(0.95,1.05),mp:U(0.0095,0.0115
 plano:U=>({mc:U(0.196,0.205),w:[0,1,2,3].map(()=>0.050*U(0.995,1.005)),da:U(-0.4,0.4)}),
 arquimedes:U=>({rhoA:U(995,999.5),D:[0,1,2,3].map(()=>U(0.0248,0.0252)),rhoE:[U(2650,2750),U(7700,7900),U(8400,8800),U(11000,11400)],mp:U(0.0095,0.0105),w:[0,1,2,3,4].map(()=>0.020*U(0.99,1.01)),rhoS:U(8300,8600)}),
 maxwell:U=>({m:0.520,r:U(0.00240,0.00260),Iz:U(9.0e-4,10.5e-4)}),
-newton:U=>({mp1:U(0.0198,0.0202),mh:U(0.0009,0.0011),m2:U(0.372,0.378),ds:U(0.0995,0.1005),fric:U(0.0003,0.0009)})
+newton:U=>({mp1:U(0.0198,0.0202),mh:U(0.0009,0.0011),m2:U(0.397,0.403),ds:U(0.0995,0.1005),fric:U(0.0003,0.0009)})
 };
 function h32(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19}h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return(h^h>>>16)>>>0}
 function rng(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
