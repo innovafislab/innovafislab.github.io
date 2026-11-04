@@ -353,7 +353,7 @@ function draw(){const al0=+$('#al').value;al=al0+HP.da;const np=Math.round((+$('
  // vectores
  vec.innerHTML='';const cx=P0.x+DC*Math.cos(a)-27*Math.sin(a),cy=P0.y-DC*Math.sin(a)-27*Math.cos(a),sc=55;const P=m*g;
  arrow(cx,cy,cx,cy+P*sc,K,2.8);T(cx-20,cy+P*sc+4,'P',{'font-style':'italic','font-weight':700},vec);
- const ux=-Math.cos(a),uy=Math.sin(a);if(F>0.02){arrow(cx,cy,cx+F*sc*ux,cy+F*sc*uy,'#d9480f');T(cx+F*sc*ux-22,cy+F*sc*uy+4,'F',{'font-style':'italic','font-weight':700,fill:'#d9480f'},vec)}
+ const ux=-Math.cos(a),uy=Math.sin(a);if(F>0.02){arrow(cx,cy,cx+F*sc*ux,cy+F*sc*uy,'#7b2fbe');T(cx+F*sc*ux-22,cy+F*sc*uy+4,'F',{'font-style':'italic','font-weight':700,fill:'#7b2fbe'},vec)}
  const nx=Math.sin(a),ny=Math.cos(a);if(N>0.02){arrow(cx,cy,cx+N*sc*nx,cy+N*sc*ny,'#1b7a43');T(cx+N*sc*nx+6,cy+N*sc*ny+16,'N',{'font-style':'italic','font-weight':700,fill:'#1b7a43'},vec)}
  if(part==1){zoom(2,0.02,F)}else{zoom(5,0.05,N)}}
 document.querySelectorAll('.pt').forEach(b=>b.onclick=()=>{part=+b.dataset.p;document.body.dataset.part=part;document.querySelectorAll('.pt').forEach(c=>c.classList.toggle('on',c===b));draw();fit()});
