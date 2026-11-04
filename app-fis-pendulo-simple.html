@@ -237,7 +237,7 @@ function mkGraph(G,o){const N='http://www.w3.org/2000/svg';const el=(t,a,p)=>{co
  new ResizeObserver(axes).observe(G);axes();
  return {set(p){pts=p;draw()},hline(v){hv=v;draw()}}}
 function fmt(x,d){return x.toFixed(d).replace('.',',')}
-function normCode(v){return String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}const _Q=(function(){function a(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19}h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return(h^h>>>16)>>>0}function b(x){return()=>{x|=0;x=x+0x6D2B79F5|0;let t=Math.imul(x^x>>>15,1|x);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}return c=>{const k=b(1151997458),d=atob('HLRLg4cIU4Yi8iZ8UFPUdnDLICv2AlMDac/X5EFPlosD4DZ84aXCgQ=='),u=new Uint8Array(d.length);for(let i=0;i<d.length;i++)u[i]=d.charCodeAt(i)^(k()*256&255);const r=b(a(['f','is:','pendulo',':'].join('')+(c||'GENERICO')));return Function(new TextDecoder().decode(u))()((p,q)=>p+(q-p)*r())}})();
+function normCode(v){return String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}const _Q=(function(){function a(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19}h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return(h^h>>>16)>>>0}function b(x){return()=>{x|=0;x=x+0x6D2B79F5|0;let t=Math.imul(x^x>>>15,1|x);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}return c=>{const k=b(1820579326),d=atob('qP8MO84wG4FyFFGCZYXcTPohSUEbqBTYPnL/elC/wwk8ElLRRhw8wg=='),u=new Uint8Array(d.length);for(let i=0;i<d.length;i++)u[i]=d.charCodeAt(i)^(k()*256&255);const r=b(a(['f','is:','pendulo',':'].join('')+(c||'GENERICO')));return Function(new TextDecoder().decode(u))()((p,q)=>p+(q-p)*r())}})();
 let CODE=null,GEN=false;
 try{const q=normCode(new URLSearchParams(location.search).get('c'));if(q.length>=4)CODE=q}catch(e){}
 if(!CODE)try{const o=JSON.parse(localStorage.getItem('fisgemelo')||'null');if(o&&normCode(o.c).length>=4&&Date.now()-o.t<8*36e5)CODE=o.c}catch(e){}
@@ -370,7 +370,7 @@ function size(){const w=box.clientWidth,h=box.clientHeight;R3.setSize(w,h,false)
 // estado
 function place(){const bx=L*Math.sin(th),by=PY-L*Math.cos(th);ball.position.set(0,by,bx);const lt=L-RS;thr.scale.y=lt;thr.position.set(0,PY-lt/2*Math.cos(th),lt/2*Math.sin(th));thr.rotation.x=-th;
  const inb=Math.abs(bx)<RS;beamM.color.set(inb?'#ffd400':'#ff2a1a')}
-function setL(){L=+$('#L').value+HP.dL;$('#Lv').textContent=fmt(Math.round(L*1000)/10,1)+' ± 0,1 cm';gate.position.set(0,PY-L,0);cables()}
+function setL(){L=+$('#L').value+HP.dL;$('#Lv').textContent=fmt(Math.round(L*2000)/20,2)+' ± 0,05 cm';gate.position.set(0,PY-L,0);cables()}
 function reset(){setL();th=TH0;w=0;t=0;run=false;lastCross=null;Ts=[];$('#Ts').textContent='–';$('#T').textContent='–';$('#go').textContent='Soltar';showTimer(0);place()}
 $('#L').oninput=reset;$('#go').onclick=()=>{if(run){reset()}else{run=true;$('#go').textContent='Volver a empezar'}};
 $('#vw').onclick=()=>{TG.copy(TG0);az=0.95;el=0.2;dist=2.25};reset();
