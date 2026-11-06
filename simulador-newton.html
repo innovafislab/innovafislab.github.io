@@ -526,7 +526,7 @@ html.dk .encb{background:#161d26;border-color:#27313c;color:#7fb2e5}html.dk .enc
 <header class="top"><div class="hl"><h1>Leyes de Newton</h1><button class="gbtn" type="button">Guía</button>
 <div class="parts" role="tablist" aria-label="Parte de la práctica"><button class="partbtn" id="part1" role="tab" data-part="1">1.ª parte: espacio y tiempo</button><button class="partbtn" id="part2" role="tab" data-part="2">2.ª parte: velocidad y tiempo</button></div>
 <button type="button" class="vthumb hv" data-src="https://innovafislab.github.io/videos/newton1.mp4">Vídeo: cómo se usa</button></div>
-<button class="code" type="button" title="Si tu profesor te ha dado un código, introdúcelo"><span>Código</span><b class="codev"></b></button><a href="laboratorios.html#fisica">← Laboratorio de Física · INNOVA-FIS-LAB</a></header>
+<button class="code" type="button" data-tip="Si tu profesor te ha dado un código, introdúcelo" aria-label="Usar código"><span>Código</span><b class="codev"></b></button><a href="laboratorios.html#fisica">← Laboratorio de Física · INNOVA-FIS-LAB</a></header>
 <main class="app"><section class="left"><div class="card"><div class="rig">
 <svg id="railSvg" class="scene" viewBox="0 -200 1800 650" role="img" aria-label="Carril de aire sobre la mesa con deslizador, disparador magnético, puerta fotoeléctrica y polea">
           <defs>
@@ -614,7 +614,7 @@ tex();addEventListener('resize',fitSide);if(document.fonts)document.fonts.ready.
 </script><script>
 (function(){
 'use strict';
-function normCode(v){return String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}const _Q=(function(){function a(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19}h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return(h^h>>>16)>>>0}function b(x){return()=>{x|=0;x=x+0x6D2B79F5|0;let t=Math.imul(x^x>>>15,1|x);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}return c=>{const k=b(517062660),d=atob('baOOlzIFQjmUVY7GtaFohqinTjQGjQ1u1jO4FSlItWH2ufIeiM40J5Al5D6zqN1mPIbNNxKqNJEukTSE6qWl4Yaqi5zN1oG2dMKXqh26l1M6jS4kqeqAR+/p6VSd0YEBkTMqbOd6kxisVAd409uSn7/le00='),u=new Uint8Array(d.length);for(let i=0;i<d.length;i++)u[i]=d.charCodeAt(i)^(k()*256&255);const r=b(a(['f','is:','newton',':'].join('')+(c||'GENERICO')));return Function(new TextDecoder().decode(u))()((p,q)=>p+(q-p)*r())}})();
+function normCode(v){return String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}const _Q=(function(){function a(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19}h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return(h^h>>>16)>>>0}function b(x){return()=>{x|=0;x=x+0x6D2B79F5|0;let t=Math.imul(x^x>>>15,1|x);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}return c=>{const k=b(1562110243),d=atob('VZRcCpLSU9RmduFUVjH9gZwPzMfcBjcQKiUdL3/WefPEB/HbFP91o5nvPll4f2Rxr5SWOis0NgmXGjpnIxkvfq4EmhvLayz3Dagw+uSL1/QPznPdHfy0HLcnNLnINqtk33i8weIBC8yqp3EgQGWGETQbuaY='),u=new Uint8Array(d.length);for(let i=0;i<d.length;i++)u[i]=d.charCodeAt(i)^(k()*256&255);const r=b(a(['f','is:','newton',':'].join('')+(c||'GENERICO')));return Function(new TextDecoder().decode(u))()((p,q)=>p+(q-p)*r())}})();
 let CODE=null,GEN=false;
 try{const q=normCode(new URLSearchParams(location.search).get('c'));if(q.length>=4)CODE=q}catch(e){}
 if(!CODE)try{const o=JSON.parse(localStorage.getItem('fisgemelo')||'null');if(o&&normCode(o.c).length>=4&&Date.now()-o.t<8*36e5)CODE=o.c}catch(e){}
@@ -1495,7 +1495,7 @@ html body header>a[href*=laboratorios]{order:0;position:static!important;flex:no
 html body header>a[href*=laboratorios]::before{content:'\2190'!important;font-size:24px!important;position:static!important;font-weight:600;color:var(--navy)}
 html body header>a[href*=laboratorios]:hover{background:#eef2f6}
 html body header h1{order:1;margin:0!important}
-html body header .encb{order:4;margin:0 0 0 2px!important}
+html body header .encb{order:4;margin:0 0 0 40px!important}html body header .code{position:relative;overflow:visible!important}html body header .code[data-tip]:hover::after{content:attr(data-tip);position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);width:max-content;max-width:210px;white-space:normal;text-align:center;font:500 13px/1.3 var(--f-ui,system-ui,sans-serif);letter-spacing:0;color:#1b2430;background:#fff;border:1px solid #c9d3de;border-radius:8px;padding:6px 10px;box-shadow:0 4px 14px rgba(20,30,45,.14);z-index:80;pointer-events:none}html.dk body header .code[data-tip]:hover::after{background:#161d26;color:#e3e8ee;border-color:#27313c}
 html body header .tabs,html body header .parts{order:3;margin:0!important}
 html body header .vthumb{order:3}
 html body header .code{order:5;margin-left:auto!important}
