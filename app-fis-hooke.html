@@ -431,4 +431,18 @@ function off(){b.classList.remove('on');e.classList.remove('on')}
 e.onclick=function(ev){ev.stopPropagation();if(b.classList.contains('on')){off();return}place();b.classList.add('on');e.classList.add('on')};
 b.querySelector('button').onclick=off;b.querySelector('a').addEventListener('click',function(){setTimeout(off,300)});
 document.addEventListener('pointerdown',function(ev){if(b.classList.contains('on')&&!b.contains(ev.target)&&!e.contains(ev.target))off()},true);
-addEventListener('resize',function(){if(b.classList.contains('on'))place()})})();</script></body></html>
+addEventListener('resize',function(){if(b.classList.contains('on'))place()})})();</script><style id="laycss">@media(min-width:821px) and (min-height:521px){
+html body header>a[href*=laboratorios]{order:-1;position:static!important;flex:none;font-size:0!important;width:38px;height:38px;display:grid;place-items:center;border-radius:8px;margin-right:2px}
+html body header>a[href*=laboratorios]::before{content:'\2190'!important;font-size:24px!important;position:static!important;font-weight:600;color:var(--navy)}
+html body header>a[href*=laboratorios]:hover{background:#eef2f6}
+html body main{grid-template-columns:minmax(0,2.3fr) minmax(330px,1fr)}
+html body.noside main{grid-template-columns:minmax(0,1fr)}
+html body .bar{flex-wrap:wrap;column-gap:12px}
+html body .bar .read{flex-basis:auto!important;margin-left:0!important;flex-wrap:nowrap}
+html body .bar .params{flex:1 1 280px;min-width:0;flex-wrap:nowrap;gap:6px 14px}
+html body .bar .params label:has(input[type=range]){flex:1 1 auto;min-width:0}
+html body .bar .params input[type=range]{flex:1 1 110px;min-width:80px;width:auto}
+html body .bar .read>*{min-width:0}html body .bar .read>b+div{flex:1 1 260px;overflow:hidden}html body .bar .acts{margin-left:0!important;flex-wrap:nowrap}
+html body .bar #vw{font-size:0!important;width:38px;padding:0!important;display:inline-grid;place-items:center}
+html body .bar #vw::before{content:'\27F2';font-size:20px;line-height:1}
+}</style></body></html>
