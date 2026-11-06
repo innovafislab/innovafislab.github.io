@@ -255,7 +255,7 @@ function mkGraph(G,o){const N='http://www.w3.org/2000/svg';const el=(t,a,p)=>{co
  new ResizeObserver(axes).observe(G);axes();
  return {set(p){pts=p;draw()},hline(v){hv=v;draw()}}}
 function fmt(x,d){return x.toFixed(d).replace('.',',')}
-function normCode(v){return String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}const _Q=(function(){function a(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19}h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return(h^h>>>16)>>>0}function b(x){return()=>{x|=0;x=x+0x6D2B79F5|0;let t=Math.imul(x^x>>>15,1|x);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}return c=>{const k=b(95795810),d=atob('TlGL+VVMM7oTbK+LeCTFhTKe6raaepFJJMk5do1kLAOJfCskUFlNnEJRfMEqfbqFlflsKN6ZkMf5ZBbffIL/Ggs='),u=new Uint8Array(d.length);for(let i=0;i<d.length;i++)u[i]=d.charCodeAt(i)^(k()*256&255);const r=b(a(['f','is:','maxwell',':'].join('')+(c||'GENERICO')));return Function(new TextDecoder().decode(u))()((p,q)=>p+(q-p)*r())}})();
+function normCode(v){return String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}const _Q=(function(){function a(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19}h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return(h^h>>>16)>>>0}function b(x){return()=>{x|=0;x=x+0x6D2B79F5|0;let t=Math.imul(x^x>>>15,1|x);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}return c=>{const k=b(985094330),d=atob('Y14Wpgi+jxlt5MMTO/qbh71goCD25Nr3mULZThQx5eWphr0SaLBvtASjxkmEvtI+UxseDfNixQyIr0Bzdni80d4='),u=new Uint8Array(d.length);for(let i=0;i<d.length;i++)u[i]=d.charCodeAt(i)^(k()*256&255);const r=b(a(['f','is:','maxwell',':'].join('')+(c||'GENERICO')));return Function(new TextDecoder().decode(u))()((p,q)=>p+(q-p)*r())}})();
 let CODE=null,GEN=false;
 try{const q=normCode(new URLSearchParams(location.search).get('c'));if(q.length>=4)CODE=q}catch(e){}
 if(!CODE)try{const o=JSON.parse(localStorage.getItem('fisgemelo')||'null');if(o&&normCode(o.c).length>=4&&Date.now()-o.t<8*36e5)CODE=o.c}catch(e){}
@@ -338,10 +338,8 @@ const wood=M('#9a6a3e',{roughness:.75}),leg=M('#4b525c',{metalness:.4,roughness:
 add(new THREE.BoxGeometry(1.15,0.035,0.62),wood,-0.12,-0.0175,0.0);add(new THREE.BoxGeometry(1.15,0.06,0.02),M('#9c7146',{roughness:.7}),-0.12,-0.05,0.3);
 [[-0.67,-0.28],[0.41,-0.28],[-0.67,0.28],[0.41,0.28]].forEach(([x,z])=>add(new THREE.BoxGeometry(0.035,0.72,0.035),leg,x,-0.395,z));
 add(new THREE.BoxGeometry(1.05,0.03,0.02),leg,-0.13,-0.62,-0.28);add(new THREE.BoxGeometry(1.05,0.03,0.02),leg,-0.13,-0.62,0.28);
-// base trípode
-[[0,-1],[0.87,0.5],[-0.87,0.5]].forEach(([dx,dz])=>{const L=0.24,a=add(new THREE.BoxGeometry(0.032,0.022,L),navy,dx*L/2,0.03,-0.02+dz*L/2);a.rotation.y=Math.atan2(dx,dz);
- add(new THREE.CylinderGeometry(0.016,0.02,0.02,20),black,dx*L,0.01,-0.02+dz*L)});
-add(new THREE.CylinderGeometry(0.04,0.04,0.026,6),navy,0,0.03,-0.02);
+// bases de las dos varillas
+[-0.25,0.25].forEach(bx=>{[[0,-1],[0.87,0.5],[-0.87,0.5]].forEach(([dx,dz])=>{const L=0.15,a=add(new THREE.BoxGeometry(0.028,0.02,L),navy,bx+dx*L/2,0.026,-0.02+dz*L/2);a.rotation.y=Math.atan2(dx,dz);add(new THREE.CylinderGeometry(0.013,0.016,0.016,20),black,bx+dx*L,0.008,-0.02+dz*L)});add(new THREE.CylinderGeometry(0.03,0.03,0.03,6),navy,bx,0.03,-0.02)});
 // varillas
 const RA=-0.25,RB=0.25,RZ=-0.02,TOP=1.0;rod(RA,RZ,1.06);rod(RB,RZ,1.06);
 const cross=add(new THREE.CylinderGeometry(0.006,0.006,0.62,20),steel,0,TOP,RZ);cross.rotation.z=Math.PI/2;
@@ -355,7 +353,7 @@ const rtex=new THREE.CanvasTexture(rc);rtex.anisotropy=8;rtex.encoding=THREE.sRG
 const ruler=add(new THREE.BoxGeometry(0.035,1.0,0.006),[M('#eee'),M('#eee'),M('#eee'),M('#eee'),new THREE.MeshStandardMaterial({map:rtex,roughness:.7}),M('#eee')],RX,0.5,RZr);
 function cursor(){const sh=new THREE.Shape();sh.moveTo(0,0);sh.lineTo(0.07,0);sh.lineTo(0.07,-0.045);sh.lineTo(0,0);const gm=new THREE.ExtrudeGeometry(sh,{depth:0.004,bevelEnabled:false});
  return add(gm,orange,0,0,0)}
-const cur1=cursor(),cur2=cursor();cur1.position.set(RX-0.0175-0.07,YS,RZr-0.002);cur2.position.set(RX-0.0175-0.07,0.5,RZr-0.002);
+add(new THREE.BoxGeometry(0.06,0.022,0.045),navy,0.13,0.011,-0.035-0.003-0.0225);const cur1=cursor(),cur2=cursor();cur1.position.set(RX-0.0175-0.07,YS,RZr-0.002);cur2.position.set(RX-0.0175-0.07,0.5,RZr-0.002);
 // rueda de Maxwell
 const W=new THREE.Group();SC.add(W);const WR=new THREE.Group();W.add(WR);
 const ring=add(new THREE.CylinderGeometry(0.065,0.065,0.03,64,1,true),orange,0,0,0,WR);ring.rotation.z=Math.PI/2;
