@@ -659,7 +659,7 @@ html.dk body main.app .left>.card{background:var(--surface)!important;border-col
             <line id="ext2" class="s-dimext" x1="0" y1="0" x2="0" y2="0"/>
             <path id="dimLine" class="s-dim" d=""/>
             <path id="dimArrows" fill="var(--accent)" d=""/>
-            <text id="dimText" class="s-dimtext" x="0" y="26" text-anchor="middle"><tspan class="s-it">s</tspan><tspan id="dimVal"> = 35,0 cm</tspan></text>
+            <text id="dimText" class="s-dimtext" x="0" y="26" text-anchor="middle"><tspan class="s-it" style="font-size:62px">s</tspan><tspan id="dimVal"> = 35,0 cm</tspan></text>
           </g>
           <path class="s-ptr start" d="M260 243 l-8 12 h16 z"/>
           <path id="gatePtr" class="s-ptr" d=""/>
@@ -1042,7 +1042,7 @@ function ctrlBoxSvg(){
   const dl = pr(210, 146, 30), dr = pr(310, 146, 30), dt = pr(260, 133, 30);
   $('dsG').innerHTML = `<line class="s-dim" x1="${dl[0]+11}" y1="${dl[1]}" x2="${dr[0]-11}" y2="${dr[1]}"/>`
     + `<path fill="var(--accent)" d="M${dl[0]+1},${dl[1]} l12,-5.5 v11 z M${dr[0]-1},${dr[1]} l-12,-5.5 v11 z"/>`
-    + `<text class="s-dimtext" style="font-size:28px" x="${dt[0]}" y="${dt[1]}" text-anchor="middle">Δ<tspan class="s-it" style="font-size:32px">s</tspan></text>`;
+    + `<text class="s-dimtext" style="font-size:36px" x="${dt[0]}" y="${dt[1]+2}" text-anchor="middle">Δ<tspan class="s-it" style="font-size:42px">s</tspan></text>`;
 
   // masa colgante y mesa vista desde la caída
   $('massTop').innerHTML = massSvg();
