@@ -89,7 +89,7 @@ main.wrap,.wrap{max-width:1240px!important}
 </style><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Caída libre · INNOVA-FIS-LAB</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="lib/katex/0.16.9/katex.min.css">
+<link rel="preload" as="image" href="lib/textures/madera-color.webp"><link rel="preload" as="image" href="lib/textures/madera-relieve.webp"><link rel="preload" as="image" href="lib/textures/madera-rugosidad.webp"><link rel="stylesheet" href="lib/katex/0.16.9/katex.min.css">
 <script src="lib/katex/0.16.9/katex.min.js"></script>
 <style>
 :root{--bg:#fff;--paper:#f6f7f9;--ink:#1b2430;--slate:#4a5566;--line:#d9dee5;--b:#1d5fa8;--o:#d9820b;--g:#1b7a43;--navy:#17324d}
@@ -212,7 +212,28 @@ html.dk .encb{background:#161d26;border-color:#27313c;color:#7fb2e5}html.dk .enc
 @media(hover:none){.sim3 .hint{display:none}}
 @media(orientation:landscape) and (max-height:520px){.sim3 .hint{display:none}}
 .sim3 .zm{position:absolute;right:10px;width:31%;border:1px solid var(--line);border-radius:8px;pointer-events:none}.sim3 .zm span{position:absolute;left:8px;top:6px;font-size:clamp(11px,1.5vh,13px);font-weight:600;color:#1b2430;background:rgba(255,255,255,.88);padding:1px 6px;border-radius:5px}.sim3 .zr2{position:absolute;right:10px;top:10px;bottom:10px;width:24%;background:#fff;border:1px solid var(--line);border-radius:8px;display:flex;flex-direction:column;padding:6px 6px 4px}.sim3 .zr2 span{font-size:clamp(11px,1.5vh,13px);font-weight:600;color:#1b2430;line-height:1.25;margin-bottom:4px}.sim3 .zr2 svg{flex:1;min-height:0;width:100%;display:block;cursor:zoom-in}@media(max-width:820px) and (orientation:portrait){.sim3 #zR{width:calc(42% - 15px)!important;top:auto!important;bottom:10px;height:62%!important}}</style>
-<script src="lib/three/r128/three.min.js"></script>
+<script src="lib/three/r128/three.min.js"></script><script id="ondemand">/* [CARGA] Solo se redibuja la escena cuando algo cambia (o cada segundo por seguridad). No altera la física ni el dibujo. */
+(function(){if(!window.THREE||THREE.__od)return;THREE.__od=1;const O=THREE.WebGLRenderer,raf=window.requestAnimationFrame.bind(window);let fid=0,inR=false;
+window.requestAnimationFrame=function(cb){return raf(t=>{fid++;inR=true;try{cb(t)}finally{inR=false}})};
+function W(p){const r=new O(p);hook(r);return r}W.prototype=O.prototype;Object.setPrototypeOf(W,O);THREE.WebGLRenderer=W;
+const MK=['map','emissiveMap','bumpMap','roughnessMap','alphaMap','metalnessMap','normalMap'];
+function hook(r){const R=r.render.bind(r),C=r.clear.bind(r),cams=new Set();let last=null,cur=[],lastCls='',dec=-1,skip=false,lastT=0;
+ const P=v=>{cur.push(typeof v==='number'?v:(v?1:0))};
+ function sig(sc){cur=[];const cv=r.domElement;P(cv.width);P(cv.height);
+  document.querySelectorAll('.sim3,.sim3 .ins,.sim3 .zm').forEach(e=>{P(e.offsetLeft);P(e.offsetTop);P(e.offsetWidth);P(e.offsetHeight);P(e._z||1);P(e._px||0);P(e._py||0);P(e._k||1)});
+  cams.forEach(c=>{const p=c.position,q=c.quaternion;P(p.x);P(p.y);P(p.z);P(q.x);P(q.y);P(q.z);P(q.w);P(c.fov);P(c.zoom);P(c.aspect);P(c.near);P(c.far)});
+  sc.traverse(o=>{const p=o.position,q=o.quaternion,s=o.scale;P(o.visible);P(p.x);P(p.y);P(p.z);P(q.x);P(q.y);P(q.z);P(q.w);P(s.x);P(s.y);P(s.z);
+   if(!o.matrixAutoUpdate)o.matrix.elements.forEach(P);
+   if(o.isLight){P(o.intensity);P(o.color.r);P(o.color.g);P(o.color.b)}
+   if(o.isInstancedMesh)P(o.instanceMatrix.version);
+   const g=o.geometry;if(g){const a=g.attributes&&g.attributes.position;P(a?a.version:0);P(g.drawRange.start);P(g.drawRange.count);P(g.index?g.index.version:0)}
+   const m=o.material;if(m)(Array.isArray(m)?m:[m]).forEach(m=>{P(m.visible);P(m.opacity);P(m.version);if(m.color){P(m.color.r);P(m.color.g);P(m.color.b)}if(m.emissive){P(m.emissive.r);P(m.emissive.g);P(m.emissive.b);P(m.emissiveIntensity)}MK.forEach(k=>{const t=m[k];P(t?t.version+1:0);if(t){P(t.offset.x);P(t.offset.y)}})})})}
+ function decide(sc){if(!inR){last=null;return false}if(dec===fid)return skip;dec=fid;const now=performance.now(),cls=document.documentElement.className;sig(sc);
+  let same=last&&last.length===cur.length&&cls===lastCls&&now-lastT<1000;if(same){for(let i=0;i<cur.length;i++)if(cur[i]!==last[i]&&!(cur[i]!==cur[i]&&last[i]!==last[i])){same=false;break}}
+  skip=!!same;if(!skip){last=cur;lastCls=cls;lastT=now}return skip}
+ r.render=function(sc,cam){cams.add(cam);if(sc&&sc.isScene&&decide(sc))return;return R(sc,cam)};
+ r.clear=function(a,b,c){if(inR&&dec===fid&&skip)return;return C(a,b,c)}}
+})();</script>
 <div class="sim3" id="v3"><canvas id="cv"></canvas><div class="zm" id="zR" style="top:10px;height:calc(100% - 20px);width:24%"><span>cm</span></div>
 <div class="hint">Arrastra para girar la vista · rueda del ratón para acercar</div></div>
 <div class="bar"><div class="ctrl"><label>Distancia <i>s</i> <input id="S" type="range" min="0.10" max="0.80" step="any" value="0.50"><b id="Sv" style="display:none"></b></label><label><input type="checkbox" id="slow"> Cámara lenta (×0,1)</label><button class="btn" id="go" data-alt="Volver a colocar">Soltar</button><button class="btn" id="vw">Vista inicial</button></div><div class="read"><b id="rt" style="display:none"></b></div></div></div><p class="note">Gemelo de la práctica: el montaje depende del código · CC BY-NC-SA 4.0</p></section>
@@ -402,33 +423,13 @@ function grainTexture(brushed){
 const micro=grainTexture(false),brush=grainTexture(true);
 // La veta tiene continuidad, variación de poro y relieve fino, bajo el barniz.
 const woodMaps=(function(){
- const n=128,noise=Array.from({length:n*n},()=>surfaceRandom());
- const smooth=t=>t*t*(3-2*t);
- function ns(x,y){const i=Math.floor(x),j=Math.floor(y),u=smooth(x-i),v=smooth(y-j);
-  const at=(a,b)=>noise[((b%n+n)%n)*n+(a%n+n)%n];
-  return (at(i,j)*(1-u)+at(i+1,j)*u)*(1-v)+(at(i,j+1)*(1-u)+at(i+1,j+1)*u)*v;
- }
- const c=document.createElement('canvas');c.width=1024;c.height=1024;
- const b=document.createElement('canvas');b.width=b.height=1024;
- const q=document.createElement('canvas');q.width=q.height=1024;
- const cx=c.getContext('2d'),bx=b.getContext('2d'),qx=q.getContext('2d');
- const cd=cx.createImageData(1024,1024),bd=bx.createImageData(1024,1024),qd=qx.createImageData(1024,1024);
- for(let y=0;y<1024;y++)for(let x=0;x<1024;x++){
-  const u=x/1024,v=y/1024,p=(y*1024+x)*4;
-  const warp=ns(u*3,v*7)*2.0+ns(u*7,v*17)*.28;
-  const phase=v*119+warp*2.2+ns(u*2,v*12)*4+ns(u*7,v*42)*.38;
-  const early=Math.sin(phase*6.283)*.5+.5;
-  const late=Math.pow(early,12),fine=ns(u*31,v*410),broad=ns(u*2.8,v*23);
-  const pore=Math.max(0,ns(u*86,v*570)-.64)*22;
-  const tone=(broad-.5)*18+(fine-.5)*5-late*11-pore+(surfaceRandom()-.5)*2;
-  cd.data[p]=159+tone;cd.data[p+1]=111+tone*.83;cd.data[p+2]=66+tone*.65;cd.data[p+3]=255;
-  const height=172-late*24-pore*2+(fine-.5)*17;
-  bd.data[p]=bd.data[p+1]=bd.data[p+2]=height;bd.data[p+3]=255;
-  const rough=208+late*19+(fine-.5)*14;
-  qd.data[p]=qd.data[p+1]=qd.data[p+2]=rough;qd.data[p+3]=255;
- }
- cx.putImageData(cd,0,0);bx.putImageData(bd,0,0);qx.putImageData(qd,0,0);
- return {map:surfaceTexture(c,true),bump:surfaceTexture(b),rough:surfaceTexture(q)};
+ // [CARGA] La veta es la misma que antes se calculaba aquí punto a punto; ahora se lee ya hecha de lib/textures (común a todas las prácticas).
+ // El generador avanza lo mismo que antes, para que el resto de texturas no cambie.
+ for(let i=0;i<1064960;i++)surfaceRandom();
+ function T(src,avg,color){const c=document.createElement('canvas');c.width=c.height=1;const x=c.getContext('2d');x.fillStyle=avg;x.fillRect(0,0,1,1);
+  const t=surfaceTexture(c,color),im=new Image();im.onload=()=>{t.image=im;t.needsUpdate=true};im.src=src;return t}
+ return {map:T('lib/textures/madera-color.webp','rgb(157,109,65)',true),bump:T('lib/textures/madera-relieve.webp','rgb(167,167,167)'),rough:T('lib/textures/madera-rugosidad.webp','rgb(211,211,211)')};
+ // [/CARGA]
 })();
 
 
