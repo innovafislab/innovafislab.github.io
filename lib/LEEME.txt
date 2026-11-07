@@ -1,0 +1,3 @@
+Bibliotecas comunes de las simulaciones (una sola copia, enlazada por ruta relativa desde los HTML de la raíz).
+three/r128/three.min.js       Three.js r128 (licencia MIT)
+katex/0.16.9/                 KaTeX 0.16.9 (licencia MIT): katex.min.js, katex.min.css, contrib/auto-render.min.js y fuentes woff2

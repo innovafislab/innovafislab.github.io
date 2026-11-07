@@ -91,8 +91,8 @@ main.wrap,.wrap{max-width:1240px!important}
 </style><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Principio de Arquímedes · INNOVA-FIS-LAB</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<link rel="stylesheet" href="lib/katex/0.16.9/katex.min.css">
+<script src="lib/katex/0.16.9/katex.min.js"></script>
 <style>
 :root{--bg:#fff;--paper:#f6f7f9;--ink:#1b2430;--slate:#4a5566;--line:#d9dee5;--b:#1d5fa8;--o:#d9820b;--g:#1b7a43;--navy:#17324d}
 *{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.4}
@@ -215,7 +215,7 @@ html.dk .encb{background:#161d26;border-color:#27313c;color:#7fb2e5}html.dk .enc
 @media(hover:none){.sim3 .hint{display:none}}
 @media(orientation:landscape) and (max-height:520px){.sim3 .hint{display:none}}
 .mrd small{font-size:1em}@media(min-width:821px){.bar{flex-wrap:nowrap!important}.bar .params{flex-wrap:nowrap!important;min-width:0}.bar .params label.p2 input[type=range]{width:90px!important}}@media(max-width:820px){.bar .params{gap:8px!important;min-height:44px;align-items:center}.bar .params label.p2{flex:1;min-width:0;display:flex;align-items:center;gap:6px}.bar .params label.p2 input[type=range]{flex:1;min-width:40px;width:auto!important}.mrd{flex-direction:column;align-items:flex-start!important;gap:0!important;line-height:1.15;padding:.15em .5em!important}.mrd small{font-size:.78em}}#insB{top:10px;height:calc(50% - 15px)}#insD{height:calc(50% - 15px)}@media(max-width:820px) and (orientation:portrait){.sim3 #insB{right:auto;left:10px}}.calov{position:absolute;inset:0;z-index:30;display:none;flex-direction:column;gap:6px;background:#fbfcfd;border-radius:10px;padding:10px 14px}.calov.on{display:flex}.calov .ch{display:flex;align-items:center;justify-content:space-between;gap:10px}.calov h3{margin:0;font-size:clamp(14px,2vh,18px);color:#17324d}.calov .cs{flex:1;min-height:0;width:100%;height:100%;display:block}.calov .x{font:inherit;font-size:.9em;font-weight:600;border:1px solid #9fb0c2;background:#fff;color:#17324d;border-radius:8px;padding:.3em 1em;cursor:pointer}.read .calb{grid-column:1/-1;display:flex}.read .calb .btn{flex:none}.sim3 .rd{display:none!important}.mrd{display:inline-flex;align-items:baseline;gap:.45em;background:#fff;border:1px solid var(--line);border-radius:8px;padding:.15em .65em;font-size:.85em;color:var(--muted);white-space:nowrap}.mrd b{font-size:1.15em;color:var(--navy)}body:not([data-part="2"]) .mrd{display:none}</style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="lib/three/r128/three.min.js"></script>
 <div class="sim3" id="v3"><canvas id="cv"></canvas>
 <div class="ins p1" id="insB"></div><div class="ins p2" id="insP"><span>ml</span><div class="rd" style="color:#1d5fa8" id="rdv">70,0 ml</div></div>
 <div class="ins" id="insD"><span>N</span><div class="rd" style="color:#c0392b" id="rdf">0,00 N</div></div>
@@ -325,16 +325,181 @@ const g=9.81,RA=HP.rhoA,DS=0.08;// el muelle del dinamómetro se alarga 8 cm por
 const MAT=[['aluminio',2700,'#c3c8ce'],['hierro',7870,'#4d535b'],['latón',8500,'#c9a24a'],['plomo',11340,'#6d727a']];let RS=0.0125,VS=4/3*Math.PI*RS**3;
 let part=1,u=0,target=0,P=0,F=0,Vsub=0,lvl=70,bg=1;
 const box=$('#v3'),cv=$('#cv');
-const R3=new THREE.WebGLRenderer({canvas:cv,antialias:true});R3.setPixelRatio(Math.min(2,devicePixelRatio));R3.outputEncoding=THREE.sRGBEncoding;R3.sortObjects=true;
+// Representación física del mismo montaje. No modifica las ecuaciones ni las cámaras.
+const R3=new THREE.WebGLRenderer({canvas:cv,antialias:true,powerPreference:'high-performance'});
+R3.setPixelRatio(Math.min(2,devicePixelRatio));R3.outputEncoding=THREE.sRGBEncoding;R3.sortObjects=true;
+R3.physicallyCorrectLights=true;R3.toneMapping=THREE.ACESFilmicToneMapping;R3.toneMappingExposure=1.02;
+R3.shadowMap.enabled=true;R3.shadowMap.type=THREE.PCFSoftShadowMap;R3.shadowMap.autoUpdate=false;
 const SC=new THREE.Scene();SC.background=new THREE.Color(document.documentElement.classList.contains('dk')?'#0f141a':'#ffffff');
 const CB=new THREE.PerspectiveCamera(24,1,0.005,5),CAM=new THREE.PerspectiveCamera(32,1,0.01,20),CD=new THREE.PerspectiveCamera(24,1,0.005,5),CP=new THREE.PerspectiveCamera(24,1,0.005,5);
-SC.add(new THREE.HemisphereLight(0xffffff,0xb8c0c8,0.8));const sun=new THREE.DirectionalLight(0xffffff,0.7);sun.position.set(1.2,2.4,1.6);SC.add(sun);
-const M=(c,o)=>new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.5,metalness:.1},o||{}));
+SC.add(new THREE.HemisphereLight(0xeaf2ff,0x8a7966,.32));
+const sun=new THREE.DirectionalLight(0xfff6eb,2.65);sun.position.set(-1.1,2.0,1.6);sun.target.position.set(0,.22,0);
+sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);
+Object.assign(sun.shadow.camera,{left:-.66,right:.66,top:.72,bottom:-.68,near:.4,far:4});
+sun.shadow.bias=-.00012;sun.shadow.normalBias=.00035;SC.add(sun,sun.target);
+const fill=new THREE.DirectionalLight(0xe6efff,.5);fill.position.set(1.5,.9,-1.2);SC.add(fill);
+(function(){
+ const env=new THREE.Scene();env.background=new THREE.Color(.14,.16,.19);
+ const room=new THREE.Mesh(new THREE.BoxGeometry(9,7,9),new THREE.MeshBasicMaterial({color:new THREE.Color(.28,.30,.33),side:THREE.BackSide}));room.position.y=1.2;env.add(room);
+ function panel(x,y,z,w,h,col){const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({color:new THREE.Color(...col),side:THREE.DoubleSide}));m.position.set(x,y,z);m.lookAt(0,.4,0);env.add(m)}
+ for(let j=0;j<2;j++)for(let i=0;i<2;i++)panel(-2.7,1+j*1.3,1+i*1.1,1.04,1.22,[3.4,3.35,3.2]);
+ panel(.2,4,-.3,3,2.4,[2.3,2.4,2.6]);panel(3.6,1.6,-1.3,.5,3.3,[2.0,2.3,2.7]);
+ panel(1.4,1.5,4,2.3,3.8,[.045,.05,.065]);panel(-2,1.2,-3.7,2.5,3.4,[.06,.065,.075]);panel(0,-1.3,0,7,7,[.24,.19,.14]);
+ const pm=new THREE.PMREMGenerator(R3);pm.compileCubemapShader();SC.environment=pm.fromScene(env,.045,.1,20).texture;pm.dispose();
+ env.traverse(o=>{if(o.isMesh){o.geometry.dispose();o.material.dispose()}});
+})();
+
+// Generador independiente: no consume Math.random(), utilizado por las medidas.
+let surfaceSeed=975314;
+function surfaceRandom(){surfaceSeed=(Math.imul(surfaceSeed,1664525)+1013904223)>>>0;return surfaceSeed/4294967296}
+const texAniso=Math.min(8,R3.capabilities.getMaxAnisotropy());
+function surfaceTexture(canvas,color=false){
+ const t=new THREE.CanvasTexture(canvas);t.wrapS=t.wrapT=THREE.RepeatWrapping;
+ t.anisotropy=texAniso;if(color)t.encoding=THREE.sRGBEncoding;return t;
+}
+function grainTexture(brushed){
+ const c=document.createElement('canvas');c.width=c.height=256;
+ const x=c.getContext('2d'),d=x.createImageData(256,256);
+ const lines=Array.from({length:256},()=>surfaceRandom());
+ for(let y=0;y<256;y++)for(let xx=0;xx<256;xx++){
+  const p=(y*256+xx)*4,n=brushed?lines[y]*.8+surfaceRandom()*.2:surfaceRandom();
+  const v=Math.round(154+n*80);d.data[p]=d.data[p+1]=d.data[p+2]=v;d.data[p+3]=255;
+ }
+ x.putImageData(d,0,0);return surfaceTexture(c);
+}
+const micro=grainTexture(false),brush=grainTexture(true);
+// La veta tiene continuidad, variación de poro y relieve fino, bajo el barniz.
+const woodMaps=(function(){
+ const n=128,noise=Array.from({length:n*n},()=>surfaceRandom());
+ const smooth=t=>t*t*(3-2*t);
+ function ns(x,y){const i=Math.floor(x),j=Math.floor(y),u=smooth(x-i),v=smooth(y-j);
+  const at=(a,b)=>noise[((b%n+n)%n)*n+(a%n+n)%n];
+  return (at(i,j)*(1-u)+at(i+1,j)*u)*(1-v)+(at(i,j+1)*(1-u)+at(i+1,j+1)*u)*v;
+ }
+ const c=document.createElement('canvas');c.width=1024;c.height=1024;
+ const b=document.createElement('canvas');b.width=b.height=1024;
+ const q=document.createElement('canvas');q.width=q.height=1024;
+ const cx=c.getContext('2d'),bx=b.getContext('2d'),qx=q.getContext('2d');
+ const cd=cx.createImageData(1024,1024),bd=bx.createImageData(1024,1024),qd=qx.createImageData(1024,1024);
+ for(let y=0;y<1024;y++)for(let x=0;x<1024;x++){
+  const u=x/1024,v=y/1024,p=(y*1024+x)*4;
+  const warp=ns(u*3,v*7)*2.0+ns(u*7,v*17)*.28;
+  const phase=v*119+warp*2.2+ns(u*2,v*12)*4+ns(u*7,v*42)*.38;
+  const early=Math.sin(phase*6.283)*.5+.5;
+  const late=Math.pow(early,12),fine=ns(u*31,v*410),broad=ns(u*2.8,v*23);
+  const pore=Math.max(0,ns(u*86,v*570)-.64)*22;
+  const tone=(broad-.5)*18+(fine-.5)*5-late*11-pore+(surfaceRandom()-.5)*2;
+  cd.data[p]=159+tone;cd.data[p+1]=111+tone*.83;cd.data[p+2]=66+tone*.65;cd.data[p+3]=255;
+  const height=172-late*24-pore*2+(fine-.5)*17;
+  bd.data[p]=bd.data[p+1]=bd.data[p+2]=height;bd.data[p+3]=255;
+  const rough=208+late*19+(fine-.5)*14;
+  qd.data[p]=qd.data[p+1]=qd.data[p+2]=rough;qd.data[p+3]=255;
+ }
+ cx.putImageData(cd,0,0);bx.putImageData(bd,0,0);qx.putImageData(qd,0,0);
+ return {map:surfaceTexture(c,true),bump:surfaceTexture(b),rough:surfaceTexture(q)};
+})();
+
+
+// Microbisel dentro de las dimensiones originales, para que el canto refleje luz.
+function finishGeometry(geo){
+ const p=geo.parameters;
+ if(geo.type==='BoxGeometry'){
+  const ext=[p.width,p.height,p.depth],rad=Math.min(.0022,Math.min(...ext)*.12);
+  const out=new THREE.BoxGeometry(...ext,8,8,8),pos=out.attributes.position,norm=out.attributes.normal,uv=out.attributes.uv;
+  const grid=h=>[-h,-h+rad*.134,-h+rad*.5,-h+rad,0,h-rad,h-rad*.5,h-rad*.134,h];
+  const gs=ext.map(e=>grid(e/2));
+  const v=new THREE.Vector3(),core=new THREE.Vector3(),n=new THREE.Vector3();
+  for(let i=0;i<pos.count;i++){
+   v.set(gs[0][Math.round((pos.getX(i)/ext[0]+.5)*8)],gs[1][Math.round((pos.getY(i)/ext[1]+.5)*8)],gs[2][Math.round((pos.getZ(i)/ext[2]+.5)*8)]);
+   core.set(...[v.x,v.y,v.z].map((c,j)=>Math.max(-ext[j]/2+rad,Math.min(ext[j]/2-rad,c))));
+   n.copy(v).sub(core).normalize();v.copy(core).addScaledVector(n,rad);
+   pos.setXYZ(i,v.x,v.y,v.z);norm.setXYZ(i,n.x,n.y,n.z);
+   const f=Math.floor(i/81),uaxis=f<2?2:0,vaxis=f===2||f===3?2:1;
+   uv.setXY(i,gs[uaxis][Math.round(uv.getX(i)*8)]/ext[uaxis]+.5,gs[vaxis][Math.round(uv.getY(i)*8)]/ext[vaxis]+.5);
+  }
+  geo.dispose();return out;
+ }
+ if(geo.type==='CylinderGeometry'&&p.radialSegments>8){
+  // Mantiene las secciones hexagonales de las bases.
+  if(!p.openEnded&&p.radiusTop===p.radiusBottom){
+   const rr=p.radiusTop,hh=p.height/2,b=Math.min(.0007,rr*.07,hh*.12);
+   const a=[new THREE.Vector2(0,-hh),new THREE.Vector2(rr-b,-hh)];
+   for(let i=1;i<=4;i++){const t=-Math.PI/2+i*Math.PI/8;a.push(new THREE.Vector2(rr-b+b*Math.cos(t),-hh+b+b*Math.sin(t)))}
+   a.push(new THREE.Vector2(rr,hh-b));
+   for(let i=1;i<=4;i++){const t=i*Math.PI/8;a.push(new THREE.Vector2(rr-b+b*Math.cos(t),hh-b+b*Math.sin(t)))}
+   a.push(new THREE.Vector2(0,hh));geo.dispose();return new THREE.LatheGeometry(a,64);
+  }
+  const out=new THREE.CylinderGeometry(p.radiusTop,p.radiusBottom,p.height,64,p.heightSegments,p.openEnded,p.thetaStart,p.thetaLength);geo.dispose();return out;
+ }
+ if(geo.type==='TorusGeometry'){
+  const out=new THREE.TorusGeometry(p.radius,p.tube,24,128,p.arc);geo.dispose();return out;
+ }
+ return geo;
+}
+
+const M=(c,o)=>{
+ const opt=Object.assign({color:new THREE.Color(c).convertSRGBToLinear(),roughness:.48,metalness:0,envMapIntensity:.8},o||{});
+ const metal={
+  '#c7ccd2':[.96,.24],'#e9edf1':[.9,.25],'#9aa3ad':[.90,.31],
+  '#c3c8ce':[.94,.41], // aluminio satinado
+  '#4d535b':[.84,.43], // hierro, acabado más mate
+  '#c9a24a':[.92,.28],'#8a6d2a':[.88,.36], // latón
+  '#6d727a':[.70,.58] // plomo: superficie mate
+ };
+ if(metal[c])Object.assign(opt,{metalness:metal[c][0],roughness:metal[c][1],bumpMap:brush,bumpScale:.000008,roughnessMap:micro});
+ if(c==='#26292e')Object.assign(opt,{metalness:.28,roughness:.68,bumpMap:micro,bumpScale:.00004,roughnessMap:micro});
+ if(c==='#1f6fd1')Object.assign(opt,{metalness:0,roughness:.38,clearcoat:.2,clearcoatRoughness:.28,bumpMap:micro,bumpScale:.000025});
+ if(c==='#4b525c')Object.assign(opt,{metalness:.55,roughness:.39,bumpMap:micro,bumpScale:.00002});
+ if(c==='#9a6a3e'||c==='#9c7146')Object.assign(opt,{color:new THREE.Color(1,1,1),map:woodMaps.map,bumpMap:woodMaps.bump,bumpScale:.00007,roughnessMap:woodMaps.rough,roughness:.54,metalness:0,clearcoat:.20,clearcoatRoughness:.36});
+ return new THREE.MeshPhysicalMaterial(opt);
+};
 const steel=M('#c7ccd2',{metalness:.6,roughness:.25}),iron=M('#26292e',{roughness:.55});
-const glass=new THREE.MeshStandardMaterial({color:'#d6e9f3',transparent:true,opacity:.3,roughness:.05,side:THREE.DoubleSide,depthWrite:false});
-const waterM=new THREE.MeshStandardMaterial({color:'#5fb3e6',transparent:true,opacity:.5,roughness:.1,depthWrite:false});
-function add(geo,mat,x,y,z,par){const o=new THREE.Mesh(geo,mat);o.position.set(x,y,z);(par||SC).add(o);return o}
-function tex(w,h,draw){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');draw(x,w,h);const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=8;return t}
+
+// La refracción usa dos capas de imagen de cada cámara, con el mismo encuadre.
+// Las graduaciones se dibujan después, en sus posiciones originales.
+const photoOptical=[];
+function photoMedium(kind){
+ const mat=new THREE.MeshPhysicalMaterial({color:0xffffff,metalness:0,roughness:kind==='glass'?.075:.045,transparent:true,opacity:1,depthWrite:false,side:THREE.FrontSide,envMapIntensity:.84});
+ const uniforms={photoBehind:{value:null},photoViewport:{value:new THREE.Vector4(0,0,1,1)},photoProjection:{value:new THREE.Vector2(1,1)},photoTint:{value:kind==='glass'?new THREE.Color(.92,.97,1):new THREE.Color(.60,.87,1)},photoBend:{value:kind==='glass'?.00025:.0016},photoF0:{value:kind==='glass'?.04:.0204},photoIsWater:{value:kind==='water'?1:0}};
+ mat.userData.photoLayer=kind;mat.userData.photoUniforms=uniforms;
+ mat.onBeforeCompile=shader=>{
+  Object.assign(shader.uniforms,uniforms);
+  shader.fragmentShader='uniform sampler2D photoBehind;\nuniform vec4 photoViewport;\nuniform vec2 photoProjection;\nuniform vec3 photoTint;\nuniform float photoBend;\nuniform float photoF0;\nuniform float photoIsWater;\n'+shader.fragmentShader;
+  shader.fragmentShader=shader.fragmentShader.replace('gl_FragColor = vec4( outgoingLight, diffuseColor.a );',`
+   vec2 photoUV=(gl_FragCoord.xy-photoViewport.xy)/photoViewport.zw;
+   vec2 photoOffset=-normal.xy*photoProjection*(.5*photoBend/max(vViewPosition.z,.025));
+   vec3 photoTransmitted=texture2D(photoBehind,clamp(photoUV+photoOffset,vec2(.001),vec2(.999))).rgb;
+   float photoCos=clamp(abs(dot(normal,geometry.viewDir)),0.0,1.0);
+   float photoFresnel=photoF0+(1.0-photoF0)*pow(1.0-photoCos,5.0);
+   vec3 photoSpecular=reflectedLight.directSpecular+reflectedLight.indirectSpecular;
+   // Contraste didáctico: agua azul y paredes visibles incluso sobre fondo blanco.
+   vec3 photoVisible;
+   if(photoIsWater>.5){
+    vec3 photoWater=min(photoTransmitted,vec3(1.0))*photoTint*(1.0-photoFresnel)+photoSpecular;
+    photoVisible=mix(photoWater,vec3(.05,.48,.90),.32);
+   }else{
+    vec3 photoClear=min(photoTransmitted*photoTint*(1.0-photoFresnel)+photoSpecular,vec3(2.0));
+    float photoEdge=.055+.42*pow(1.0-photoCos,2.5);
+    photoVisible=mix(photoClear,vec3(.22,.42,.56),photoEdge);
+   }
+   gl_FragColor=vec4(photoVisible,1.0);
+  `);
+ };
+ mat.customProgramCacheKey=()=> 'archimedes-optics-visible-v2-'+kind;photoOptical.push(mat);return mat;
+}
+const glass=photoMedium('glass'),waterM=photoMedium('water');
+
+function add(geo,mat,x,y,z,par){
+ const originalType=geo.type;
+ const o=new THREE.Mesh(mat.userData&&mat.userData.photoLayer?geo:finishGeometry(geo),mat);o.position.set(x,y,z);
+ o.userData.photoLayer=mat.userData&&mat.userData.photoLayer;
+ o.castShadow=!mat.transparent&&!mat.isMeshBasicMaterial;o.receiveShadow=!mat.transparent;
+ if(mat.isMeshBasicMaterial){mat.toneMapped=false;if(mat.map){o.userData.photoDecal=true;o.renderOrder=20;mat.depthWrite=false}}
+ if(o.userData.photoLayer){o.renderOrder=o.userData.photoLayer==='glass'?5:2;o.castShadow=false;o.receiveShadow=false}
+ (par||SC).add(o);return o;
+}
+function tex(w,h,draw){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');draw(x,w,h);const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=texAniso;return t}
+
 // mesa
 const wood=M('#9a6a3e',{roughness:.75}),leg=M('#4b525c',{metalness:.4,roughness:.4});
 add(new THREE.BoxGeometry(0.9,0.035,0.55),wood,-0.08,-0.0175,0.0);add(new THREE.BoxGeometry(0.9,0.06,0.02),M('#9c7146',{roughness:.7}),-0.08,-0.05,0.265);
@@ -400,6 +565,96 @@ function draw(){const s=solve();clamp.position.y=s.Yc;const iy=SY0-F*SPX;ind.pos
  thr.scale.y=LTH();thr.position.y=hyL-0.004-LTH()/2;obj.position.y=hyL-0.004-LTH();
  if(part==2){const top=PB+lvl*MLH;pw.scale.y=top-PB;pw.position.y=(top+PB)/2;wl.position.y=top;$('#rv').textContent=fmt(lvl,1)+' ml';$('#rdv').textContent='V = '+fmt(lvl,1)+' ml'}
  $('#rd').textContent=fmt(F,2)+' N';$('#rdf').textContent='F = '+fmt(F,2)+' N'}
+// Acabados visibles sobre las piezas originales.
+// El muelle sigue la posición del indicador; no interviene en el equilibrio.
+const photoSpring=(function(){
+ const turns=14,segments=224,sides=8,radius=.0045,wire=.00022;
+ const points=new Float32Array((segments+1)*(sides+1)*3),normals=new Float32Array(points.length),uvs=new Float32Array((segments+1)*(sides+1)*2),ix=[];
+ for(let i=0;i<segments;i++)for(let j=0;j<sides;j++){const k=i*(sides+1)+j;ix.push(k,k+sides+1,k+1,k+1,k+sides+1,k+sides+2)}
+ const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.BufferAttribute(points,3));geometry.setAttribute('normal',new THREE.BufferAttribute(normals,3));geometry.setAttribute('uv',new THREE.BufferAttribute(uvs,2));geometry.setIndex(ix);
+ const mesh=new THREE.Mesh(geometry,M('#c7ccd2'));mesh.castShadow=true;mesh.receiveShadow=true;mesh.frustumCulled=false;clamp.add(mesh);
+ let last=NaN;
+ return ()=>{
+  const end=ind.position.y+.0025,top=SY0+.008,L=top-end;if(L===last)return;last=L;
+  for(let i=0;i<=segments;i++){
+   const t=i/segments,a=t*turns*Math.PI*2,co=Math.cos(a),si=Math.sin(a),slope=L/(turns*Math.PI*2*radius),z=1/Math.sqrt(1+slope*slope);
+   for(let j=0;j<=sides;j++){
+    const b=j/sides*Math.PI*2,ca=Math.cos(b),sa=Math.sin(b),k=i*(sides+1)+j;
+    const nx=ca*co-sa*si*slope*z,ny=sa*z,nz=ca*si+sa*co*slope*z;
+    points[k*3]=radius*co+wire*nx;points[k*3+1]=top-t*L+wire*ny;points[k*3+2]=radius*si+wire*nz;
+    normals[k*3]=nx;normals[k*3+1]=ny;normals[k*3+2]=nz;uvs[k*2]=j/sides;uvs[k*2+1]=t;
+   }
+  }
+  geometry.attributes.position.needsUpdate=true;geometry.attributes.normal.needsUpdate=true;geometry.attributes.uv.needsUpdate=true;
+ };
+})();
+(function(){
+ // Bordes pulidos, con la misma geometría que el vaso y la probeta originales.
+ const rimMat=new THREE.MeshPhysicalMaterial({color:new THREE.Color('#7ca4b8').convertSRGBToLinear(),roughness:.30,metalness:.05,transparent:true,opacity:.76,depthWrite:false});
+ const levelMat=new THREE.MeshBasicMaterial({color:'#2587b9',transparent:true,opacity:.78,depthWrite:false,toneMapped:false});
+ function visibleRim(o,material){o.material=material;o.userData.photoLayer=null;o.userData.photoDecal=true;o.renderOrder=10;o.castShadow=false;o.receiveShadow=false}
+ [vaso,prob].forEach(group=>group.children.forEach(o=>{
+  if(o.isMesh&&o.geometry.type==='TorusGeometry'&&o!==wl)visibleRim(o,rimMat);
+ }));
+ const lowerRim=add(new THREE.TorusGeometry(.0095,.00032,12,80),glass,0,DT-.012-DL,0,clamp);lowerRim.rotation.x=Math.PI/2;
+ const meniscus=add(new THREE.TorusGeometry(VR-.0013,.0003,12,96),waterM,0,VL,0,vaso);meniscus.rotation.x=Math.PI/2;
+ visibleRim(lowerRim,rimMat);visibleRim(meniscus,levelMat);visibleRim(wl,levelMat);
+ const bottomRim=add(new THREE.TorusGeometry(VR-.0005,.0005,12,96),rimMat,0,.0012,0,vaso);bottomRim.rotation.x=Math.PI/2;visibleRim(bottomRim,rimMat);
+ // Fibra del hilo, manteniendo el diámetro y el alargamiento del original.
+ thr.material=new THREE.MeshStandardMaterial({color:new THREE.Color('#555b63').convertSRGBToLinear(),roughness:.95,metalness:0,bumpMap:micro,bumpScale:.00001});thr.castShadow=false;
+ // Oclusión de contacto, restringida a los apoyos sobre la mesa.
+ const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),gr=x.createRadialGradient(64,64,16,64,64,64);
+ gr.addColorStop(0,'rgba(20,16,12,.22)');gr.addColorStop(.60,'rgba(20,16,12,.12)');gr.addColorStop(1,'rgba(20,16,12,0)');x.fillStyle=gr;x.fillRect(0,0,128,128);
+ const mat=new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1,toneMapped:false});
+ function contact(par,x,z,w){const o=new THREE.Mesh(new THREE.PlaneGeometry(w,w),mat);o.position.set(x,.00008,z);o.rotation.x=-Math.PI/2;par.add(o)}
+ contact(vaso,0,0,VR*2.35);contact(prob,0,0,.08);
+ [[.6,.8],[-.6,.8],[0,-1]].forEach(([dx,dz])=>contact(SC,BX+dx*.15,BZ+dz*.15,.046));
+})();
+
+// Dos capturas por cámara sólo cuando cambia el encuadre o el estado.
+// Agua y vidrio usan capturas distintas, evitando tapar la esfera o las pesas.
+(function(){
+ const raw=R3.render.bind(R3),cache=new WeakMap();let shadowKey='';
+ const useHalf=R3.capabilities.isWebGL2&&R3.extensions.has('EXT_color_buffer_float');
+ function target(w,h){return new THREE.WebGLRenderTarget(w,h,{type:useHalf?THREE.HalfFloatType:THREE.UnsignedByteType,format:THREE.RGBAFormat,minFilter:THREE.LinearFilter,magFilter:THREE.LinearFilter,depthBuffer:true,stencilBuffer:false,encoding:THREE.LinearEncoding})}
+ function materials(layer,tex,vp,cam){
+  for(const mat of photoOptical)if(mat.userData.photoLayer===layer){
+   const q=mat.userData.photoUniforms;q.photoBehind.value=tex;q.photoViewport.value.copy(vp);q.photoProjection.value.set(cam.projectionMatrix.elements[0],cam.projectionMatrix.elements[5]);
+  }
+ }
+ R3.render=function(scene,camera){
+  if(scene!==SC)return raw(scene,camera);
+  photoSpring();camera.updateMatrixWorld();
+  const viewport=R3.getViewport(new THREE.Vector4()),scissor=R3.getScissor(new THREE.Vector4()),scissorOn=R3.getScissorTest(),pixel=R3.getPixelRatio(),oldTarget=R3.getRenderTarget();
+  const w=Math.max(1,Math.round(viewport.z*pixel)),h=Math.max(1,Math.round(viewport.w*pixel));
+  let item=cache.get(camera);
+  if(!item||item.w!==w||item.h!==h){if(item){item.opaque.dispose();item.water.dispose()}item={w,h,opaque:target(w,h),water:target(w,h),key:''};cache.set(camera,item)}
+  const state=[part,u,P,F,lvl,geo.V,$('#E').value,$('#NP').value].join('/');
+  const key=state+'/'+SC.background.getHex()+'/'+camera.matrixWorld.elements.join(',')+'/'+camera.projectionMatrix.elements.join(',');
+  if(key!==item.key){
+   const hidden=[];SC.traverse(o=>{if(o.isMesh&&(o.userData.photoLayer||o.userData.photoDecal)){hidden.push([o,o.visible]);o.visible=false}});
+   const tone=R3.toneMapping,background=SC.background;
+   try{
+    R3.toneMapping=THREE.NoToneMapping;
+    if(useHalf&&background.getHex()===0xffffff)SC.background=new THREE.Color(4,4,4);
+    R3.setRenderTarget(item.opaque);R3.setViewport(0,0,w/pixel,h/pixel);R3.setScissorTest(false);
+    if(state!==shadowKey){shadowKey=state;R3.shadowMap.needsUpdate=true}
+    raw(scene,camera);
+    for(const [o,visible] of hidden)if(o.userData.photoLayer==='water')o.visible=visible;
+    materials('water',item.opaque.texture,new THREE.Vector4(0,0,w,h),camera);
+    R3.setRenderTarget(item.water);R3.setViewport(0,0,w/pixel,h/pixel);R3.setScissorTest(false);raw(scene,camera);
+    item.key=key;
+   }finally{
+    hidden.forEach(([o,visible])=>o.visible=visible);R3.toneMapping=tone;SC.background=background;
+    R3.setRenderTarget(oldTarget);R3.setViewport(viewport.x,viewport.y,viewport.z,viewport.w);R3.setScissor(scissor.x,scissor.y,scissor.z,scissor.w);R3.setScissorTest(scissorOn);
+   }
+  }
+  const screen=new THREE.Vector4(viewport.x*pixel,viewport.y*pixel,w,h);
+  materials('water',item.opaque.texture,screen,camera);materials('glass',item.water.texture,screen,camera);
+  return raw(scene,camera);
+ };
+})();
+
 // cámara
 let az=0.45,el=0.2,dist=1.05;const TG=new THREE.Vector3(-0.08,0.24,0);const CAMP={1:[0.4,0.22,0.62,0.15],2:[0.4,0.2,0.72,0.19]};function camPart(p){[az,el,dist,TG.y]=CAMP[p];TG.x=-0.02;TG.z=0}
 function camSet(){CAM.position.set(TG.x+dist*Math.cos(el)*Math.sin(az),TG.y+dist*Math.sin(el),TG.z+dist*Math.cos(el)*Math.cos(az));CAM.lookAt(TG)}
