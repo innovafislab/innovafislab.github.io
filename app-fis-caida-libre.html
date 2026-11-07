@@ -357,7 +357,7 @@ const CAM=new THREE.PerspectiveCamera(32,1,0.01,20),CAM2=new THREE.PerspectiveCa
 SC.add(new THREE.HemisphereLight(0xeaf2ff,0x8a7966,0.34));
 const sun=new THREE.DirectionalLight(0xfff5e7,2.55);
 sun.position.set(-1.35,2.8,1.85);sun.target.position.set(0,.40,0);
-sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);
+sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);
 Object.assign(sun.shadow.camera,{left:-1.02,right:1.02,top:1.10,bottom:-1.05,near:.3,far:6});
 sun.shadow.bias=-.00015;sun.shadow.normalBias=.00035;
 SC.add(sun,sun.target);
