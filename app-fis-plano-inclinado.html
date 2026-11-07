@@ -570,18 +570,28 @@ function finishGeometry(geo){
  // Placa del transportador: mismo borde y mismas marcas, con acabado marfil.
  const plate=[..._SC.children].find(e=>e.tagName==='path'&&e.getAttribute('fill')==='#fbfcfd');
  if(plate){const gr=mk('linearGradient',{id:'photo-protractor',x1:0,y1:0,x2:1,y2:1},defs);[[0,'#ffffff'],[.55,'#f7f8f9'],[1,'#dce1e6']].forEach(([offset,color])=>mk('stop',{offset,'stop-color':color},gr));plate.setAttribute('fill','url(#photo-protractor)')}
- let previousKey='',scheduled=false;
- function renderPhoto(){
-  scheduled=false;const key=[al,m,part].join('/');if(key===previousKey)return;previousKey=key;
+ // [FLUIDEZ] Mientras se mueve un control se renderiza a menor resolución y la imagen se codifica de forma asíncrona;
+ // al soltar se repite a resolución completa. Doble imagen para cambiar sin parpadeo.
+ const photoB=photo.cloneNode();_SC.insertBefore(photoB,PL);photoB.style.visibility='hidden';let front=photo,back=photoB;
+ let doneKey='',doneHi=false,scheduled=false,busy=false,pend=null,hiT=0,curD=0,urls=new Map();
+ const DLO=Math.min(density,1.15);function setD(d){if(d!==curD){curD=d;R3.setSize(Math.round(W*d),Math.round(H*d),false)}}
+ function show(url){back.onload=()=>{back.style.visibility='';front.style.visibility='hidden';const old=urls.get(front);if(old)URL.revokeObjectURL(old);urls.set(back,url);const t=front;front=back;back=t;_SIM.classList.add('photo-ready')};back.setAttribute('href',url)}
+ function renderPhoto(hi){
+  hi=hi===true;scheduled=false;const key=[al,m,part].join('/');if(key===doneKey&&(doneHi||!hi))return;
+  if(busy){pend=pend===true?true:hi;return}
+  doneKey=key;doneHi=hi;
   pos(ramp,P0.x,P0.y,0);ramp.rotation.z=al*Math.PI/180;
   const sy=attr(frod,'y'),sh=attr(frod,'height');pos(support,attr(frod,'x')+3.5,sy+sh/2,-22);length(support,sh);
   const cx=attr(fcl,'x')+8,cy=attr(fcl,'y')+6;pos(clamp,cx,cy,0);pos(clampScrew,cx,cy,12);pos(clampSlot,cx,cy,13.1);
   masses.forEach((o,i)=>o.visible=i<wts.children.length/2);syncInstrument(parallel,D1,false);normal.g3.visible=part===2;if(part===2)syncInstrument(normal,D2,true);
-  R3.render(SC,camera);photo.setAttribute('href',cv.toDataURL('image/webp',.97));_SIM.classList.add('photo-ready');
+  setD(hi?density:DLO);R3.render(SC,camera);busy=true;
+  const fin=b=>{busy=false;if(b)show(URL.createObjectURL(b));else show(cv.toDataURL('image/webp',hi?.95:.85));if(pend!==null){const p=pend;pend=null;renderPhoto(p)}};
+  if(cv.toBlob)cv.toBlob(fin,'image/webp',hi?.95:.85);else fin(null);
  }
- function schedule(){if(!scheduled){scheduled=true;requestAnimationFrame(renderPhoto)}}
+ function schedule(){if(!scheduled){scheduled=true;requestAnimationFrame(()=>renderPhoto(false))}clearTimeout(hiT);hiT=setTimeout(()=>renderPhoto(true),220)}
  new MutationObserver(schedule).observe(PL,{attributes:true,childList:true,subtree:true});
- renderPhoto();
+ renderPhoto(true);
+ // [/FLUIDEZ]
  // QA expone sólo el renderizador; no modifica ni sustituye la física.
  _SIM._photoRender=renderPhoto;
 })();
