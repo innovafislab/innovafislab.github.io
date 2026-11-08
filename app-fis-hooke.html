@@ -87,8 +87,8 @@ main.wrap,.wrap{max-width:1240px!important}
 </style><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Ley de Hooke · INNOVA-FIS-LAB</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<link rel="stylesheet" href="lib/katex/0.16.9/katex.min.css">
+<script src="lib/katex/0.16.9/katex.min.js"></script>
 <style>
 :root{--bg:#fff;--paper:#f6f7f9;--ink:#1b2430;--slate:#4a5566;--line:#d9dee5;--b:#1d5fa8;--o:#d9820b;--g:#1b7a43;--navy:#17324d}
 *{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.4}
@@ -197,7 +197,7 @@ header h1{margin-right:0!important}
 .enc button{border:0;background:#eef1f5;color:#5b6676;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:15px;line-height:24px;padding:0}
 .note .encf,.mnote .encf{color:inherit;text-decoration:underline}
 html.dk .encb{background:#161d26;border-color:#27313c;color:#7fb2e5}html.dk .enc{background:#161d26;border-color:#27313c;color:#e3e8ee}html.dk .enc a{color:#7fb2e5}html.dk .enc button{background:#27313c;color:#9aa5b2}
-@media(max-width:820px){header h1{flex:0 1 auto!important;min-width:0!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;font-size:15px!important;line-height:1.12!important;overflow-wrap:normal}.encb{width:30px;height:30px}.enc{gap:8px;padding:5px 5px 5px 12px;font-size:13px}.enc span{display:none}}@media(max-width:380px){header h1{font-size:13px!important}header .code,header .gbtn{font-size:12px!important;padding:.32em .5em!important}header .code span{letter-spacing:0!important}.encb{width:26px;height:26px}.encb svg{width:16px;height:16px}}@media(max-width:340px){header h1{font-size:12px!important;line-height:1.08!important}}</style><style id="ftcss">.side h2 .rw{font-size:.62em;font-weight:500;color:#5b6676}.ftw{overflow-x:auto}.side table.ft{width:100%;border-collapse:collapse;font-size:.9em;background:#fff;border:1px solid #9aa3ae;margin:4px 0 10px}.side table.ft th,.side table.ft td{padding:.3em .45em;border:1px solid #c3cad3;text-align:center}.side table.ft th{background:#fff0c1;font-weight:600;white-space:nowrap}.side table.ft th.calc{background:#e8f0fa}.side table.ft th .u{display:block;font-size:.8em;font-weight:500;color:#5b6676}.side table.ft td{height:1.7em}html.dk .side table.ft{background:#161d26}html.dk .side table.ft th{background:#2b2617}html.dk .side table.ft th.calc{background:#1c2a3a}</style><style id="unitlab">html body .sim3 .ins>span,html body .sim3 .zm>span{display:block!important;position:absolute!important;left:2px!important;right:auto!important;top:auto!important;bottom:100%!important;height:auto!important;line-height:1.15!important;margin:0 0 1px!important;padding:0!important;font-size:clamp(16px,2.6vh,24px)!important;font-weight:700!important;color:#1b2430!important;background:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;white-space:nowrap}html.dk body .sim3 .ins>span,html.dk body .sim3 .zm>span{color:#e3e8ee!important;background:none!important}</style></head><body>
+@media(max-width:820px){header h1{flex:0 1 auto!important;min-width:0!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;font-size:15px!important;line-height:1.12!important;overflow-wrap:normal}.encb{width:30px;height:30px}.enc{gap:8px;padding:5px 5px 5px 12px;font-size:13px}.enc span{display:none}}@media(max-width:380px){header h1{font-size:13px!important}header .code,header .gbtn{font-size:12px!important;padding:.32em .5em!important}header .code span{letter-spacing:0!important}.encb{width:26px;height:26px}.encb svg{width:16px;height:16px}}@media(max-width:340px){header h1{font-size:12px!important;line-height:1.08!important}}</style><style id="ftcss">.side h2 .rw{font-size:.62em;font-weight:500;color:#5b6676}.ftw{overflow-x:auto}.side table.ft{width:100%;border-collapse:collapse;font-size:.9em;background:#fff;border:1px solid #9aa3ae;margin:4px 0 10px}.side table.ft th,.side table.ft td{padding:.3em .45em;border:1px solid #c3cad3;text-align:center}.side table.ft th{background:#fff0c1;font-weight:600;white-space:nowrap}.side table.ft th.calc{background:#e8f0fa}.side table.ft th .u{display:block;font-size:.8em;font-weight:500;color:#5b6676}.side table.ft td{height:1.7em}html.dk .side table.ft{background:#161d26}html.dk .side table.ft th{background:#2b2617}html.dk .side table.ft th.calc{background:#1c2a3a}</style></head><body>
 <header><h1>Ley de Hooke</h1><button class="code" type="button" data-tip="Si tu profesor te ha dado un código, introdúcelo" aria-label="Usar código"><span>Código</span><b class="codev"></b></button><button class="gbtn" type="button">Guía</button><a href="laboratorios.html#fisica" aria-label="Volver">← Laboratorio de Física · INNOVA-FIS-LAB</a></header>
 <main><section class="left"><div class="card"><style>
 .sim3{flex:1;min-height:0;position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;touch-action:none;cursor:grab}
@@ -212,12 +212,33 @@ body[data-part="1"] .sim3 .ins{height:calc(100% - 20px)}
 @media(hover:none){.sim3 .hint{display:none}}
 @media(orientation:landscape) and (max-height:520px){.sim3 .hint{display:none}}
 @media(min-width:821px){.read .sw{order:1}.read>.p2:not(.sw){order:2}}.sim3 .rd{display:none!important}.sim3 .gph{display:none!important}.sim3 .ins{height:calc(100% - 20px)!important}@media(max-width:820px) and (orientation:portrait){.sim3 .ins{height:40%!important}}html body .sim3 .ins span{display:block!important;position:absolute;left:0;right:0;top:0;height:clamp(24px,3.6vh,34px);line-height:clamp(24px,3.6vh,34px);padding:0 10px;font-size:clamp(16px,2.6vh,24px);font-weight:700;color:#1b2430;background:#f6f7f9;border-radius:8px 8px 0 0;border-bottom:1px solid var(--line)}html.dk body .sim3 .ins span{background:#161d26;color:#e3e8ee}</style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="lib/three/r128/three.min.js"></script><script id="ondemand">/* [CARGA] Solo se redibuja la escena cuando algo cambia (o cada segundo por seguridad). No altera la física ni el dibujo. */
+(function(){if(!window.THREE||THREE.__od)return;THREE.__od=1;const O=THREE.WebGLRenderer,raf=window.requestAnimationFrame.bind(window);let fid=0,inR=false;
+window.requestAnimationFrame=function(cb){return raf(t=>{fid++;inR=true;try{cb(t)}finally{inR=false}})};
+function W(p){const r=new O(p);hook(r);return r}W.prototype=O.prototype;Object.setPrototypeOf(W,O);THREE.WebGLRenderer=W;
+const MK=['map','emissiveMap','bumpMap','roughnessMap','alphaMap','metalnessMap','normalMap'];
+function hook(r){const R=r.render.bind(r),C=r.clear.bind(r),cams=new Set();let last=null,cur=[],lastCls='',dec=-1,skip=false,lastT=0;
+ const P=v=>{cur.push(typeof v==='number'?v:(v?1:0))};
+ function sig(sc){cur=[];const cv=r.domElement;P(cv.width);P(cv.height);
+  document.querySelectorAll('.sim3,.sim3 .ins,.sim3 .zm').forEach(e=>{P(e.offsetLeft);P(e.offsetTop);P(e.offsetWidth);P(e.offsetHeight);P(e._z||1);P(e._px||0);P(e._py||0);P(e._k||1)});
+  cams.forEach(c=>{const p=c.position,q=c.quaternion;P(p.x);P(p.y);P(p.z);P(q.x);P(q.y);P(q.z);P(q.w);P(c.fov);P(c.zoom);P(c.aspect);P(c.near);P(c.far)});
+  sc.traverse(o=>{const p=o.position,q=o.quaternion,s=o.scale;P(o.visible);P(p.x);P(p.y);P(p.z);P(q.x);P(q.y);P(q.z);P(q.w);P(s.x);P(s.y);P(s.z);
+   if(!o.matrixAutoUpdate)o.matrix.elements.forEach(P);
+   if(o.isLight){P(o.intensity);P(o.color.r);P(o.color.g);P(o.color.b)}
+   if(o.isInstancedMesh)P(o.instanceMatrix.version);
+   const g=o.geometry;if(g){const a=g.attributes&&g.attributes.position;P(a?a.version:0);P(g.drawRange.start);P(g.drawRange.count);P(g.index?g.index.version:0)}
+   const m=o.material;if(m)(Array.isArray(m)?m:[m]).forEach(m=>{P(m.visible);P(m.opacity);P(m.version);if(m.color){P(m.color.r);P(m.color.g);P(m.color.b)}if(m.emissive){P(m.emissive.r);P(m.emissive.g);P(m.emissive.b);P(m.emissiveIntensity)}MK.forEach(k=>{const t=m[k];P(t?t.version+1:0);if(t){P(t.offset.x);P(t.offset.y)}})})})}
+ function decide(sc){if(!inR){last=null;return false}if(dec===fid)return skip;dec=fid;const now=performance.now(),cls=document.documentElement.className;sig(sc);
+  let same=last&&last.length===cur.length&&cls===lastCls&&now-lastT<1000;if(same){for(let i=0;i<cur.length;i++)if(cur[i]!==last[i]&&!(cur[i]!==cur[i]&&last[i]!==last[i])){same=false;break}}
+  skip=!!same;if(!skip){last=cur;lastCls=cls;lastT=now}return skip}
+ r.render=function(sc,cam){cams.add(cam);if(sc&&sc.isScene&&decide(sc))return;return R(sc,cam)};
+ r.clear=function(a,b,c){if(inR&&dec===fid&&skip)return;return C(a,b,c)}}
+})();</script>
 <div class="sim3" id="v3"><canvas id="cv"></canvas><svg class="gph p2" id="gph" viewBox="0 0 300 200"></svg>
-<div class="ins"><span>mm</span><div class="rd p1" id="rdx">x = 0 mm</div></div>
+<div class="ins"><span><i>x</i> (mm)</span><div class="rd p1" id="rdx">x = 0 mm</div></div>
 <div class="hint">Arrastra para girar la vista · rueda del ratón para acercar</div></div>
 <div class="bar"><div class="ctrl"><button class="btn pt on" data-p="1">Parte I: alargamiento</button><button class="btn pt" data-p="2">Parte II: periodo</button><label>Muelle <select id="K" class="btn"><option value="10">rojo</option><option value="20">azul</option></select></label><label>Pesas de 10 g <input id="N" type="range" min="0" max="8" step="1" value="3"><b id="Nv"></b></label><button class="btn p2" id="go" data-alt="Volver a empezar">Bajar y soltar</button><button class="btn p2" id="pp" data-alt="Continuar">Parar</button><button class="btn" id="vw">Vista inicial</button></div><div class="read"><div><span>Masa <i>m</i> (dato)</span><b id="rm">–</b></div><b id="rF" style="display:none"></b><b id="rx" style="display:none"></b><div class="p2"><span>Oscilaciones</span><b id="cnt">0</b></div><b id="tt" style="display:none"></b><div class="p2 sw"><span>Cronómetro <i>t</i> =</span><b id="swv">0,00 s</b><button class="swb" id="sws" type="button">Iniciar</button><button class="swb" id="swr" type="button">A cero</button></div></div></div></div><p class="note">Gemelo de la práctica: el muelle y las pesas dependen del código · CC BY-NC-SA 4.0</p></section>
-<section class="side card"><div class="gem"><p>Si tu profesor te ha dado un código, introdúcelo.<b class="codeg" hidden></b></p></div><h2>Qué se observa</h2><p class="p1">Al colgar pesas, el muelle se alarga y el índice rojo baja por la escala. El alargamiento es proporcional a la fuerza.</p><div class="p1"><div class="eq" data-tex="F=k\,x"></div><p>Aquí <i>F</i> = <i>mg</i> es el peso de lo que cuelga, portapesas incluido, con <i>g</i> = (9,80 ± 0,01) m/s²; <i>x</i>, el alargamiento, que se lee en la escala del recuadro de detalle porque el índice marca 0 sin carga; y <i>k</i>, la constante del muelle.</p></div><p class="p2">Si se baja un poco la masa y se suelta, oscila arriba y abajo. Con más masa oscila más despacio.</p><div class="p2"><div class="eq" data-tex="T=2\pi\sqrt{\frac{m}{k}}"></div><p>Aquí <i>T</i> es el periodo; <i>m</i>, la masa colgada; y <i>k</i>, la constante del muelle. El contador suma una oscilación cada vez que la masa vuelve al punto más bajo.</p></div><h2>Qué hay que medir</h2><p>Elige el muelle y anótalo. La masa de lo que cuelga, portapesas más pesas, se da como dato con su error. Ve añadiendo una a una las 8 pesas de 10 g.</p><p class="p1">Para cada masa, lee el alargamiento <i>x</i> en la escala del detalle.</p><p class="p2">Para cada masa, pulsa «Bajar y soltar»: el cronómetro se pone en marcha solo. Páralo cuando el contador llegue a 30 y anota <i>t</i><sub>30</sub>. El cronómetro se para también con la barra espaciadora.</p><h2>Tabla de la ficha <small class="rw">(rellenar en Word)</small></h2><div class="ftw"><table class="ft"><thead><tr><th><i>m</i><span class="u">g</span></th><th class="calc p1"><i>F</i><span class="u">N</span></th><th class="p1"><i>x</i><span class="u">mm</span></th><th class="p2"><i>t</i><sub>30</sub><span class="u">s</span></th><th class="calc p2"><i>t̄</i><sub>30</sub><span class="u">s</span></th><th class="calc p2"><i>T</i><span class="u">s</span></th></tr></thead><tbody><tr><td>&nbsp;</td><td class="p1">&nbsp;</td><td class="p1">&nbsp;</td><td class="p2">&nbsp;</td><td class="p2">&nbsp;</td><td class="p2">&nbsp;</td></tr></tbody></table></div><h2>Datos y errores</h2><p><span class="p1">El alargamiento <i>x</i> se lee en la escala en mm del recuadro de detalle; su error lo deduces de esa escala.</span><span class="p2">El tiempo <i>t</i><sub>30</sub> de 30 oscilaciones se mide con el cronómetro digital; su error lo deduces del cronómetro.</span> La masa <i>m</i> se da como dato con su error.</p><p>Datos que no se miden: <i>g</i> = (9,80 ± 0,01) m/s².</p><p>Los errores de las medias, de las magnitudes indirectas y de los ajustes también los calculas tú, como se explica en la <a href="https://innovafislab.github.io/errores.html" target="_blank">página de errores</a>.</p><p class="mnote">Gemelo de la práctica: el muelle y las pesas dependen del código · CC BY-NC-SA 4.0</p></section></main>
+<section class="side card"><div class="gem"><p>Si tu profesor te ha dado un código, introdúcelo.<b class="codeg" hidden></b></p></div><h2>Qué se observa</h2><p class="p1">El canto del disco rojo indica el alargamiento del muelle en milímetros. Al añadir pesas, el disco baja. En equilibrio, el alargamiento es proporcional al peso colgado.</p><div class="p1"><div class="eq" data-tex="F=k\,x"></div><p>Aquí <i>F</i> = <i>mg</i> es el peso de lo que cuelga, portapesas incluido, con <i>g</i> = (9,80 ± 0,01) m/s²; <i>x</i>, el alargamiento, que se lee en la escala del recuadro de detalle tomando como cero la posición del muelle sin pesas ni portapesas; y <i>k</i>, la constante del muelle.</p></div><p class="p2">Si se baja un poco la masa y se suelta, oscila arriba y abajo. Con más masa oscila más despacio.</p><div class="p2"><div class="eq" data-tex="T=2\pi\sqrt{\frac{m}{k}}"></div><p>Aquí <i>T</i> es el periodo; <i>m</i>, la masa colgada; y <i>k</i>, la constante del muelle. El contador suma una oscilación cada vez que la masa vuelve al punto más bajo.</p></div><h2>Qué hay que medir</h2><p>Elige el muelle y anótalo. La masa de lo que cuelga, portapesas más pesas, se da como dato con su error. Ve añadiendo una a una las 8 pesas de 10 g.</p><p class="p1">Para cada masa, lee el alargamiento <i>x</i> en la escala del detalle.</p><p class="p2">Para cada masa, pulsa «Bajar y soltar»: el cronómetro se pone en marcha solo. Páralo cuando el contador llegue a 30 y anota <i>t</i><sub>30</sub>. El cronómetro se para también con la barra espaciadora.</p><h2>Tabla de la ficha <small class="rw">(rellenar en Word)</small></h2><div class="ftw"><table class="ft"><thead><tr><th><i>m</i><span class="u">g</span></th><th class="calc p1"><i>F</i><span class="u">N</span></th><th class="p1"><i>x</i><span class="u">mm</span></th><th class="p2"><i>t</i><sub>30</sub><span class="u">s</span></th><th class="calc p2"><i>t̄</i><sub>30</sub><span class="u">s</span></th><th class="calc p2"><i>T</i><span class="u">s</span></th></tr></thead><tbody><tr><td>&nbsp;</td><td class="p1">&nbsp;</td><td class="p1">&nbsp;</td><td class="p2">&nbsp;</td><td class="p2">&nbsp;</td><td class="p2">&nbsp;</td></tr></tbody></table></div><h2>Datos y errores</h2><p><span class="p1">El alargamiento <i>x</i> se lee en la escala en mm del recuadro de detalle; su error lo deduces de esa escala.</span><span class="p2">El tiempo <i>t</i><sub>30</sub> de 30 oscilaciones se mide con el cronómetro digital; su error lo deduces del cronómetro.</span> La masa <i>m</i> se da como dato con su error.</p><p>Datos que no se miden: <i>g</i> = (9,80 ± 0,01) m/s².</p><p>Los errores de las medias, de las magnitudes indirectas y de los ajustes también los calculas tú, como se explica en la <a href="https://innovafislab.github.io/errores.html" target="_blank">página de errores</a>.</p><p class="mnote">Gemelo de la práctica: el muelle y las pesas dependen del código · CC BY-NC-SA 4.0</p></section></main>
 <script>(()=>{
 const MOB=()=>matchMedia('(max-width:820px),(max-height:520px)').matches;
 function fit(){const e=document.querySelector('.side');if(MOB()){e.style.fontSize='';return}let lo=15,hi=34;for(let i=0;i<10;i++){const m=(lo+hi)/2;e.style.fontSize=m+'px';if(e.scrollHeight>e.clientHeight+1||e.scrollWidth>e.clientWidth+1)hi=m;else lo=m}e.style.fontSize=lo+'px'}
@@ -319,58 +340,332 @@ pp.onclick=()=>set(!playing);document.addEventListener('click',e=>{const t=e.tar
 window.PKX=0.35;
 const g=9.80,MP=0.010,Y0=0.50,ROD=0.22;let part=1,k=10,m=MP,y=0,v=0,run=false,t=0,cnt=0,hist=[];
 const box=$('#v3'),cv=$('#cv');
-const R3=new THREE.WebGLRenderer({canvas:cv,antialias:true});R3.setPixelRatio(Math.min(2,devicePixelRatio));R3.outputEncoding=THREE.sRGBEncoding;
-const SC=new THREE.Scene();SC.background=new THREE.Color(document.documentElement.classList.contains('dk')?'#0f141a':'#ffffff');
+// Acero satinado, hierro fundido y haya barnizada con una única iluminación de laboratorio.
+const R3=new THREE.WebGLRenderer({canvas:cv,antialias:true,powerPreference:'high-performance'});
+R3.setPixelRatio(Math.min(2,devicePixelRatio));
+R3.outputEncoding=THREE.sRGBEncoding;
+R3.physicallyCorrectLights=true;
+R3.toneMapping=THREE.ACESFilmicToneMapping;
+R3.toneMappingExposure=1.04;
+R3.shadowMap.enabled=true;
+R3.shadowMap.type=THREE.PCFSoftShadowMap;
+R3.shadowMap.autoUpdate=false;
+const SC=new THREE.Scene();
+SC.background=new THREE.Color(document.documentElement.classList.contains('dk')?'#0f141a':'#ffffff');
 const CAM=new THREE.PerspectiveCamera(32,1,0.01,20),CAM2=new THREE.PerspectiveCamera(26,1,0.005,5);
-SC.add(new THREE.HemisphereLight(0xffffff,0xb8c0c8,0.75));const sun=new THREE.DirectionalLight(0xffffff,0.75);sun.position.set(1.2,2.4,1.6);SC.add(sun);
-const M=(c,o)=>new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.5,metalness:.1},o||{}));
-const steel=M('#c7ccd2',{metalness:.6,roughness:.25}),iron=M('#26292e',{roughness:.55}),blue=M('#1f6fd1',{roughness:.4});
-function add(geo,mat,x,y,z,par){const o=new THREE.Mesh(geo,mat);o.position.set(x,y,z);(par||SC).add(o);return o}
-// mesa
-const wood=M('#9a6a3e',{roughness:.75}),leg=M('#4b525c',{metalness:.4,roughness:.4});
-add(new THREE.BoxGeometry(1.0,0.035,0.6),wood,-0.12,-0.0175,0.0);add(new THREE.BoxGeometry(1.0,0.06,0.02),M('#9c7146',{roughness:.7}),-0.12,-0.05,0.29);
-[[-0.6,-0.27],[0.36,-0.27],[-0.6,0.27],[0.36,0.27]].forEach(([x,z])=>add(new THREE.BoxGeometry(0.035,0.72,0.035),leg,x,-0.395,z));
-add(new THREE.BoxGeometry(0.92,0.03,0.02),leg,-0.12,-0.62,-0.27);add(new THREE.BoxGeometry(0.92,0.03,0.02),leg,-0.12,-0.62,0.27);
-// trípode de hierro negro y varilla
-const BX=-0.16,BZ=-0.06;
-[[0.6,0.8],[-0.6,0.8],[0,-1]].forEach(([dx,dz])=>{const Lb=0.16,a=add(new THREE.BoxGeometry(0.03,0.022,Lb),iron,BX+dx*Lb/2,0.011,BZ+dz*Lb/2);a.rotation.y=Math.atan2(dx,dz);
- add(new THREE.CylinderGeometry(0.014,0.016,0.012,16),iron,BX+dx*Lb,0.006,BZ+dz*Lb)});
-add(new THREE.CylinderGeometry(0.03,0.034,0.03,20),iron,BX,0.02,BZ);
-add(new THREE.CylinderGeometry(0.0065,0.0065,0.70,20),steel,BX,0.35,BZ);add(new THREE.SphereGeometry(0.0075,16,10),steel,BX,0.70,BZ);
-// nuez con gancho
-add(new THREE.BoxGeometry(0.03,0.03,0.03),M('#9aa3ad',{metalness:.5,roughness:.3}),BX,0.65,BZ);
-const kn=add(new THREE.CylinderGeometry(0.013,0.013,0.012,20),blue,BX,0.65,BZ+0.022);kn.rotation.x=Math.PI/2;
-const hk=add(new THREE.CylinderGeometry(0.003,0.003,Math.hypot(-BX,-BZ),10),steel,BX/2,0.655,BZ/2);hk.rotation.z=Math.PI/2;hk.rotation.y=-Math.atan2(-BZ,-BX);
-const hook=add(new THREE.TorusGeometry(0.006,0.0015,8,20,Math.PI*1.4),steel,0,0.649,0);hook.rotation.z=Math.PI*0.8;
-// dispositivo de Hooke: tubo transparente con escala en mm, muelle y índice
+SC.add(new THREE.HemisphereLight(0xeaf2ff,0x8a7966,.40));
+const sun=new THREE.DirectionalLight(0xfff5e7,3.1);
+sun.position.set(-1.35,2.8,1.85);sun.target.position.set(-.07,.34,0);
+sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);
+Object.assign(sun.shadow.camera,{left:-.78,right:.78,top:.83,bottom:-.83,near:.2,far:6});
+sun.shadow.bias=-.00013;sun.shadow.normalBias=.00032;
+SC.add(sun,sun.target);
+const fill=new THREE.DirectionalLight(0xe6efff,.70);fill.position.set(2,1.4,-1.4);SC.add(fill);
+(function labReflections(){
+ const room=new THREE.Scene();
+ const walls=new THREE.Mesh(new THREE.BoxGeometry(8,6,8),new THREE.MeshBasicMaterial({color:new THREE.Color(.34,.36,.40),side:THREE.BackSide}));
+ walls.position.y=1;room.add(walls);
+ function panel(x,y,z,w,h,r,g,b){
+  const plate=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({color:new THREE.Color(r,g,b),side:THREE.DoubleSide}));
+  plate.position.set(x,y,z);plate.lookAt(0,.4,0);room.add(plate);
+ }
+ for(let j=0;j<2;j++)for(let i=0;i<2;i++)panel(-2.6,1+j*1.42,1+i*1.31,1.2,1.32,3.8,3.7,3.6);
+ panel(.15,3.7,-.4,3.1,2.4,2.45,2.53,2.72);
+ panel(3.25,1.6,-1.25,.8,3.5,2.15,2.45,2.95);
+ panel(1.45,1.2,3.7,2.0,3.7,.065,.075,.09);
+ panel(-1.9,1.2,-3.6,2.4,3.3,.09,.10,.125);
+ panel(0,-1.4,0,6.5,6.5,.29,.235,.18);
+ const gen=new THREE.PMREMGenerator(R3);
+ SC.environment=gen.fromScene(room,.035,.1,16).texture;
+ gen.dispose();room.traverse(o=>{if(o.isMesh){o.geometry.dispose();o.material.dispose()}});
+})();
+
+const colorLab=hex=>new THREE.Color(hex).convertSRGBToLinear();
+const M=(hex,options={})=>new THREE.MeshStandardMaterial(Object.assign({color:colorLab(hex),metalness:0,roughness:.48,envMapIntensity:.85},options));
+const aniso=Math.min(8,R3.capabilities.getMaxAnisotropy());
+let finishSeed=0x29d3b63b;
+function grainRand(){finishSeed=(Math.imul(1664525,finishSeed)+1013904223)>>>0;return finishSeed/4294967296}
+function surface(w,h,paint,srgb=false){
+ const c=document.createElement('canvas');c.width=w;c.height=h;
+ const ctx=c.getContext('2d'),im=ctx.createImageData(w,h);
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+  const n=(y*w+x)*4;paint(im.data,n,x,y);im.data[n+3]=255;
+ }
+ ctx.putImageData(im,0,0);const tex=new THREE.CanvasTexture(c);
+ tex.wrapS=tex.wrapT=THREE.RepeatWrapping;tex.anisotropy=aniso;
+ if(srgb)tex.encoding=THREE.sRGBEncoding;
+ return tex;
+}
+const grit=surface(128,128,(p,i)=>{p[i]=p[i+1]=p[i+2]=165+grainRand()*73});
+const brushLines=Array.from({length:128},grainRand);
+const brushed=surface(128,128,(p,i,x,y)=>{p[i]=p[i+1]=p[i+2]=162+64*brushLines[y]+15*grainRand()});
+const woodGrain=(function(){
+ const noise=Float32Array.from({length:64*64},grainRand);
+ const smooth=t=>t*t*(3-2*t);
+ function sample(x,y){
+  const i=Math.floor(x),j=Math.floor(y),u=smooth(x-i),v=smooth(y-j);
+  const a=noise[(j&63)*64+(i&63)],b=noise[(j&63)*64+((i+1)&63)];
+  const c=noise[((j+1)&63)*64+(i&63)],d=noise[((j+1)&63)*64+((i+1)&63)];
+  return (a+(b-a)*u)*(1-v)+(c+(d-c)*u)*v;
+ }
+ return surface(512,256,(out,i,x,y)=>{
+  const u=x/512,v=y/256;
+  const drift=2.2*sample(u*3,v*6)+.42*sample(u*7,v*18);
+  const phase=v*42+drift+.20*sample(u*10,v*38);
+  const late=Math.pow(.5+.5*Math.sin(phase*2*Math.PI),10);
+  const grain=(sample(u*2.9,v*20)-.5)*20+(sample(u*33,v*170)-.5)*7-10*late+(grainRand()-.5)*2.5;
+  out[i]=159+grain;out[i+1]=111+grain*.83;out[i+2]=66+grain*.64;
+ },true);
+})();
+const steel=M('#cfced0',{metalness:.95,roughness:.24,roughnessMap:brushed});
+const satin=M('#b6bdc3',{metalness:.87,roughness:.34,roughnessMap:brushed});
+const iron=M('#393b3c',{metalness:.11,roughness:.56,roughnessMap:grit,bumpMap:grit,bumpScale:.000032});
+const rubber=M('#292b2f',{roughness:.84,bumpMap:grit,bumpScale:.000014});
+const blue=M('#226aac',{roughness:.43,bumpMap:grit,bumpScale:.000010});
+const wood=M('#ffffff',{map:woodGrain,roughness:.49,roughnessMap:grit,bumpMap:woodGrain,bumpScale:.000045});
+const leg=M('#515761',{metalness:.48,roughness:.43,roughnessMap:grit});
+
+function finishGeometry(geo){
+ const p=geo.parameters;
+ const ext=[p.width,p.height,p.depth],rad=Math.min(.0022,Math.min(...ext)*.12);
+  const out=new THREE.BoxGeometry(...ext,8,8,8),pos=out.attributes.position,norm=out.attributes.normal,uv=out.attributes.uv;
+  const grid=h=>[-h,-h+rad*.134,-h+rad*.5,-h+rad,0,h-rad,h-rad*.5,h-rad*.134,h];
+  const gs=ext.map(e=>grid(e/2));
+  const v=new THREE.Vector3(),core=new THREE.Vector3(),n=new THREE.Vector3();
+  for(let i=0;i<pos.count;i++){
+   v.set(gs[0][Math.round((pos.getX(i)/ext[0]+.5)*8)],gs[1][Math.round((pos.getY(i)/ext[1]+.5)*8)],gs[2][Math.round((pos.getZ(i)/ext[2]+.5)*8)]);
+   core.set(...[v.x,v.y,v.z].map((c,j)=>Math.max(-ext[j]/2+rad,Math.min(ext[j]/2-rad,c))));
+   n.copy(v).sub(core).normalize();v.copy(core).addScaledVector(n,rad);
+   pos.setXYZ(i,v.x,v.y,v.z);norm.setXYZ(i,n.x,n.y,n.z);
+   const f=Math.floor(i/81),uaxis=f<2?2:0,vaxis=f===2||f===3?2:1;
+   uv.setXY(i,gs[uaxis][Math.round(uv.getX(i)*8)]/ext[uaxis]+.5,gs[vaxis][Math.round(uv.getY(i)*8)]/ext[vaxis]+.5);
+  }
+  geo.dispose();return out;
+}
+
+function add(geo,mat,x,y,z,par=SC){
+ const o=new THREE.Mesh(geo,mat);o.position.set(x,y,z);
+ o.castShadow=o.receiveShadow=!mat.transparent&&!mat.isMeshBasicMaterial;
+ par.add(o);return o;
+}
+function block(w,h,d,mat,x,y,z,par){
+ const geo=finishGeometry(new THREE.BoxGeometry(w,h,d));
+ if(mat===wood){
+  const pos=geo.attributes.position,n=geo.attributes.normal,uv=geo.attributes.uv;
+  for(let i=0;i<pos.count;i++){
+   const xx=pos.getX(i)+x,yy=pos.getY(i)+y,zz=pos.getZ(i)+z;
+   if(Math.abs(n.getX(i))>.8)uv.setXY(i,(zz+.3)*1.4,(yy+.32)*1.4);
+   else uv.setXY(i,xx+.7,(Math.abs(n.getY(i))>.8?zz+.3:yy+.32)*1.4);
+  }
+ }
+ return add(geo,mat,x,y,z,par);
+}
+// Perfiles de revolución en milímetros, desde la base hacia arriba.
+function turned(profile,mat,x,y,z,par=SC,segments=48){
+ const g=new THREE.LatheGeometry(profile.map(([r,h])=>new THREE.Vector2(r*.001,h*.001)),segments);
+ return add(g,mat,x,y,z,par);
+}
+function bar(a,b,r,mat,par=SC){
+ const start=new THREE.Vector3(...a),end=new THREE.Vector3(...b),axis=end.clone().sub(start),mid=start.add(end).multiplyScalar(.5);
+ const rod=add(new THREE.CylinderGeometry(r,r,axis.length(),24),mat,mid.x,mid.y,mid.z,par);
+ rod.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),axis.normalize());return rod;
+}
+function bent(points,r,mat,par=SC){
+ const curve=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));
+ return add(new THREE.TubeGeometry(curve,points.length*6,r,8,false),mat,0,0,0,par);
+}
+function fluted(radius,length,grooves,depth,mat,x,y,z){
+ const profile=[[0,-length/2],[radius*.90,-length/2],[radius,-length*.36],[radius,length*.35],[radius*.89,length/2],[0,length/2]];
+ const geom=new THREE.LatheGeometry(profile.map(p=>new THREE.Vector2(...p)),grooves*4);
+ const pos=geom.attributes.position;
+ for(let i=0;i<pos.count;i++){
+  const xx=pos.getX(i),zz=pos.getZ(i),a=Math.atan2(xx,zz);
+  const n=1-depth*(.5+.5*Math.cos(a*grooves));
+  pos.setXYZ(i,xx*n,pos.getY(i),zz*n);
+ }
+ geom.computeVertexNormals();return add(geom,mat,x,y,z);
+}
+// Banco del montaje original.
+block(1,.035,.6,wood,-.12,-.0175,0);
+block(1,.06,.02,wood,-.12,-.05,.29);
+for(const x of [-.6,.36])for(const z of [-.27,.27])block(.035,.72,.035,leg,x,-.395,z);
+for(const z of [-.27,.27])block(.92,.03,.02,leg,-.12,-.62,z);
+
+// Trípode de fundición, pies de goma y columna rectificada.
+const BX=-.16,BZ=-.06;
+const armShape=new THREE.Shape();
+armShape.moveTo(-.019,.006);armShape.quadraticCurveTo(-.021,-.033,-.0157,-.063);
+armShape.lineTo(-.0128,-.140);armShape.quadraticCurveTo(-.015,-.154,-.0125,-.161);
+armShape.quadraticCurveTo(0,-.167,.0125,-.161);armShape.quadraticCurveTo(.015,-.154,.0128,-.14);
+armShape.lineTo(.0157,-.063);armShape.quadraticCurveTo(.021,-.033,.019,.006);armShape.closePath();
+const armMesh=new THREE.ExtrudeGeometry(armShape,{depth:.014,bevelEnabled:true,bevelSize:.0017,bevelThickness:.0017,bevelSegments:3,curveSegments:7});
+armMesh.rotateX(-Math.PI/2);
+const footShape=[[0,0],[13,0],[14.8,.8],[15.3,2.5],[14.9,6.2],[14,7],[0,7]];
+for(const [dx,dz] of [[.6,.8],[-.6,.8],[0,-1]]){
+ add(armMesh,iron,BX,.006,BZ).rotation.y=Math.atan2(dx,dz);
+ turned(footShape,rubber,BX+dx*.16,0,BZ+dz*.16,SC,32);
+}
+turned([[0,3],[30,3],[33,5],[33.4,9],[30,23],[25,28],[19,29.5],[16.5,31],[15.5,34],[0,34]],iron,BX,0,BZ);
+turned([[6.6,32],[13,32],[13,34.4],[12.4,35.3],[8,35.6],[6.6,35]],satin,BX,0,BZ);
+turned([[0,0],[6.5,0],[6.5,698],[6.25,699.4],[5.6,700],[0,700]],steel,BX,0,BZ);
+const lock=M('#363b40',{metalness:.45,roughness:.40});
+const clampMat=M('#aeb4b8',{metalness:.83,roughness:.35,roughnessMap:brushed});
+block(.030,.030,.030,clampMat,BX,.65,BZ);
+bar([BX,.65,BZ+.014],[BX,.65,BZ+.024],.0059,satin);
+const knob=fluted(.013,.0105,18,.10,blue,BX,.65,BZ+.024);
+knob.rotation.x=Math.PI/2;
+turned([[0,-.35],[4.7,-.35],[5,0],[4.6,.35],[0,.35]],satin,BX,.65,BZ+.0294).rotation.x=Math.PI/2;
+block(.005,.00085,.00016,lock,BX,.65,BZ+.0298).rotation.z=-.26;
+bar([BX+.006,.655,BZ+.001],[BX+.04,.655,BZ+.015],.0046,satin);
+bar([BX+.036,.655,BZ+.013],[-.013,.655,-.0038],.0027,steel);
+bent([[-.014,.655,-.004],[-.008,.655,-.0019],[-.0038,.653,0],[-.002,.6496,0],[.001,.6485,0],[.0041,.6501,0],[.0049,.653,0]],.00128,steel);
+
+// Muelle con escala de alargamiento en el vidrio. Las alturas de la escena se expresan en metros.
 const D=new THREE.Group();SC.add(D);
-const TT=Y0+0.12,TB=Y0-0.23;
-add(new THREE.CylinderGeometry(0.016,0.016,TT-TB,40,1,true),new THREE.MeshStandardMaterial({color:'#e8f1f7',transparent:true,opacity:.22,roughness:.1,metalness:0,side:THREE.DoubleSide,depthWrite:false}),0,(TT+TB)/2,0,D);
-const cap=add(new THREE.CylinderGeometry(0.018,0.018,0.035,32),M('#d32f2f',{roughness:.4}),0,TT+0.012,0,D);
-add(new THREE.CylinderGeometry(0.017,0.017,0.012,32),M('#d32f2f',{roughness:.4}),0,TB-0.004,0,D);
-add(new THREE.CylinderGeometry(0.0015,0.0015,0.02,8),steel,0,TT+0.038,0,D);
-const sc=document.createElement('canvas');sc.width=128;sc.height=2048;const sx=sc.getContext('2d');const stex=new THREE.CanvasTexture(sc);stex.encoding=THREE.sRGBEncoding;stex.anisotropy=8;
-function scaleTex(){sx.clearRect(0,0,128,2048);sx.fillStyle='rgba(255,255,255,.92)';sx.fillRect(0,0,128,2048);sx.fillStyle='#1b2430';const PX=2048/(TT-TB),z=(TT-Y0)*PX;
- for(let mm=-20;mm<=220;mm++){const yy=z+mm/1000*PX;if(yy<4||yy>2044)continue;const L=mm%10==0?60:mm%5==0?42:26;sx.fillRect(0,yy-1,L,mm%10==0?3:2);if(mm%10==0&&mm>=0){sx.font='bold 30px Inter,Arial';sx.fillText(String(mm),66,yy+11)}}stex.needsUpdate=true}scaleTex();
-add(new THREE.PlaneGeometry(0.02,TT-TB),new THREE.MeshBasicMaterial({map:stex,transparent:true}),0.006,(TT+TB)/2,-0.009,D);
-const hp=[];for(let i=0;i<=900;i++){const u=i/900,a=u*2*Math.PI*34;hp.push(new THREE.Vector3(0.0075*Math.cos(a),-u,0.0075*Math.sin(a)))}
-const coil=add(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(hp),1400,0.0009,6,false),M('#9aa3ad',{metalness:.7,roughness:.3}),0,TT-0.005,0,D);
-const idx=new THREE.Group();D.add(idx);add(new THREE.CylinderGeometry(0.0035,0.0035,0.004,20),M('#e53935',{roughness:.4}),0,0,0,idx);
-add(new THREE.BoxGeometry(0.02,0.0014,0.003),new THREE.MeshBasicMaterial({color:'#e01b12'}),0.006,0,-0.0065,idx);
-const rod=add(new THREE.CylinderGeometry(0.0016,0.0016,ROD,8),steel,0,-ROD/2,0,idx);
-const hookB=add(new THREE.TorusGeometry(0.006,0.0013,8,20,Math.PI*1.3),steel,0,-ROD-0.004,0,idx);hookB.rotation.z=-Math.PI*0.65;
-// portapesas y pesas ranuradas
-const hang=new THREE.Group();idx.add(hang);hang.position.y=-ROD-0.012;
-const pp=add(new THREE.CylinderGeometry(0.0018,0.0018,0.09,8),steel,0,-0.045,0,hang);
-const plate=add(new THREE.CylinderGeometry(0.017,0.017,0.004,32),M('#8f969f',{metalness:.6,roughness:.3}),0,-0.088,0,hang);
-const wts=[];for(let i=0;i<8;i++){const w=add(new THREE.CylinderGeometry(0.0145,0.0145,0.0055,32),M('#c9a24a',{metalness:.55,roughness:.3}),0,-0.0835+i*0.006,0,hang);wts.push(w)}
-// cronómetro de mano
-const sw=new THREE.Group();SC.add(sw);function swMount(sw,px,pz,yaw,a){const P=new THREE.Group();SC.add(P);P.add(sw);P.position.set(px,0,pz);P.rotation.y=yaw;const k=1.6,R=0.038*k,t=0.018*k,h=0.005,pl=M('#3a3f46',{roughness:.6}),sa=Math.sin(a),ca=Math.cos(a),cy=h+R*ca+t/2*sa;sw.position.set(0,cy,0);sw.rotation.set(-a,0,0);add(new THREE.BoxGeometry(0.11,h,0.085),pl,0,h/2,-0.012,P);const zf=R*sa+t/2*ca;add(new THREE.BoxGeometry(0.11,0.012,0.006),pl,0,h+0.006,zf+0.003,P);const L=0.085,o=t/2+0.002,w=(h+L/2*ca-cy+o*sa)/ca;const st=add(new THREE.BoxGeometry(0.07,L,0.004),pl,0,cy-o*sa+w*ca,-o*ca-w*sa,P);st.rotation.x=-a}if(matchMedia('(max-width:820px) and (orientation:portrait)').matches){swMount(sw,-0.078,-0.13,-0.05,0.2)}else{swMount(sw,-0.36,0.03,0.4,0.25)}sw.scale.setScalar(1.6);
-const swb=add(new THREE.CylinderGeometry(0.038,0.038,0.018,40),M('#f2c21a',{roughness:.45}),0,0,0,sw);swb.rotation.x=Math.PI/2;
-add(new THREE.CylinderGeometry(0.006,0.006,0.012,16),M('#c7ccd2',{metalness:.5}),0,0.044,0,sw);
-const sc2=document.createElement('canvas');sc2.width=256;sc2.height=128;const sx2=sc2.getContext('2d');const stex2=new THREE.CanvasTexture(sc2);stex2.encoding=THREE.sRGBEncoding;
-add(new THREE.PlaneGeometry(0.052,0.026),new THREE.MeshBasicMaterial({map:stex2}),0,0.004,0.0095,sw);
-let swLast='';function showSW(val){const txt=fmt(val,2);if(txt===swLast)return;swLast=txt;sx2.fillStyle='#c9d4b6';sx2.fillRect(0,0,256,128);sx2.fillStyle='#1d2318';sx2.font='bold 84px "IBM Plex Mono",monospace';sx2.textAlign='center';sx2.fillText(txt,128,98);stex2.needsUpdate=true}
+const TT=Y0+.12,TB=Y0-.23;
+// Escala milimétrica en la cara del tubo que mira al visor.
+const caseRadius=.016,tubeHeight=TT-TB,scaleTop=Y0+.025;
+const scaleCanvas=document.createElement('canvas');
+scaleCanvas.width=256;scaleCanvas.height=2048;
+const scalePen=scaleCanvas.getContext('2d'),printPx=scaleCanvas.height/(scaleTop-TB);
+scalePen.scale(scaleCanvas.width/(2*caseRadius*printPx),1);
+scalePen.translate(caseRadius*printPx,0);
+scalePen.fillStyle='#fff';
+scalePen.font='600 '+Math.round(.0063*printPx)+'px Arial,sans-serif';
+const digitHeight=scalePen.measureText('0').actualBoundingBoxAscent||.00455*printPx;
+for(let mm=-20;mm<=220;mm++){
+ const y=(scaleTop-Y0+mm*.001)*printPx;
+ const major=mm%10===0,half=mm%5===0;
+ const from=-.01445*printPx,to=(major?.00665:half?-.0069:-.00945)*printPx;
+ const weight=(major?.00036:half?.00028:.00022)*printPx;
+ scalePen.fillRect(from,y-weight/2,to-from,weight);
+ if(major&&mm>=0)scalePen.fillText(String(mm),.00828*printPx,y+digitHeight/2,.00658*printPx);
+}
+scalePen.font='600 '+Math.round(.004*printPx)+'px Arial,sans-serif';
+scalePen.fillText('mm',.00828*printPx,scaleCanvas.height-.0026*printPx,.00658*printPx);
+const scaleInk=new THREE.CanvasTexture(scaleCanvas);scaleInk.anisotropy=aniso;
+const wallGeometry=new THREE.CylinderGeometry(caseRadius,caseRadius,tubeHeight,64,1,true);
+const wallPos=wallGeometry.attributes.position,wallUV=wallGeometry.attributes.uv;
+for(let i=0;i<wallPos.count;i++){
+ wallUV.setXY(i,.5+wallPos.getX(i)/(2*caseRadius),(wallPos.getY(i)+tubeHeight/2)/(scaleTop-TB));
+}
+const tubeGlass=new THREE.MeshStandardMaterial({
+ color:0xc4d8df,metalness:0,roughness:.13,envMapIntensity:.65,
+ transparent:true,side:THREE.DoubleSide,depthWrite:false
+});
+const engravedColor=colorLab(document.documentElement.classList.contains('dk')?'#e1e4e1':'#182026');
+tubeGlass.onBeforeCompile=shader=>{
+ shader.uniforms.scaleInk={value:scaleInk};
+ shader.uniforms.engravedColor={value:engravedColor};
+ shader.vertexShader='varying vec3 vGlassPrint;\n'+shader.vertexShader;
+ shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvGlassPrint=vec3(uv,position.z);');
+ shader.fragmentShader='uniform sampler2D scaleInk;\nuniform vec3 engravedColor;\nvarying vec3 vGlassPrint;\n'+shader.fragmentShader;
+ shader.fragmentShader=shader.fragmentShader.replace('#include <tonemapping_fragment>',`
+  float ink=texture2D(scaleInk,vGlassPrint.xy).a*step(0.0,vGlassPrint.z)*step(vGlassPrint.y,1.0);
+  float edge=1.0-clamp(abs(dot(normalize(normal),normalize(vViewPosition))),0.0,1.0);
+  float glass=gl_FrontFacing ? .025+.46*pow(edge,2.35) : 0.0;
+  float alpha=ink+(1.0-ink)*glass;
+  if(alpha<.001)discard;
+  gl_FragColor=vec4((engravedColor*ink+gl_FragColor.rgb*glass*(1.0-ink))/alpha,alpha);
+  #include <tonemapping_fragment>`);
+};
+const caseWall=add(wallGeometry,tubeGlass,0,(TT+TB)/2,0,D);caseWall.renderOrder=3;
+const capPlastic=M('#d32f2f',{roughness:.39,roughnessMap:grit});
+const cap=turned([[0,-5.5],[16.8,-5.5],[17.65,-5],[18,-4.15],[18,-1.8],[17.75,-1.5],[17.75,20.5],[17.5,22.2],[16.5,24],[14.6,24.6],[4.2,24.6],[0,24.6]],capPlastic,0,TT,0,D);
+turned([[1.1,0],[3.6,0],[4.1,.35],[3.8,1.05],[1.1,1.05]],satin,0,TT+.0246,0,D);
+add(new THREE.TorusGeometry(.0039,.00085,9,40),steel,0,TT+.028,0,D).rotation.y=Math.PI/2;
+const guide=M('#dedbd2',{roughness:.46});
+turned([[2.1,-10.4],[12.8,-10.4],[14.8,-9.4],[15.6,-8],[15.6,-5.3],[16.6,-5.1],[16.6,.6],[15.4,1.1],[2.1,1.1],[2.1,-10.4]],guide,0,TB,0,D);
+turned([[15.5,-5.35],[16.45,-5.35],[17,-4.65],[17,-1.8],[16.5,-1.45],[15.5,-1.45]],M('#b43c32',{roughness:.42}),0,TB,0,D);
+turned([[1.85,-.4],[3.2,-.4],[3.4,0],[3.4,.5],[1.85,.5],[1.85,-.4]],satin,0,TB-.0102,0,D);
+// El paso de la hélice cambia con la elongación; el diámetro del alambre se mantiene.
+const wireSpan={value:.15},wireR=.0075,wireGauge=.00068,turns=34;
+function springGeometry(){
+ const pos=[],nor=[],uv=[],indices=[],steps=turns*26,sides=8;
+ for(let i=0;i<=steps;i++){
+  const u=i/steps,a=u*Math.PI*2*turns,c=Math.cos(a),s=Math.sin(a);
+  for(let j=0;j<=sides;j++){
+   const b=j*2*Math.PI/sides,cb=Math.cos(b),sb=Math.sin(b);
+   pos.push(c*(wireR+wireGauge*cb),-u+wireGauge*sb,s*(wireR+wireGauge*cb));nor.push(c*cb,sb,s*cb);uv.push(u,j/sides);
+   if(i<steps&&j<sides){const v=i*(sides+1)+j,next=v+sides+1;indices.push(v,v+1,next,v+1,next+1,next)}
+  }
+ }
+ const g=new THREE.BufferGeometry();g.setIndex(indices);g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(nor,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));return g;
+}
+function springShader(shader){
+ shader.uniforms.hookeSpan=wireSpan;
+ shader.vertexShader=shader.vertexShader.replace('#include <common>',`#include <common>
+uniform float hookeSpan;
+vec3 helixNormal(vec3 p,vec3 n){
+ vec2 r=normalize(p.xz);float q=hookeSpan/${(Math.PI*2*turns*wireR).toFixed(8)};
+ return vec3(n.x,0.,n.z)+vec3(-r.y*q,1.,r.x*q)*(n.y*inversesqrt(1.+q*q));
+}`)
+ .replace('#include <beginnormal_vertex>','#include <beginnormal_vertex>\nobjectNormal=helixNormal(position,normal)*vec3(1.,hookeSpan,1.);')
+ .replace('#include <begin_vertex>',`vec2 r=normalize(position.xz);
+vec3 transformed=vec3(r.x*${wireR},-uv.x,r.y*${wireR})+${wireGauge}*helixNormal(position,normal)/vec3(1.,hookeSpan,1.);`);
+}
+const wire=M('#a8adb3',{metalness:.94,roughness:.29,roughnessMap:brushed,envMapIntensity:.90});wire.onBeforeCompile=springShader;
+const coil=add(springGeometry(),wire,0,TT-.005,0,D);coil.castShadow=false;
+const idx=new THREE.Group();D.add(idx);
+// Distancia axial desde la última espira hasta el borde que señala el alargamiento.
+const coilToRim=.0085;
+const redDisc=M('#be2822',{roughness:.41,envMapIntensity:.60});
+turned([[1.45,-2.05],[2.55,-2.04],[3.4,-1.97],[8.4,-1.15],[12.65,-.38],[14.02,-.12],[14.22,-.065],
+ [14.22,.065],[14.02,.12],[12.65,.38],[8.4,1.15],[3.4,1.97],[2.55,2.04],[1.45,2.05],[1.45,-2.05]],redDisc,0,0,0,idx,64);
+bent([[wireR,0,0],[.00713,-.00024,.0025],[.0046,-.00056,.0041],[.00185,-.00088,.0022],
+ [0,-.0011,0]],wireGauge,wire.clone(),idx).position.y=coilToRim;
+bar([0,coilToRim-.0011,0],[0,-ROD,0],.0016,steel,idx);
+bent([[0,-ROD+.0015,0],[0,-ROD-.0018,0],[-.0023,-ROD-.0042,0],[-.0035,-ROD-.0086,0],[-.0013,-ROD-.0121,0],[.0023,-ROD-.0124,0],[.0042,-ROD-.0106,0],[.0044,-ROD-.0082,0]],.00117,steel,idx);
+// Portapesas y ocho discos con ranura pasante y cantos torneados.
+const hang=new THREE.Group();idx.add(hang);hang.position.y=-ROD-.012;
+bar([0,-.004,0],[0,-.088,0],.00165,satin,hang);
+bent([[0,-.005,0],[0,-.002,-.0025],[0,.0005,-.003],[0,.0032,-.002],[0,.004,0],[0,.0031,.0021],[0,.0008,.0029],[0,-.002,.002],[0,-.005,0]],.00092,steel,hang);
+turned([[0,-2],[15.7,-2],[16.6,-1.75],[17,-1.22],[17,.85],[16.6,1.7],[16,2],[0,2]],satin,0,-.088,0,hang);
+const brassGrain=surface(128,128,(p,i,x,y)=>{const r=Math.hypot(x-64,y-64);p[i]=p[i+1]=p[i+2]=188+22*Math.sin(r*2.0)+24*grainRand()});
+const brass=M('#d1ad70',{metalness:.83,roughness:.38,roughnessMap:brassGrain});
+const brassEdge=M('#c5a06a',{metalness:.85,roughness:.35,roughnessMap:brushed});
+function slottedDisk(){
+ const ring=new THREE.Shape(),outer=14.28,inner=2.52,slot=2.22;
+ const a=Math.asin(slot/outer),b=Math.asin(slot/inner);
+ ring.moveTo(outer*Math.cos(a),slot);ring.absarc(0,0,outer,a,Math.PI*2-a,false);
+ ring.lineTo(inner*Math.cos(b),-slot);ring.absarc(0,0,inner,-b,-Math.PI*2+b,true);ring.closePath();
+ const geo=new THREE.ExtrudeGeometry(ring,{depth:5.1,bevelEnabled:true,bevelSize:.22,bevelThickness:.20,bevelSegments:3,curveSegments:28});
+ const pos=geo.attributes.position,uv=geo.attributes.uv;
+ for(let i=0;i<pos.count;i++)uv.setXY(i,.5+pos.getX(i)/29,.5+pos.getY(i)/29);
+ geo.translate(0,0,-2.55);geo.scale(.001,.001,.001);geo.rotateX(-Math.PI/2);return geo;
+}
+const disks=slottedDisk(),wts=[],diskAngles=[-.72,-1.42,-.99,-2.20,-1.67,-.35,-2.6,-1.08];
+for(let i=0;i<8;i++){const w=add(disks,[brass,brassEdge],0,-.0835+i*.006,0,hang);w.rotation.y=diskAngles[i];wts.push(w)}
+
+const sw=new THREE.Group();SC.add(sw);function swMount(sw,px,pz,yaw,a){const P=new THREE.Group();SC.add(P);P.add(sw);P.position.set(px,0,pz);P.rotation.y=yaw;const k=1.6,R=0.038*k,t=0.018*k,h=0.005,pl=M('#3a3f46',{roughness:.6}),sa=Math.sin(a),ca=Math.cos(a),cy=h+R*ca+t/2*sa;sw.position.set(0,cy,0);sw.rotation.set(-a,0,0);block(0.11,h,0.085,pl,0,h/2,-0.012,P);const zf=R*sa+t/2*ca;block(0.11,0.012,0.006,pl,0,h+0.006,zf+0.003,P);const L=0.085,o=t/2+0.002,w=(h+L/2*ca-cy+o*sa)/ca;const st=block(0.07,L,0.004,pl,0,cy-o*sa+w*ca,-o*ca-w*sa,P);st.rotation.x=-a}if(matchMedia('(max-width:820px) and (orientation:portrait)').matches){swMount(sw,-0.078,-0.13,-0.05,0.2)}else{swMount(sw,-0.36,0.03,0.4,0.25)}sw.scale.setScalar(1.6);
+// Carcasa y LCD del cronómetro, en la posición del instrumento original.
+const yellow=M('#e9b821',{roughness:.37,roughnessMap:grit});
+const bezel=M('#282d2d',{roughness:.55});
+turned([[0,-9],[32,-9],[35,-8.5],[37.5,-6.8],[38,-4],[38,3.5],[37.5,5.9],[36.25,7.3],[34.2,8.7],[31,9],[0,9]],yellow,0,0,0,sw,64).rotation.x=Math.PI/2;
+turned([[37.7,-.55],[38.16,-.55],[38.2,.35],[37.7,.55]],bezel,0,0,-.002,sw,64).rotation.x=Math.PI/2;
+turned([[0,0],[4.7,0],[4.7,4.7],[3.9,5],[0,5]],steel,0,.0372,0,sw);
+turned([[0,0],[5.1,0],[5.6,.6],[5.6,6],[5.2,6.7],[4.7,7.1],[0,7.1]],bezel,0,.0413,0,sw);
+block(.055,.0295,.002,bezel,0,.004,.009,sw);
+const sc2=document.createElement('canvas');sc2.width=256;sc2.height=128;
+const sx2=sc2.getContext('2d'),stex2=new THREE.CanvasTexture(sc2);stex2.encoding=THREE.sRGBEncoding;stex2.anisotropy=aniso;
+const lcd=add(new THREE.PlaneGeometry(.0518,.0257),new THREE.MeshBasicMaterial({map:stex2,toneMapped:false}),0,.004,.01005,sw);
+const lcdBg=sx2.createLinearGradient(0,0,32,128);lcdBg.addColorStop(0,'#919a85');lcdBg.addColorStop(.18,'#b5bea7');lcdBg.addColorStop(.72,'#c6cdb6');lcdBg.addColorStop(1,'#b4bea5');
+const marks=['0,3 3,0 20,0 23,3 19.5,5.5 4,5.5','20.2,6.2 23.8,3.2 23.8,18.4 21,21.1 18.7,18.7','20.8,22.6 23.8,25 23.8,40.5 20.7,42.9 18.7,39.4 18.7,25.7','1,43 4.4,39.8 18.5,39.8 21.3,43.3 18.6,45.1 4.2,45.1','0,25 3,22.6 5.3,25.6 5.3,38.4 2,41.6 0,39.2','0,4.8 2.4,3 5.3,6.2 5.3,18.8 3,21 0,18.3','3.6,21.7 6.9,19.4 17.5,19.4 20.1,21.7 17.1,24.1 6.5,24.1'].map(coords=>{
+ const p=new Path2D();coords.split(' ').forEach((pair,i)=>{const [x,y]=pair.split(',').map(Number);i?p.lineTo(x,y):p.moveTo(x,y)});p.closePath();return p;
+});
+const segmentMasks=[63,6,91,79,102,109,125,7,127,111];
+let swLast='';function showSW(val){
+ const txt=fmt(val,2);if(txt===swLast)return;swLast=txt;
+ const advance=ch=>ch===','?9:29,width=[...txt].reduce((sum,ch)=>sum+advance(ch),0)-3,scale=Math.min(1.96,231/width);
+ sx2.fillStyle=lcdBg;sx2.fillRect(0,0,256,128);sx2.save();sx2.translate((256-width*scale)/2,(128-45*scale)/2);sx2.scale(scale,scale);
+ for(const ch of txt){
+  if(ch===','){sx2.fillStyle='#293127';sx2.beginPath();sx2.moveTo(1,39);sx2.lineTo(6,39);sx2.lineTo(6,43);sx2.lineTo(1,48);sx2.closePath();sx2.fill()}
+  else marks.forEach((p,i)=>{sx2.fillStyle=segmentMasks[Number(ch)]&(1<<i)?'#273025':'rgba(54,70,51,.055)';sx2.fill(p)});
+  sx2.translate(advance(ch),0);
+ }
+ sx2.restore();stex2.needsUpdate=true;
+}
+
 // gráfica (parte II)
 const G=$('#gph'),gx0=14,gy0=40,gw=272,gh=146;const gk=(tag,at)=>{const e=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const q in at)e.setAttribute(q,at[q]);G.appendChild(e);return e};
 const gt=gk('text',{x:150,y:24,'text-anchor':'middle','font-size':15,'font-weight':700,fill:'#1b2430','font-family':'Inter,sans-serif'});gt.textContent='Posición de la masa, últimos 6 s';
@@ -384,8 +679,8 @@ box.addEventListener('pointerup',()=>drag=null);box.addEventListener('wheel',e=>
 function size(){const w=box.clientWidth,h=box.clientHeight;R3.setSize(w,h,false);if(CAM.f0===undefined)CAM.f0=CAM.fov;if(matchMedia('(max-width:820px) and (orientation:portrait)').matches){const hs=h*0.6,Hf=2*h-hs;CAM.fov=2*Math.atan(Math.tan(CAM.f0*Math.PI/360)*Hf/hs)*180/Math.PI;const kx=window.PKX||0;CAM.aspect=w*(1+kx)/Hf;CAM.setViewOffset(w*(1+kx),Hf,w*kx,h-hs,w,h)}else{const kk=w>h*1.3?0.3:0;CAM.fov=CAM.f0;CAM.aspect=w*(1+kk)/h;CAM.setViewOffset(w*(1+kk),h,w*kk,0,w,h)}CAM.updateProjectionMatrix()}let needSz=false;function eR(e){const b=box.getBoundingClientRect(),r=e.getBoundingClientRect(),x0=b.left+box.clientLeft,y1=b.top+box.clientTop+box.clientHeight;return [Math.round(r.left-x0),Math.round(y1-r.bottom),Math.round(r.width),Math.round(r.height)]};new ResizeObserver(()=>needSz=true).observe(box);size();
 // estado
 let m0=0;function setm(){const red=$('#K').value=='10';k=red?HP.kr:HP.kb;m0=red?HP.m0r:HP.m0b;const n=+$('#N').value;m=HP.mp;for(let i=0;i<n;i++)m+=HP.w[i];$('#Nv').textContent=n;$('#rm').textContent=fmt(m*1000,1)+' ± 0,1 g';
- cap.material.color.set(red?'#d32f2f':'#1f6fd1');wts.forEach((w,i)=>w.visible=i<n);const x=m*g/k;$('#rF').textContent=fmt(m*g,3)+' N';$('#rx').textContent=Math.round(x*1000)+' mm';$('#rdx').textContent='x = '+Math.round(x*1000)+' mm'}
-function place(){const x=m*g/k+y,iy=Y0-x;idx.position.y=iy;const top=TT-0.005;coil.scale.y=Math.max(0.01,top-iy-0.002)}
+ cap.material.color.set(red?'#d32f2f':'#1f6fd1').convertSRGBToLinear();wts.forEach((w,i)=>w.visible=i<n);const x=m*g/k;$('#rF').textContent=fmt(m*g,3)+' N';$('#rx').textContent=Math.round(x*1000)+' mm';$('#rdx').textContent='x = '+Math.round(x*1000)+' mm'}
+function place(){const x=m*g/k+y,iy=Y0-x;idx.position.y=iy;coil.scale.y=Math.max(0.01,coil.position.y-iy-coilToRim);wireSpan.value=coil.scale.y;R3.shadowMap.needsUpdate=true}
 function reset(){setm();y=0;v=0;t=0;cnt=0;run=false;hist=[];gtr.setAttribute('d','');$('#cnt').textContent='0';swReset();showSW(0);if($('#go'))$('#go').textContent='Bajar y soltar';place()}
 function setPart(p){part=p;document.body.dataset.part=p;document.querySelectorAll('.tab,.pt').forEach(c=>c.classList.toggle('on',+c.dataset.p===p));reset();fixBtn();fit()}
 document.querySelectorAll('.pt').forEach(b=>b.onclick=()=>setPart(+b.dataset.p));
@@ -395,8 +690,13 @@ let lt=null;function frame(ts){if(lt===null)lt=ts;const dt=Math.min(0.05,(ts-lt)
  if(run&&playing){swTick(dt);const n=20,h=dt/n,om2=k/(m+m0);for(let i=0;i<n;i++){const vn=v-om2*y*h,yn=y+vn*h;if(v>0&&vn<=0){cnt++;$('#cnt').textContent=cnt}v=vn;y=yn;t+=h}
   showSW(SW.t);hist.push([t,y]);if(hist.length>900)hist.shift();let d='';hist.forEach(p=>{if(p[0]>=t-6)d+=(d?'L':'M')+(gx0+(p[0]-Math.max(0,t-6))/6*gw).toFixed(1)+' '+(gy0+gh/2+p[1]/0.014*gh/2).toFixed(1)});gtr.setAttribute('d',d);place()}
  if(needSz){needSz=false;size()}camSet();const W0=box.clientWidth,H0=box.clientHeight;R3.setViewport(0,0,W0,H0);R3.setScissorTest(false);R3.render(SC,CAM);
- if($('.sim3 .ins').offsetWidth>0){const [ix,iy,iw,ih1]=eR($('.sim3 .ins')),ih=ih1,iy0=Y0-m*g/k;CAM2.zoom=$('.sim3 .ins')._k||1;CAM2.aspect=iw/ih;CAM2.updateProjectionMatrix();
-  CAM2.position.set(0.016,iy0+0.004,0.12);CAM2.lookAt(0.008,iy0,-0.008);R3.setScissorTest(true);R3.setViewport(ix,iy,iw,ih);R3.setScissor(ix,iy,iw,ih);R3.setClearColor(document.documentElement.classList.contains('dk')?0x161d26:0xf6f7f9,1);R3.clear();R3.render(SC,CAM2);R3.setScissorTest(false);R3.setViewport(0,0,W0,H0)}
+ if($('.sim3 .ins').offsetWidth>0){
+  const [ix,iy,iw,ih1]=eR($('.sim3 .ins')),ih=ih1-($('.sim3 .ins span').offsetHeight||0),iy0=Y0-m*g/k;
+  // Vista de lectura perpendicular al tubo, a la altura de equilibrio de cada carga.
+  const eyeDistance=.9,viewHeight=Math.max(.038,.0345*ih/iw);
+  CAM2.aspect=iw/ih;CAM2.zoom=2*eyeDistance*Math.tan(CAM2.fov*Math.PI/360)/viewHeight;CAM2.updateProjectionMatrix();
+  CAM2.position.set(0,iy0,eyeDistance);CAM2.lookAt(0,iy0,0);
+  R3.setScissorTest(true);R3.setViewport(ix,iy,iw,ih);R3.setScissor(ix,iy,iw,ih);R3.setClearColor(document.documentElement.classList.contains('dk')?0x161d26:0xf6f7f9,1);R3.clear();R3.render(SC,CAM2);R3.setScissorTest(false);R3.setViewport(0,0,W0,H0)}
  requestAnimationFrame(frame)}requestAnimationFrame(frame);
 
 (function(){const v=document.getElementById('vw');if(!v)return;const home=()=>document.querySelector('.acts');const f=()=>{const s=document.querySelector('.sim3');if(!s)return;if(MOB()){if(v.parentNode!==s){s.appendChild(v);v.classList.add('ov');v.title='Vista inicial'}}else if(v.classList.contains('ov')){v.classList.remove('ov');home()&&home().appendChild(v)}};f();addEventListener('resize',f)})();
@@ -478,7 +778,7 @@ html body .sw{gap:6px!important}html body .swb{padding-left:.55em!important;padd
 function f(){if(!t||!hd)return;if(D()){if(t.parentNode!==hd)hd.appendChild(t)}else if(t.parentNode===hd){home.insertBefore(t,nx)}if(typeof lockBar==='function')try{lockBar()}catch(e){}dispatchEvent(new Event('resize-lay'))}
 f();addEventListener('resize',f)})();</script><script id="appi18n">/* ES/EN: interfaz y guía de la app en inglés */
 (function(){
-var D={"Danos tu opinión": "Your feedback", "Usar c": "Use c", "ódigo": "ode", "Ocultar guía": "Hide guide", "← Laboratorio de Física · INNOVA-FIS-LAB": "← Physics Laboratory · INNOVA-FIS-LAB", "Arrastra para girar la vista · rueda del ratón para acercar": "Drag to rotate the view · mouse wheel to zoom", "Vista inicial": "Initial view", "Si tu profesor te ha dado un código, introdúcelo.": "If your teacher has given you a code, enter it.", "genérico": "generic", "Qué se observa": "What you observe", "Aquí": "Here", "Qué hay que medir": "What you have to measure", "Tabla de la ficha": "Worksheet table", "(rellenar en Word)": "(fill in Word)", "Datos y errores": "Data and errors", "Los errores de las medias, de las magnitudes indirectas y de los ajustes también los calculas tú, como se explica en la": "You also calculate the errors of the means, of the indirect quantities and of the fits yourself, as explained in the", "página de errores": "errors page", "Laboratorio de Física": "Physics Laboratory", "Si tu profesor te ha dado un código, escríbelo aquí. Con él, el montaje pasa a ser el tuyo.": "If your teacher has given you a code, type it here. With it, the setup becomes yours.", "Empezar con código": "Start with code", "Seguir sin código": "Continue without code", "¿Te ha servido esta app?": "Did this app help you?", "Danos tu opinión (20 s)": "Give us your feedback (20 s)", "Valora esta app": "Rate this app", "Usar código": "Use code", "Si tu profesor te ha dado un código, introdúcelo": "If your teacher has given you a code, enter it", "Volver": "Back", "Código": "Code", "Cerrar": "Close", "Guía": "Guide", "Parar": "Stop", "es el periodo;": "is the period;", "Volver a empezar": "Start again", "Continuar": "Continue", "Ley de Hooke": "Hooke's law", "Parte I: alargamiento": "Part I: extension", "Parte II: periodo": "Part II: period", "Posición de la masa, últimos 6 s": "Position of the mass, last 6 s", "Muelle": "Spring", "rojo": "red", "azul": "blue", "Pesas de 10 g": "10 g weights", "Bajar y soltar": "Pull down and release", "Masa": "Mass", "(dato)": "(data)", "Oscilaciones": "Oscillations", "Cronómetro": "Stopwatch", "Iniciar": "Start", "A cero": "Reset", "Gemelo de la práctica: el muelle y las pesas dependen del código · CC BY-NC-SA 4.0": "Twin of the experiment: the spring and the weights depend on the code · CC BY-NC-SA 4.0", "Al colgar pesas, el muelle se alarga y el índice rojo baja por la escala. El alargamiento es proporcional a la fuerza.": "When weights are hung, the spring stretches and the red index moves down the scale. The extension is proportional to the force.", "es el peso de lo que cuelga, portapesas incluido, con": "is the weight of what hangs, weight hanger included, with", ", el alargamiento, que se lee en la escala del recuadro de detalle porque el índice marca 0 sin carga; y": ", the extension, read on the scale of the detail box because the index reads 0 with no load; and", ", la constante del muelle.": ", the spring constant.", "Si se baja un poco la masa y se suelta, oscila arriba y abajo. Con más masa oscila más despacio.": "If the mass is pulled down a little and released, it oscillates up and down. With more mass it oscillates more slowly.", ", la masa colgada; y": ", the hanging mass; and", ", la constante del muelle. El contador suma una oscilación cada vez que la masa vuelve al punto más bajo.": ", the spring constant. The counter adds one oscillation each time the mass returns to its lowest point.", "Elige el muelle y anótalo. La masa de lo que cuelga, portapesas más pesas, se da como dato con su error. Ve añadiendo una a una las 8 pesas de 10 g.": "Choose the spring and write it down. The mass of what hangs, hanger plus weights, is given as data with its error. Add the eight 10 g weights one by one.", "Para cada masa, lee el alargamiento": "For each mass, read the extension", "en la escala del detalle.": "on the scale of the detail.", "Para cada masa, pulsa «Bajar y soltar»: el cronómetro se pone en marcha solo. Páralo cuando el contador llegue a 30 y anota": "For each mass, press «Pull down and release»: the stopwatch starts by itself. Stop it when the counter reaches 30 and write down", ". El cronómetro se para también con la barra espaciadora.": ". The stopwatch can also be stopped with the space bar.", "El alargamiento": "The extension", "se lee en la escala en mm del recuadro de detalle; su error lo deduces de esa escala.": "is read on the mm scale of the detail box; you deduce its error from that scale.", "El tiempo": "The time", "de 30 oscilaciones se mide con el cronómetro digital; su error lo deduces del cronómetro.": "of 30 oscillations is measured with the digital stopwatch; you deduce its error from the stopwatch.", "La masa": "The mass", "se da como dato con su error.": "is given as data with its error.", "Datos que no se miden:": "Data that are not measured:", "Ley de Hooke · INNOVA-FIS-LAB": "Hooke's law · INNOVA-FIS-LAB", "y": "and", ", con": ", with", "Mostrar guía": "Show guide", "Simulación": "Simulation", "Escribe el código completo: al menos 4 letras o números.": "Type the complete code: at least 4 letters or numbers."},RX=[["^el de tu código, (.+)$", "yours, $1"], ["^= (\\d+) cm \\((\\d) de 3\\): t =$", "= $1 cm ($2 of 3): t ="], ["^= (\\d+) cm ya tiene tres medidas, así que no se anota\\. Cambia la posición de la puerta\\.$", "= $1 cm already has three measurements, so it is not recorded. Change the position of the gate."], ["^Faltan datos: se necesitan al menos tres posiciones de la puerta \\(llevas (\\d+)\\)\\.$", "Missing data: at least three gate positions are needed (you have $1)."], ["^s = (\\d+) cm: se mide en el laboratorio$", "s = $1 cm: measured in the laboratory"], ["^Colocar la puerta en s = (\\d+) cm$", "Place the gate at s = $1 cm"], ["^(\\d+) × 50 g$", "$1 × 50 g"]].map(function(r){return [new RegExp(r[0]),r[1]]});
+var D={"Danos tu opinión": "Your feedback", "Usar c": "Use c", "ódigo": "ode", "Ocultar guía": "Hide guide", "← Laboratorio de Física · INNOVA-FIS-LAB": "← Physics Laboratory · INNOVA-FIS-LAB", "Arrastra para girar la vista · rueda del ratón para acercar": "Drag to rotate the view · mouse wheel to zoom", "Vista inicial": "Initial view", "Si tu profesor te ha dado un código, introdúcelo.": "If your teacher has given you a code, enter it.", "genérico": "generic", "Qué se observa": "What you observe", "Aquí": "Here", "Qué hay que medir": "What you have to measure", "Tabla de la ficha": "Worksheet table", "(rellenar en Word)": "(fill in Word)", "Datos y errores": "Data and errors", "Los errores de las medias, de las magnitudes indirectas y de los ajustes también los calculas tú, como se explica en la": "You also calculate the errors of the means, of the indirect quantities and of the fits yourself, as explained in the", "página de errores": "errors page", "Laboratorio de Física": "Physics Laboratory", "Si tu profesor te ha dado un código, escríbelo aquí. Con él, el montaje pasa a ser el tuyo.": "If your teacher has given you a code, type it here. With it, the setup becomes yours.", "Empezar con código": "Start with code", "Seguir sin código": "Continue without code", "¿Te ha servido esta app?": "Did this app help you?", "Danos tu opinión (20 s)": "Give us your feedback (20 s)", "Valora esta app": "Rate this app", "Usar código": "Use code", "Si tu profesor te ha dado un código, introdúcelo": "If your teacher has given you a code, enter it", "Volver": "Back", "Código": "Code", "Cerrar": "Close", "Guía": "Guide", "Parar": "Stop", "es el periodo;": "is the period;", "Volver a empezar": "Start again", "Continuar": "Continue", "Ley de Hooke": "Hooke's law", "Parte I: alargamiento": "Part I: extension", "Parte II: periodo": "Part II: period", "Posición de la masa, últimos 6 s": "Position of the mass, last 6 s", "Muelle": "Spring", "rojo": "red", "azul": "blue", "Pesas de 10 g": "10 g weights", "Bajar y soltar": "Pull down and release", "Masa": "Mass", "(dato)": "(data)", "Oscilaciones": "Oscillations", "Cronómetro": "Stopwatch", "Iniciar": "Start", "A cero": "Reset", "Gemelo de la práctica: el muelle y las pesas dependen del código · CC BY-NC-SA 4.0": "Twin of the experiment: the spring and the weights depend on the code · CC BY-NC-SA 4.0", "El canto del disco rojo indica el alargamiento del muelle en milímetros. Al añadir pesas, el disco baja. En equilibrio, el alargamiento es proporcional al peso colgado.": "The rim of the red disc shows the spring extension in millimetres. Adding weights lowers the disc. At equilibrium, the extension is proportional to the suspended weight.", "es el peso de lo que cuelga, portapesas incluido, con": "is the weight of what hangs, weight hanger included, with", ", el alargamiento, que se lee en la escala del recuadro de detalle tomando como cero la posición del muelle sin pesas ni portapesas; y": ", the extension, read on the scale of the detail box relative to the zero position of the spring with the weights and hanger removed; and", ", la constante del muelle.": ", the spring constant.", "Si se baja un poco la masa y se suelta, oscila arriba y abajo. Con más masa oscila más despacio.": "If the mass is pulled down a little and released, it oscillates up and down. With more mass it oscillates more slowly.", ", la masa colgada; y": ", the hanging mass; and", ", la constante del muelle. El contador suma una oscilación cada vez que la masa vuelve al punto más bajo.": ", the spring constant. The counter adds one oscillation each time the mass returns to its lowest point.", "Elige el muelle y anótalo. La masa de lo que cuelga, portapesas más pesas, se da como dato con su error. Ve añadiendo una a una las 8 pesas de 10 g.": "Choose the spring and write it down. The mass of what hangs, hanger plus weights, is given as data with its error. Add the eight 10 g weights one by one.", "Para cada masa, lee el alargamiento": "For each mass, read the extension", "en la escala del detalle.": "on the scale of the detail.", "Para cada masa, pulsa «Bajar y soltar»: el cronómetro se pone en marcha solo. Páralo cuando el contador llegue a 30 y anota": "For each mass, press «Pull down and release»: the stopwatch starts by itself. Stop it when the counter reaches 30 and write down", ". El cronómetro se para también con la barra espaciadora.": ". The stopwatch can also be stopped with the space bar.", "El alargamiento": "The extension", "se lee en la escala en mm del recuadro de detalle; su error lo deduces de esa escala.": "is read on the mm scale of the detail box; you deduce its error from that scale.", "El tiempo": "The time", "de 30 oscilaciones se mide con el cronómetro digital; su error lo deduces del cronómetro.": "of 30 oscillations is measured with the digital stopwatch; you deduce its error from the stopwatch.", "La masa": "The mass", "se da como dato con su error.": "is given as data with its error.", "Datos que no se miden:": "Data that are not measured:", "Ley de Hooke · INNOVA-FIS-LAB": "Hooke's law · INNOVA-FIS-LAB", "y": "and", ", con": ", with", "Mostrar guía": "Show guide", "Simulación": "Simulation", "Escribe el código completo: al menos 4 letras o números.": "Type the complete code: at least 4 letters or numbers."},RX=[["^el de tu código, (.+)$", "yours, $1"], ["^= (\\d+) cm \\((\\d) de 3\\): t =$", "= $1 cm ($2 of 3): t ="], ["^= (\\d+) cm ya tiene tres medidas, así que no se anota\\. Cambia la posición de la puerta\\.$", "= $1 cm already has three measurements, so it is not recorded. Change the position of the gate."], ["^Faltan datos: se necesitan al menos tres posiciones de la puerta \\(llevas (\\d+)\\)\\.$", "Missing data: at least three gate positions are needed (you have $1)."], ["^s = (\\d+) cm: se mide en el laboratorio$", "s = $1 cm: measured in the laboratory"], ["^Colocar la puerta en s = (\\d+) cm$", "Place the gate at s = $1 cm"], ["^(\\d+) × 50 g$", "$1 × 50 g"]].map(function(r){return [new RegExp(r[0]),r[1]]});
 var NOSVG={"y":1,"e":1,"o":1};
 var K='lang',lang='es';try{lang=localStorage.getItem(K)==='en'?'en':'es'}catch(e){}
 var TO=new WeakMap(),AO=new WeakMap(),ATT=['title','aria-label','alt','placeholder','data-tip','data-alt'],titleES=null,busy=false;
@@ -502,13 +802,4 @@ var css=document.createElement('style');css.textContent='header .lng{order:7;fle
 var sn=document.querySelector('header.snav .thm');if(sn){var b=document.createElement('button');b.type='button';b.className='lng';b.setAttribute('aria-label','Idioma / Language');b.innerHTML='<span class="les">ES</span><span class="sl">|</span><span class="len">EN</span>';b.addEventListener('click',function(ev){ev.stopPropagation();lang=lang==='en'?'es':'en';try{localStorage.setItem(K,lang)}catch(e){}apply()});var w=document.createElement('span');w.className='lngw';sn.parentNode.insertBefore(w,sn);w.appendChild(b);w.appendChild(sn);css.textContent+='.lngw{display:inline-flex;align-items:center;flex:none}.lngw .lng{display:inline-flex!important;position:static!important;border:0!important;order:0;font-size:13px;margin-right:6px}@media(max-width:820px){.snav .lngw{display:contents}.snav .lngw .lng{position:absolute!important;right:44px;top:13px;margin:0}}'}var h=sn?null:document.querySelector('header');if(h){var b=document.createElement('button');b.type='button';b.className='lng';b.setAttribute('aria-label','Idioma / Language');b.innerHTML='<span class="les">ES</span><span class="sl">|</span><span class="len">EN</span>';b.addEventListener('click',function(ev){ev.stopPropagation();lang=lang==='en'?'es':'en';try{localStorage.setItem(K,lang)}catch(e){}apply()});h.appendChild(b);var sd=document.querySelector('.side');if(sd){var m=document.createElement('div');m.className='lngm';var b2=b.cloneNode(true);b2.addEventListener('click',function(ev){ev.stopPropagation();b.click()});m.appendChild(b2);sd.insertBefore(m,sd.firstChild)}}
 try{var FT=CanvasRenderingContext2D.prototype.fillText;CanvasRenderingContext2D.prototype.fillText=function(s,x,y,m){if(lang==='en'&&typeof s==='string'){var t=look(s);if(t!==undefined)s=t}return m===undefined?FT.call(this,s,x,y):FT.call(this,s,x,y,m)}}catch(e){}
 apply();
-})();</script><script id="unitlabjs">(function(){const S=document.querySelector('.sim3');if(!S)return;const W=[...S.querySelectorAll('.ins,.zm')].filter(e=>e.querySelector(':scope>span'));if(!W.length)return;
-W.forEach(e=>{e._o=['top','bottom','height'].map(p=>[p,e.style.getPropertyValue(p),e.style.getPropertyPriority(p)])});
-function fit(){W.forEach(e=>{e._o.forEach(([p,v,pr])=>{if(v)e.style.setProperty(p,v,pr);else e.style.removeProperty(p)});e._k=1});
- const sb=S.getBoundingClientRect(),t0=sb.top+S.clientTop,vis=[...S.querySelectorAll('.ins,.zm')].filter(e=>e.offsetWidth>0);
- W.forEach(e=>{if(!e.offsetWidth)return;const sp=e.querySelector(':scope>span'),r=e.getBoundingClientRect();let lim=t0+3;
-  vis.forEach(o=>{if(o===e)return;const q=o.getBoundingClientRect();if(q.right>r.left+1&&q.left<r.right-1&&q.bottom<=r.top+2)lim=Math.max(lim,q.bottom+2)});
-  const d=Math.ceil(sp.offsetHeight+1-(r.top-lim));if(d>0){const cs=getComputedStyle(e),bb=cs.boxSizing==='border-box'?0:parseFloat(cs.borderTopWidth)+parseFloat(cs.borderBottomWidth),h=r.height-d;
-   e.style.setProperty('top',(r.top-t0+d)+'px','important');e.style.setProperty('bottom','auto','important');e.style.setProperty('height',(h-bb)+'px','important');e._k=r.height/h}})}
- let sig='';function chk(){const s=[S.clientWidth,S.clientHeight,innerWidth,innerHeight,document.body.dataset.part,W.map(e=>e.offsetWidth>0?1:0).join('')].join();if(s!==sig){fit();sig=[S.clientWidth,S.clientHeight,innerWidth,innerHeight,document.body.dataset.part,W.map(e=>e.offsetWidth>0?1:0).join('')].join()}}
- addEventListener('resize',chk);setInterval(chk,300);chk()})();</script></body></html>
+})();</script></body></html>
