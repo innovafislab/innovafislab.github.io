@@ -1884,13 +1884,15 @@ var D={"Danos tu opinión": "Your feedback", "Usar c": "Use c", "ódigo": "ode",
 Object.assign(D,{"Detalle del nonio":"Vernier detail","pantalla (Δs)":"flag (Δs)","deslizador":"glider"});
 var NOSVG={"y":1,"e":1,"o":1};
 var K='lang',lang='es';try{lang=localStorage.getItem(K)==='en'?'en':'es'}catch(e){}
-var TO=new WeakMap(),AO=new WeakMap(),ATT=['title','aria-label','alt','placeholder','data-tip','data-alt'],titleES=null,busy=false;
+var RV=null,TO=new WeakMap(),AO=new WeakMap(),ATT=['title','aria-label','alt','placeholder','data-tip','data-alt'],titleES=null,busy=false;
 function look(k){var t=D[k];if(t!==undefined)return t;for(var i=0;i<RX.length;i++)if(RX[i][0].test(k))return k.replace(RX[i][0],RX[i][1]);return undefined}
 function ok(el){return el&&!el.closest('script,style,noscript,.katex,.lng')}
 function tx(n){var el=n.parentElement;if(!ok(el))return;var o=TO.get(n);
  if(lang==='en'){var src=o!==undefined?o:n.nodeValue;var k=src.replace(/\s+/g,' ').trim();if(!k)return;if(el.closest('svg')&&NOSVG[k])return;if(k.length<=2&&el.closest('sub,sup,i,svg'))return;var t=look(k);if(t===undefined)return;
   if(o===undefined)TO.set(n,src);var v=src.match(/^\s*/)[0]+t+src.match(/\s*$/)[0];if(n.nodeValue!==v)n.nodeValue=v}
- else if(o!==undefined){if(n.nodeValue!==o)n.nodeValue=o;TO.delete(n)}}
+ else if(o!==undefined){if(n.nodeValue!==o)n.nodeValue=o;TO.delete(n)}
+ /* [ES] Texto que la propia app reescribió estando en inglés (p. ej. al medir el ancho de los botones): se devuelve al español */
+ else{var k2=n.nodeValue.replace(/\s+/g,' ').trim();if(k2&&D[k2]===undefined){if(!RV){RV={};for(var q in D)if(RV[D[q]]===undefined)RV[D[q]]=q}var s2=RV[k2];if(s2!==undefined&&s2!==k2)n.nodeValue=n.nodeValue.match(/^\s*/)[0]+s2+n.nodeValue.match(/\s*$/)[0]}}}
 function at(el){if(!ok(el))return;var o=AO.get(el);
  for(var i=0;i<ATT.length;i++){var a=ATT[i];if(!el.hasAttribute(a))continue;
   if(lang==='en'){var src=o&&o[a]!==undefined?o[a]:el.getAttribute(a);var t=look(src.replace(/\s+/g,' ').trim());if(t===undefined)continue;if(!o){o={};AO.set(el,o)}if(o[a]===undefined)o[a]=src;if(el.getAttribute(a)!==t)el.setAttribute(a,t)}
