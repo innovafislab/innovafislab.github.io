@@ -680,10 +680,10 @@ html.dk body main.app .left>.card{background:var(--surface)!important;border-col
 <div class="panel">
 <div class="ctl">
 <div class="ctl-row" style="justify-content:space-between"><label class="t" for="gate">Puerta fotoeléctrica</label><span class="readout" id="gateReadout"></span></div>
-<input type="range" id="gate" min="50" max="90" step="any" value="50" aria-describedby="gateReadout">
+<div class="rz"><div><svg id="rz1" class="isvg"></svg></div></div><input type="range" id="gate" min="50" max="90" step="any" value="50" aria-describedby="gateReadout">
 <div class="ctl-row"><div class="chips" id="chips"><span class="t"><i style="font-family:var(--f-math)">s</i> (cm)</span></div><label class="switch" style="margin-left:.8em"><input type="checkbox" id="slow"> Cámara lenta (×0,2)</label></div>
 </div>
-<button class="mgo" id="mGo" type="button">Soltar</button><div class="rz"><div><svg id="rz1" class="isvg"></svg></div></div><div class="rd"><div><span class="l">Distancia \(s\)</span><b id="rS">–</b></div><div><span class="l">Contador izq., \(t\)</span><b id="rT">–</b></div><div><span class="l">Contador dcho., \(\Delta t\)</span><b id="rDT">–</b></div><div class="p1only"><span class="l">\(t'=t+\Delta t/2\)</span><b id="rTp">–</b></div><div class="p2only"><span class="l">\(v=\Delta s/\Delta t\)</span><b id="rV">–</b></div></div>
+<button class="mgo" id="mGo" type="button">Soltar</button><div class="rd"><div><span class="l">Distancia \(s\)</span><b id="rS">–</b></div><div><span class="l">Contador izq., \(t\)</span><b id="rT">–</b></div><div><span class="l">Contador dcho., \(\Delta t\)</span><b id="rDT">–</b></div><div class="p1only"><span class="l">\(t'=t+\Delta t/2\)</span><b id="rTp">–</b></div><div class="p2only"><span class="l">\(v=\Delta s/\Delta t\)</span><b id="rV">–</b></div></div>
 <dl class="datos2"><dt>Masa colgante</dt><dd>\(m_1\): pesa <b id="gm1"></b> + portapesas <b id="gmh"></b> (datos)</dd><dt>Deslizador</dt><dd>\(m_2\) = <b id="gm2"></b>, sin pesas (dato)</dd>
 <dt class="p2only">Pantalla</dt><dd class="p2only" id="dsCell"><button class="linkbtn" id="calibre">Medir Δs con el calibre</button></dd></dl>
 <p class="note">Se pulsa el botón verde SOLTAR o la barra espaciadora. · CC BY-NC-SA 4.0</p>
@@ -746,11 +746,11 @@ document.querySelectorAll('.codev').forEach(e=>e.textContent=CODE||'Usar código
  const pill=document.querySelector('header .code');if(pill)pill.onclick=()=>show(true);show(false)})();
 
 function zoomable(el,apply){if(el._zb)return;el._zb=1;el._z=1;el._px=0;el._py=0;el.style.touchAction='none';const P=new Map();let d0=0;
- const cl=()=>{const m=0.5-0.5/el._z;el._px=Math.max(-m,Math.min(m,el._px));el._py=Math.max(-m,Math.min(m,el._py));apply()};
- el.addEventListener('wheel',e=>{e.preventDefault();e.stopPropagation();el._z=Math.max(1,Math.min(8,el._z*Math.exp(-e.deltaY*0.0015)));cl()},{passive:false});
+ const cl=()=>{const m=0.5-0.5/el._z;el._px=Math.max(-m,Math.min(m,el._px));el._py=Math.max(-m,Math.min(m,el._py));apply()};/* [ZOOM] amplía en el punto de los dedos o del ratón */const zp=(cx,cy,z1)=>{const z0=el._z,r=el.getBoundingClientRect();if(el._vb&&el.getScreenCTM&&el.getScreenCTM()){const u=new DOMPoint(cx,cy).matrixTransform(el.getScreenCTM().inverse());el._z=z1;apply();const M=el.getScreenCTM(),s=new DOMPoint(u.x,u.y).matrixTransform(M),v=el._vb.split(/[ ,]+/).map(Number);el._px+=(s.x-cx)/(M.a*v[2]);el._py+=(s.y-cy)/(M.d*v[3])}else{const q=1/z0-1/z1;el._px+=((cx-r.left)/r.width-0.5)*q;el._py+=((cy-r.top)/r.height-0.5)*q;el._z=z1}};
+ el.addEventListener('wheel',e=>{e.preventDefault();e.stopPropagation();zp(e.clientX,e.clientY,Math.max(1,Math.min(8,el._z*Math.exp(-e.deltaY*0.0015))));cl()},{passive:false});
  el.addEventListener('pointerdown',e=>{e.stopPropagation();P.set(e.pointerId,[e.clientX,e.clientY]);try{el.setPointerCapture(e.pointerId)}catch(_){}if(P.size==2){const p=[...P.values()];d0=Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1])}});
  el.addEventListener('pointermove',e=>{if(!P.has(e.pointerId))return;e.stopPropagation();const o=P.get(e.pointerId);P.set(e.pointerId,[e.clientX,e.clientY]);
-  if(P.size>=2){const p=[...P.values()],d=Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1]);if(d0>0){/* [ZOOM] amplía en el punto entre los dedos */const z0=el._z,z1=Math.max(1,Math.min(8,z0*d/d0)),r=el.getBoundingClientRect(),q=1/z0-1/z1;el._px+=(((p[0][0]+p[1][0])/2-r.left)/r.width-0.5)*q;el._py+=(((p[0][1]+p[1][1])/2-r.top)/r.height-0.5)*q;el._z=z1}d0=d}
+  if(P.size>=2){const p=[...P.values()],d=Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1]);if(d0>0)zp((p[0][0]+p[1][0])/2,(p[0][1]+p[1][1])/2,Math.max(1,Math.min(8,el._z*d/d0)));d0=d}
   else if(el._z>1){el._px-=(e.clientX-o[0])/el.clientWidth/el._z;el._py-=(e.clientY-o[1])/el.clientHeight/el._z}cl()});
  const up=e=>{P.delete(e.pointerId);d0=0};el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);el.addEventListener('dblclick',()=>{el._z=1;el._px=el._py=0;apply()})}
 function svgI(el,vb,h){el._vb=vb;el.setAttribute('preserveAspectRatio','xMidYMid meet');el.innerHTML=h;const ap=()=>{const v=el._vb.split(/[ ,]+/).map(Number),Z=el._z||1,w=v[2]/Z,hh=v[3]/Z,cx=v[0]+v[2]*(0.5+(el._px||0)),cy=v[1]+v[3]*(0.5+(el._py||0));el.setAttribute('viewBox',(cx-w/2)+' '+(cy-hh/2)+' '+w+' '+hh)};zoomable(el,ap);ap()}
