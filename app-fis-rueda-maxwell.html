@@ -481,8 +481,11 @@ add(new THREE.BoxGeometry(1.05,0.03,0.02),leg,-0.13,-0.62,-0.28);add(new THREE.B
 [-0.25,0.25].forEach(bx=>{[[0,-1],[0.87,0.5],[-0.87,0.5]].forEach(([dx,dz])=>{const L=0.15,a=add(new THREE.BoxGeometry(0.028,0.02,L),navy,bx+dx*L/2,0.026,-0.02+dz*L/2);a.rotation.y=Math.atan2(dx,dz);add(new THREE.CylinderGeometry(0.013,0.016,0.016,20),black,bx+dx*L,0.008,-0.02+dz*L)});add(new THREE.CylinderGeometry(0.03,0.03,0.03,6),navy,bx,0.03,-0.02)});
 // varillas
 const RA=-0.25,RB=0.25,RZ=-0.02,TOP=1.0;rod(RA,RZ,1.06);rod(RB,RZ,1.06);
-const cross=add(new THREE.CylinderGeometry(0.006,0.006,0.62,20),steel,0,TOP,RZ);cross.rotation.z=Math.PI/2;
-[RA,RB].forEach(x=>add(new THREE.BoxGeometry(0.045,0.045,0.04),navy,x,TOP,RZ));
+// [SOPORTE] Las nueces adelantan la barra superior respecto al plano de las varillas, hasta el plano de los hilos, que van atados a ella.
+const ZB=r+0.0004-0.0067;const cross=add(new THREE.CylinderGeometry(0.006,0.006,0.62,20),steel,0,TOP,ZB);cross.rotation.z=Math.PI/2;
+[RA,RB].forEach(x=>{add(new THREE.BoxGeometry(0.045,0.045,0.04),navy,x,TOP,RZ);add(new THREE.BoxGeometry(0.04,0.04,0.03),navy,x,TOP,ZB)});
+[-0.045,0.045].forEach(x=>{const k=add(new THREE.TorusGeometry(0.0067,0.0007,6,24),new THREE.MeshBasicMaterial({color:'#6b7280'}),x,TOP,ZB);k.rotation.y=Math.PI/2});
+// [/SOPORTE]
 // regla vertical con dos cursores
 const RX=0.13,RZr=-0.035;
 const rc=document.createElement('canvas');rc.width=160;rc.height=4096;const rx=rc.getContext('2d');rx.fillStyle='#fbfbf7';rx.fillRect(0,0,160,4096);rx.fillStyle='#1b2430';rx.textAlign='left';
