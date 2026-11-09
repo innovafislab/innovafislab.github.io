@@ -597,10 +597,12 @@ const wheelBody=new THREE.Group();WR.add(wheelBody);
 const axle=add(new THREE.CylinderGeometry(r,r,0.13,16),steel,0,0,0,W);axle.rotation.z=Math.PI/2;
 // hilos
 const sMat=new THREE.MeshBasicMaterial({color:'#6b7280'});const thr=[-0.045,0.045].map(x=>add(new THREE.CylinderGeometry(0.0007,0.0007,1,6),sMat,x,0,0));
-// [HILO] Vueltas de hilo enrolladas en el eje junto a cada hilo: su número sigue a la longitud que queda enrollada (LMAX − d).
-const NV=10,PV=0.0014,vGeo=new THREE.TorusGeometry(r+0.0007,0.0007,6,24),vMat=new THREE.MeshStandardMaterial({color:'#4f555d',roughness:.8,metalness:0});
-const coils=[-1,1].map(sg=>Array.from({length:NV},(_,i)=>{const v=new THREE.Mesh(vGeo,vMat);v.rotation.y=Math.PI/2;v.position.x=sg*(0.045-(i+0.5)*PV);v.castShadow=true;WR.add(v);return v}));
-function coilSet(d){const n=Math.ceil(NV*Math.max(0,LMAX-d)/LMAX-1e-6);coils.forEach(s=>s.forEach((v,i)=>{v.visible=i<n}))}
+// [HILO] Vueltas de hilo enrolladas en el eje junto a cada hilo, una por cada perímetro 2πr de hilo que queda enrollado (LMAX − d).
+const PV=0.0004,NV=Math.ceil(LMAX/(2*Math.PI*r)),vGeo=new THREE.TorusGeometry(r+PV/2,PV/2,5,24),vMat=new THREE.MeshStandardMaterial({color:'#4f555d',roughness:.8,metalness:0});
+const coils=[-1,1].map(sg=>Array.from({length:NV},(_,i)=>{const v=new THREE.Mesh(vGeo,vMat);v.rotation.y=Math.PI/2;v.position.x=sg*(0.045-(i+0.5)*PV);WR.add(v);return v}));
+function coilSet(d){const n=Math.ceil(Math.max(0,LMAX-d)/(2*Math.PI*r)-1e-9);coils.forEach(s=>s.forEach((v,i)=>{v.visible=i<n}))}
+// El hilo baja tangente al eje (lado +z), no desde su centro.
+thr.forEach(o=>{o.position.z=r+PV});
 // [/HILO]
 // puerta fotoeléctrica en su varilla
 const GX=0.058,RC=RB;
