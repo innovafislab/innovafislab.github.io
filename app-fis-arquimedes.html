@@ -747,7 +747,19 @@ bentHook([[coilRadius,0,0],[.00421,-.00014,.00154],[.00273,-.00033,.00242],[.001
 const inner=add(new THREE.CylinderGeometry(.0016,.0016,1,12),silver,0,0,0,clamp);
 const hk=new THREE.Group();clamp.add(hk);
 bentHook([[0,.0006,0],[0,-.0009,0],[-.0015,-.0023,.0003],[-.0029,-.0049,.0005],[-.0016,-.0073,.0006],[.0014,-.0078,.0003],[.0037,-.0062,0],[.0044,-.0039,-.0003],[.00405,-.0019,-.0004]],.0009,silver,hk);
-const thr=add(new THREE.CylinderGeometry(0.0005,0.0005,1,6),new THREE.MeshBasicMaterial({color:'#555b63'}),0,0,0,clamp);
+const threadRadius=.0005;
+const threadMaterial=new THREE.MeshStandardMaterial({color:new THREE.Color('#555b63').convertSRGBToLinear(),
+ roughness:.95,metalness:0,bumpMap:micro,bumpScale:.00001});
+const threadFootprint={value:0},threadViewport=new THREE.Vector4();
+threadMaterial.onBeforeCompile=shader=>{
+ shader.uniforms.threadFootprint=threadFootprint;
+ shader.vertexShader='uniform float threadFootprint;\n'+shader.vertexShader;
+ shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
+  float depth=-(modelViewMatrix*vec4(0.,position.y,0.,1.)).z;
+  transformed.xz*=max(1.,depth*threadFootprint/${threadRadius});`);
+};
+const thr=add(new THREE.CylinderGeometry(threadRadius,threadRadius,1,8),threadMaterial,0,0,0,clamp);
+thr.castShadow=false;
 const obj=new THREE.Group();clamp.add(obj);
 // recipientes
 const VR=0.036,VH=0.115,VL=0.078;const vaso=new THREE.Group();SC.add(vaso);vaso.position.set(0,0,0);
@@ -865,8 +877,6 @@ return vec3(n.x,0.,n.z)+vec3(-r.y*q,1.,r.x*q)*(n.y*inversesqrt(1.+q*q));}`)
  const meniscus=add(new THREE.TorusGeometry(VR-.0013,.0003,12,96),waterM,0,VL,0,vaso);meniscus.rotation.x=Math.PI/2;
  visibleRim(meniscus,levelMat);visibleRim(wl,levelMat);
  const bottomRim=add(new THREE.TorusGeometry(VR-.0005,.0005,12,96),rimMat,0,.0012,0,vaso);bottomRim.rotation.x=Math.PI/2;visibleRim(bottomRim,rimMat);
- // Fibra del hilo, manteniendo el diámetro y el alargamiento del original.
- thr.material=new THREE.MeshStandardMaterial({color:new THREE.Color('#555b63').convertSRGBToLinear(),roughness:.95,metalness:0,bumpMap:micro,bumpScale:.00001});thr.castShadow=false;
  // Oclusión de contacto, restringida a los apoyos sobre la mesa.
  const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),gr=x.createRadialGradient(64,64,16,64,64,64);
  gr.addColorStop(0,'rgba(20,16,12,.22)');gr.addColorStop(.60,'rgba(20,16,12,.12)');gr.addColorStop(1,'rgba(20,16,12,0)');x.fillStyle=gr;x.fillRect(0,0,128,128);
@@ -889,6 +899,10 @@ return vec3(n.x,0.,n.z)+vec3(-r.y*q,1.,r.x*q)*(n.y*inversesqrt(1.+q*q));}`)
  }
  R3.render=function(scene,camera){
   if(scene!==SC)return raw(scene,camera);
+  // La refracción se captura a resolución CSS. Un hilo subpíxel puede caer entre dos muestras.
+  // Todas las pasadas de esta cámara usan la misma sección; de cerca prevalece el diámetro real.
+  R3.getViewport(threadViewport);
+  threadFootprint.value=1.95/Math.max(1,threadViewport.z*camera.projectionMatrix.elements[0]);
   photoSpring();
   if(camera===CD)return raw(scene,camera);
   camera.updateMatrixWorld();
