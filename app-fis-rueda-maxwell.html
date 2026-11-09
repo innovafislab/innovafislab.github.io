@@ -606,8 +606,9 @@ const PV=0.0004,NV=Math.ceil(LMAX/(2*Math.PI*r)),XIN=0.045-NV*PV,ZT=r+PV,vGeo=ne
 const coils=[-1,1].map(sg=>Array.from({length:NV},(_,i)=>{const v=new THREE.Mesh(vGeo,vMat);v.rotation.y=Math.PI/2;v.position.x=sg*(XIN+(i+0.5)*PV);WR.add(v);return v}));
 function coilSet(d,y){const ne=Math.max(0,LMAX-d)/(2*Math.PI*r),n=Math.ceil(ne-1e-9);coils.forEach(s=>s.forEach((v,i)=>{v.visible=i<n}));
  // [YOYO] Tras cada rebote el hilo se enrolla por el otro lado del eje (como un yoyó): el punto de tangencia pasa de +z a −z.
- const zb=(NB%2?-1:1)*ZT;
- thr.forEach((o,k)=>{const sg=k?1:-1,xt=sg*0.045,xb=sg*(XIN+Math.min(ne,NV)*PV),dv=new THREE.Vector3(xb-xt,y-TOP,zb-ZT),L=dv.length();o.scale.y=L;o.position.set((xt+xb)/2,(TOP+y)/2,(ZT+zb)/2);o.quaternion.setFromUnitVectors(new THREE.Vector3(0,-1,0),dv.normalize())})}
+ // [VUELTA] Abajo, con el hilo ya desenrollado, su punto de anclaje recorre la mitad superior del eje (ángulo TA de 0 a π) y pasa de un lado al otro de forma continua.
+ const sd=NB%2?-1:1,zb=TA>=0?sd*ZT*Math.cos(TA):sd*ZT,yb=TA>=0?y+ZT*Math.sin(TA):y;
+ thr.forEach((o,k)=>{const sg=k?1:-1,xt=sg*0.045,xb=sg*(XIN+Math.min(ne,NV)*PV),dv=new THREE.Vector3(xb-xt,yb-TOP,zb-ZT),L=dv.length();o.scale.y=L;o.position.set((xt+xb)/2,(TOP+yb)/2,(ZT+zb)/2);o.quaternion.setFromUnitVectors(new THREE.Vector3(0,-1,0),dv.normalize())})}
 // [/HILO]
 // puerta fotoeléctrica en su varilla
 const GX=0.058,RC=RB;
@@ -727,22 +728,24 @@ const CAM2=new THREE.PerspectiveCamera(28,1,0.01,5);
 // estado
 // [YOYO] Rodadura sin deslizar sobre el hilo: dθ = −σ·dd/r, con σ = +1 si el hilo sale por delante del eje y −1 si sale por detrás.
 // En el rebote de abajo el hilo cambia de lado y la rueda sigue girando en el mismo sentido; arriba, al pararse, invierte el giro.
-let NB=0,ROT=0;
+// [VUELTA] TA: ángulo del anclaje durante la media vuelta de abajo (−1 fuera de ella); al agotarse la energía la rueda queda colgando con el anclaje arriba del eje (TA = π/2).
+let NB=0,ROT=0,TA=-1,TAw=0,TAv=0,TAE=Math.PI;
 function place(){const y=YS-d;W.position.set(0,y,0);WR.rotation.x=ROT;coilSet(d,y)}
 function setS(){s=+$('#S').value;$('#Sv').textContent=fmt(s*100,2)+' ± 0,05 cm';$('#rphi').textContent=fmt(Math.round(phi*1e3/0.05)*0.05,2)+' ± 0,05 mm';gate.position.set(0,YS-s,0);cur2.position.y=YS-s;cables();
  GR.hline(s)}
 function show(){const tv=tg===null?(first&&run?Math.floor(t*1000)/1000:(run||d>0?null:0)):tg;
  showTimer(dtg!==null?dtg:0);showSW(SW.t);
  $('#rt').textContent=tg!==null?fmt(tg,3)+' s':(run?fmt(t,2)+' s':'–');$('#rdt').textContent=dtg===null?'–':fmt(dtg,3)+' s';$('#rv').textContent=dtg===null?'–':fmt(phi/dtg,3)+' m/s'}
-function reset(){setS();run=false;t=0;d=0;v=0;NB=0;ROT=0;tg=null;dtg=null;first=true;hist=[];GR.set([]);swReset();$('#go').textContent='Soltar';place();show()}
+function reset(){setS();run=false;t=0;d=0;v=0;NB=0;ROT=0;TA=-1;tg=null;dtg=null;first=true;hist=[];GR.set([]);swReset();$('#go').textContent='Soltar';place();show()}
 function setPart(p){part=p;document.body.dataset.part=p;document.querySelectorAll('.pt').forEach(c=>c.classList.toggle('on',+c.dataset.p===p));lastShown='';reset();fixBtn();fit()}
 document.querySelectorAll('.pt').forEach(b=>b.onclick=()=>setPart(+b.dataset.p));
 $('#S').oninput=reset;$('#go').onclick=()=>{if(run||d>0){reset();return}run=true;swStart();$('#go').textContent='Volver a enrollar'};
 $('#vw').onclick=()=>{TG.copy(TG0);az=V0[0];el=V0[1];dist=V0[2]};setPart(1);
 let SLOW=1;{const b=$('#slo');b.onclick=()=>{SLOW=SLOW===1?0.2:1;b.classList.toggle('on',SLOW<1);b.setAttribute('aria-pressed',SLOW<1);b.blur()}}
 let lt=null;function frame(ts){if(lt===null)lt=ts;const dt=Math.min(0.05,(ts-lt)/1000);lt=ts;
- if(run&&playing){const dts=dt*SLOW;swTick(dts);const n=10,h=dts/n;for(let i=0;i<n;i++){v+=A*h;const dd0=d,sg=NB%2?-1:1;d+=v*h;t+=h;if(first&&tg===null&&d>=s){tg=Math.floor(Math.sqrt(2*s/A)*1000)/1000;dtg=Math.round((phi/(A*Math.sqrt(2*s/A))+gauss(0.0002))*1e3)/1e3;SW.on=false;SW.t=Math.max(0,Math.sqrt(2*s/A)+gauss(0.012));swShow()}
-  if(d>=LMAX&&v>0){d=LMAX;v=-0.9*v;first=false;NB++}if(!first&&v>0&&d<0.02){d=0.02;v=0}ROT-=sg*(d-dd0)/r;}
+ if(run&&playing){const dts=dt*SLOW;swTick(dts);const n=10,h=dts/n;for(let i=0;i<n;i++){if(TA>=0){t+=h;if(TA<TAE){const sg=NB%2?-1:1,da=Math.min(TAw*h,TAE-TA);TA+=da;ROT-=sg*da;d=LMAX+r*Math.sin(TA);if(TA>=TAE&&TAE>=Math.PI){TA=-1;NB++;d=LMAX;v=-0.9*TAv}}continue}
+  v+=A*h;const dd0=d,sg=NB%2?-1:1;d+=v*h;t+=h;if(first&&tg===null&&d>=s){tg=Math.floor(Math.sqrt(2*s/A)*1000)/1000;dtg=Math.round((phi/(A*Math.sqrt(2*s/A))+gauss(0.0002))*1e3)/1e3;SW.on=false;SW.t=Math.max(0,Math.sqrt(2*s/A)+gauss(0.012));swShow()}
+  if(d>=LMAX&&v>0){ROT-=sg*(LMAX-dd0)/r;d=LMAX;first=false;TA=0;TAw=v/r;TAv=v;TAE=v<0.012?Math.PI/2:Math.PI;v=0;continue}if(!first&&v>0&&d<0.02){d=0.02;v=0}ROT-=sg*(d-dd0)/r;}
   if(first){hist.push([t,d]);GR.set(hist)}
   place();show()}
  if(needSz){needSz=false;size()}camSet();const W0=box.clientWidth,H0=box.clientHeight;R3.setViewport(0,0,W0,H0);R3.setScissorTest(false);R3.shadowMap.needsUpdate=true;R3.render(SC,CAM);
