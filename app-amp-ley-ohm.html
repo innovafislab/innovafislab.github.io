@@ -67,7 +67,7 @@ svg text{font-family:Inter,system-ui,sans-serif}
 <h2>Datos y errores</h2>
 <p>Tensiones e intensidades se leen en los polímetros digitales; el error de cada lectura es una unidad de la última cifra del rango que uses. Elige el rango más pequeño que no se desborde.</p>
 <h2>Cómo se monta</h2>
-<p>Arrastra cada resistencia a una casilla de la placa: sus dos clavijas entran en los huecos de los lados. Tócala para girarla. Los puentes unen dos huecos sin resistencia. Arrastra un cable desde su bobina y lleva cada clavija a un hueco, a un borne de la fuente o a un borne del polímetro. Gira el selector del polímetro tocando la posición que quieras y enciéndelo con su botón. La tensión de la fuente se ajusta con el mando V (arrastra arriba o abajo, o usa la rueda del ratón). Para retirar una pieza o un cable, devuélvelo a su bandeja.</p>
+<p>En la placa, los 9 huecos de cada isla están unidos por las líneas negras: todo lo que se enchufa en una isla queda conectado. Por eso cada resistencia debe ir de una isla a la vecina; si sus dos clavijas quedan en la misma isla, está cortocircuitada. Arrastra cada resistencia a la placa y tócala para girarla. Los puentes unen dos islas sin resistencia. Arrastra un cable desde su bobina y lleva cada clavija a un hueco, a un borne de la fuente o a un borne del polímetro. Gira el selector del polímetro tocando la posición que quieras y enciéndelo con su botón. La tensión de la fuente se ajusta con el mando V (arrastra arriba o abajo, o usa la rueda del ratón). Para retirar una pieza o un cable, devuélvelo a su bandeja.</p>
 <p class="note">Gemelo de la práctica: resistencias con su tolerancia real, fuente con limitación de corriente y polímetros con fusible · CC BY-NC-SA 4.0</p>
 </aside></main>
 <script src="lib/katex/0.16.9/katex.min.js"></script>
@@ -84,16 +84,12 @@ const gauss=()=>{let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();r
 /* ---------- datos del montaje ---------- */
 // Resistencias con su tolerancia real (valor fijo para que los datos se puedan repetir)
 const RES={R1:{nom:'100 Ω',v:100*(1+(rnd()-.5)*0.06)},R2:{nom:'220 Ω',v:220*(1+(rnd()-.5)*0.06)},R3:{nom:'150 Ω',v:150*(1+(rnd()-.5)*0.06)},R4:{nom:'220 Ω',v:220*(1+(rnd()-.5)*0.06)}};
-const CELL=88,BX=572,BY=60,MG=32,GAP=32,KB=CELL/100; // placa
-const MODW=2*CELL;
-const BW=2*MG+4*MODW+3*GAP,BH=2*MG+3*MODW+2*GAP;
-const holes={},cells={};
-for(let my=0;my<3;my++)for(let mx=0;mx<4;mx++){const x0=BX+MG+mx*(MODW+GAP),y0=BY+MG+my*(MODW+GAP);
- for(let i=0;i<2;i++)for(let j=0;j<3;j++){const id=`h${mx}${my}a${i}${j}`;holes[id]={x:x0+(i+.5)*CELL,y:y0+j*CELL}}
- for(let i=0;i<3;i++)for(let j=0;j<2;j++){const id=`h${mx}${my}b${i}${j}`;holes[id]={x:x0+i*CELL,y:y0+(j+.5)*CELL}}
- for(let i=0;i<2;i++)for(let j=0;j<2;j++)cells[`c${mx}${my}${i}${j}`]={cx:x0+(i+.5)*CELL,cy:y0+(j+.5)*CELL,T:`h${mx}${my}a${i}${j}`,B:`h${mx}${my}a${i}${j+1}`,L:`h${mx}${my}b${i}${j}`,R:`h${mx}${my}b${i+1}${j}`}}
-// lados que une cada pieza según su giro
-const SIDES={R:[['L','R'],['T','B']],W:[['L','R'],['T','B']],K:[['L','T'],['T','R'],['R','B'],['B','L']]};
+// [PLACA] Placa PHYWE: 4 × 3 islas de 3 × 3 huecos en las esquinas de las casillas. Las líneas negras unen los 9 huecos de cada isla,
+// así que una isla es un único punto eléctrico; entre islas vecinas hay una casilla de separación (paso uniforme P).
+const P=72,BX=572,BY=60,MG=40,NC=12,NR=9,KB=P/100,CELL=P;
+const BW=2*MG+(NC-1)*P,BH=2*MG+(NR-1)*P;
+const holes={};const hx=c=>BX+MG+c*P,hy=r=>BY+MG+r*P;
+for(let c=0;c<NC;c++)for(let r=0;r<NR;r++)holes[`p${c}_${r}`]={x:hx(c),y:hy(r),c,r,isl:`I${Math.floor(c/3)}${Math.floor(r/3)}`};
 const SRC={x:22,y:22,w:520,h:280};
 const TRAY={x:22,y:312,w:520,h:158};
 const CTRAY={x:22,y:462,w:520,h:0};
@@ -149,8 +145,8 @@ mk('rect',{x:-2000,y:-2000,width:5600,height:4900,fill:'url(#gTable)'},L_bg);
  mk('rect',{x:BX,y:BY,width:BW,height:BH,rx:10,fill:'url(#gBoard)',stroke:'#c9ccc6','stroke-width':2,filter:'url(#fSh)'},g);
  txt(g,BX+BW-30,BY+24,'PHYWE',{'text-anchor':'end','font-size':17,'font-weight':800,fill:'#2b2f33','letter-spacing':'.06em'});
  txt(g,BX+30,BY+24,'06033.00',{'font-size':12,fill:'#5b6168'});
- for(let my=0;my<3;my++)for(let mx=0;mx<4;mx++){const x0=BX+MG+mx*(MODW+GAP),y0=BY+MG+my*(MODW+GAP);
-  for(let k=0;k<3;k++){mk('path',{d:`M${x0} ${y0+k*CELL} H${x0+MODW}`,stroke:'#22262a','stroke-width':2.4},g);mk('path',{d:`M${x0+k*CELL} ${y0} V${y0+MODW}`,stroke:'#22262a','stroke-width':2.4},g)}}
+ for(let my=0;my<3;my++)for(let mx=0;mx<4;mx++){const x0=hx(3*mx),y0=hy(3*my);
+  for(let k=0;k<3;k++){mk('path',{d:`M${x0} ${y0+k*P} H${x0+2*P}`,stroke:'#22262a','stroke-width':2.4},g);mk('path',{d:`M${x0+k*P} ${y0} V${y0+2*P}`,stroke:'#22262a','stroke-width':2.4},g)}}
  for(const id in holes){const h=holes[id];mk('circle',{cx:h.x,cy:h.y,r:9.5,fill:'#f4f5f2'},g);mk('circle',{cx:h.x,cy:h.y,r:7.2,fill:'url(#gHole)'},g)}
 })();
 
@@ -188,7 +184,7 @@ function drawSrcState(){const s=state.src;srcLed.setAttribute('fill',s.on?'#35e0
  knobV.querySelector('.ind').setAttribute('transform',`rotate(${knobAng(s.v,12)} ${KV.x} ${KV.y})`);knobA.querySelector('.ind').setAttribute('transform',`rotate(${knobAng(s.ilim,2)} ${KA.x} ${KA.y})`)}
 
 /* ---------- bandejas ---------- */
-const TRAYPOS={R1:{x:TRAY.x+72,y:TRAY.y+58},R2:{x:TRAY.x+197,y:TRAY.y+58},R3:{x:TRAY.x+322,y:TRAY.y+58},R4:{x:TRAY.x+447,y:TRAY.y+58},W:{x:TRAY.x+110,y:TRAY.y+122},K:{x:TRAY.x+330,y:TRAY.y+124}};
+const TRAYPOS={R1:{x:TRAY.x+72,y:TRAY.y+58},R2:{x:TRAY.x+197,y:TRAY.y+58},R3:{x:TRAY.x+322,y:TRAY.y+58},R4:{x:TRAY.x+447,y:TRAY.y+58},W:{x:TRAY.x+72,y:TRAY.y+122}};
 const COILS=[{col:'R',x:TRAY.x+0,y:0},{col:'B',x:0,y:0},{col:'K',x:0,y:0}];
 (function drawTray(){const g=L_tray;
  mk('rect',{x:TRAY.x,y:TRAY.y,width:TRAY.w,height:TRAY.h,rx:10,fill:'#f2ede4',stroke:'#cdbfa8'},g);
@@ -199,35 +195,30 @@ const COILPOS={R:{x:BX+BW-230,y:BY+BH+0},B:{x:BX+BW-150,y:BY+BH+0},K:{x:BX+BW-70
 const CABLEZONE={x:BX+BW-270,y:BY+BH-4,w:270,h:0};
 
 /* ---------- utilidades de piezas ---------- */
-function brickHoles(b){if(!b.cell)return null;const c=cells[b.cell],s=SIDES[b.type][b.rot];return [c[s[0]],c[s[1]]]}
-function brickXY(b){if(b.cell){const c=cells[b.cell];return {x:c.cx,y:c.cy}}return {x:b.x,y:b.y}}
+// Cada pieza ocupa dos huecos contiguos: (c,r) y el de su derecha (giro 0) o el de debajo (giro 1)
+const slotHoles=(cell,rot)=>{if(!cell)return null;const [c,r]=cell.split('_').map(Number),c2=c+(rot?0:1),r2=r+(rot?1:0);if(c<0||r<0||c2>=NC||r2>=NR)return null;return [`p${c}_${r}`,`p${c2}_${r2}`]};
+function brickHoles(b){return slotHoles(b.cell,b.rot)}
+function brickXY(b){const h=brickHoles(b);if(h){const a=holes[h[0]],c=holes[h[1]];return {x:(a.x+c.x)/2,y:(a.y+c.y)/2}}return {x:b.x,y:b.y}}
+function slotFor(p,rot){const c=Math.round((p.x-BX-MG)/P-(rot?0:.5)),r=Math.round((p.y-BY-MG)/P-(rot?.5:0)),cell=`${c}_${r}`,h=slotHoles(cell,rot);if(!h)return null;const a=holes[h[0]],b=holes[h[1]];return Math.hypot((a.x+b.x)/2-p.x,(a.y+b.y)/2-p.y)<.6*P?cell:null}
+function slotFree(cell,rot,self){const h=slotHoles(cell,rot);if(!h)return false;return !state.bricks.some(b=>b!==self&&b.cell&&brickHoles(b).some(x=>h.includes(x)))}
 function drawBrick(b,par){const g=mk('g',{'data-b':b.id,class:'grab'},par),p=brickXY(b);
- const rot=b.type==='K'?0:(b.rot?90:0);
- const gi=mk('g',{transform:`translate(${p.x} ${p.y}) scale(${KB})`+(b.type==='K'?'':` rotate(${rot})`)},g);
- if(b.type==='K'){ // puente en L: une dos lados contiguos de la casilla
-  const s=SIDES.K[b.rot],P={L:[-50,0],R:[50,0],T:[0,-50],B:[0,50]},a=P[s[0]],c=P[s[1]],k=[0,0];
-  const box=`M${a[0]-(a[1]?18:0)+(a[0]?0:0)} ${a[1]}`;
-  mk('path',{d:`M${a[0]} ${a[1]} L${k[0]} ${k[1]} L${c[0]} ${c[1]}`,stroke:'#cfe0ea','stroke-width':40,'stroke-linejoin':'round','stroke-linecap':'round',opacity:.95,filter:'url(#fSh2)'},gi);
-  mk('path',{d:`M${a[0]} ${a[1]} L${k[0]} ${k[1]} L${c[0]} ${c[1]}`,stroke:'#9fb4c2','stroke-width':40,'stroke-linejoin':'round','stroke-linecap':'round',fill:'none',opacity:.35},gi);
-  mk('path',{d:`M${a[0]} ${a[1]} L${k[0]} ${k[1]} L${c[0]} ${c[1]}`,stroke:'#b07a2a','stroke-width':3.2,fill:'none','stroke-linejoin':'round'},gi);
-  for(const q of [a,c]){mk('circle',{cx:q[0],cy:q[1],r:12,fill:'url(#gMetal)',stroke:'#6d747b'},gi);mk('circle',{cx:q[0],cy:q[1],r:4.5,fill:'#2a2e33'},gi)}
-  return g}
- mk('rect',{x:-58,y:-30,width:116,height:60,rx:7,fill:'url(#gAcryl)',stroke:'#9fb4c2','stroke-width':1.5,filter:'url(#fSh2)'},gi);
+ const gi=mk('g',{transform:`translate(${p.x} ${p.y}) scale(${KB}) rotate(${b.rot?90:0})`},g);
+ mk('rect',{x:-64,y:-40,width:128,height:80,rx:8,fill:'url(#gAcryl)',stroke:'#9fb4c2','stroke-width':1.5,filter:'url(#fSh2)'},gi);
  if(b.type==='R'){
-  mk('path',{d:'M-46 0 H-26 M26 0 H46',stroke:'#9ba2a8','stroke-width':2.4},gi);
-  mk('rect',{x:-26,y:-9,width:52,height:18,rx:8,fill:'url(#gRes)',stroke:'#a8844f'},gi);
+  mk('path',{d:'M-46 0 L-26 -3 M26 -3 L46 0',stroke:'#9ba2a8','stroke-width':2.4},gi);
+  mk('rect',{x:-26,y:-12,width:52,height:18,rx:8,fill:'url(#gRes)',stroke:'#a8844f'},gi);
   const bands={R1:['#7a4a1f','#1b1b1b','#7a4a1f'],R2:['#c42d22','#c42d22','#7a4a1f'],R3:['#7a4a1f','#2f8f3a','#7a4a1f'],R4:['#c42d22','#c42d22','#7a4a1f']}[b.key];
-  bands.forEach((c,i)=>mk('rect',{x:-17+i*8,y:-9,width:4,height:18,fill:c},gi));mk('rect',{x:13,y:-9,width:4,height:18,fill:'#c9a227'},gi);
+  bands.forEach((c,i)=>mk('rect',{x:-17+i*8,y:-12,width:4,height:18,fill:c},gi));mk('rect',{x:13,y:-12,width:4,height:18,fill:'#c9a227'},gi);
   // etiqueta como la de los bloques PHYWE
-  mk('rect',{x:-34,y:12,width:68,height:16,rx:2,fill:'#fff',stroke:'#1b1e22','stroke-width':.8},gi);
-  txt(gi,0,24.5,b.key+'  '+RES[b.key].nom,{'text-anchor':'middle','font-size':11,'font-weight':700,fill:'#111'});
+  mk('rect',{x:-50,y:13,width:100,height:23,rx:2,fill:'#fff',stroke:'#1b1e22','stroke-width':1},gi);
+  txt(gi,0,30,b.key+'  '+RES[b.key].nom,{'text-anchor':'middle','font-size':16,'font-weight':800,fill:'#111'});
  }else{mk('path',{d:'M-46 0 C-20 -14 20 -14 46 0',stroke:'#b07a2a','stroke-width':3.2,fill:'none'},gi)}
  for(const q of [-50,50]){mk('circle',{cx:q,cy:0,r:12,fill:'url(#gMetal)',stroke:'#6d747b'},gi);mk('circle',{cx:q,cy:0,r:4.5,fill:'#2a2e33'},gi)}
  return g}
 function drawTrayItems(){[...L_tray.querySelectorAll('[data-tray]')].forEach(e=>e.remove());
- for(const k of ['R1','R2','R3','R4']){if(state.bricks.some(b=>b.key===k))continue;const P=TRAYPOS[k];const g=drawBrick({id:'t'+k,type:'R',key:k,rot:0,x:P.x,y:P.y},L_tray);g.setAttribute('data-tray',k);g.setAttribute('transform',`translate(${P.x} ${P.y}) scale(.9) translate(${-P.x} ${-P.y})`)}
- for(const k of ['W','K']){const P=TRAYPOS[k];const g=drawBrick({id:'t'+k,type:k,key:k,rot:k==='K'?1:0,x:P.x,y:P.y},L_tray);g.setAttribute('data-tray',k);g.setAttribute('transform',`translate(${P.x} ${P.y}) scale(.6) translate(${-P.x} ${-P.y})`);
-  const t=txt(L_tray,P.x+48,P.y+5,k==='W'?'Puente':'Puente en L',{'font-size':13,'font-weight':600,fill:'#5a4a32','data-tray':'lbl'})}
+ for(const k of ['R1','R2','R3','R4']){if(state.bricks.some(b=>b.key===k))continue;const Q=TRAYPOS[k];const g=drawBrick({id:'t'+k,type:'R',key:k,rot:0,x:Q.x,y:Q.y},L_tray);g.setAttribute('data-tray',k);g.setAttribute('transform',`translate(${Q.x} ${Q.y}) scale(1.2) translate(${-Q.x} ${-Q.y})`)}
+ for(const k of ['W']){const Q=TRAYPOS[k];const g=drawBrick({id:'t'+k,type:k,key:k,rot:0,x:Q.x,y:Q.y},L_tray);g.setAttribute('data-tray',k);
+  txt(L_tray,Q.x+60,Q.y+5,'Puente (une dos islas, tantos como quieras)',{'font-size':13,'font-weight':600,fill:'#5a4a32','data-tray':'lbl'})}
  // bobinas de cable
  for(const c in COILPOS){const P=COILPOS[c],g=mk('g',{'data-tray':'C'+c,class:'grab'},L_tray),col={R:'#d0302a',B:'#2563c9',K:'#1e2226'}[c];
   for(let i=0;i<4;i++)mk('ellipse',{cx:P.x,cy:P.y+40-i*3,rx:30-i*2,ry:17-i,fill:'none',stroke:col,'stroke-width':5},g);
@@ -277,7 +268,7 @@ function setDial(m){const g=L_meters.querySelector(`[data-m="${m.id}"]`);if(!g)r
 /* ---------- cables ---------- */
 const CCOL={R:['#d0302a','#8f1a15'],B:['#2563c9','#163c7d'],K:['#2a2f35','#0d0f12']};
 function endXY(e){if(e.at){const s=sockXY(e.at);if(s)return s}return {x:e.x,y:e.y}}
-function sockXY(id){if(id.startsWith('h'))return holes[id];if(id.startsWith('S:'))return SRCJ[id.slice(2)];if(id.startsWith('M:')){const [_,mid,j]=id.split(':'),m=state.meters.find(q=>q.id===mid);return jackPos(m,j)}return null}
+function sockXY(id){if(holes[id])return holes[id];if(id.startsWith('S:'))return SRCJ[id.slice(2)];if(id.startsWith('M:')){const [_,mid,j]=id.split(':'),m=state.meters.find(q=>q.id===mid);return jackPos(m,j)}return null}
 function drawCable(c){const g=mk('g',{'data-c':c.id},L_cables),a=endXY(c.ends[0]),b=endXY(c.ends[1]),col=CCOL[c.color];
  const dx=b.x-a.x,dy=b.y-a.y,dist=Math.hypot(dx,dy),sag=Math.min(140,30+dist*.22);
  const d=`M${a.x} ${a.y} C${a.x+dx*.15} ${a.y+sag} ${b.x-dx*.15} ${b.y+sag} ${b.x} ${b.y}`;
@@ -299,6 +290,7 @@ function solveLin(A,b){const n=b.length;for(let i=0;i<n;i++){let p=i;for(let r=i
  const x=new Array(n).fill(0);for(let i=n-1;i>=0;i--){let s=b[i];for(let c=i+1;c<n;c++)s-=A[i][c]*x[c];x[i]=s/(A[i][i]||1e-30)}return x}
 const RMA=1.0,RA=0.01,RV=10e6,RINT=0.05;
 function netlist(){const P={};const f=a=>{if(P[a]===undefined)P[a]=a;while(P[a]!==a){P[a]=P[P[a]];a=P[a]}return a};const u=(a,b)=>{const ra=f(a),rb=f(b);if(ra!==rb)P[ra]=rb};const node=a=>f(a);
+ for(const id in holes)u(id,holes[id].isl);
  for(const c of state.cables)if(c.ends[0].at&&c.ends[1].at)u(c.ends[0].at,c.ends[1].at);
  const R=[];for(const b of state.bricks){const h=brickHoles(b);if(!h)continue;if(b.type==='R')R.push({a:h[0],b:h[1],r:RES[b.key].v});else u(h[0],h[1])}
  return {node,R}}
@@ -383,8 +375,6 @@ function hitSocket(p,excludeCable){let best=null,bd=26;
  for(const k in SRCJ){const J=SRCJ[k],d=Math.hypot(J.x-p.x,J.y-p.y);if(d<bd){bd=d;best='S:'+k}}
  for(const m of state.meters)for(const [j] of JACKS[m.kind]){const J=jackPos(m,j),d=Math.hypot(J.x-p.x,J.y-p.y);if(d<bd){bd=d;best=`M:${m.id}:${j}`}}
  return best}
-function cellFor(p){let best=null,bd=.7*CELL;for(const id in cells){const c=cells[id],d=Math.hypot(c.cx-p.x,c.cy-p.y);if(d<bd){bd=d;best=id}}return best}
-function cellFree(cid,self){return !state.bricks.some(b=>b!==self&&b.cell===cid)}
 function inTray(p){return (p.x>TRAY.x&&p.x<TRAY.x+TRAY.w&&p.y>TRAY.y&&p.y<TRAY.y+TRAY.h)}
 function inCoils(p){return Object.values(COILPOS).some(P=>Math.hypot(P.x-p.x,P.y+30-p.y)<55)}
 SV.addEventListener('pointerdown',e=>{ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
@@ -399,7 +389,7 @@ SV.addEventListener('pointerdown',e=>{ptrs.set(e.pointerId,{x:e.clientX,y:e.clie
   drag={k:'btn',a,id:act.getAttribute('data-id'),p0:p,moved:false};return}
  if(tr){const k=tr.getAttribute('data-tray');
   if(k[0]==='C'&&k.length===2){const col=k[1],c={id:state.nid++,color:col,ends:[{at:null,x:p.x,y:p.y},{at:null,x:COILPOS[col].x,y:COILPOS[col].y+20}]};state.cables.push(c);drag={k:'plug',c,i:0,p0:p,moved:true,isNew:true};render();return}
-  if(k==='R1'||k==='R2'||k==='R3'||k==='R4'||k==='W'||k==='K'){const b={id:'b'+(state.nid++),type:k[0]==='R'?'R':k,key:k,rot:k==='K'?3:0,cell:null,x:p.x,y:p.y};state.bricks.push(b);drag={k:'brick',b,dx:0,dy:0,p0:p,moved:true,isNew:true};render();return}}
+  if(k==='R1'||k==='R2'||k==='R3'||k==='R4'||k==='W'){const b={id:'b'+(state.nid++),type:k[0]==='R'?'R':k,key:k,rot:0,cell:null,x:p.x,y:p.y};state.bricks.push(b);drag={k:'brick',b,dx:0,dy:0,p0:p,moved:true,isNew:true};render();return}}
  if(bk){const b=state.bricks.find(q=>q.id===bk.getAttribute('data-b'));if(b){const q=brickXY(b);drag={k:'brick',b,dx:q.x-p.x,dy:q.y-p.y,p0:p,moved:false,from:b.cell};return}}
  if(mb){const m=state.meters.find(q=>q.id===mb.getAttribute('data-mbody'));drag={k:'meter',m,dx:m.x-p.x,dy:m.y-p.y,p0:p,moved:false};return}
  drag={k:'pan',c0:{x:e.clientX,y:e.clientY},vb0:vb.slice()};
@@ -411,7 +401,7 @@ SV.addEventListener('pointermove',e=>{if(!ptrs.has(e.pointerId))return;ptrs.set(
  SV.classList.add('grabbing');
  if(drag.k==='pan'){const r=SV.getBoundingClientRect(),s=vb[2]/r.width;vb[0]=drag.vb0[0]-(e.clientX-drag.c0.x)*s;vb[1]=drag.vb0[1]-(e.clientY-drag.c0.y)*s;setVB();return}
  if(drag.k==='plug'){const e2=drag.c.ends[drag.i];e2.at=null;e2.x=p.x;e2.y=p.y;const hs=hitSocket(p);drag.hover=hs;L_cables.innerHTML='';state.cables.forEach(drawCable);if(hs){const q=sockXY(hs);mk('circle',{cx:q.x,cy:q.y,r:21,fill:'none',stroke:'#1d5fa8','stroke-width':3},L_cables)}return}
- if(drag.k==='brick'){const b=drag.b;b.cell=null;b.x=p.x+drag.dx;b.y=p.y+drag.dy;L_bricks.innerHTML='';state.bricks.forEach(q=>drawBrick(q,L_bricks));const cid=cellFor({x:b.x,y:b.y});if(cid&&cellFree(cid,b)){const c=cells[cid];mk('rect',{x:c.cx-CELL/2,y:c.cy-CELL/2,width:CELL,height:CELL,rx:8,fill:'#1d5fa822',stroke:'#1d5fa8','stroke-width':2,'stroke-dasharray':'6 4'},L_bricks)}return}
+ if(drag.k==='brick'){const b=drag.b;b.cell=null;b.x=p.x+drag.dx;b.y=p.y+drag.dy;L_bricks.innerHTML='';state.bricks.forEach(q=>drawBrick(q,L_bricks));const cid=slotFor({x:b.x,y:b.y},b.rot);if(cid&&slotFree(cid,b.rot,b)){const h=slotHoles(cid,b.rot).map(k=>holes[k]);for(const q of h)mk('circle',{cx:q.x,cy:q.y,r:15,fill:'#1d5fa822',stroke:'#1d5fa8','stroke-width':3},L_bricks)}return}
  if(drag.k==='meter'){drag.m.x=p.x+drag.dx;drag.m.y=p.y+drag.dy;L_meters.innerHTML='';L_cables.innerHTML='';state.meters.forEach(drawMeter);state.cables.forEach(drawCable);updLcd(true);return}
  if(drag.k==='kv'||drag.k==='ka'){const max=drag.k==='kv'?12:2,dv=-(p.y-drag.p0.y)/220*max;const nv=Math.max(0,Math.min(max,drag.v0+dv));if(drag.k==='kv')state.src.v=nv;else state.src.ilim=nv;drawSrcState();solveAll();return}
 });
@@ -422,7 +412,7 @@ function endPtr(e){ptrs.delete(e.pointerId);if(ptrs.size<2)pinch=null;if(!drag)r
  if(d.k==='brick'){const b=d.b;
   if(!d.moved&&d.from){b.cell=d.from;rotateBrick(b);render();return}
   if(inTray(p)){state.bricks=state.bricks.filter(q=>q!==b);render();return}
-  const cid=cellFor({x:b.x,y:b.y});if(cid&&cellFree(cid,b)){b.cell=cid}else if(d.from){b.cell=d.from}else{state.bricks=state.bricks.filter(q=>q!==b)}
+  const cid=slotFor({x:b.x,y:b.y},b.rot);if(cid&&slotFree(cid,b.rot,b)){b.cell=cid}else if(d.from){b.cell=d.from}else{state.bricks=state.bricks.filter(q=>q!==b)}
   render();return}
  if(d.k==='meter'){render();return}
  if(d.k==='dial'){const m=d.m;if(d.pos)m.dial=d.pos;else if(d.moved){const C=dialC(m),a=Math.atan2(p.x-C.x,-(p.y-C.y))*180/Math.PI;let best=null,bd=999;for(const q of DIALS[m.kind]){let dd=Math.abs(((q[2]-a)%360+540)%360-180);if(dd<bd){bd=dd;best=q[0]}}m.dial=best}else{const D=DIALS[m.kind],i=D.findIndex(q=>q[0]===m.dial);m.dial=D[(i+1)%D.length][0]}
@@ -430,7 +420,9 @@ function endPtr(e){ptrs.delete(e.pointerId);if(ptrs.size<2)pinch=null;if(!drag)r
  if(d.k==='btn'&&!d.moved){if(d.a==='pwr'){state.src.on=!state.src.on;solveAll();drawSrcState()}else if(d.a==='mpwr'){const m=state.meters.find(q=>q.id===d.id);m.on=!m.on;updLcd(true)}return}
 }
 SV.addEventListener('pointerup',endPtr);SV.addEventListener('pointercancel',endPtr);
-function rotateBrick(b){const n=SIDES[b.type].length;b.rot=(b.rot+1)%n}
+function rotateBrick(b){ // gira 90° alrededor de su primera clavija; si no cabe, prueba hacia el otro lado
+ const [c,r]=b.cell.split('_').map(Number),nr=1-b.rot,cand=nr?[`${c}_${r}`,`${c}_${r-1}`]:[`${c}_${r}`,`${c-1}_${r}`];
+ for(const k of cand)if(slotFree(k,nr,b)){b.cell=k;b.rot=nr;return}}
 SV.addEventListener('wheel',e=>{e.preventDefault();const t=e.target,act=t.closest&&t.closest('[data-act]');
  if(act&&(act.getAttribute('data-act')==='kv'||act.getAttribute('data-act')==='ka')){const kv=act.getAttribute('data-act')==='kv',max=kv?12:2,st=(e.shiftKey?0.01:0.05)*max/12*(kv?1:1);const dv=(e.deltaY<0?1:-1)*(kv?(e.shiftKey?0.02:0.1):(e.shiftKey?0.005:0.02));if(kv)state.src.v=Math.max(0,Math.min(12,state.src.v+dv));else state.src.ilim=Math.max(0,Math.min(2,state.src.ilim+dv));drawSrcState();solveAll();return}
  if(act&&act.getAttribute('data-act')==='dial'){const m=state.meters.find(q=>q.id===act.getAttribute('data-id')),D=DIALS[m.kind],i=D.findIndex(q=>q[0]===m.dial),j=Math.max(0,Math.min(D.length-1,i+(e.deltaY>0?1:-1)));m.dial=D[j][0];setDial(m);solveAll();return}
@@ -443,7 +435,7 @@ $('#resetBtn').onclick=()=>{initState();vb=VB0.slice();setVB();$('#fuseBtn').hid
 $('#fuseBtn').onclick=()=>{state.meters.forEach(m=>m.fuse=true);$('#fuseBtn').hidden=true;solveAll();updLcd(true)};
 try{document.querySelectorAll('.eq[data-tex]').forEach(e=>katex.render(e.dataset.tex,e,{displayMode:true,throwOnError:false}))}catch(e){}
 initState();render();
-window.__ohm={state,cells,holes,render,solveAll,reading,RES};
+window.__ohm={state,holes,render,solveAll,reading,RES,slotHoles};
 })();
 </script>
 </body></html>
