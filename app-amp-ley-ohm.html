@@ -254,26 +254,27 @@ function drawSchem(){L_sch.innerHTML='';const g=L_sch,X=SCH.x,Y=SCH.y;
  if(!state.part){let xx=X+SCH.w-12;for(const [k,l] of [['paralelo','Paralelo'],['serie','Serie']]){const w=l.length*8.2+18,on=SCHK===k,bg=mk('g',{class:'btnz','data-act':'sch','data-id':k},g);
   mk('rect',{x:xx-w,y:Y+9,width:w,height:24,rx:6,fill:on?'#1d5fa8':'#fff',stroke:'#1d5fa8'},bg);txt(bg,xx-w/2,Y+26,l,{'text-anchor':'middle','font-size':13,'font-weight':600,fill:on?'#fff':'#1d5fa8'});xx-=w+6}}
  const sc=Math.min((SCH.w-16)/440,(SCH.h-58)/222),b=mk('g',{transform:`translate(${X+8+(SCH.w-16-440*sc)/2} ${Y+52}) scale(${sc})`},g);
- const W='#22262a',ln=(pts)=>mk('path',{d:'M'+pts.map(q=>q.join(' ')).join(' L'),stroke:W,'stroke-width':2.2,fill:'none','stroke-linejoin':'round'},b);
- const dot=(x,y)=>mk('circle',{cx:x,cy:y,r:3.8,fill:W},b);
- const res=(cx,cy,lab,val)=>{mk('rect',{x:cx-34,y:cy-9,width:68,height:18,fill:'#fff',stroke:W,'stroke-width':2.2},b);txt(b,cx,cy+30,lab+' · '+val,{'text-anchor':'middle','font-size':14,fill:W})};
- const met=(cx,cy,kind)=>{const col=kind==='V'?'#e8711a':'#3f4a57';mk('circle',{cx,cy,r:16,fill:'#fff',stroke:col,'stroke-width':2.6},b);txt(b,cx,cy+6,kind,{'text-anchor':'middle','font-size':17,'font-weight':800,fill:col})};
- const src=(x,y,right)=>{mk('path',{d:`M${x-18} ${y-6} H${x+18}`,stroke:W,'stroke-width':2.6},b);mk('path',{d:`M${x-9} ${y+6} H${x+9}`,stroke:W,'stroke-width':5},b);txt(b,x+24,y-6,'+',{'font-size':15,'font-weight':700,fill:W});
-  if(right)txt(b,x+24,y+16,'Fuente',{'font-size':13,fill:W});else txt(b,x-24,y+5,'Fuente',{'text-anchor':'end','font-size':13,fill:W})};
- if(part===1){
-  ln([[60,146],[60,105],[105,105]]);ln([[175,105],[245,105]]);ln([[315,105],[400,105],[400,200],[236,200]]);ln([[204,200],[60,200],[60,158]]);
-  src(60,152);res(140,105,'R₁','100 Ω');res(280,105,'R₂','220 Ω');met(220,200,'A');
-  const [na,nb]={asoc:[82,358],R1:[82,210],R2:[210,358]}[sub],vx=(na+nb)/2;
-  ln([[na,105],[na,40],[vx-16,40]]);ln([[vx+16,40],[nb,40],[nb,105]]);met(vx,40,'V');dot(na,105);dot(nb,105);
- }else{
-  ln([[30,114],[30,30],[105,30]]);ln([[30,146],[30,212],[105,212]]);met(30,130,'V');dot(105,30);dot(105,212);
-  ln([[105,30],[105,114]]);ln([[105,126],[105,212]]);src(105,120,true);
-  if(sub==='tot'){ln([[105,30],[148,30]]);met(164,30,'A');ln([[180,30],[200,30]])}else ln([[105,30],[200,30]]);
-  ln([[200,30],[200,165]]);dot(200,85);
-  for(const [ry,key,lab,val] of [[85,'R3','R₃','150 Ω'],[165,'R4','R₄','220 Ω']]){
-   if(sub===key){ln([[200,ry],[219,ry]]);met(235,ry,'A');ln([[251,ry],[276,ry]])}else ln([[200,ry],[276,ry]]);
-   res(310,ry,lab,val);ln([[344,ry],[410,ry]])}
-  ln([[410,85],[410,212],[105,212]]);dot(410,165);
+ // mismo trazado que las figuras de las fichas (serie: figura 2 de la ficha I; paralelo: figuras a y b de la ficha II)
+ const W='#22262a',ln=(pts)=>mk('path',{d:'M'+pts.map(q=>q.join(' ')).join(' L'),stroke:W,'stroke-width':2.2,fill:'none','stroke-linejoin':'miter'},b);
+ const dot=(x,y)=>mk('circle',{cx:x,cy:y,r:3.6,fill:W},b);
+ const it={'font-family':"'Times New Roman',Times,serif",'font-style':'italic'};
+ const res=(x,y1,y2,lab,val,side)=>{mk('rect',{x:x-10,y:y1,width:20,height:y2-y1,fill:'#fff',stroke:W,'stroke-width':2.2},b);const tx=side>0?x+18:x-18,an=side>0?'start':'end',ym=(y1+y2)/2;
+  txt(b,tx,ym+2,lab,Object.assign({'text-anchor':an,'font-size':20,fill:W},it));txt(b,tx,ym+20,val,{'text-anchor':an,'font-size':12,fill:'#5a6270'})};
+ const met=(cx,cy,kind)=>{const col=kind==='V'?'#e8711a':'#3f4a57';mk('circle',{cx,cy,r:17,fill:'#fff',stroke:col,'stroke-width':2.6},b);txt(b,cx,cy+7,kind,Object.assign({'text-anchor':'middle','font-size':20,fill:col},it))};
+ const src=(x,y)=>{mk('path',{d:`M${x-30} ${y} H${x+30}`,stroke:W,'stroke-width':2.4},b);mk('path',{d:`M${x-11} ${y+14} H${x+11}`,stroke:W,'stroke-width':6},b);txt(b,x-34,y+12,'V',Object.assign({'text-anchor':'end','font-size':22,fill:W},it))};
+ if(part===1){const L=150,Rx=270,T=20,Bt=205;
+  ln([[L,T],[L,38]]);met(L,55,'A');ln([[L,72],[L,118]]);ln([[L,132],[L,Bt],[Rx,Bt],[Rx,185]]);src(L,118);
+  ln([[L,T],[Rx,T],[Rx,35]]);ln([[Rx,95],[Rx,125]]);res(Rx,35,95,'R₁','100 Ω',-1);res(Rx,125,185,'R₂','220 Ω',-1);
+  const VX=370,[na,nb]={asoc:[27,197],R1:[27,110],R2:[110,197]}[sub],vy=(na+nb)/2;
+  ln([[Rx,na],[VX,na],[VX,vy-17]]);ln([[VX,vy+17],[VX,nb],[Rx,nb]]);met(VX,vy,'V');dot(Rx,na);dot(Rx,nb);
+ }else{const L=80,T=20,Bt=205,X3=300,X4=375;
+  ln([[L,T],[L,118]]);ln([[L,132],[L,Bt]]);src(L,118);
+  ln([[L,62],[165,62],[165,95]]);ln([[165,129],[165,168],[L,168]]);met(165,112,'V');dot(L,62);dot(L,168);
+  if(sub==='tot'){ln([[L,T],[212,T]]);met(229,T,'A');ln([[246,T],[X4,T]])}else ln([[L,T],[X4,T]]);dot(X3,T);
+  for(const [x,key,lab,val,sd] of [[X3,'R3','R₃','150 Ω',-1],[X4,'R4','R₄','220 Ω',1]]){
+   if(sub===key){ln([[x,T],[x,38]]);met(x,55,'A');ln([[x,72],[x,95]])}else ln([[x,T],[x,95]]);
+   res(x,95,155,lab,val,sd);ln([[x,155],[x,Bt]])}
+  ln([[X4,Bt],[L,Bt]]);dot(X3,Bt);
  }}
 
 /* ---------- polímetros: dibujo ---------- */
