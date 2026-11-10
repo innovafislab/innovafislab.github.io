@@ -707,7 +707,7 @@ function applyPreset(){const B=[],C=[],part=state.part,sub=SUB[part];
   const [va,vb]={asoc:['p5_1','p5_7'],R1:['p5_1','p5_4'],R2:['p5_4','p5_7']}[sub];cb('R','M:m1:V',va);cb('K','M:m1:COM',vb)}
  else{ // [RAMAS] fijo: R3, R4, puente superior (cable de arriba), puente inferior y cable negro. Cada rama baja del cable de arriba
   // a su resistencia por un puente vertical; para medir una rama se quita su puente y el amperímetro ocupa ese hueco.
-  br('R3','1_5',1);br('R4','4_5',1);W_('2_1',0);W_('2_7',0);cb('K','S:N','p0_7');
+  br('R3','1_5',1);br('R4','4_5',1);W_('2_1',0);W_('2_7',0);cb('K','S:N','p1_7'); // el negro, en el centro de la isla, bajo R3
   if(sub!=='R3')W_('1_2',1);if(sub!=='R4')W_('4_2',1);
   if(sub==='tot'){cb('R','S:P','M:m2:mA');cb('B','M:m2:COM','p0_1')}
   else{cb('R','S:P','p0_1');const c=sub==='R3'?1:4;cb('B',`p${c}_2`,'M:m2:mA');cb('B','M:m2:COM',`p${c}_3`)}
