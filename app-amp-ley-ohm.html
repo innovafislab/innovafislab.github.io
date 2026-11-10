@@ -265,7 +265,7 @@ function drawTrayItems(){[...L_tray.querySelectorAll('[data-tray]')].forEach(e=>
 }
 
 /* ---------- [ESQUEMA] esquema del montaje en la bandeja ---------- */
-// Muestra el circuito de la pestaña activa con el voltímetro (naranja, como el VICTOR) y el amperímetro (gris, como el PHYWE)
+// Muestra el circuito de la pestaña activa con el voltímetro (naranja, como el VICTOR) y el amperímetro (azul)
 // donde están conectados. En «Móntalo tú mismo» se elige ver el de la parte I o el de la parte II.
 let SCHK='serie',schB=null,schPos={},flashT=null;const L_sch=mk('g',null,L_tray);
 function flashR(key){if(!schB||!schPos[key])return;const old=schB.querySelector('.rfl');if(old)old.remove();clearTimeout(flashT);const P0=schPos[key],w=150,x=P0.side>0?P0.x-6:P0.x-w+6,y=P0.y+14;
@@ -290,7 +290,7 @@ function drawSchem(){L_sch.innerHTML='';const g=L_sch,X=SCH.x,Y=SCH.y;
   const hg=mk('g',{class:'btnz','data-act':'rflash','data-id':key},b);mk('rect',{x:side>0?tx-4:tx-34,y:ym-20,width:38,height:30,fill:'#000','fill-opacity':0},hg);
   txt(hg,tx,ym+4,lab,Object.assign({'text-anchor':an,'font-size':22,fill:W,'text-decoration':'underline dotted'},it));schPos[key]={x:tx,y:ym,side}};
  schB=b;
- const met=(cx,cy,kind)=>{const col=kind==='V'?'#e8711a':'#3f4a57';mk('circle',{cx,cy,r:17,fill:'#fff',stroke:col,'stroke-width':2.6},b);txt(b,cx,cy+7,kind,Object.assign({'text-anchor':'middle','font-size':20,fill:col},it))};
+ const met=(cx,cy,kind)=>{const col=kind==='V'?'#e8711a':'#1f6fd1';mk('circle',{cx,cy,r:17,fill:'#fff',stroke:col,'stroke-width':2.6},b);txt(b,cx,cy+7,kind,Object.assign({'text-anchor':'middle','font-size':20,fill:col},it))};
  const src=(x,y)=>{mk('path',{d:`M${x-30} ${y} H${x+30}`,stroke:W,'stroke-width':2.4},b);mk('path',{d:`M${x-11} ${y+14} H${x+11}`,stroke:W,'stroke-width':6},b);txt(b,x-34,y+12,'V',Object.assign({'text-anchor':'end','font-size':22,fill:W},it))};
  if(part===1){const L=150,Rx=270,T=20,Bt=205;mk('rect',{x:L,y:T-2,width:1,height:Bt-T+4,opacity:0},b);
   ln([[L,T],[L,38]]);met(L,55,'A');ln([[L,72],[L,118]]);ln([[L,132],[L,Bt],[Rx,Bt],[Rx,185]]);src(L,118);
