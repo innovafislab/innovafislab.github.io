@@ -86,7 +86,7 @@ svg text{font-family:Inter,system-ui,sans-serif}
 <h2>Datos y errores</h2>
 <p>Tensiones e intensidades se leen en los polímetros digitales; el error de cada lectura es una unidad de la última cifra del rango que uses. Elige el rango más pequeño que no se desborde.</p>
 <h2>Cómo se monta</h2>
-<p>En la placa, los 9 huecos de cada isla están unidos por las líneas negras: todo lo que se enchufa en una isla queda conectado. Por eso cada resistencia debe ir de una isla a la vecina; si sus dos clavijas quedan en la misma isla, está cortocircuitada. Arrastra cada resistencia por el centro para llevarla a la placa. Para girarla, acerca el puntero a una de sus clavijas y aparecerá una flecha de giro: un clic la gira 90° alrededor de la otra clavija (en sentido horario desde la clavija derecha y antihorario desde la izquierda), y si pinchas y arrastras la giras a mano hasta el hueco que quieras. En cuanto sacas una pieza o una clavija de cable, el circuito queda abierto y los polímetros lo muestran. Los puentes unen dos islas sin resistencia. Arrastra un cable desde su bobina y lleva cada clavija a un hueco, a un borne de la fuente o a un borne del polímetro. Gira el selector del polímetro arrastrándolo alrededor de su eje (o con la rueda del ratón) y enciéndelo con su botón POWER. Las posiciones del selector están agrupadas en sectores: V⎓ y A⎓ son tensión e intensidad continuas, V~ y A~ las alternas, y Ω la resistencia; los números del sector mA⎓ son miliamperios (200 es el rango de 200 mA) y el de A⎓ es el de 20 A. Los mandos de la fuente se giran igual. En los mandos y en los selectores también puedes pinchar directamente en un número o una marca de la escala para llevarlos a ese valor. Si un cable tapa algo, pincha en cualquier tramo y arrástralo para apartarlo; el cable es rígido y admite como mucho dos puntos de agarre; si lo dejas casi recto se endereza, y con doble clic vuelve a colgar suelto. Para retirar una pieza o un cable, devuélvelo a su bandeja.</p>
+<p>En la placa, los 9 huecos de cada isla están unidos por las líneas negras: todo lo que se enchufa en una isla queda conectado. Por eso cada resistencia debe ir de una isla a la vecina; si sus dos clavijas quedan en la misma isla, está cortocircuitada. Arrastra cada resistencia por el centro para llevarla a la placa. Para girarla, acerca el puntero a una de sus clavijas y aparecerá una flecha de giro: un clic la gira 90° alrededor de la otra clavija (en sentido horario desde la clavija derecha y antihorario desde la izquierda), y si pinchas y arrastras la giras a mano hasta el hueco que quieras. En cuanto sacas una pieza o una clavija de cable, el circuito queda abierto y los polímetros lo muestran. Los puentes unen dos islas sin resistencia. Arrastra un cable desde su bobina y lleva cada clavija a un hueco, a un borne de la fuente o a un borne del polímetro. Gira el selector del polímetro arrastrándolo alrededor de su eje (o con la rueda del ratón) y enciéndelo con su botón POWER. Las posiciones del selector están agrupadas en sectores: V⎓ y A⎓ son tensión e intensidad continuas, V~ y A~ las alternas, y Ω la resistencia; los números del sector mA⎓ son miliamperios (200 es el rango de 200 mA) y el de A⎓ es el de 20 A. Los mandos de la fuente se giran igual. En los mandos y en los selectores también puedes pinchar directamente en un número o una marca de la escala para llevarlos a ese valor. Si un cable tapa algo, pincha en cualquier tramo y arrástralo para apartarlo; el cable es rígido y admite como mucho dos puntos de agarre; si lo dejas casi recto se endereza, y con doble clic vuelve a colgar suelto. Para retirar una pieza o un cable, devuélvelo a su bandeja. La flecha que hay junto a «Ver corriente» (o Ctrl+Z) deshace el último paso; pulsándola varias veces vas retrocediendo.</p>
 <p>Con el botón «Ver corriente» se superpone el recorrido de la corriente por todo el circuito: los puntos avanzan en el sentido convencional, de + a −, y más deprisa cuanto mayor es la intensidad. Puedes seguir ajustando la fuente con la vista activa.</p>
 <p class="note">Gemelo de la práctica: resistencias con su tolerancia real, fuente con limitación de corriente y polímetros con fusible · CC BY-NC-SA 4.0</p>
 </aside></main>
@@ -529,6 +529,11 @@ function drawFlowBtn(){L_ui.innerHTML='';const g=mk('g',{class:'btnz','data-act'
  [[0,2,.35],[6,2.3,.65],[12.5,2.6,1]].forEach(([dx,r,o])=>mk('circle',{cx:cx+dx,cy,r,fill:on?'#ffffff':'#f5821f',opacity:o},g));
  mk('path',{d:`M${cx+16} ${cy-3.5} L${cx+18.5} ${cy} L${cx+16} ${cy+3.5}`,stroke:c,'stroke-width':1.6,fill:'none','stroke-linecap':'round','stroke-linejoin':'round'},g);
  txt(g,cx+26,cy+5.5,'Ver corriente',{'font-size':15,'font-weight':700,fill:c});
+ // deshacer: flecha curva hacia atrás, junto a «Ver corriente»; apagada si no hay nada que deshacer
+ const can=!!(HIST&&HIST.length),ug=mk('g',{class:'btnz','data-act':'undo',opacity:can?1:.4},L_ui),ux=FB.x+FB.w+12+18,uy=FB.y+FB.h/2;
+ mk('circle',{cx:ux,cy:uy,r:18,fill:'#fff',stroke:'#cfd6de',filter:'url(#fSh2)'},ug);
+ mk('path',{d:`M${ux+7} ${uy+7} V${uy+1} A6 6 0 0 0 ${ux+1} ${uy-5} H${ux-7}`,stroke:'#17324d','stroke-width':2.1,fill:'none','stroke-linecap':'round','stroke-linejoin':'round'},ug);
+ mk('path',{d:`M${ux-3} ${uy-9.5} L${ux-7.5} ${uy-5} L${ux-3} ${uy-0.5}`,stroke:'#17324d','stroke-width':2.1,fill:'none','stroke-linecap':'round','stroke-linejoin':'round'},ug);
  // ↺ volver a la configuración inicial, en la esquina superior derecha de la placa
  const rg=mk('g',{class:'btnz','data-act':'reset'},L_ui),rx=BX+BW-28,ry=BY+24;mk('circle',{cx:rx,cy:ry,r:16,fill:'#fff',stroke:'#cfd6de',filter:'url(#fSh2)'},rg);
  mk('path',{d:`M${rx+5.6} ${ry-5} A7.5 7.5 0 1 0 ${rx+7.4} ${ry+1.5}`,stroke:'#17324d','stroke-width':1.9,fill:'none','stroke-linecap':'round'},rg);
@@ -596,6 +601,15 @@ const angOf=(K,p)=>Math.atan2(p.x-K.x,-(p.y-K.y))*180/Math.PI;
 function dialTo(m,p){const C=dialC(m);if(Math.hypot(p.x-C.x,p.y-C.y)<14*MS)return;const a=angOf(C,p);let best=null,bd=999;
  for(const q of DIALS[m.kind]){const dd=Math.abs(((q[2]-a)%360+540)%360-180);if(dd<bd){bd=dd;best=q[0]}}
  if(best&&best!==m.dial){m.dial=best;setDial(m);solveAll()}}
+// [DESHACER] Antes de cada gesto se guarda una foto del montaje; si al terminar ha cambiado algo, la foto pasa al historial.
+// El botón de deshacer (o Ctrl+Z) recupera la última. Al cambiar de pestaña o volver a empezar, el historial se vacía.
+var HIST=[];let preSnap=null,wheelT=0;
+function snap(){return JSON.stringify({b:state.bricks,c:state.cables.map(c=>({id:c.id,color:c.color,ends:c.ends,h:c.h||null})),m:state.meters,s:{on:state.src.on,v:state.src.v,ilim:state.src.ilim},p:[SRCX,SRCY]})}
+function pushHist(sn){if(HIST[HIST.length-1]===sn)return;HIST.push(sn);if(HIST.length>80)HIST.shift();drawFlowBtn()}
+function undo(){const sn=HIST.pop();if(!sn)return;const o=JSON.parse(sn);state.bricks=o.b;state.cables=o.c.map(c=>{const r={id:c.id,color:c.color,ends:c.ends};if(c.h)r.h=c.h;return r});
+ state.meters=o.m;Object.assign(state.src,o.s);SRCX=o.p[0];SRCY=o.p[1];placeSrc();$('#fuseBtn').hidden=state.meters.every(m=>m.fuse);render();drawFlowBtn()}
+function clearHist(){HIST.length=0;drawFlowBtn()}
+SV.addEventListener('pointerdown',()=>{preSnap=snap()},true);
 SV.addEventListener('pointerdown',e=>{ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
  if(ptrs.size===2&&!drag){const [a,b]=[...ptrs.values()];pinch={d:Math.hypot(a.x-b.x,a.y-b.y),c:{x:(a.x+b.x)/2,y:(a.y+b.y)/2}};return}
  if(ptrs.size>1)return;
@@ -661,9 +675,11 @@ function endPtr(e){ptrs.delete(e.pointerId);if(ptrs.size<2)pinch=null;if(!drag)r
   L_cables.innerHTML='';state.cables.forEach(drawCable);return}
  if(d.k==='meter'||d.k==='srcmove'){render();return}
  if(d.k==='dial')return;
- if(d.k==='btn'&&!d.moved){if(d.a==='flow'){setFlow(!flowOn)}else if(d.a==='reset'){$('#dlg').hidden=false;$('#dlgNo').focus()}else if(d.a==='sch'){SCHK=d.id;drawSchem()}else if(d.a==='fsub'){FSUB[SCHK==='serie'?1:2]=d.id;drawSchem()}else if(d.a==='rflash'){flashR(d.id)}else if(d.a==='pwr'){state.src.on=!state.src.on;solveAll();drawSrcState()}else if(d.a==='mpwr'){const m=state.meters.find(q=>q.id===d.id);m.on=!m.on;updLcd(true);updMsg()}return}
+ if(d.k==='btn'&&!d.moved){if(d.a==='flow'){setFlow(!flowOn)}else if(d.a==='reset'){$('#dlg').hidden=false;$('#dlgNo').focus()}else if(d.a==='undo'){undo()}else if(d.a==='sch'){SCHK=d.id;drawSchem()}else if(d.a==='fsub'){FSUB[SCHK==='serie'?1:2]=d.id;drawSchem()}else if(d.a==='rflash'){flashR(d.id)}else if(d.a==='pwr'){state.src.on=!state.src.on;solveAll();drawSrcState()}else if(d.a==='mpwr'){const m=state.meters.find(q=>q.id===d.id);m.on=!m.on;updLcd(true);updMsg()}return}
 }
-SV.addEventListener('pointerup',endPtr);
+SV.addEventListener('pointerdown',()=>{if(drag&&!drag.snap0&&!(drag.k==='btn'&&drag.a==='undo'))drag.snap0=preSnap});
+function endAndRecord(e){const d=drag;endPtr(e);if(d&&d.snap0&&snap()!==d.snap0)pushHist(d.snap0)}
+SV.addEventListener('pointerup',endAndRecord);SV.addEventListener('pointercancel',endAndRecord);
 // [GIRO] Cada pieza se gira alrededor de una de sus clavijas: cerca de la clavija B (derecha o inferior) gira en sentido horario,
 // cerca de la A (izquierda o superior) en antihorario. Clic: 90°; arrastrar: giro a mano hasta el hueco vecino más próximo.
 const DIRS=[[1,0],[0,1],[-1,0],[0,-1]]; // derecha, abajo, izquierda, arriba (orden horario en pantalla)
@@ -688,6 +704,7 @@ function hoverAt(e){if(e.pointerType&&e.pointerType!=='mouse')return;const t=e.t
  const key=b?b.id+z:'';if(key===hov)return;hov=key;SV.classList.toggle('rotc',z==='A'||z==='B');drawHint(b,z)}
 SV.addEventListener('pointerleave',()=>{if(!drag){hov='';SV.classList.remove('rotc');L_top.innerHTML=''}});
 SV.addEventListener('wheel',e=>{e.preventDefault();const t=e.target,act=t.closest&&t.closest('[data-act]');
+ if(act&&/^(kv|ka|dial)$/.test(act.getAttribute('data-act'))){const now=performance.now();if(now-wheelT>700)pushHist(snap());wheelT=now}
  if(act&&(act.getAttribute('data-act')==='kv'||act.getAttribute('data-act')==='ka')){const kv=act.getAttribute('data-act')==='kv',max=kv?12:2,st=(e.shiftKey?0.01:0.05)*max/12*(kv?1:1);const dv=(e.deltaY<0?1:-1)*(kv?(e.shiftKey?0.02:0.1):(e.shiftKey?0.005:0.02));if(kv)state.src.v=Math.max(0,Math.min(12,state.src.v+dv));else state.src.ilim=Math.max(0,Math.min(2,state.src.ilim+dv));drawSrcState();solveAll();return}
  if(act&&act.getAttribute('data-act')==='dial'){const m=state.meters.find(q=>q.id===act.getAttribute('data-id')),D=DIALS[m.kind],i=D.findIndex(q=>q[0]===m.dial),j=Math.max(0,Math.min(D.length-1,i+(e.deltaY>0?1:-1)));m.dial=D[j][0];setDial(m);solveAll();return}
  zoomAt(e.clientX,e.clientY,Math.exp(-Math.max(-300,Math.min(300,e.deltaY))*0.0018))},{passive:false});
@@ -720,8 +737,8 @@ function presetDials(){const v=state.meters.find(m=>m.id==='m1'),a=state.meters.
 function updSub(){const el=$('#sub'),p=state.part;el.hidden=!p;if(!p)return;$('#sublab').textContent=p===1?'Voltímetro en':'Amperímetro en la rama';
  const opts=p===1?[['asoc','asociación'],['R1','R₁'],['R2','R₂']]:[['tot','común'],['R3','R₃'],['R4','R₄']];
  const T=$('#subtabs');T.innerHTML='';for(const [k,l] of opts){const b=document.createElement('button');b.type='button';b.className='tab'+(SUB[p]===k?' on':'');b.textContent=l;
-  b.onclick=()=>{if(SUB[p]===k)return;SUB[p]=k;applyPreset();render();updSub()};T.appendChild(b)}}
-function setPart(np){if(np===state.part)return;if(state.part===0)freeSave=clone({bricks:state.bricks,cables:state.cables});
+  b.onclick=()=>{if(SUB[p]===k)return;clearHist();SUB[p]=k;applyPreset();render();updSub()};T.appendChild(b)}}
+function setPart(np){if(np===state.part)return;clearHist();if(state.part===0)freeSave=clone({bricks:state.bricks,cables:state.cables});
  state.part=np;document.body.dataset.part=np;document.querySelectorAll('#ptabs .tab').forEach(q=>q.classList.toggle('on',+q.dataset.p===np));
  if(np===0){state.bricks=clone(freeSave.bricks);state.cables=clone(freeSave.cables)}else{applyPreset();presetDials()}
  render();updSub()}
@@ -730,12 +747,12 @@ $('#gbtn').onclick=()=>{const h=document.body.classList.toggle('noside');$('#gbt
 // [CONFIRMAR] volver a empezar borra el montaje: se pide confirmación
 $('#dlgNo').onclick=()=>{$('#dlg').hidden=true};
 $('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg')$('#dlg').hidden=true});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#dlg').hidden=true});
-$('#dlgYes').onclick=()=>{$('#dlg').hidden=true;initState();SUB[1]='asoc';SUB[2]='tot';if(state.part){applyPreset();presetDials();updSub()}vb=VB0.slice();setVB();$('#fuseBtn').hidden=true;render()};
-$('#fuseBtn').onclick=()=>{state.meters.forEach(m=>m.fuse=true);$('#fuseBtn').hidden=true;solveAll();updLcd(true)};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#dlg').hidden=true;if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&(e.key==='z'||e.key==='Z')){e.preventDefault();undo()}});
+$('#dlgYes').onclick=()=>{$('#dlg').hidden=true;clearHist();initState();SUB[1]='asoc';SUB[2]='tot';if(state.part){applyPreset();presetDials();updSub()}vb=VB0.slice();setVB();$('#fuseBtn').hidden=true;render()};
+$('#fuseBtn').onclick=()=>{pushHist(snap());state.meters.forEach(m=>m.fuse=true);$('#fuseBtn').hidden=true;solveAll();updLcd(true)};
 try{document.querySelectorAll('.eq[data-tex]').forEach(e=>katex.render(e.dataset.tex,e,{displayMode:true,throwOnError:false}))}catch(e){}
 initState();render();setPart(1);requestAnimationFrame(fitScene); // se abre en la parte I
-window.__ohm={LAY,fitScene,setFlow,flowSolve,setPart,SUB,applyPreset,zoneAt,brickEnds,state,holes,render,solveAll,reading,RES,slotHoles,DIALS,dialC,KVg,KAg,SRCJ,jackPos,TRAYPOS,COILPOS};
+window.__ohm={HIST,undo,LAY,fitScene,setFlow,flowSolve,setPart,SUB,applyPreset,zoneAt,brickEnds,state,holes,render,solveAll,reading,RES,slotHoles,DIALS,dialC,KVg,KAg,SRCJ,jackPos,TRAYPOS,COILPOS};
 })();
 </script>
 </body></html>
