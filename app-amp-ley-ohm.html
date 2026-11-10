@@ -278,7 +278,7 @@ function drawSchem(){L_sch.innerHTML='';const g=L_sch,X=SCH.x,Y=SCH.y;
  if(state.part)txt(g,X+14,Y+43,(part===1?'Serie':'Paralelo')+' · '+subt,{'font-size':12.5,fill:'#5a4a32'});
  if(!state.part){let xx=X+14+150;for(const [k,l] of [['paralelo','Paralelo'],['serie','Serie']]){const w=l.length*8.2+18,on=SCHK===k,bg=mk('g',{class:'btnz','data-act':'sch','data-id':k},g);
   mk('rect',{x:xx-w,y:Y+31,width:w,height:24,rx:6,fill:on?'#1d5fa8':'#fff',stroke:'#1d5fa8'},bg);txt(bg,xx-w/2,Y+48,l,{'text-anchor':'middle','font-size':13,'font-weight':600,fill:on?'#fff':'#1d5fa8'});xx-=w+6}}
- const sc=Math.min((SCH.w-12)/440,(SCH.h-70)/222),b=mk('g',{transform:`translate(${X+6+(SCH.w-12-440*sc)/2} ${Y+62}) scale(${sc})`},g);
+ const b=mk('g',null,g);
  // mismo trazado que las figuras de las fichas (serie: figura 2 de la ficha I; paralelo: figuras a y b de la ficha II)
  const W='#22262a',ln=(pts)=>mk('path',{d:'M'+pts.map(q=>q.join(' ')).join(' L'),stroke:W,'stroke-width':2.2,fill:'none','stroke-linejoin':'miter'},b);
  const dot=(x,y)=>mk('circle',{cx:x,cy:y,r:3.6,fill:W},b);
@@ -293,17 +293,21 @@ function drawSchem(){L_sch.innerHTML='';const g=L_sch,X=SCH.x,Y=SCH.y;
  if(part===1){const L=150,Rx=270,T=20,Bt=205;
   ln([[L,T],[L,38]]);met(L,55,'A');ln([[L,72],[L,118]]);ln([[L,132],[L,Bt],[Rx,Bt],[Rx,185]]);src(L,118);
   ln([[L,T],[Rx,T],[Rx,35]]);ln([[Rx,95],[Rx,125]]);res(Rx,35,95,'R₁','R1',-1);res(Rx,125,185,'R₂','R2',-1);
-  const VX=370,[na,nb]={asoc:[27,197],R1:[27,110],R2:[110,197]}[sub],vy=(na+nb)/2;
+  const VX=338,[na,nb]={asoc:[27,197],R1:[27,110],R2:[110,197]}[sub],vy=(na+nb)/2;
   ln([[Rx,na],[VX,na],[VX,vy-17]]);ln([[VX,vy+17],[VX,nb],[Rx,nb]]);met(VX,vy,'V');dot(Rx,na);dot(Rx,nb);
- }else{const L=80,T=20,Bt=205,X3=300,X4=375;
+ }else{const L=80,T=20,Bt=205,X3=248,X4=318,VL=150;
   ln([[L,T],[L,118]]);ln([[L,132],[L,Bt]]);src(L,118);
-  ln([[L,62],[165,62],[165,95]]);ln([[165,129],[165,168],[L,168]]);met(165,112,'V');dot(L,62);dot(L,168);
-  if(sub==='tot'){ln([[L,T],[212,T]]);met(229,T,'A');ln([[246,T],[X4,T]])}else ln([[L,T],[X4,T]]);dot(X3,T);
+  ln([[L,62],[VL,62],[VL,95]]);ln([[VL,129],[VL,168],[L,168]]);met(VL,112,'V');dot(L,62);dot(L,168);
+  if(sub==='tot'){ln([[L,T],[180,T]]);met(197,T,'A');ln([[214,T],[X4,T]])}else ln([[L,T],[X4,T]]);dot(X3,T);
   for(const [x,key,lab,sd] of [[X3,'R3','R₃',-1],[X4,'R4','R₄',1]]){
    if(sub===key){ln([[x,T],[x,38]]);met(x,55,'A');ln([[x,72],[x,95]])}else ln([[x,T],[x,95]]);
    res(x,95,155,lab,key,sd);ln([[x,155],[x,Bt]])}
   ln([[X4,Bt],[L,Bt]]);dot(X3,Bt);
- }}
+ }
+ // [ENCAJE] el dibujo se escala para ocupar todo el hueco libre de la ventana del esquema (sin cambiar la ventana)
+ let bb=null;try{bb=b.getBBox()}catch(e){}if(!bb||!bb.width)bb={x:0,y:0,width:440,height:222};
+ const ax=X+10,ay=Y+60,aw=SCH.w-20,ah=SCH.h-70,sc=Math.min(aw/bb.width,ah/bb.height,1.9);
+ b.setAttribute('transform',`translate(${ax+(aw-bb.width*sc)/2} ${ay+(ah-bb.height*sc)/2}) scale(${sc}) translate(${-bb.x} ${-bb.y})`)}
 
 /* ---------- polímetros: dibujo ---------- */
 const SEG=[[0,0],[1,0],[1,1],[1,2],[0,2],[0,1],[0,1]];
