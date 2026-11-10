@@ -25,9 +25,15 @@ body.noside main{grid-template-columns:minmax(0,1fr)}body.noside .side{display:n
 .left{display:flex;flex-direction:column;min-height:0;min-width:0}
 .left .card{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;position:relative}
 #bench{flex:1;min-height:0;width:100%;display:block;touch-action:none;user-select:none;-webkit-user-select:none}
-.bar{display:flex;align-items:center;gap:10px;padding:6px 12px;border-top:1px solid var(--line);min-height:44px;font-size:14px}
-.bar .st{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--slate)}
-.bar .st.w{color:var(--warn);font-weight:700}
+.st{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);max-width:min(78%,760px);background:#fdecea;color:var(--warn);border:1px solid #f1b8b3;border-radius:8px;padding:6px 12px;font-size:14px;font-weight:700;pointer-events:none;box-shadow:0 2px 8px #0002}
+html.dk .st{background:#3a1d1b;border-color:#6b2c27;color:#ffb4ab}
+.st[hidden],.dlg[hidden]{display:none}
+.vbtn{position:absolute;right:10px;bottom:10px;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:22px/1 Inter,system-ui,sans-serif;cursor:pointer;display:grid;place-items:center;opacity:.92;padding:0}
+.vbtn:hover{background:var(--paper)}
+.dlg{position:fixed;inset:0;background:#0006;display:grid;place-items:center;z-index:20}
+.dlgc{background:var(--bg);color:var(--ink);border-radius:12px;padding:20px 22px;max-width:420px;margin:16px;box-shadow:0 10px 40px #0004;font-size:16px}
+.dlgc p{margin:0 0 16px}.dlgb{display:flex;gap:10px;justify-content:flex-end}
+.hbtn.pri{background:#1d5fa8;border-color:#1d5fa8;color:#fff}
 .side{overflow:auto;padding:14px 18px;font-size:clamp(14px,1.05vw,17px)}
 .side h2{font-size:1.08em;margin:1em 0 .35em;color:var(--navy)}.side h2:first-child{margin-top:0}
 .side p{margin:.4em 0}
@@ -41,14 +47,14 @@ body.noside main{grid-template-columns:minmax(0,1fr)}body.noside .side{display:n
 svg text{font-family:Inter,system-ui,sans-serif}
 .grab{cursor:grab}.grabbing,.grabbing *{cursor:grabbing!important}
 .btnz{cursor:pointer}
-@media (max-width:820px){main{grid-template-columns:minmax(0,1fr);height:auto;padding:10px}header{padding:8px 10px}.left .card{height:72vh}.side{max-height:none}}
+@media (max-width:820px){main{grid-template-columns:minmax(0,1fr);height:auto;padding:10px}header{padding:8px 10px}.left .card{height:auto}#bench{flex:none;height:auto;aspect-ratio:1500/900}.side{max-height:none}.vbtn{width:30px;height:30px;font-size:17px;right:6px;bottom:6px}}
 </style></head><body data-part="1">
 <header><a class="back" href="laboratorios.html#ampliacion" aria-label="Volver al Laboratorio de Ampliación de Física">←</a><h1>Ley de Ohm</h1>
 <div class="tabs" role="tablist"><button class="tab on" data-p="1" type="button">Parte I: serie</button><button class="tab" data-p="2" type="button">Parte II: paralelo</button></div>
 <span class="sp"></span><button class="hbtn" id="fuseBtn" type="button" hidden>Cambiar fusible</button><button class="hbtn" id="resetBtn" type="button">Empezar de nuevo</button><button class="hbtn" id="gbtn" type="button">Ocultar guía</button></header>
 <main><section class="left"><div class="card">
-<svg id="bench" viewBox="0 0 1460 900" preserveAspectRatio="xMidYMid meet" aria-label="Mesa de laboratorio con la placa de montaje, la fuente, las resistencias, los cables y dos polímetros"></svg>
-<div class="bar"><span class="st" id="st">Arrastra las resistencias a la placa y conecta los cables.</span><button class="hbtn" id="viewBtn" type="button" title="Vista inicial">⟲ Vista inicial</button></div>
+<svg id="bench" viewBox="0 0 1500 900" preserveAspectRatio="xMidYMid meet" aria-label="Mesa de laboratorio con la placa de montaje, la fuente, las resistencias, los cables y dos polímetros"></svg>
+<div class="st" id="st" role="status" hidden></div><button class="vbtn" id="viewBtn" type="button" title="Vista inicial (zoom y encuadre)" aria-label="Vista inicial">⟲</button>
 </div></section>
 <aside class="side card" id="side">
 <h2>Qué se observa</h2>
@@ -67,9 +73,10 @@ svg text{font-family:Inter,system-ui,sans-serif}
 <h2>Datos y errores</h2>
 <p>Tensiones e intensidades se leen en los polímetros digitales; el error de cada lectura es una unidad de la última cifra del rango que uses. Elige el rango más pequeño que no se desborde.</p>
 <h2>Cómo se monta</h2>
-<p>En la placa, los 9 huecos de cada isla están unidos por las líneas negras: todo lo que se enchufa en una isla queda conectado. Por eso cada resistencia debe ir de una isla a la vecina; si sus dos clavijas quedan en la misma isla, está cortocircuitada. Arrastra cada resistencia a la placa y tócala para girarla. Los puentes unen dos islas sin resistencia. Arrastra un cable desde su bobina y lleva cada clavija a un hueco, a un borne de la fuente o a un borne del polímetro. Gira el selector del polímetro tocando la posición que quieras y enciéndelo con su botón. La tensión de la fuente se ajusta con el mando V (arrastra arriba o abajo, o usa la rueda del ratón). Para retirar una pieza o un cable, devuélvelo a su bandeja.</p>
+<p>En la placa, los 9 huecos de cada isla están unidos por las líneas negras: todo lo que se enchufa en una isla queda conectado. Por eso cada resistencia debe ir de una isla a la vecina; si sus dos clavijas quedan en la misma isla, está cortocircuitada. Arrastra cada resistencia a la placa y tócala para girarla. Los puentes unen dos islas sin resistencia. Arrastra un cable desde su bobina y lleva cada clavija a un hueco, a un borne de la fuente o a un borne del polímetro. Gira el selector del polímetro arrastrándolo alrededor de su eje (o con la rueda del ratón) y enciéndelo con su botón POWER. Las posiciones del selector están agrupadas en sectores: V⎓ y A⎓ son tensión e intensidad continuas, V~ y A~ las alternas, y Ω la resistencia; los números del sector mA⎓ son miliamperios (200 es el rango de 200 mA) y el de A⎓ es el de 20 A. Los mandos de la fuente se giran igual. Para retirar una pieza o un cable, devuélvelo a su bandeja.</p>
 <p class="note">Gemelo de la práctica: resistencias con su tolerancia real, fuente con limitación de corriente y polímetros con fusible · CC BY-NC-SA 4.0</p>
 </aside></main>
+<div class="dlg" id="dlg" hidden><div class="dlgc" role="dialog" aria-modal="true"><p>¿Quieres volver a la configuración inicial? Se perderá todo el montaje.</p><div class="dlgb"><button class="hbtn" id="dlgNo" type="button">Cancelar</button><button class="hbtn pri" id="dlgYes" type="button">Sí, empezar de nuevo</button></div></div></div>
 <script src="lib/katex/0.16.9/katex.min.js"></script>
 <script>
 (function(){
@@ -84,37 +91,36 @@ const gauss=()=>{let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();r
 /* ---------- datos del montaje ---------- */
 // Resistencias con su tolerancia real (valor fijo para que los datos se puedan repetir)
 const RES={R1:{nom:'100 Ω',v:100*(1+(rnd()-.5)*0.06)},R2:{nom:'220 Ω',v:220*(1+(rnd()-.5)*0.06)},R3:{nom:'150 Ω',v:150*(1+(rnd()-.5)*0.06)},R4:{nom:'220 Ω',v:220*(1+(rnd()-.5)*0.06)}};
-// [PLACA] Placa PHYWE: 4 × 3 islas de 3 × 3 huecos en las esquinas de las casillas. Las líneas negras unen los 9 huecos de cada isla,
+// [PLACA] Placa PHYWE (aquí solo 3 × 2 islas, suficiente para los dos montajes): islas de 3 × 3 huecos en las esquinas de las casillas. Las líneas negras unen los 9 huecos de cada isla,
 // así que una isla es un único punto eléctrico; entre islas vecinas hay una casilla de separación (paso uniforme P).
-const P=72,BX=572,BY=60,MG=40,NC=12,NR=9,KB=P/100,CELL=P;
+const P=99,BX=615,BY=12,MG=40,NC=9,NR=6,KB=P/100,CELL=P;
 const BW=2*MG+(NC-1)*P,BH=2*MG+(NR-1)*P;
 const holes={};const hx=c=>BX+MG+c*P,hy=r=>BY+MG+r*P;
 for(let c=0;c<NC;c++)for(let r=0;r<NR;r++)holes[`p${c}_${r}`]={x:hx(c),y:hy(r),c,r,isl:`I${Math.floor(c/3)}${Math.floor(r/3)}`};
-const SRC={x:22,y:22,w:520,h:280};
-const TRAY={x:22,y:312,w:520,h:158};
-const CTRAY={x:22,y:462,w:520,h:0};
+// [ESPACIO] fuente arriba a la izquierda, polímetros debajo, placa a la derecha y bandeja de piezas bajo la placa
+const SRC={x:0,y:0,w:520,h:280},SRCX=12,SRCY=12,SS=1.125;
+const TRAY={x:BX,y:BY+BH+14,w:BW,h:888-(BY+BH+14)};
 const state={part:1,bricks:[],cables:[],meters:[],src:{on:false,v:0,ilim:1.0,cc:false},nid:1,warn:''};
 function initState(){
  state.bricks=[];state.cables=[];state.src={on:false,v:0,ilim:1.0,cc:false};
- state.meters=[{id:'m1',kind:'victor',x:22,y:480,on:false,dial:'DCV20',fuse:true},{id:'m2',kind:'phywe',x:292,y:480,on:false,dial:'DCV20',fuse:true}];
+ state.meters=[{id:'m1',kind:'victor',x:12,y:339,on:false,dial:'DCV20',fuse:true},{id:'m2',kind:'phywe',x:309.5,y:339,on:false,dial:'DCV20',fuse:true}];
 }
 /* ---------- polímetros ---------- */
-// Posiciones del selector: [id, etiqueta, ángulo (0 = arriba, sentido horario), función, rango]
+// [ESCALAS] Selector agrupado en sectores con su símbolo (V⎓, V~, mA~, A⎓, mA⎓, Ω): así cada número es corto y se ve a qué magnitud y unidad pertenece.
+// Cada posición: [id, etiqueta, ángulo (0 = arriba, horario), función, rango, sector]
+function mkDial(groups){const n=groups.reduce((u,q)=>u+q[2].length,0),k=groups.length,st=360/((n-k)+1.6*k);const out=[];let an=-(groups[0][2].length-1)*st/2;
+ groups.forEach(([sym,fn,list],gi)=>{for(const [lab,rg] of list){out.push([fn+rg,lab,an,fn,rg,gi,sym]);an+=st}an+=0.6*st});return out}
 const DIALS={
- victor:[['OHM200','200',-112,'OHM',200],['OHM2k','2k',-90,'OHM',2e3],['OHM20k','20k',-68,'OHM',2e4],['OHM200k','200k',-46,'OHM',2e5],['OHM2M','2M',-24,'OHM',2e6],
-  ['DCV200m','200m',0,'DCV',.2],['DCV2','2',22,'DCV',2],['DCV20','20',44,'DCV',20],['DCV200','200',66,'DCV',200],['DCV1000','1000',88,'DCV',1000],
-  ['ACV750','750',112,'ACV',750],
-  ['DCA20A','20A',140,'DCA',20],['DCA200m','200m',162,'DCA',.2],['DCA20m','20m',184,'DCA',.02],['DCA2m','2m',206,'DCA',.002],['ACA200m','200m',230,'ACA',.2]],
- phywe:[['OHM200','200',-100,'OHM',200],['OHM2k','2K',-78,'OHM',2e3],['OHM20k','20K',-56,'OHM',2e4],['OHM200k','200K',-34,'OHM',2e5],['OHM2M','2M',-12,'OHM',2e6],
-  ['DCV200m','200m',12,'DCV',.2],['DCV2','2',34,'DCV',2],['DCV20','20',56,'DCV',20],['DCV200','200',78,'DCV',200],['DCV600','600',100,'DCV',600],
-  ['ACV600','600',124,'ACV',600],
-  ['ACA200m','200m',150,'ACA',.2],['DCA10','10A',176,'DCA',10],['DCA200m','200m',198,'DCA',.2],['DCA20m','20m',220,'DCA',.02],['DCA2m','2m',242,'DCA',.002]]
+ victor:mkDial([['V',  'DCV',[['200m',.2],['2',2],['20',20],['200',200],['1000',1000]]],['V~','ACV',[['200',200],['750',750]]],['mA~','ACA',[['200',.2]]],
+  ['A','DCA',[['20',20]]],['mA','DCA',[['200',.2],['20',.02],['2',.002]]],['Ω','OHM',[['200',200],['2k',2e3],['20k',2e4],['200k',2e5],['2M',2e6]]]]),
+ phywe:mkDial([['V',  'DCV',[['200m',.2],['2',2],['20',20],['200',200],['600',600]]],['V~','ACV',[['200',200],['600',600]]],['mA~','ACA',[['200',.2]]],
+  ['A','DCA',[['10',10]]],['mA','DCA',[['200',.2],['20',.02],['2',.002]]],['Ω','OHM',[['200',200],['2K',2e3],['20K',2e4],['200K',2e5],['2M',2e6]]]])
 };
-const MW=250,MH=420;
+const MS=1.15,MW=250,MH=470,DCX=125,DCY=262;
 const JACKS={victor:[['A','20A',38],['mA','mA',96],['COM','COM',154],['V','VΩHz',212]],phywe:[['A','10A',38],['mA','mA',96],['V','V·Ω',154],['COM','COM',212]]};
-const jackPos=(m,j)=>{const L=JACKS[m.kind].find(q=>q[0]===j);return {x:m.x+L[2],y:m.y+MH-48}};
-const dialC=m=>({x:m.x+MW/2,y:m.y+246});
-const dialR=52;
+const jackPos=(m,j)=>{const L=JACKS[m.kind].find(q=>q[0]===j);return {x:m.x+MS*L[2],y:m.y+MS*(MH-48)}};
+const dialC=m=>({x:m.x+MS*DCX,y:m.y+MS*DCY});
+const dialR=46;
 
 /* ---------- capas SVG ---------- */
 const defs=mk('defs',null,SV);
@@ -145,14 +151,17 @@ mk('rect',{x:-2000,y:-2000,width:5600,height:4900,fill:'url(#gTable)'},L_bg);
  mk('rect',{x:BX,y:BY,width:BW,height:BH,rx:10,fill:'url(#gBoard)',stroke:'#c9ccc6','stroke-width':2,filter:'url(#fSh)'},g);
  txt(g,BX+BW-30,BY+24,'PHYWE',{'text-anchor':'end','font-size':17,'font-weight':800,fill:'#2b2f33','letter-spacing':'.06em'});
  txt(g,BX+30,BY+24,'06033.00',{'font-size':12,fill:'#5b6168'});
- for(let my=0;my<3;my++)for(let mx=0;mx<4;mx++){const x0=hx(3*mx),y0=hy(3*my);
+ for(let my=0;my<NR/3;my++)for(let mx=0;mx<NC/3;mx++){const x0=hx(3*mx),y0=hy(3*my);
   for(let k=0;k<3;k++){mk('path',{d:`M${x0} ${y0+k*P} H${x0+2*P}`,stroke:'#22262a','stroke-width':2.4},g);mk('path',{d:`M${x0+k*P} ${y0} V${y0+2*P}`,stroke:'#22262a','stroke-width':2.4},g)}}
  for(const id in holes){const h=holes[id];mk('circle',{cx:h.x,cy:h.y,r:9.5,fill:'#f4f5f2'},g);mk('circle',{cx:h.x,cy:h.y,r:7.2,fill:'url(#gHole)'},g)}
 })();
 
 /* ---------- fuente ---------- */
-const SRCJ={P:{x:SRC.x+352,y:SRC.y+236,col:'R',lab:'+'},N:{x:SRC.x+402,y:SRC.y+236,col:'B',lab:'−'},A0:{x:SRC.x+60,y:SRC.y+236,col:'K',lab:'0'},A6:{x:SRC.x+112,y:SRC.y+236,col:'K',lab:'6V~'},A12:{x:SRC.x+164,y:SRC.y+236,col:'K',lab:'12V~'}};
-const KV={x:SRC.x+300,y:SRC.y+132,r:30},KA={x:SRC.x+432,y:SRC.y+132,r:30};
+const SRCJL={P:{x:352,y:236,col:'R',lab:'+'},N:{x:402,y:236,col:'B',lab:'−'},A0:{x:60,y:236,col:'K',lab:'0'},A6:{x:112,y:236,col:'K',lab:'6V~'},A12:{x:164,y:236,col:'K',lab:'12V~'}};
+const SG=(x,y)=>({x:SRCX+SS*x,y:SRCY+SS*y});
+const SRCJ={};for(const k in SRCJL)SRCJ[k]=Object.assign({},SRCJL[k],SG(SRCJL[k].x,SRCJL[k].y));
+const KV={x:300,y:132,r:30},KA={x:432,y:132,r:30},KVg=SG(KV.x,KV.y),KAg=SG(KA.x,KA.y);
+L_src.setAttribute('transform',`translate(${SRCX} ${SRCY}) scale(${SS})`);
 let srcLed,srcCC,knobV,knobA,pwrBtn;
 function knobAng(v,max){return -135+270*v/max}
 (function drawSrc(){const g=L_src,x=SRC.x,y=SRC.y;
@@ -173,26 +182,24 @@ function knobAng(v,max){return -135+270*v/max}
   txt(g,K.x,K.y+K.r+46,lab,{'text-anchor':'middle','font-size':16,'font-weight':700,fill:'#2a2f36'})}
  srcCC=mk('circle',{cx:KA.x,cy:KA.y-KA.r-38,r:5,fill:'#4a2222'},g);
  knobV=mk('g',{class:'btnz','data-act':'kv'},g);knobA=mk('g',{class:'btnz','data-act':'ka'},g);
- for(const [kg,K] of [[knobV,KV],[knobA,KA]]){mk('circle',{cx:K.x,cy:K.y,r:K.r,fill:'url(#gKnob)',stroke:'#80868c',filter:'url(#fSh2)'},kg);mk('circle',{cx:K.x,cy:K.y,r:K.r-9,fill:'none',stroke:'#b9bec3'},kg);mk('path',{d:`M${K.x} ${K.y-K.r+4} V${K.y-K.r+16}`,stroke:'#1b1e22','stroke-width':4,'stroke-linecap':'round','class':'ind'},kg)}
+ for(const [kg,K] of [[knobV,KV],[knobA,KA]]){mk('circle',{cx:K.x,cy:K.y,r:K.r+20,fill:'#000','fill-opacity':0},kg);mk('circle',{cx:K.x,cy:K.y,r:K.r,fill:'url(#gKnob)',stroke:'#80868c',filter:'url(#fSh2)'},kg);mk('circle',{cx:K.x,cy:K.y,r:K.r-9,fill:'none',stroke:'#b9bec3'},kg);mk('path',{d:`M${K.x} ${K.y-K.r+4} V${K.y-K.r+16}`,stroke:'#1b1e22','stroke-width':4,'stroke-linecap':'round','class':'ind'},kg)}
  // bornes
  txt(g,x+112,y+198,'AC  máx. 5 A',{'text-anchor':'middle','font-size':12,fill:'#3b4250'});
  txt(g,x+377,y+198,'DC',{'text-anchor':'middle','font-size':13,'font-weight':700,fill:'#3b4250'});
- for(const k in SRCJ){const J=SRCJ[k];txt(g,J.x,J.y-22,J.lab,{'text-anchor':'middle','font-size':13,'font-weight':700,fill:'#2a2f36'});
+ for(const k in SRCJL){const J=SRCJL[k];txt(g,J.x,J.y-22,J.lab,{'text-anchor':'middle','font-size':13,'font-weight':700,fill:'#2a2f36'});
   mk('circle',{cx:J.x,cy:J.y,r:14,fill:`url(#gSock${J.col})`,stroke:'#1a1d21'},g);mk('circle',{cx:J.x,cy:J.y,r:5,fill:'#0d0f11'},g)}
 })();
 function drawSrcState(){const s=state.src;srcLed.setAttribute('fill',s.on?'#35e05a':'#2b4a2f');srcCC.setAttribute('fill',s.on&&s.cc?'#ff3b30':'#4a2222');
  knobV.querySelector('.ind').setAttribute('transform',`rotate(${knobAng(s.v,12)} ${KV.x} ${KV.y})`);knobA.querySelector('.ind').setAttribute('transform',`rotate(${knobAng(s.ilim,2)} ${KA.x} ${KA.y})`)}
 
 /* ---------- bandejas ---------- */
-const TRAYPOS={R1:{x:TRAY.x+72,y:TRAY.y+58},R2:{x:TRAY.x+197,y:TRAY.y+58},R3:{x:TRAY.x+322,y:TRAY.y+58},R4:{x:TRAY.x+447,y:TRAY.y+58},W:{x:TRAY.x+72,y:TRAY.y+122}};
-const COILS=[{col:'R',x:TRAY.x+0,y:0},{col:'B',x:0,y:0},{col:'K',x:0,y:0}];
+const TRAYPOS={R1:{x:TRAY.x+100,y:TRAY.y+84},R2:{x:TRAY.x+272,y:TRAY.y+84},R3:{x:TRAY.x+444,y:TRAY.y+84},R4:{x:TRAY.x+616,y:TRAY.y+84},W:{x:TRAY.x+100,y:TRAY.y+208}};
 (function drawTray(){const g=L_tray;
  mk('rect',{x:TRAY.x,y:TRAY.y,width:TRAY.w,height:TRAY.h,rx:10,fill:'#f2ede4',stroke:'#cdbfa8'},g);
- txt(g,TRAY.x+12,TRAY.y+18,'Resistencias y puentes',{'font-size':13,'font-weight':700,fill:'#5a4a32'});
+ txt(g,TRAY.x+14,TRAY.y+24,'Resistencias y puentes',{'font-size':15,'font-weight':700,fill:'#5a4a32'});
 })();
-// bobinas de cable: a la derecha de la placa no hay sitio; van sobre la mesa, bajo la placa
-const COILPOS={R:{x:BX+BW-230,y:BY+BH+0},B:{x:BX+BW-150,y:BY+BH+0},K:{x:BX+BW-70,y:BY+BH+0}};
-const CABLEZONE={x:BX+BW-270,y:BY+BH-4,w:270,h:0};
+// bobinas de cable, en la misma bandeja (abajo a la derecha)
+const COILPOS={R:{x:TRAY.x+BW-300,y:TRAY.y+138},B:{x:TRAY.x+BW-215,y:TRAY.y+138},K:{x:TRAY.x+BW-130,y:TRAY.y+138}};
 
 /* ---------- utilidades de piezas ---------- */
 // Cada pieza ocupa dos huecos contiguos: (c,r) y el de su derecha (giro 0) o el de debajo (giro 1)
@@ -218,12 +225,12 @@ function drawBrick(b,par){const g=mk('g',{'data-b':b.id,class:'grab'},par),p=bri
 function drawTrayItems(){[...L_tray.querySelectorAll('[data-tray]')].forEach(e=>e.remove());
  for(const k of ['R1','R2','R3','R4']){if(state.bricks.some(b=>b.key===k))continue;const Q=TRAYPOS[k];const g=drawBrick({id:'t'+k,type:'R',key:k,rot:0,x:Q.x,y:Q.y},L_tray);g.setAttribute('data-tray',k);g.setAttribute('transform',`translate(${Q.x} ${Q.y}) scale(1.2) translate(${-Q.x} ${-Q.y})`)}
  for(const k of ['W']){const Q=TRAYPOS[k];const g=drawBrick({id:'t'+k,type:k,key:k,rot:0,x:Q.x,y:Q.y},L_tray);g.setAttribute('data-tray',k);
-  txt(L_tray,Q.x+60,Q.y+5,'Puente (une dos islas, tantos como quieras)',{'font-size':13,'font-weight':600,fill:'#5a4a32','data-tray':'lbl'})}
+  txt(L_tray,Q.x+88,Q.y+6,'Puente (une dos islas, tantos como quieras)',{'font-size':15,'font-weight':600,fill:'#5a4a32','data-tray':'lbl'})}
  // bobinas de cable
  for(const c in COILPOS){const P=COILPOS[c],g=mk('g',{'data-tray':'C'+c,class:'grab'},L_tray),col={R:'#d0302a',B:'#2563c9',K:'#1e2226'}[c];
   for(let i=0;i<4;i++)mk('ellipse',{cx:P.x,cy:P.y+40-i*3,rx:30-i*2,ry:17-i,fill:'none',stroke:col,'stroke-width':5},g);
   mk('rect',{x:P.x-9,y:P.y+18,width:18,height:22,rx:4,fill:col},g);mk('rect',{x:P.x-4,y:P.y+8,width:8,height:14,rx:2,fill:'#c7ccd2'},g)}
- const zt=mk('text',{x:COILPOS.R.x-38,y:COILPOS.R.y+30,'text-anchor':'end','font-size':13,'font-weight':700,fill:'#5a4a32','data-tray':'lbl'},L_tray);zt.textContent='Cables';
+ const zt=mk('text',{x:COILPOS.R.x-44,y:COILPOS.R.y+46,'text-anchor':'end','font-size':15,'font-weight':700,fill:'#5a4a32','data-tray':'lbl'},L_tray);zt.textContent='Cables';
 }
 
 /* ---------- polímetros: dibujo ---------- */
@@ -232,8 +239,10 @@ const MASK={'0':63,'1':6,'2':91,'3':79,'4':102,'5':109,'6':125,'7':7,'8':127,'9'
 function digit(par,x,y,w,h,ch,on,off){ // 7 segmentos
  const t=w*.18,segs=[[x+t,y,x+w-t,y],[x+w,y+t,x+w,y+h/2-t/2],[x+w,y+h/2+t/2,x+w,y+h-t],[x+t,y+h,x+w-t,y+h],[x,y+h/2+t/2,x,y+h-t],[x,y+t,x,y+h/2-t/2],[x+t,y+h/2,x+w-t,y+h/2]];
  const m=MASK[ch]||0;segs.forEach((s,i)=>mk('path',{d:`M${s[0]} ${s[1]} L${s[2]} ${s[3]}`,stroke:(m>>i)&1?on:off,'stroke-width':t*.9,'stroke-linecap':'round'},par))}
+const pol=(c,r,a)=>({x:c.x+r*Math.sin(a*Math.PI/180),y:c.y-r*Math.cos(a*Math.PI/180)});
+function arcD(c,r,a1,a2){const p=pol(c,r,a1),q=pol(c,r,a2);return `M${p.x} ${p.y} A${r} ${r} 0 ${a2-a1>180?1:0} 1 ${q.x} ${q.y}`}
 function drawMeter(m){
- const g=mk('g',{'data-m':m.id},L_meters),x=m.x,y=m.y,V=m.kind==='victor';
+ const g=mk('g',{'data-m':m.id,transform:`translate(${m.x} ${m.y}) scale(${MS})`},L_meters),x=0,y=0,V=m.kind==='victor';
  const body=mk('rect',{x,y,width:MW,height:MH,rx:26,fill:V?'#f07a1c':'#3f4a57',filter:'url(#fSh)',class:'grab','data-mbody':m.id},g);
  mk('rect',{x:x+10,y:y+10,width:MW-20,height:MH-20,rx:18,fill:V?'#26292d':'#e7eaee',class:'grab','data-mbody':m.id},g);
  txt(g,x+22,y+34,V?'VICTOR 88C':'PHYWE',{'font-size':V?14:15,'font-weight':800,fill:V?'#f07a1c':'#2a4f8f',class:'grab','data-mbody':m.id});
@@ -242,27 +251,36 @@ function drawMeter(m){
  mk('g',{class:'lcd','data-lcd':m.id},g);
  // botón de encendido
  const pb=mk('g',{class:'btnz','data-act':'mpwr','data-id':m.id},g);mk('rect',{x:x+22,y:y+133,width:58,height:20,rx:7,fill:V?'#f08a2e':'#c9ced6',stroke:'#00000033'},pb);txt(pb,x+51,y+147,'POWER',{'text-anchor':'middle','font-size':10.5,'font-weight':700,fill:V?'#26292d':'#2a3340'});
- // selector
- const C=dialC(m),D=DIALS[m.kind];
- mk('circle',{cx:C.x,cy:C.y,r:dialR+38,fill:V?'#2f3338':'#f4f6f8',stroke:V?'#444a50':'#c5ccd4'},g);
- for(const p of D){const a=p[2]*Math.PI/180,r1=dialR+4,r2=dialR+10,col=p[3]==='DCA'||p[3]==='ACA'?(V?'#ffb066':'#b33a2a'):(V?'#f2f2f2':'#1f2a36');
-  mk('path',{d:`M${C.x+r1*Math.sin(a)} ${C.y-r1*Math.cos(a)} L${C.x+r2*Math.sin(a)} ${C.y-r2*Math.cos(a)}`,stroke:col,'stroke-width':1.6},g);
-  txt(g,C.x+(dialR+24)*Math.sin(a),C.y-(dialR+24)*Math.cos(a)+4,p[1],{'text-anchor':'middle','font-size':11,'font-weight':600,fill:col,class:'btnz','data-act':'dial','data-id':m.id,'data-pos':p[0]})}
- // rótulos de cada sección del selector, por fuera de la corona
- const grp={};for(const p of D){const k=p[3]==='OHM'?'Ω':p[3]==='DCV'?'V⎓':p[3]==='ACV'?'V~':p[3]==='DCA'?'A⎓':p[3]==='ACA'?'A~':'';if(!k)continue;(grp[k]=grp[k]||[]).push(p[2])}
- for(const k in grp){const a=(grp[k].reduce((u,v)=>u+v,0)/grp[k].length)*Math.PI/180,rr=dialR+50,col=k[0]==='A'?(V?'#ffb066':'#b33a2a'):(V?'#f2f2f2':'#1f2a36');txt(g,C.x+rr*Math.sin(a),C.y-rr*Math.cos(a)+5,k,{'text-anchor':'middle','font-size':14,'font-weight':800,fill:col})}
+ // selector: sectores con su símbolo, marcas y rangos
+ const C={x:DCX,y:DCY},D=DIALS[m.kind],stp=Math.abs(D[1][2]-D[0][2]);
+ const cV=V?'#f2f2f2':'#1f2a36',cA=V?'#ffb066':'#b33a2a';
+ mk('circle',{cx:C.x,cy:C.y,r:114,fill:V?'#2f3338':'#f4f6f8',stroke:V?'#444a50':'#c5ccd4'},g);
+ const grp=[];for(const p of D){const L=grp[grp.length-1];if(L&&L.gi===p[5])L.a.push(p[2]);else grp.push({gi:p[5],fn:p[3],sym:p[6],a:[p[2]]})}
+ for(const G of grp){const cur=G.fn==='DCA'||G.fn==='ACA',col=cur?cA:cV,a1=G.a[0]-stp*.42,a2=G.a[G.a.length-1]+stp*.42;
+  mk('path',{d:arcD(C,103,a1,a2),stroke:cur?(V?'#55391f':'#f3d9d3'):(V?'#454c55':'#dbe2ea'),'stroke-width':17,fill:'none','stroke-linecap':'round'},g);
+  const am=(a1+a2)/2,pm=pol(C,103,am),rot=((am%360)+360)%360,rr=G.sym==='Ω'?0:rot>90&&rot<270?am+180:am,sg=mk('g',{transform:`translate(${pm.x} ${pm.y}) rotate(${rr})`},g);
+  // símbolo: letras (V, A, mA) seguidas de la marca de continua (línea y trazos) o de alterna (~); Ω sola
+  const ac=G.sym.endsWith('~'),let_=G.sym.replace('~',''),lw=let_==='Ω'?11:let_.length*9.5,tw=let_==='Ω'?lw:lw+2+(ac?11:14),x0=-tw/2;
+  txt(sg,x0,5,let_,{'font-size':let_==='Ω'?15:13.5,'font-weight':800,fill:col});
+  if(let_!=='Ω'){if(ac)txt(sg,x0+lw+7.5,6,'~',{'text-anchor':'middle','font-size':18,'font-weight':800,fill:col});
+   else{mk('path',{d:`M${x0+lw+2} -2.5 h14`,stroke:col,'stroke-width':2},sg);mk('path',{d:`M${x0+lw+2} 2.5 h14`,stroke:col,'stroke-width':2,'stroke-dasharray':'3.6 1.6'},sg)}}}
+ for(const p of D){const col=p[3]==='DCA'||p[3]==='ACA'?cA:cV,q1=pol(C,dialR+4,p[2]),q2=pol(C,dialR+11,p[2]),ql=pol(C,79,p[2]);
+  mk('path',{d:`M${q1.x} ${q1.y} L${q2.x} ${q2.y}`,stroke:col,'stroke-width':1.8},g);
+  txt(g,ql.x,ql.y+4.5,p[1],{'text-anchor':'middle','font-size':12,'font-weight':700,fill:col})}
+ // zona de agarre del selector (toda la corona) y mando
+ mk('circle',{cx:C.x,cy:C.y,r:114,fill:'#000','fill-opacity':0,class:'btnz','data-act':'dial','data-id':m.id},g);
  const kn=mk('g',{class:'btnz','data-act':'dial','data-id':m.id,'data-knob':m.id},g);
- mk('circle',{cx:C.x,cy:C.y,r:dialR-6,fill:V?'url(#gDialK)':'url(#gDialW)',stroke:V?'#0c0d0f':'#9aa3ad',filter:'url(#fSh2)'},kn);
+ mk('circle',{cx:C.x,cy:C.y,r:dialR-4,fill:V?'url(#gDialK)':'url(#gDialW)',stroke:V?'#0c0d0f':'#9aa3ad',filter:'url(#fSh2)'},kn);
  mk('rect',{x:C.x-11,y:C.y-dialR+2,width:22,height:2*dialR-4,rx:10,fill:V?'#3c4248':'#ffffff',stroke:V?'#0c0d0f':'#aab2bb','class':'ptr'},kn);
  mk('path',{d:`M${C.x} ${C.y-dialR+6} V${C.y-dialR+26}`,stroke:V?'#ffffff':'#1f2a36','stroke-width':3.2,'stroke-linecap':'round','class':'ptr2'},kn);
  // bornes
- for(const [j,lab] of JACKS[m.kind]){const P=jackPos(m,j),red=j!=='COM';
+ for(const [j,lab,jx] of JACKS[m.kind]){const P={x:jx,y:MH-48},red=j!=='COM';
   txt(g,P.x,P.y-24,lab,{'text-anchor':'middle','font-size':11.5,'font-weight':700,fill:V?'#f2f2f2':'#1f2a36'});
   mk('circle',{cx:P.x,cy:P.y,r:16,fill:red?'url(#gSockR)':'url(#gSockK)',stroke:'#0c0d0f'},g);mk('circle',{cx:P.x,cy:P.y,r:6,fill:'#0b0c0e'},g)}
  txt(g,x+MW/2,y+MH-14,j_max(m),{'text-anchor':'middle','font-size':9,fill:V?'#c8c8c8':'#4a5566'});
  setDial(m);return g}
 function j_max(m){return m.kind==='victor'?'20A MÁX · mA 200 mA MÁX · fusible':'10A MÁX · mA 200 mA MÁX · fusible'}
-function setDial(m){const g=L_meters.querySelector(`[data-m="${m.id}"]`);if(!g)return;const p=DIALS[m.kind].find(q=>q[0]===m.dial),C=dialC(m);
+function setDial(m){const g=L_meters.querySelector(`[data-m="${m.id}"]`);if(!g)return;const p=DIALS[m.kind].find(q=>q[0]===m.dial),C={x:DCX,y:DCY};
  g.querySelector(`[data-knob="${m.id}"]`).querySelectorAll('.ptr,.ptr2').forEach(e=>e.setAttribute('transform',`rotate(${p[2]} ${C.x} ${C.y})`))}
 
 /* ---------- cables ---------- */
@@ -319,7 +337,7 @@ function solveAll(){const {node,R}=netlist(),s=state.src;
  if(blow){blow.fuse=false;$('#fuseBtn').hidden=false;render();return}
  const fb=state.meters.find(q=>!q.fuse);if(fb){warn='Se ha fundido el fusible del borne mA del polímetro '+(fb.kind==='victor'?'naranja':'gris')+': ha pasado demasiada corriente. Corrige el montaje y pulsa «Cambiar fusible».'}
  if(state.src.cc&&s.on&&!fb)warn=warn||'La fuente está limitando la corriente (piloto rojo): hay un cortocircuito o una resistencia demasiado pequeña.';
- setStatus(warn||defaultStatus(),!!warn);drawSrcState();updLcd(true)}
+ setStatus(warn);drawSrcState();updLcd(true)}
 function ohmMeter(m){ // resistencia entre V y COM con la fuente desconectada
  const {node,R}=netlist();const el=[];R.forEach(r=>el.push([node(r.a),node(r.b),r.r]));
  for(const o of state.meters){const n=j=>node(`M:${o.id}:${j}`);if(o!==m)el.push([n('V'),n('COM'),RV]);if(o.fuse)el.push([n('mA'),n('COM'),RMA]);el.push([n('A'),n('COM'),RA])}
@@ -327,16 +345,15 @@ function ohmMeter(m){ // resistencia entre V y COM con la fuente desconectada
  const n=ids.size,G=Array.from({length:n},()=>new Array(n).fill(0)),I=new Array(n).fill(0);for(let i=0;i<n;i++)G[i][i]+=1e-12;
  el.forEach(e=>{const i=idx(e[0]),j=idx(e[1]);if(i===j)return;const g=1/e[2];G[i][i]+=g;G[j][j]+=g;G[i][j]-=g;G[j][i]-=g});
  const ib=idx(b);for(let k=0;k<n;k++)G[ib][k]=0;G[ib][ib]=1;I[idx(a)]=1e-3;const x=solveLin(G,I);return x[idx(a)]/1e-3}
-function defaultStatus(){return state.part===1?'Serie: R₁ y R₂ en serie con la fuente y el amperímetro; el voltímetro, en paralelo con lo que quieras medir.':'Paralelo: R₃ y R₄ en paralelo con la fuente; el amperímetro, en la rama común o en la de cada resistencia.'}
-function setStatus(t,w){const e=$('#st');e.textContent=t;e.classList.toggle('w',!!w)}
+function setStatus(t){const e=$('#st');e.textContent=t||'';e.hidden=!t}
 
 /* ---------- pantallas ---------- */
-const FMT={DCV:{.2:[1,'mV',1e3],2:[3,'V',1],20:[2,'V',1],200:[1,'V',1],1000:[0,'V',1],600:[0,'V',1]},DCA:{.002:[3,'mA',1e3],.02:[2,'mA',1e3],.2:[1,'mA',1e3],20:[2,'A',1],10:[2,'A',1]},
+const FMT={DCV:{.2:[1,'mV',1e3],2:[3,'V',1],20:[2,'V',1],200:[1,'V',1],1000:[0,'V',1],600:[0,'V',1]},ACV:{200:[1,'V',1],750:[0,'V',1],600:[0,'V',1]},ACA:{.2:[1,'mA',1e3]},DCA:{.002:[3,'mA',1e3],.02:[2,'mA',1e3],.2:[1,'mA',1e3],20:[2,'A',1],10:[2,'A',1]},
  OHM:{200:[1,'Ω',1],2e3:[3,'kΩ',1e-3],2e4:[2,'kΩ',1e-3],2e5:[1,'kΩ',1e-3],2e6:[3,'MΩ',1e-6],2e7:[2,'MΩ',1e-6]}};
 let lastLcd=0;const shown={};
 function reading(m){const p=DIALS[m.kind].find(q=>q[0]===m.dial),fn=p[3],rg=p[4],r=state.read[m.id];
  if(fn==='X')return {s:'  0',u:'',neg:false};
- if(fn==='ACV'||fn==='ACA'){return {s:fn==='ACV'?' 0.0':'0.0',u:fn==='ACV'?'V~':'mA~',neg:false}}
+ if(fn==='ACV'||fn==='ACA'){const f=FMT[fn][rg];return {s:(0).toFixed(f[0]),u:f[1],neg:false}} // la fuente da continua: en alterna se lee cero
  let val,f=FMT[fn][rg];
  if(fn==='DCV')val=r.V;else if(fn==='DCA')val=rg>=10?r.iA:r.iMA;else val=r.ohm();
  const noise=fn==='OHM'?1+gauss()*1e-4:1+gauss()*2e-4;val*=noise;
@@ -346,7 +363,7 @@ function reading(m){const p=DIALS[m.kind].find(q=>q[0]===m.dial),fn=p[3],rg=p[4]
  let s=Math.abs(disp).toFixed(f[0]);return {s,u:f[1],neg:disp<0&&Math.abs(disp)>=Math.pow(10,-f[0])/2}}
 function updLcd(force){const now=performance.now();if(!force&&now-lastLcd<380)return;lastLcd=now;
  for(const m of state.meters){const g=L_meters.querySelector(`[data-lcd="${m.id}"]`);if(!g)continue;g.innerHTML='';if(!m.on)continue;
-  const V=m.kind==='victor',x=m.x+22,y=m.y+44,on=V?'#1a1d17':'#132033',off=V?'#b7c0aa22':'#b6c3d022';
+  const V=m.kind==='victor',x=22,y=44,on=V?'#1a1d17':'#132033',off=V?'#b7c0aa22':'#b6c3d022';
   const r=reading(m);let s=r.s;if(r.ol&&V)s='1   ';
   // dígitos: hasta 4 posiciones con la coma decimal
   const chars=[],dots=[];for(const ch of s){if(ch==='.'){dots.push(chars.length-1);continue}chars.push(ch)}
@@ -356,16 +373,16 @@ function updLcd(force){const now=performance.now();if(!force&&now-lastLcd<380)re
   chars.forEach((ch,i)=>{const cx=x0+i*(dw+12);if(ch==='O'||ch==='L'||ch==='1'&&r.ol){digit(g,cx,y0,dw,dh,ch,on,off)}else digit(g,cx,y0,dw,dh,ch,on,off)});
   dots.forEach(i=>mk('circle',{cx:x0+i*(dw+12)+dw+6,cy:y0+dh+1,r:3.2,fill:on},g));
   mk('text',{x:x+198,y:y+17,'text-anchor':'end','font-size':12,'font-weight':700,fill:on},g).textContent=r.u;
-  const p=DIALS[m.kind].find(q=>q[0]===m.dial);if(p[3]==='DCV'||p[3]==='DCA')mk('text',{x:x+8,y:y+17,'font-size':10,'font-weight':700,fill:on},g).textContent='DC';
-  if(!m.fuse&&p[3]==='DCA'&&p[4]<10)mk('text',{x:x+8,y:y+78,'font-size':9,'font-weight':700,fill:'#b3261e'},g).textContent='FUSIBLE';
+  const p=DIALS[m.kind].find(q=>q[0]===m.dial);mk('text',{x:x+8,y:y+17,'font-size':10,'font-weight':700,fill:on},g).textContent=p[3].startsWith('DC')?'DC':p[3].startsWith('AC')?'AC':'';
+  if(!m.fuse&&(p[3]==='DCA'||p[3]==='ACA')&&p[4]<10)mk('text',{x:x+8,y:y+78,'font-size':9,'font-weight':700,fill:'#b3261e'},g).textContent='FUSIBLE';
  }}
 setInterval(()=>updLcd(false),400);
 
 /* ---------- vista: zoom y desplazamiento ---------- */
-const VB0=[0,0,1460,900];let vb=VB0.slice();
+const VB0=[0,0,1500,900];let vb=VB0.slice();
 function setVB(){SV.setAttribute('viewBox',vb.join(' '))}
 function toSvg(e){const p=SV.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(SV.getScreenCTM().inverse())}
-function zoomAt(cx,cy,f){const p=toSvg({clientX:cx,clientY:cy});const nw=Math.min(1460*1.3,Math.max(300,vb[2]/f)),k=nw/vb[2];vb=[p.x-(p.x-vb[0])*k,p.y-(p.y-vb[1])*k,nw,vb[3]*k];setVB()}
+function zoomAt(cx,cy,f){const p=toSvg({clientX:cx,clientY:cy});const nw=Math.min(VB0[2]*1.3,Math.max(300,vb[2]/f)),k=nw/vb[2];vb=[p.x-(p.x-vb[0])*k,p.y-(p.y-vb[1])*k,nw,vb[3]*k];setVB()}
 $('#viewBtn').onclick=()=>{vb=VB0.slice();setVB()};
 
 /* ---------- interacción ---------- */
@@ -377,6 +394,11 @@ function hitSocket(p,excludeCable){let best=null,bd=26;
  return best}
 function inTray(p){return (p.x>TRAY.x&&p.x<TRAY.x+TRAY.w&&p.y>TRAY.y&&p.y<TRAY.y+TRAY.h)}
 function inCoils(p){return Object.values(COILPOS).some(P=>Math.hypot(P.x-p.x,P.y+30-p.y)<55)}
+// [RUEDAS] los mandos siguen el ángulo del puntero alrededor de su eje, como al girarlos con los dedos
+const angOf=(K,p)=>Math.atan2(p.x-K.x,-(p.y-K.y))*180/Math.PI;
+function dialTo(m,p){const C=dialC(m);if(Math.hypot(p.x-C.x,p.y-C.y)<14*MS)return;const a=angOf(C,p);let best=null,bd=999;
+ for(const q of DIALS[m.kind]){const dd=Math.abs(((q[2]-a)%360+540)%360-180);if(dd<bd){bd=dd;best=q[0]}}
+ if(best&&best!==m.dial){m.dial=best;setDial(m);solveAll()}}
 SV.addEventListener('pointerdown',e=>{ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
  if(ptrs.size===2&&!drag){const [a,b]=[...ptrs.values()];pinch={d:Math.hypot(a.x-b.x,a.y-b.y),c:{x:(a.x+b.x)/2,y:(a.y+b.y)/2}};return}
  if(ptrs.size>1)return;
@@ -384,8 +406,8 @@ SV.addEventListener('pointerdown',e=>{ptrs.set(e.pointerId,{x:e.clientX,y:e.clie
  SV.setPointerCapture(e.pointerId);
  if(pl){const [cid,i]=pl.getAttribute('data-plug').split(':');const c=state.cables.find(q=>q.id==cid);drag={k:'plug',c,i:+i,p0:p,moved:false};return}
  if(act){const a=act.getAttribute('data-act');
-  if(a==='kv'||a==='ka'){drag={k:a,p0:p,v0:a==='kv'?state.src.v:state.src.ilim,moved:false};return}
-  if(a==='dial'){drag={k:'dial',m:state.meters.find(q=>q.id===act.getAttribute('data-id')),pos:act.getAttribute('data-pos'),p0:p,moved:false};return}
+  if(a==='kv'||a==='ka'){const K=a==='kv'?KVg:KAg;drag={k:a,K,last:angOf(K,p),p0:p,moved:false};return}
+  if(a==='dial'){const m=state.meters.find(q=>q.id===act.getAttribute('data-id'));drag={k:'dial',m,p0:p,moved:false};dialTo(m,p);return}
   drag={k:'btn',a,id:act.getAttribute('data-id'),p0:p,moved:false};return}
  if(tr){const k=tr.getAttribute('data-tray');
   if(k[0]==='C'&&k.length===2){const col=k[1],c={id:state.nid++,color:col,ends:[{at:null,x:p.x,y:p.y},{at:null,x:COILPOS[col].x,y:COILPOS[col].y+20}]};state.cables.push(c);drag={k:'plug',c,i:0,p0:p,moved:true,isNew:true};render();return}
@@ -399,11 +421,13 @@ SV.addEventListener('pointermove',e=>{if(!ptrs.has(e.pointerId))return;ptrs.set(
   const r=SV.getBoundingClientRect(),s=vb[2]/r.width;vb[0]-=(c.x-pinch.c.x)*s;vb[1]-=(c.y-pinch.c.y)*s;setVB();zoomAt(c.x,c.y,d/pinch.d);pinch={d,c};return}
  if(!drag)return;const p=toSvg(e);if(Math.hypot(p.x-drag.p0.x,p.y-drag.p0.y)>4)drag.moved=true;
  SV.classList.add('grabbing');
+ if(drag.k==='dial'){dialTo(drag.m,p);return}
  if(drag.k==='pan'){const r=SV.getBoundingClientRect(),s=vb[2]/r.width;vb[0]=drag.vb0[0]-(e.clientX-drag.c0.x)*s;vb[1]=drag.vb0[1]-(e.clientY-drag.c0.y)*s;setVB();return}
  if(drag.k==='plug'){const e2=drag.c.ends[drag.i];e2.at=null;e2.x=p.x;e2.y=p.y;const hs=hitSocket(p);drag.hover=hs;L_cables.innerHTML='';state.cables.forEach(drawCable);if(hs){const q=sockXY(hs);mk('circle',{cx:q.x,cy:q.y,r:21,fill:'none',stroke:'#1d5fa8','stroke-width':3},L_cables)}return}
  if(drag.k==='brick'){const b=drag.b;b.cell=null;b.x=p.x+drag.dx;b.y=p.y+drag.dy;L_bricks.innerHTML='';state.bricks.forEach(q=>drawBrick(q,L_bricks));const cid=slotFor({x:b.x,y:b.y},b.rot);if(cid&&slotFree(cid,b.rot,b)){const h=slotHoles(cid,b.rot).map(k=>holes[k]);for(const q of h)mk('circle',{cx:q.x,cy:q.y,r:15,fill:'#1d5fa822',stroke:'#1d5fa8','stroke-width':3},L_bricks)}return}
  if(drag.k==='meter'){drag.m.x=p.x+drag.dx;drag.m.y=p.y+drag.dy;L_meters.innerHTML='';L_cables.innerHTML='';state.meters.forEach(drawMeter);state.cables.forEach(drawCable);updLcd(true);return}
- if(drag.k==='kv'||drag.k==='ka'){const max=drag.k==='kv'?12:2,dv=-(p.y-drag.p0.y)/220*max;const nv=Math.max(0,Math.min(max,drag.v0+dv));if(drag.k==='kv')state.src.v=nv;else state.src.ilim=nv;drawSrcState();solveAll();return}
+ if(drag.k==='kv'||drag.k==='ka'){const K=drag.K;if(Math.hypot(p.x-K.x,p.y-K.y)<10)return;const an=angOf(K,p),da=((an-drag.last)%360+540)%360-180;drag.last=an;
+  const max=drag.k==='kv'?12:2,cur=drag.k==='kv'?state.src.v:state.src.ilim,nv=Math.max(0,Math.min(max,cur+da/270*max));if(drag.k==='kv')state.src.v=nv;else state.src.ilim=nv;drawSrcState();solveAll();return}
 });
 function endPtr(e){ptrs.delete(e.pointerId);if(ptrs.size<2)pinch=null;if(!drag)return;const d=drag;drag=null;SV.classList.remove('grabbing');const p=toSvg(e);
  if(d.k==='plug'){const end=d.c.ends[d.i];if(inCoils(p)&&!d.isNew||(!d.moved&&false)){state.cables=state.cables.filter(q=>q!==d.c)}else{const hs=hitSocket(p);if(hs){end.at=hs}else{end.at=null;end.x=p.x;end.y=p.y}
@@ -415,8 +439,7 @@ function endPtr(e){ptrs.delete(e.pointerId);if(ptrs.size<2)pinch=null;if(!drag)r
   const cid=slotFor({x:b.x,y:b.y},b.rot);if(cid&&slotFree(cid,b.rot,b)){b.cell=cid}else if(d.from){b.cell=d.from}else{state.bricks=state.bricks.filter(q=>q!==b)}
   render();return}
  if(d.k==='meter'){render();return}
- if(d.k==='dial'){const m=d.m;if(d.pos)m.dial=d.pos;else if(d.moved){const C=dialC(m),a=Math.atan2(p.x-C.x,-(p.y-C.y))*180/Math.PI;let best=null,bd=999;for(const q of DIALS[m.kind]){let dd=Math.abs(((q[2]-a)%360+540)%360-180);if(dd<bd){bd=dd;best=q[0]}}m.dial=best}else{const D=DIALS[m.kind],i=D.findIndex(q=>q[0]===m.dial);m.dial=D[(i+1)%D.length][0]}
-  setDial(m);solveAll();return}
+ if(d.k==='dial')return;
  if(d.k==='btn'&&!d.moved){if(d.a==='pwr'){state.src.on=!state.src.on;solveAll();drawSrcState()}else if(d.a==='mpwr'){const m=state.meters.find(q=>q.id===d.id);m.on=!m.on;updLcd(true)}return}
 }
 SV.addEventListener('pointerup',endPtr);SV.addEventListener('pointercancel',endPtr);
@@ -431,11 +454,16 @@ SV.addEventListener('wheel',e=>{e.preventDefault();const t=e.target,act=t.closes
 /* ---------- cabecera ---------- */
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{state.part=+t.dataset.p;document.body.dataset.part=state.part;document.querySelectorAll('.tab').forEach(q=>q.classList.toggle('on',q===t));solveAll()});
 $('#gbtn').onclick=()=>{const h=document.body.classList.toggle('noside');$('#gbtn').textContent=h?'Mostrar guía':'Ocultar guía'};
-$('#resetBtn').onclick=()=>{initState();vb=VB0.slice();setVB();$('#fuseBtn').hidden=true;render()};
+// [CONFIRMAR] volver a empezar borra el montaje: se pide confirmación
+$('#resetBtn').onclick=()=>{$('#dlg').hidden=false;$('#dlgNo').focus()};
+$('#dlgNo').onclick=()=>{$('#dlg').hidden=true};
+$('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg')$('#dlg').hidden=true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#dlg').hidden=true});
+$('#dlgYes').onclick=()=>{$('#dlg').hidden=true;initState();vb=VB0.slice();setVB();$('#fuseBtn').hidden=true;render()};
 $('#fuseBtn').onclick=()=>{state.meters.forEach(m=>m.fuse=true);$('#fuseBtn').hidden=true;solveAll();updLcd(true)};
 try{document.querySelectorAll('.eq[data-tex]').forEach(e=>katex.render(e.dataset.tex,e,{displayMode:true,throwOnError:false}))}catch(e){}
 initState();render();
-window.__ohm={state,holes,render,solveAll,reading,RES,slotHoles};
+window.__ohm={state,holes,render,solveAll,reading,RES,slotHoles,DIALS,dialC,KVg,KAg,SRCJ,jackPos,TRAYPOS,COILPOS};
 })();
 </script>
 </body></html>
