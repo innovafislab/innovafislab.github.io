@@ -118,8 +118,8 @@ const TRAY={x:12,y:12,w:250,h:540.5};
 // se reparte como separación entre la fuente y los polímetros, la placa y la bandeja, en lugar de dejar franjas vacías a los lados.
 // [DISTRIBUCIÓN] Izquierda: bandeja de piezas y amperímetro (PHYWE) arriba, fuente debajo. Centro: placa. Derecha: esquema arriba
 // y voltímetro (VICTOR) debajo. Así los cables se cruzan lo menos posible.
-const LAY={W:1500,m1x:1201,m2x:274,srcx:12};
-function computeLayout(W){const e=W-1500,mg=12+e*.08,trw=250+e*.10,gtm=12+e*.08,gcb=18+e*.26,gbt=14+e*.20,mW=MW*MS;
+const LAY={W:1500,m1x:1201,m2x:290,srcx:12};
+function computeLayout(W){const e=W-1500,mg=12+e*.08,trw=250+e*.10,gtm=28+e*.08,gcb=18+e*.26,gbt=14+e*.20,mW=MW*MS;
  const colW=Math.max(SRC.w*SS,trw+gtm+mW),bx=mg+colW+gcb,rx=bx+BW+gbt,rw=Math.max(mW,W-mg-rx);
  return {W,srcx:mg,trx:mg,trw,m2x:mg+trw+gtm,m1x:rx+(rw-mW)/2,bx,rx,rw}}
 const state={part:0,bricks:[],cables:[],meters:[],src:{on:false,v:0,ilim:1.0,cc:false},nid:1,warn:''};
