@@ -19,7 +19,7 @@ html.dk .tab{color:#7fb2e5}html.dk .tab.on{background:#6ea6e8;color:#0b1622}
 header .sp{flex:1}
 .hbtn{font:inherit;font-weight:600;font-size:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
 .hbtn:hover{background:var(--paper)}
-main{display:grid;grid-template-columns:minmax(0,1fr) clamp(340px,30vw,560px);gap:14px;padding:12px 14px;height:calc(100vh - 56px)}
+body{display:flex;flex-direction:column}main{display:grid;grid-template-columns:minmax(0,1fr) clamp(340px,30vw,560px);gap:14px;padding:12px 14px;flex:1;min-height:0}
 body.noside main{grid-template-columns:minmax(0,1fr)}body.noside .side{display:none}
 .card{background:var(--bg);border:1px solid var(--line);border-radius:12px}
 .left{display:flex;flex-direction:column;min-height:0;min-width:0}
@@ -42,15 +42,19 @@ html.dk .st{background:#3a1d1b;border-color:#6b2c27;color:#ffb4ab}
 .side th,.side td{border:1px solid var(--line);padding:.3em .4em;text-align:center}
 .side th{background:#e8f0fa}html.dk .side th{background:#1c2a3a}
 .side .rw{font-size:.62em;font-weight:500;color:var(--slate)}
-.side .p2{display:none}body[data-part="2"] .side .p2{display:block}body[data-part="2"] .side .p1{display:none}
+.side .p2,.side .p0,.side .pre{display:none}body[data-part="2"] .side .p2,body[data-part="0"] .side .p2,body[data-part="0"] .side .p0,body[data-part="1"] .side .pre,body[data-part="2"] .side .pre{display:revert}body[data-part="2"] .side .p1{display:none}
+.sub{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--slate)}.sub[hidden]{display:none}
+.sub .tabs{border-color:#9fb3c8}.sub .tab{font-size:14px;font-weight:600;color:#3d5a78;padding:3px 11px}.sub .tab+.tab{border-left-color:#9fb3c8}.sub .tab.on{background:#e3edf8;color:#17324d}
+html.dk .sub .tab{color:#9cc3ea}html.dk .sub .tab.on{background:#1c2a3a;color:#e3e8ee}
 .side .note{font-size:.8em;color:var(--slate);margin-top:1.2em}
 svg text{font-family:Inter,system-ui,sans-serif}
 .grab{cursor:grab}#bench.rotc [data-b]{cursor:pointer}.grabbing,.grabbing *{cursor:grabbing!important}
 .btnz{cursor:pointer}
-@media (max-width:820px){main{grid-template-columns:minmax(0,1fr);height:auto;padding:10px}header{padding:8px 10px}.left .card{height:auto}#bench{flex:none;height:auto;aspect-ratio:1500/900}.side{max-height:none}.vbtn{width:30px;height:30px;font-size:17px;right:6px;bottom:6px}}
-</style></head><body data-part="1">
+@media (max-width:820px){body{display:block}main{grid-template-columns:minmax(0,1fr);height:auto;padding:10px}header{padding:8px 10px}.left .card{height:auto}#bench{flex:none;height:auto;aspect-ratio:1500/900}.side{max-height:none}.vbtn{width:30px;height:30px;font-size:17px;right:6px;bottom:6px}}
+</style></head><body data-part="0">
 <header><a class="back" href="laboratorios.html#ampliacion" aria-label="Volver al Laboratorio de Ampliación de Física">←</a><h1>Ley de Ohm</h1>
-<div class="tabs" role="tablist"><button class="tab on" data-p="1" type="button">Parte I: serie</button><button class="tab" data-p="2" type="button">Parte II: paralelo</button></div>
+<div class="tabs" role="tablist" id="ptabs"><button class="tab on" data-p="0" type="button">Móntalo tú mismo</button><button class="tab" data-p="1" type="button">Parte I: serie</button><button class="tab" data-p="2" type="button">Parte II: paralelo</button></div>
+<div class="sub" id="sub" hidden><span id="sublab"></span><div class="tabs" id="subtabs"></div></div>
 <span class="sp"></span><button class="hbtn" id="fuseBtn" type="button" hidden>Cambiar fusible</button><button class="hbtn" id="resetBtn" type="button">Empezar de nuevo</button><button class="hbtn" id="gbtn" type="button">Ocultar guía</button></header>
 <main><section class="left"><div class="card">
 <svg id="bench" viewBox="0 0 1500 900" preserveAspectRatio="xMidYMid meet" aria-label="Mesa de laboratorio con la placa de montaje, la fuente, las resistencias, los cables y dos polímetros"></svg>
@@ -65,8 +69,10 @@ svg text{font-family:Inter,system-ui,sans-serif}
 <p class="p2">En paralelo, R<sub>3</sub> y R<sub>4</sub> tienen la misma tensión y la intensidad total es la suma de las de cada rama:</p>
 <div class="eq p2" data-tex="\frac{1}{R_{eq}}=\frac{1}{R_3}+\frac{1}{R_4}"></div>
 <h2>Qué hay que medir</h2>
-<p class="p1">Monta R<sub>1</sub> y R<sub>2</sub> en serie sobre la placa y conéctalas a la fuente con un polímetro en serie como amperímetro (bornes COM y mA). Con el otro polímetro, como voltímetro (COM y V), mide en paralelo la tensión de la asociación, la de R<sub>1</sub> y la de R<sub>2</sub>. Repite para varios valores de la tensión de la fuente. No superes 120 mA.</p>
-<p class="p2">Monta R<sub>3</sub> y R<sub>4</sub> en paralelo. Mide con un polímetro la tensión V de la fuente. Primero mide con el amperímetro la intensidad total, en la rama común (figura a); después, para las mismas tensiones, la intensidad de cada rama (figura b). No superes 120 mA.</p>
+<p class="p0">Monta tú el circuito de la parte I o el de la parte II sobre la placa.</p>
+<p class="pre">El circuito ya está montado: enciende la fuente y los polímetros, ajusta la tensión, elige en cada polímetro el rango adecuado y mide. Con el selector de la cabecera cambias dónde está conectado el <span class="p1">voltímetro</span><span class="p2">amperímetro</span>.</p>
+<p class="p1">Parte I: R<sub>1</sub> y R<sub>2</sub> en serie con la fuente y con un polímetro en serie como amperímetro (bornes COM y mA). Con el otro polímetro, como voltímetro (COM y V), mide en paralelo la tensión de la asociación, la de R<sub>1</sub> y la de R<sub>2</sub>. Repite para varios valores de la tensión de la fuente. No superes 120 mA.</p>
+<p class="p2">Parte II: R<sub>3</sub> y R<sub>4</sub> en paralelo. Mide con un polímetro la tensión V de la fuente. Primero mide con el amperímetro la intensidad total, en la rama común (figura a); después, para las mismas tensiones, la intensidad de cada rama (figura b). No superes 120 mA.</p>
 <h2>Tabla de la ficha <small class="rw">(rellenar en Word)</small></h2>
 <table class="p1"><tr><th><i>I</i></th><th><i>V</i><sub>asoc</sub></th><th><i>V</i><sub>1</sub></th><th><i>V</i><sub>2</sub></th></tr><tr><td>&nbsp;</td><td></td><td></td><td></td></tr></table>
 <table class="p2"><tr><th><i>V</i></th><th><i>I</i><sub>asoc</sub></th><th><i>I</i><sub>R3</sub></th><th><i>I</i><sub>R4</sub></th></tr><tr><td>&nbsp;</td><td></td><td></td><td></td></tr></table>
@@ -100,7 +106,7 @@ for(let c=0;c<NC;c++)for(let r=0;r<NR;r++)holes[`p${c}_${r}`]={x:hx(c),y:hy(r),c
 // [ESPACIO] fuente arriba a la izquierda, polímetros debajo, placa a la derecha y bandeja de piezas bajo la placa
 const SRC={x:0,y:0,w:520,h:280},SRCX=12,SRCY=12,SS=1.125;
 const TRAY={x:BX,y:BY+BH+14,w:BW,h:888-(BY+BH+14)};
-const state={part:1,bricks:[],cables:[],meters:[],src:{on:false,v:0,ilim:1.0,cc:false},nid:1,warn:''};
+const state={part:0,bricks:[],cables:[],meters:[],src:{on:false,v:0,ilim:1.0,cc:false},nid:1,warn:''};
 function initState(){
  state.bricks=[];state.cables=[];state.src={on:false,v:0,ilim:1.0,cc:false};
  state.meters=[{id:'m1',kind:'victor',x:12,y:339,on:false,dial:'DCV20',fuse:true},{id:'m2',kind:'phywe',x:309.5,y:339,on:false,dial:'DCV20',fuse:true}];
@@ -487,18 +493,41 @@ SV.addEventListener('wheel',e=>{e.preventDefault();const t=e.target,act=t.closes
  zoomAt(e.clientX,e.clientY,Math.exp(-Math.max(-300,Math.min(300,e.deltaY))*0.0018))},{passive:false});
 
 /* ---------- cabecera ---------- */
-document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{state.part=+t.dataset.p;document.body.dataset.part=state.part;document.querySelectorAll('.tab').forEach(q=>q.classList.toggle('on',q===t));solveAll()});
+// [MONTADO] «Móntalo tú mismo» deja la placa libre (y recuerda lo montado); en las partes I y II el circuito y los polímetros ya están conectados.
+// Polímetro naranja = voltímetro (V y COM), gris = amperímetro (mA y COM). El selector de la cabecera mueve el voltímetro (parte I) o el amperímetro (parte II).
+const SUB={1:'asoc',2:'tot'};let freeSave={bricks:[],cables:[]};
+const clone=o=>JSON.parse(JSON.stringify(o));
+function applyPreset(){const B=[],C=[],part=state.part,sub=SUB[part];
+ const br=(key,cell,rot)=>B.push({id:'b'+(state.nid++),type:'R',key,rot:rot||0,cell});
+ const cb=(color,a,b)=>C.push({id:state.nid++,color,ends:[{at:a},{at:b}]});
+ if(part===1){br('R1','2_1');br('R2','5_1');cb('R','S:P','p0_1');cb('B','p8_1','M:m2:mA');cb('K','M:m2:COM','S:N');
+  const [va,vb]={asoc:['p1_2','p7_2'],R1:['p1_2','p4_2'],R2:['p4_2','p7_2']}[sub];cb('R','M:m1:V',va);cb('K','M:m1:COM',vb)}
+ else{cb('K','p5_1','S:N');cb('R','M:m1:V','p0_2');cb('K','M:m1:COM','p4_1');
+  if(sub==='tot'){cb('R','S:P','M:m2:mA');cb('B','M:m2:COM','p0_1');br('R3','2_0');br('R4','2_2')}
+  else if(sub==='R3'){cb('R','S:P','p0_1');br('R4','2_2');br('R3','5_0');cb('B','p1_0','M:m2:mA');cb('B','M:m2:COM','p7_0')}
+  else{cb('R','S:P','p0_1');br('R3','2_0');br('R4','5_2');cb('B','p1_2','M:m2:mA');cb('B','M:m2:COM','p7_2')}}
+ state.bricks=B;state.cables=C}
+function presetDials(){const v=state.meters.find(m=>m.id==='m1'),a=state.meters.find(m=>m.id==='m2');if(v)v.dial='DCV20';if(a)a.dial='DCA0.2'}
+function updSub(){const el=$('#sub'),p=state.part;el.hidden=!p;if(!p)return;$('#sublab').textContent=p===1?'Voltímetro en':'Amperímetro en';
+ const opts=p===1?[['asoc','asociación'],['R1','R₁'],['R2','R₂']]:[['tot','rama común'],['R3','rama R₃'],['R4','rama R₄']];
+ const T=$('#subtabs');T.innerHTML='';for(const [k,l] of opts){const b=document.createElement('button');b.type='button';b.className='tab'+(SUB[p]===k?' on':'');b.textContent=l;
+  b.onclick=()=>{if(SUB[p]===k)return;SUB[p]=k;applyPreset();render();updSub()};T.appendChild(b)}}
+function setPart(np){if(np===state.part)return;if(state.part===0)freeSave=clone({bricks:state.bricks,cables:state.cables});
+ state.part=np;document.body.dataset.part=np;document.querySelectorAll('#ptabs .tab').forEach(q=>q.classList.toggle('on',+q.dataset.p===np));
+ if(np===0){state.bricks=clone(freeSave.bricks);state.cables=clone(freeSave.cables)}else{applyPreset();presetDials()}
+ render();updSub()}
+document.querySelectorAll('#ptabs .tab').forEach(t=>t.onclick=()=>setPart(+t.dataset.p));
 $('#gbtn').onclick=()=>{const h=document.body.classList.toggle('noside');$('#gbtn').textContent=h?'Mostrar guía':'Ocultar guía'};
 // [CONFIRMAR] volver a empezar borra el montaje: se pide confirmación
 $('#resetBtn').onclick=()=>{$('#dlg').hidden=false;$('#dlgNo').focus()};
 $('#dlgNo').onclick=()=>{$('#dlg').hidden=true};
 $('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg')$('#dlg').hidden=true});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#dlg').hidden=true});
-$('#dlgYes').onclick=()=>{$('#dlg').hidden=true;initState();vb=VB0.slice();setVB();$('#fuseBtn').hidden=true;render()};
+$('#dlgYes').onclick=()=>{$('#dlg').hidden=true;initState();if(state.part){applyPreset();presetDials()}vb=VB0.slice();setVB();$('#fuseBtn').hidden=true;render()};
 $('#fuseBtn').onclick=()=>{state.meters.forEach(m=>m.fuse=true);$('#fuseBtn').hidden=true;solveAll();updLcd(true)};
 try{document.querySelectorAll('.eq[data-tex]').forEach(e=>katex.render(e.dataset.tex,e,{displayMode:true,throwOnError:false}))}catch(e){}
 initState();render();
-window.__ohm={zoneAt,brickEnds,state,holes,render,solveAll,reading,RES,slotHoles,DIALS,dialC,KVg,KAg,SRCJ,jackPos,TRAYPOS,COILPOS};
+window.__ohm={setPart,SUB,applyPreset,zoneAt,brickEnds,state,holes,render,solveAll,reading,RES,slotHoles,DIALS,dialC,KVg,KAg,SRCJ,jackPos,TRAYPOS,COILPOS};
 })();
 </script>
 </body></html>
