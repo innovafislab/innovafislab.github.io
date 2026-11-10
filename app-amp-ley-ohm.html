@@ -8,7 +8,7 @@
 html.dk{--bg:#0f141a;--paper:#161d26;--ink:#e3e8ee;--slate:#9aa5b2;--line:#27313c;--navy:#9cc3ea;color-scheme:dark}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);font:16px/1.45 Inter,system-ui,sans-serif}
-header{display:flex;align-items:center;gap:10px 14px;padding:8px 16px;background:var(--bg);border-bottom:1px solid var(--line);flex-wrap:wrap}
+header{display:flex;align-items:center;gap:10px 14px;padding:8px 16px;background:var(--bg);border-bottom:1px solid var(--line);flex-wrap:nowrap;white-space:nowrap}
 header .back{font-size:24px;font-weight:600;color:var(--navy);text-decoration:none;width:38px;height:38px;display:grid;place-items:center;border-radius:8px}
 header .back:hover{background:var(--paper)}
 header h1{font-size:clamp(19px,2.2vw,26px);margin:0;color:var(--navy);font-weight:800;letter-spacing:-.01em}
@@ -32,7 +32,7 @@ html.dk .st{background:#3a1d1b;border-color:#6b2c27;color:#ffb4ab}
 .vbtn{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:17px/1 Inter,system-ui,sans-serif;cursor:pointer;display:grid;place-items:center;opacity:.95;padding:0}
 .vbtn:hover{background:var(--paper)}
 .fbtn{flex:none;height:30px;display:flex;align-items:center;gap:6px;padding:0 11px 0 9px;border-radius:15px;border:1px solid var(--line);background:rgba(255,255,255,.92);color:#17324d;font:600 12.5px/1 Inter,system-ui,sans-serif;cursor:pointer;box-shadow:0 1px 3px #0000000f;transition:background .25s,color .25s,border-color .25s}
-.fbtn:hover{background:#fff}.fbtn svg{flex:none}
+.fbtn:hover{background:#fff}.fbtn[hidden]{display:none}.fbtn.warnb{color:var(--warn);border-color:#f1b8b3;background:#fff5f4}.fbtn svg{flex:none}
 .fbtn.on{background:#0f2236;border-color:#0f2236;color:#eaf6ff}
 html.dk .fbtn{background:var(--bg);color:var(--ink)}html.dk .fbtn.on{background:#cfe9ff;color:#0f2236;border-color:#cfe9ff}
 .dlg{position:fixed;inset:0;background:#0006;display:grid;place-items:center;z-index:20}
@@ -55,15 +55,16 @@ html.dk .sub .tab{color:#9cc3ea}html.dk .sub .tab.on{background:#1c2a3a;color:#e
 svg text{font-family:Inter,system-ui,sans-serif}
 .grab{cursor:grab}#bench.rotc [data-b]{cursor:pointer}.grabbing,.grabbing *{cursor:grabbing!important}
 .btnz{cursor:pointer}
-@media (max-width:820px){body{display:block}main{grid-template-columns:minmax(0,1fr);height:auto;padding:10px}header{padding:8px 10px}.left .card{height:auto}#bench{flex:none;height:auto;aspect-ratio:1500/900}.side{max-height:none}.ctl{position:static;justify-content:flex-end;padding:4px 6px 6px;gap:6px}.vbtn{width:26px;height:26px;font-size:15px}.fbtn{height:26px;font-size:11px;padding:0 8px 0 6px}.fbtn svg{width:16px}.st{font-size:12px}}
+@media (max-width:1300px) and (min-width:821px){header{gap:8px;padding:8px 10px}.tab{padding:4px 10px}.sub{gap:6px}.sub .tab{padding:3px 8px}#sublab{font-size:13px}.hbtn{padding:6px 10px}}
+@media (max-width:820px){header{flex-wrap:wrap;white-space:normal}body{display:block}main{grid-template-columns:minmax(0,1fr);height:auto;padding:10px}header{padding:8px 10px}.left .card{height:auto}#bench{flex:none;height:auto;aspect-ratio:1500/900}.side{max-height:none}.ctl{position:static;justify-content:flex-end;padding:4px 6px 6px;gap:6px}.vbtn{width:26px;height:26px;font-size:15px}.fbtn{height:26px;font-size:11px;padding:0 8px 0 6px}.fbtn svg{width:16px}.st{font-size:12px}}
 </style></head><body data-part="0">
 <header><a class="back" href="laboratorios.html#ampliacion" aria-label="Volver al Laboratorio de Ampliación de Física">←</a><h1>Ley de Ohm</h1>
 <div class="tabs" role="tablist" id="ptabs"><button class="tab on" data-p="0" type="button">Móntalo tú mismo</button><button class="tab" data-p="1" type="button">Parte I: serie</button><button class="tab" data-p="2" type="button">Parte II: paralelo</button></div>
 <div class="sub" id="sub" hidden><span id="sublab"></span><div class="tabs" id="subtabs"></div></div>
-<span class="sp"></span><button class="hbtn" id="fuseBtn" type="button" hidden>Cambiar fusible</button><button class="hbtn" id="resetBtn" type="button">Empezar de nuevo</button><button class="hbtn" id="gbtn" type="button">Ocultar guía</button></header>
+<span class="sp"></span><button class="hbtn" id="gbtn" type="button">Ocultar guía</button></header>
 <main><section class="left"><div class="card">
 <svg id="bench" viewBox="0 0 1500 900" preserveAspectRatio="xMidYMid meet" aria-label="Mesa de laboratorio con la placa de montaje, la fuente, las resistencias, los cables y dos polímetros"></svg>
-<div class="st" id="st" role="status" hidden></div><div class="ctl">
+<div class="st" id="st" role="status" hidden></div><div class="ctl"><button class="fbtn warnb" id="fuseBtn" type="button" hidden>Cambiar fusible</button>
 <button class="fbtn" id="flowBtn" type="button" aria-pressed="false" title="Ver cómo circula la corriente: sentido convencional, de + a −; los puntos van más deprisa cuanto mayor es la intensidad"><svg width="22" height="14" viewBox="0 0 22 14" aria-hidden="true"><circle cx="3" cy="7" r="2" fill="currentColor" opacity=".35"/><circle cx="9" cy="7" r="2.3" fill="currentColor" opacity=".65"/><circle cx="15.5" cy="7" r="2.6" fill="currentColor"/><path d="M19 3.5 L21.5 7 L19 10.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="flowLbl">Corriente</span></button><button class="vbtn" id="viewBtn" type="button" title="Volver a la configuración inicial" aria-label="Volver a la configuración inicial">⟲</button></div>
 </div></section>
 <aside class="side card" id="side">
@@ -653,8 +654,8 @@ function applyPreset(){const B=[],C=[],part=state.part,sub=SUB[part];
   cb('R','M:m1:V','S:P');cb('K','M:m1:COM','S:N')}
  state.bricks=B;state.cables=C}
 function presetDials(){const v=state.meters.find(m=>m.id==='m1'),a=state.meters.find(m=>m.id==='m2');if(v)v.dial='DCV20';if(a)a.dial='DCA0.2'}
-function updSub(){const el=$('#sub'),p=state.part;el.hidden=!p;if(!p)return;$('#sublab').textContent=p===1?'Voltímetro en':'Amperímetro en';
- const opts=p===1?[['asoc','asociación'],['R1','R₁'],['R2','R₂']]:[['tot','rama común'],['R3','rama R₃'],['R4','rama R₄']];
+function updSub(){const el=$('#sub'),p=state.part;el.hidden=!p;if(!p)return;$('#sublab').textContent=p===1?'Voltímetro en':'Amperímetro en la rama';
+ const opts=p===1?[['asoc','asociación'],['R1','R₁'],['R2','R₂']]:[['tot','común'],['R3','R₃'],['R4','R₄']];
  const T=$('#subtabs');T.innerHTML='';for(const [k,l] of opts){const b=document.createElement('button');b.type='button';b.className='tab'+(SUB[p]===k?' on':'');b.textContent=l;
   b.onclick=()=>{if(SUB[p]===k)return;SUB[p]=k;applyPreset();render();updSub()};T.appendChild(b)}}
 function setPart(np){if(np===state.part)return;if(state.part===0)freeSave=clone({bricks:state.bricks,cables:state.cables});
@@ -664,7 +665,6 @@ function setPart(np){if(np===state.part)return;if(state.part===0)freeSave=clone(
 document.querySelectorAll('#ptabs .tab').forEach(t=>t.onclick=()=>setPart(+t.dataset.p));
 $('#gbtn').onclick=()=>{const h=document.body.classList.toggle('noside');$('#gbtn').textContent=h?'Mostrar guía':'Ocultar guía'};
 // [CONFIRMAR] volver a empezar borra el montaje: se pide confirmación
-$('#resetBtn').onclick=()=>{$('#dlg').hidden=false;$('#dlgNo').focus()};
 $('#dlgNo').onclick=()=>{$('#dlg').hidden=true};
 $('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg')$('#dlg').hidden=true});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#dlg').hidden=true});
