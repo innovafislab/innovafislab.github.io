@@ -218,17 +218,17 @@ function drawSrcState(){const s=state.src;srcLed.setAttribute('fill',s.on?'#35e0
 /* ---------- bandejas ---------- */
 // [BANDEJA] piezas a la izquierda (resistencias y puente arriba, cables abajo) y el esquema del montaje a la derecha
 const SCH={x:1201,y:12,w:287.5,h:315};
-const TS=0.82,TRAYPOS={R1:{x:TRAY.x+62,y:TRAY.y+76},R2:{x:TRAY.x+TRAY.w-62,y:TRAY.y+76},R3:{x:TRAY.x+62,y:TRAY.y+153},R4:{x:TRAY.x+TRAY.w-62,y:TRAY.y+153},W:{x:TRAY.x+62,y:TRAY.y+230}};
+const TS=0.82,TRAYPOS={R1:{x:TRAY.x+62,y:TRAY.y+240},R2:{x:TRAY.x+TRAY.w-62,y:TRAY.y+240},R3:{x:TRAY.x+62,y:TRAY.y+314},R4:{x:TRAY.x+TRAY.w-62,y:TRAY.y+314},W:{x:TRAY.x+62,y:TRAY.y+388}}; // [ORDEN BANDEJA] mensajes, «Ver corriente», piezas y cables
 const L_trayBg=mk('g',null,L_tray);
 function drawTray(){const g=L_trayBg;g.innerHTML='';
  mk('rect',{x:TRAY.x,y:TRAY.y,width:TRAY.w,height:TRAY.h,rx:10,fill:'#f2ede4',stroke:'#cdbfa8'},g);
- txt(g,TRAY.x+14,TRAY.y+28,'Resistencias y puentes',{'font-size':15,'font-weight':700,fill:'#5a4a32'});
+ txt(g,TRAY.x+14,TRAY.y+194,'Resistencias y puentes',{'font-size':15,'font-weight':700,fill:'#5a4a32'});
 }
 drawTray();
 function placeTray(){TRAYPOS.R1.x=TRAY.x+62;TRAYPOS.R2.x=TRAY.x+TRAY.w-62;TRAYPOS.R3.x=TRAY.x+62;TRAYPOS.R4.x=TRAY.x+TRAY.w-62;TRAYPOS.W.x=TRAY.x+62;
  COILPOS.R.x=TRAY.x+48;COILPOS.B.x=TRAY.x+TRAY.w/2;COILPOS.K.x=TRAY.x+TRAY.w-48}
 // bobinas de cable, en la misma bandeja (abajo a la derecha)
-const COILPOS={R:{x:TRAY.x+48,y:TRAY.y+312},B:{x:TRAY.x+TRAY.w/2,y:TRAY.y+312},K:{x:TRAY.x+TRAY.w-48,y:TRAY.y+312}};
+const COILPOS={R:{x:TRAY.x+48,y:TRAY.y+470},B:{x:TRAY.x+TRAY.w/2,y:TRAY.y+470},K:{x:TRAY.x+TRAY.w-48,y:TRAY.y+470}};
 
 /* ---------- utilidades de piezas ---------- */
 // Cada pieza ocupa dos huecos contiguos: (c,r) y el de su derecha (giro 0) o el de debajo (giro 1)
@@ -462,7 +462,7 @@ function updMsg(){L_msg.innerHTML='';let t='',warn=false;const s=state.src;
  else if(!s.on&&state.cables.length)t='La fuente está apagada: pulsa Power para encenderla.';
  if(!t)return;const x0=TRAY.x+12,maxw=TRAY.w-24,cpl=Math.floor((maxw-38)/6.6),words=t.split(' '),lines=[];let cur='';
  for(const wd of words){if((cur+' '+wd).trim().length>cpl&&cur){lines.push(cur);cur=wd}else cur=(cur+' '+wd).trim()}if(cur)lines.push(cur);
- const w=maxw,h=17*lines.length+16,x=x0,y=FB.y+FB.h+10;
+ const w=maxw,h=17*lines.length+16,x=x0,y=TRAY.y+12;
  mk('rect',{x,y,width:w,height:h,rx:Math.min(16,h/2),fill:warn?'#fff5f4':'#ffffff',opacity:.97,stroke:warn?'#f1b8b3':'#d5dde7',filter:'url(#fSh2)'},L_msg);
  mk('circle',{cx:x+15,cy:y+16.5,r:4.5,fill:warn?'#d0302a':'#2f86d6'},L_msg);
  lines.forEach((l,i)=>txt(L_msg,x+27,y+21.5+17*i,l,{'font-size':13,'font-weight':600,fill:warn?'#b3261e':'#17324d'}))}
@@ -522,7 +522,7 @@ function flowTick(t){if(!flowOn){flowRaf=0;flowT=0;return}const dt=flowT?Math.mi
  flowRaf=requestAnimationFrame(flowTick)}
 // [BOTÓN] «Corriente» va en la esquina superior izquierda de la placa (en la primera línea, que está libre)
 const L_ui=mk('g',null,VP);VP.insertBefore(L_msg,L_ui); // los mensajes, por encima del velo de la vista de corriente
-const FB={x:TRAY.x+12,y:TRAY.y+398,w:158,h:36}; // [AVISOS] botón «Corriente» y mensajes al pie de la bandeja de la izquierda
+const FB={x:TRAY.x+12,y:TRAY.y+122,w:158,h:36}; // [AVISOS] botón «Corriente» y mensajes al pie de la bandeja de la izquierda
 function drawFlowBtn(){L_ui.innerHTML='';const g=mk('g',{class:'btnz','data-act':'flow'},L_ui),on=flowOn;
  mk('rect',{x:FB.x,y:FB.y,width:FB.w,height:FB.h,rx:18,fill:on?'#f5821f':'#fff4e8',stroke:'#f5821f','stroke-width':1.8,filter:'url(#fSh2)'},g);
  const c=on?'#ffffff':'#7a3d06',cx=FB.x+15,cy=FB.y+FB.h/2;
