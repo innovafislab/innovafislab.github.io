@@ -70,7 +70,7 @@ svg text{font-family:Inter,system-ui,sans-serif}
 <div class="eq p2" data-tex="\frac{1}{R_{eq}}=\frac{1}{R_3}+\frac{1}{R_4}"></div>
 <h2>Qué hay que medir</h2>
 <p class="p0">Monta tú el circuito de la parte I o el de la parte II sobre la placa.</p>
-<p class="pre">El circuito ya está montado: enciende la fuente y los polímetros, ajusta la tensión, elige en cada polímetro el rango adecuado y mide. Con el selector de la cabecera cambias dónde está conectado el <span class="p1">voltímetro</span><span class="p2">amperímetro</span>.</p>
+<p class="pre">El circuito ya está montado: enciende la fuente y los polímetros, ajusta la tensión, elige en cada polímetro el rango adecuado y mide. Con el selector de la cabecera cambias dónde está conectado el <span class="p1">voltímetro</span><span class="p2">amperímetro</span>; las resistencias no se mueven, solo cambian los cables.</p>
 <p class="p1">Parte I: R<sub>1</sub> y R<sub>2</sub> en serie con la fuente y con un polímetro en serie como amperímetro (bornes COM y mA). Con el otro polímetro, como voltímetro (COM y V), mide en paralelo la tensión de la asociación, la de R<sub>1</sub> y la de R<sub>2</sub>. Repite para varios valores de la tensión de la fuente. No superes 120 mA.</p>
 <p class="p2">Parte II: R<sub>3</sub> y R<sub>4</sub> en paralelo. Mide con un polímetro la tensión V de la fuente. Primero mide con el amperímetro la intensidad total, en la rama común (figura a); después, para las mismas tensiones, la intensidad de cada rama (figura b). No superes 120 mA.</p>
 <h2>Tabla de la ficha <small class="rw">(rellenar en Word)</small></h2>
@@ -202,7 +202,7 @@ function drawSrcState(){const s=state.src;srcLed.setAttribute('fill',s.on?'#35e0
 const TRAYPOS={R1:{x:TRAY.x+100,y:TRAY.y+84},R2:{x:TRAY.x+272,y:TRAY.y+84},R3:{x:TRAY.x+444,y:TRAY.y+84},R4:{x:TRAY.x+616,y:TRAY.y+84},W:{x:TRAY.x+100,y:TRAY.y+208}};
 (function drawTray(){const g=L_tray;
  mk('rect',{x:TRAY.x,y:TRAY.y,width:TRAY.w,height:TRAY.h,rx:10,fill:'#f2ede4',stroke:'#cdbfa8'},g);
- txt(g,TRAY.x+14,TRAY.y+24,'Resistencias y puentes',{'font-size':15,'font-weight':700,fill:'#5a4a32'});
+ txt(g,TRAY.x+48,TRAY.y+26,'Resistencias y puentes',{'font-size':15,'font-weight':700,fill:'#5a4a32'});
 })();
 // bobinas de cable, en la misma bandeja (abajo a la derecha)
 const COILPOS={R:{x:TRAY.x+BW-300,y:TRAY.y+138},B:{x:TRAY.x+BW-215,y:TRAY.y+138},K:{x:TRAY.x+BW-130,y:TRAY.y+138}};
@@ -293,9 +293,61 @@ function setDial(m){const g=L_meters.querySelector(`[data-m="${m.id}"]`);if(!g)r
 const CCOL={R:['#d0302a','#8f1a15'],B:['#2563c9','#163c7d'],K:['#2a2f35','#0d0f12']};
 function endXY(e){if(e.at){const s=sockXY(e.at);if(s)return s}return {x:e.x,y:e.y}}
 function sockXY(id){if(holes[id])return holes[id];if(id.startsWith('S:'))return SRCJ[id.slice(2)];if(id.startsWith('M:')){const [_,mid,j]=id.split(':'),m=state.meters.find(q=>q.id===mid);return jackPos(m,j)}return null}
+/* ---------- [RUTAS] cables en ángulo recto que esquivan los aparatos ---------- */
+// Rejilla de 10 unidades sobre la mesa: cada casilla tiene un coste (mesa libre 1, placa algo más, interior de las islas y huecos ajenos más,
+// piezas, fuente y polímetros mucho más). Cada cable busca el camino más barato con penalización por codo (A*) y deja una pequeña
+// penalización en las casillas que ocupa para que los siguientes vayan al lado y no encima.
+const GR=10,GW=Math.ceil(1500/GR),GH=Math.ceil(900/GR);
+function costMap(){const M=new Float32Array(GW*GH).fill(1);
+ const rect=(x0,y0,x1,y1,c)=>{for(let j=Math.max(0,Math.ceil((y0-GR/2)/GR));j<=Math.min(GH-1,Math.floor((y1-GR/2)/GR));j++)for(let i=Math.max(0,Math.ceil((x0-GR/2)/GR));i<=Math.min(GW-1,Math.floor((x1-GR/2)/GR));i++){const k=j*GW+i;if(M[k]<c)M[k]=c}};
+ rect(BX,BY,BX+BW,BY+BH,1.3);
+ for(let iy=0;iy<NR/3;iy++)for(let ix=0;ix<NC/3;ix++)rect(hx(3*ix)-14,hy(3*iy)-14,hx(3*ix+2)+14,hy(3*iy+2)+14,3);
+ for(const id in holes){const h=holes[id];rect(h.x-11,h.y-11,h.x+11,h.y+11,14)}
+ rect(TRAY.x,TRAY.y,TRAY.x+TRAY.w,TRAY.y+TRAY.h,2.5);
+ rect(SRCX,SRCY,SRCX+SRC.w*SS,SRCY+SRC.h*SS,40);
+ for(const m of state.meters)rect(m.x,m.y,m.x+MW*MS,m.y+MH*MS,40);
+ for(const b of state.bricks){if(!b.cell)continue;const q=brickXY(b),hw=(b.rot?40:64)*KB+6,hh=(b.rot?64:40)*KB+6;rect(q.x-hw,q.y-hh,q.x+hw,q.y+hh,60)}
+ return M}
+// zona de salida de cada clavija: los bornes de la fuente y de los polímetros salen hacia abajo hasta el borde del aparato
+function portCells(id,set){const P0=sockXY(id);if(!P0)return;const add=(x,y)=>{const i=Math.floor(x/GR),j=Math.floor(y/GR);if(i>=0&&j>=0&&i<GW&&j<GH)set.add(j*GW+i)};
+ for(let dx=-12;dx<=12;dx+=GR/2)for(let dy=-12;dy<=12;dy+=GR/2)add(P0.x+dx,P0.y+dy);
+ let yEnd=null;if(id.startsWith('S:'))yEnd=SRCY+SRC.h*SS+GR;else if(id.startsWith('M:')){const m=state.meters.find(q=>q.id===id.split(':')[1]);if(m)yEnd=m.y+MH*MS+GR}
+ if(yEnd!=null)for(let y=P0.y;y<=yEnd;y+=GR/2)add(P0.x,y)}
+function routeOne(M,used,A,B,free){const si=Math.floor(A.x/GR),sj=Math.floor(A.y/GR),ti=Math.floor(B.x/GR),tj=Math.floor(B.y/GR);
+ const N=GW*GH,dist=new Float64Array(N*4).fill(Infinity),prev=new Int32Array(N*4).fill(-1),DI=[1,0,-1,0],DJ=[0,1,0,-1],BEND=7;
+ const heap=[];const push=(f,s2)=>{heap.push([f,s2]);let i=heap.length-1;while(i>0){const p2=(i-1)>>1;if(heap[p2][0]<=heap[i][0])break;[heap[p2],heap[i]]=[heap[i],heap[p2]];i=p2}};
+ const pop=()=>{const top=heap[0],last=heap.pop();if(heap.length){heap[0]=last;let i=0;for(;;){const l=2*i+1,r=l+1;let m=i;if(l<heap.length&&heap[l][0]<heap[m][0])m=l;if(r<heap.length&&heap[r][0]<heap[m][0])m=r;if(m===i)break;[heap[m],heap[i]]=[heap[i],heap[m]];i=m}}return top};
+ const h=(i,j)=>Math.abs(i-ti)+Math.abs(j-tj);
+ for(let d=0;d<4;d++){const s2=(sj*GW+si)*4+d;dist[s2]=0;push(h(si,sj),s2)}
+ let goal=-1,n=0;
+ while(heap.length&&n<200000){n++;const [f,s2]=pop(),c=s2>>2,d=s2&3,i=c%GW,j=(c/GW)|0;if(f-h(i,j)>dist[s2]+1e-6)continue;if(i===ti&&j===tj){goal=s2;break}
+  for(let nd=0;nd<4;nd++){if(nd===((d+2)&3))continue;const ni=i+DI[nd],nj=j+DJ[nd];if(ni<0||nj<0||ni>=GW||nj>=GH)continue;const k=nj*GW+ni;
+   const cst=(free.has(k)?1:M[k])+used[k]+(nd!==d?BEND:0),ns=k*4+nd,nv=dist[s2]+cst;if(nv<dist[ns]){dist[ns]=nv;prev[ns]=s2;push(nv+h(ni,nj),ns)}}}
+ if(goal<0)return null;
+ const cells=[];for(let s2=goal;s2>=0;s2=prev[s2])cells.push(s2>>2);cells.reverse();
+ for(const k of cells)used[k]+=3;
+ // esquinas
+ const pts=[];for(let q=0;q<cells.length;q++){const k=cells[q],x=(k%GW)*GR+GR/2,y=((k/GW)|0)*GR+GR/2;
+  if(q===0||q===cells.length-1){pts.push({x,y});continue}const a=cells[q-1],b=cells[q+1];if((k-a)!==(b-k))pts.push({x,y})}
+ return snapPts(pts,A,B)}
+function snapPts(pts,A,B){if(pts.length<2)return [A,{x:A.x,y:(A.y+B.y)/2},{x:B.x,y:(A.y+B.y)/2},B];
+ const n=pts.length;
+ if(n===2){const v=Math.abs(pts[0].x-pts[1].x)<1;if(v){const ym=(A.y+B.y)/2;return Math.abs(A.x-B.x)<2?[A,B]:[A,{x:A.x,y:ym},{x:B.x,y:ym},B]}const xm=(A.x+B.x)/2;return Math.abs(A.y-B.y)<2?[A,B]:[A,{x:xm,y:A.y},{x:xm,y:B.y},B]}
+ const p=pts.map(q=>({x:q.x,y:q.y}));
+ if(Math.abs(p[0].x-p[1].x)<1)p[1].x=A.x;else p[1].y=A.y;
+ if(Math.abs(p[n-1].x-p[n-2].x)<1)p[n-2].x=B.x;else p[n-2].y=B.y;
+ p[0]={x:A.x,y:A.y};p[n-1]={x:B.x,y:B.y};return p}
+function roundedD(p){let d=`M${p[0].x} ${p[0].y}`;for(let i=1;i<p.length-1;i++){const a=p[i-1],b=p[i],c=p[i+1],l1=Math.hypot(b.x-a.x,b.y-a.y),l2=Math.hypot(c.x-b.x,c.y-b.y);
+  const r=Math.min(16,l1/2,l2/2);if(r<0.5){d+=` L${b.x} ${b.y}`;continue}const u1={x:(b.x-a.x)/l1,y:(b.y-a.y)/l1},u2={x:(c.x-b.x)/l2,y:(c.y-b.y)/l2};
+  d+=` L${b.x-u1.x*r} ${b.y-u1.y*r} Q${b.x} ${b.y} ${b.x+u2.x*r} ${b.y+u2.y*r}`}
+ const z=p[p.length-1];return d+` L${z.x} ${z.y}`}
+const rkey=c=>c.ends.map(e=>{const q=endXY(e);return e.at?e.at+'@'+Math.round(q.x)+','+Math.round(q.y):'x'}).join('|');
+function routeAll(){const M=costMap(),used=new Float32Array(GW*GH);
+ for(const c of state.cables){c.route=null;if(!c.ends[0].at||!c.ends[1].at)continue;const free=new Set();portCells(c.ends[0].at,free);portCells(c.ends[1].at,free);
+  const r=routeOne(M,used,endXY(c.ends[0]),endXY(c.ends[1]),free);if(r){c.route=r;c.rk=rkey(c)}}}
 function drawCable(c){const g=mk('g',{'data-c':c.id},L_cables),a=endXY(c.ends[0]),b=endXY(c.ends[1]),col=CCOL[c.color];
  const dx=b.x-a.x,dy=b.y-a.y,dist=Math.hypot(dx,dy),sag=Math.min(140,30+dist*.22);
- const d=`M${a.x} ${a.y} C${a.x+dx*.15} ${a.y+sag} ${b.x-dx*.15} ${b.y+sag} ${b.x} ${b.y}`;
+ const d=c.route&&c.rk===rkey(c)?roundedD(c.route):`M${a.x} ${a.y} C${a.x+dx*.15} ${a.y+sag} ${b.x-dx*.15} ${b.y+sag} ${b.x} ${b.y}`;
  mk('path',{d,stroke:'#00000030','stroke-width':9,fill:'none',transform:'translate(2 4)'},g);
  mk('path',{d,stroke:col[1],'stroke-width':8,fill:'none','stroke-linecap':'round'},g);
  mk('path',{d,stroke:col[0],'stroke-width':5,fill:'none','stroke-linecap':'round'},g);
@@ -306,7 +358,7 @@ function drawCable(c){const g=mk('g',{'data-c':c.id},L_cables),a=endXY(c.ends[0]
 /* ---------- render ---------- */
 function render(){L_top.innerHTML='';hov='';L_bricks.innerHTML='';L_meters.innerHTML='';L_cables.innerHTML='';
  for(const b of state.bricks)drawBrick(b,L_bricks);drawTrayItems();
- for(const m of state.meters)drawMeter(m);for(const c of state.cables)drawCable(c);drawSrcState();solveAll();}
+ for(const m of state.meters)drawMeter(m);routeAll();for(const c of state.cables)drawCable(c);drawSrcState();solveAll();}
 
 /* ---------- circuito ---------- */
 function solveLin(A,b){const n=b.length;for(let i=0;i<n;i++){let p=i;for(let r=i+1;r<n;r++)if(Math.abs(A[r][i])>Math.abs(A[p][i]))p=r;[A[i],A[p]]=[A[p],A[i]];[b[i],b[p]]=[b[p],b[i]];const d=A[i][i]||1e-30;
@@ -500,12 +552,14 @@ const clone=o=>JSON.parse(JSON.stringify(o));
 function applyPreset(){const B=[],C=[],part=state.part,sub=SUB[part];
  const br=(key,cell,rot)=>B.push({id:'b'+(state.nid++),type:'R',key,rot:rot||0,cell});
  const cb=(color,a,b)=>C.push({id:state.nid++,color,ends:[{at:a},{at:b}]});
+ // Las resistencias no se mueven al cambiar el selector: solo cambia el cableado. Donde dos cables van al mismo punto, la clavija se apila sobre la otra.
  if(part===1){br('R1','2_1');br('R2','5_1');cb('R','S:P','p0_1');cb('B','p8_1','M:m2:mA');cb('K','M:m2:COM','S:N');
-  const [va,vb]={asoc:['p1_2','p7_2'],R1:['p1_2','p4_2'],R2:['p4_2','p7_2']}[sub];cb('R','M:m1:V',va);cb('K','M:m1:COM',vb)}
- else{cb('K','p5_1','S:N');cb('R','M:m1:V','p0_2');cb('K','M:m1:COM','p4_1');
-  if(sub==='tot'){cb('R','S:P','M:m2:mA');cb('B','M:m2:COM','p0_1');br('R3','2_0');br('R4','2_2')}
-  else if(sub==='R3'){cb('R','S:P','p0_1');br('R4','2_2');br('R3','5_0');cb('B','p1_0','M:m2:mA');cb('B','M:m2:COM','p7_0')}
-  else{cb('R','S:P','p0_1');br('R3','2_0');br('R4','5_2');cb('B','p1_2','M:m2:mA');cb('B','M:m2:COM','p7_2')}}
+  const [va,vb]={asoc:['p0_1','p8_1'],R1:['p0_1','p4_2'],R2:['p4_2','p8_1']}[sub];cb('R','M:m1:V',va);cb('K','M:m1:COM',vb)}
+ else{B.push({id:'b'+(state.nid++),type:'W',key:'W',rot:1,cell:'4_2'});br('R3','2_1');br('R4','2_4');cb('K','S:N','p5_1');
+  if(sub==='tot'){cb('R','S:P','M:m2:mA');cb('B','M:m2:COM','p0_1');cb('B','p1_2','p1_3')}
+  else if(sub==='R3'){cb('R','S:P','p0_4');cb('B','p0_4','M:m2:mA');cb('B','M:m2:COM','p0_1')}
+  else{cb('R','S:P','p0_1');cb('B','p0_1','M:m2:mA');cb('B','M:m2:COM','p0_4')}
+  cb('R','M:m1:V','S:P');cb('K','M:m1:COM','S:N')}
  state.bricks=B;state.cables=C}
 function presetDials(){const v=state.meters.find(m=>m.id==='m1'),a=state.meters.find(m=>m.id==='m2');if(v)v.dial='DCV20';if(a)a.dial='DCA0.2'}
 function updSub(){const el=$('#sub'),p=state.part;el.hidden=!p;if(!p)return;$('#sublab').textContent=p===1?'Voltímetro en':'Amperímetro en';
