@@ -519,7 +519,8 @@ function flowTick(t){if(!flowOn){flowRaf=0;flowT=0;return}const dt=flowT?Math.mi
  for(const it of flowItems){let o=(flowOff[it.key]||0)-it.dir*it.v*dt;o=((o%FSP)+FSP)%FSP;flowOff[it.key]=o;for(const e of it.els)e.setAttribute('stroke-dashoffset',o)}
  flowRaf=requestAnimationFrame(flowTick)}
 // [BOTÓN] «Corriente» va en la esquina superior izquierda de la placa (en la primera línea, que está libre)
-const L_ui=mk('g',null,VP);const FB={x:BX+12,y:BY+8,w:124,h:32};
+const L_ui=mk('g',null,VP);VP.insertBefore(L_msg,L_ui); // los mensajes, por encima del velo de la vista de corriente
+const FB={x:BX+12,y:BY+8,w:124,h:32};
 function drawFlowBtn(){L_ui.innerHTML='';const g=mk('g',{class:'btnz','data-act':'flow'},L_ui),on=flowOn;
  mk('rect',{x:FB.x,y:FB.y,width:FB.w,height:FB.h,rx:16,fill:on?'#0f2236':'#ffffff',stroke:on?'#0f2236':'#cfd6de',filter:'url(#fSh2)'},g);
  const c=on?'#eaf6ff':'#17324d',cx=FB.x+14,cy=FB.y+FB.h/2;
