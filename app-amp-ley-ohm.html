@@ -105,7 +105,7 @@ const gauss=()=>{let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();r
 /* ---------- datos del montaje ---------- */
 // Resistencias con su tolerancia real (valor fijo para que los datos se puedan repetir)
 const RES={R1:{nom:'100 Ω',v:100*(1+(rnd()-.5)*0.06)},R2:{nom:'220 Ω',v:220*(1+(rnd()-.5)*0.06)},R3:{nom:'150 Ω',v:150*(1+(rnd()-.5)*0.06)},R4:{nom:'220 Ω',v:220*(1+(rnd()-.5)*0.06)}};
-// [PLACA] Placa PHYWE (aquí solo 3 × 2 islas, suficiente para los dos montajes): islas de 3 × 3 huecos en las esquinas de las casillas. Las líneas negras unen los 9 huecos de cada isla,
+// [PLACA] Placa de montaje (aquí solo 3 × 2 islas, suficiente para los dos montajes): islas de 3 × 3 huecos en las esquinas de las casillas. Las líneas negras unen los 9 huecos de cada isla,
 // así que una isla es un único punto eléctrico; entre islas vecinas hay una casilla de separación (paso uniforme P).
 const P=98.4,BY=12,MG=40,NC=6,NR=9,KB=P/100,CELL=P;let BX=615; // [VERTICAL] 2 columnas × 3 filas de islas; borde inferior a la altura del de los polímetros
 const BW=2*MG+(NC-1)*P,BH=2*MG+(NR-1)*P;
@@ -116,7 +116,7 @@ const SRC={x:0,y:0,w:520,h:280},SS=1.125,MY0=12,SRCY0=12+470*1.15+12;let SRCX=12
 const TRAY={x:12,y:12,w:250,h:540.5};
 // [REPARTO] La escena mide 900 de alto y su ancho se adapta a la ventana (mínimo 1500). El ancho que sobra (p. ej. al ocultar la guía)
 // se reparte como separación entre la fuente y los polímetros, la placa y la bandeja, en lugar de dejar franjas vacías a los lados.
-// [DISTRIBUCIÓN] Izquierda: bandeja de piezas y amperímetro (PHYWE) arriba, fuente debajo. Centro: placa. Derecha: esquema arriba
+// [DISTRIBUCIÓN] Izquierda: bandeja de piezas y amperímetro (azul) arriba, fuente debajo. Centro: placa. Derecha: esquema arriba
 // y voltímetro (VICTOR) debajo. Así los cables se cruzan lo menos posible.
 const LAY={W:1500,m1x:1201,m2x:290,srcx:12};
 function computeLayout(W){const e=W-1500,mg=12+e*.08,trw=250+e*.10,gtm=28+e*.08,gcb=18+e*.26,gbt=14+e*.20,mW=MW*MS;
@@ -172,8 +172,6 @@ mk('rect',{x:-2000,y:-2000,width:5600,height:4900,fill:'url(#gTable)'},L_bg);
 /* ---------- placa ---------- */
 function drawBoard(){const g=L_board;g.innerHTML='';
  mk('rect',{x:BX,y:BY,width:BW,height:BH,rx:10,fill:'url(#gBoard)',stroke:'#c9ccc6','stroke-width':2,filter:'url(#fSh)'},g);
- txt(g,BX+BW-30,BY+BH-13,'PHYWE',{'text-anchor':'end','font-size':17,'font-weight':800,fill:'#2b2f33','letter-spacing':'.06em'});
- txt(g,BX+30,BY+BH-13,'06033.00',{'font-size':12,fill:'#5b6168'});
  for(let my=0;my<NR/3;my++)for(let mx=0;mx<NC/3;mx++){const x0=hx(3*mx),y0=hy(3*my);
   for(let k=0;k<3;k++){mk('path',{d:`M${x0} ${y0+k*P} H${x0+2*P}`,stroke:'#22262a','stroke-width':2.4},g);mk('path',{d:`M${x0+k*P} ${y0} V${y0+2*P}`,stroke:'#22262a','stroke-width':2.4},g)}}
  for(const id in holes){const h=holes[id];mk('circle',{cx:h.x,cy:h.y,r:9.5,fill:'#f4f5f2'},g);mk('circle',{cx:h.x,cy:h.y,r:7.2,fill:'url(#gHole)'},g)}
@@ -194,7 +192,6 @@ function knobAng(v,max){return -135+270*v/max}
  mk('rect',{x:x+14,y:y+14,width:SRC.w-28,height:SRC.h-28,rx:8,fill:'url(#gSrc)',stroke:'#aab1b8'},g);
  txt(g,x+32,y+48,'Fuente de alimentación',{'font-size':17,'font-weight':700,fill:'#1d2346'});
  txt(g,x+32,y+68,'regulada  0…12 V ⎓ / 0…2 A',{'font-size':13,fill:'#3b4250'});
- txt(g,x+SRC.w-34,y+46,'PHYWE',{'text-anchor':'end','font-size':17,'font-weight':800,fill:'#1d2346','letter-spacing':'.06em'});
  // encendido
  txt(g,x+58,y+112,'Power',{'text-anchor':'middle','font-size':12,fill:'#3b4250'});
  srcLed=mk('circle',{cx:x+58,cy:y+96,r:5,fill:'#2b4a2f'},g);
@@ -247,7 +244,7 @@ function drawBrick(b,par){const g=mk('g',{'data-b':b.id,class:'grab'},par),p=bri
   mk('rect',{x:-26,y:-12,width:52,height:18,rx:8,fill:'url(#gRes)',stroke:'#a8844f'},gi);
   const bands={R1:['#7a4a1f','#1b1b1b','#7a4a1f'],R2:['#c42d22','#c42d22','#7a4a1f'],R3:['#7a4a1f','#2f8f3a','#7a4a1f'],R4:['#c42d22','#c42d22','#7a4a1f']}[b.key];
   bands.forEach((c,i)=>mk('rect',{x:-17+i*8,y:-12,width:4,height:18,fill:c},gi));mk('rect',{x:13,y:-12,width:4,height:18,fill:'#c9a227'},gi);
-  // etiqueta como la de los bloques PHYWE
+  // etiqueta como la de los bloques de montaje
   mk('rect',{x:-50,y:13,width:100,height:23,rx:2,fill:'#fff',stroke:'#1b1e22','stroke-width':1},gi);
   txt(gi,0,31,b.key,{'text-anchor':'middle','font-size':18,'font-weight':800,fill:'#111'}); // [CIEGAS] sin valor: solo el nombre y el código de colores
  }else{mk('path',{d:'M-46 0 C-20 -14 20 -14 46 0',stroke:'#b07a2a','stroke-width':3.2,fill:'none'},gi)}
@@ -321,10 +318,10 @@ const pol=(c,r,a)=>({x:c.x+r*Math.sin(a*Math.PI/180),y:c.y-r*Math.cos(a*Math.PI/
 function arcD(c,r,a1,a2){const p=pol(c,r,a1),q=pol(c,r,a2);return `M${p.x} ${p.y} A${r} ${r} 0 ${a2-a1>180?1:0} 1 ${q.x} ${q.y}`}
 function drawMeter(m){
  const g=mk('g',{'data-m':m.id,transform:`translate(${m.x} ${m.y}) scale(${MS})`},L_meters),x=0,y=0,V=m.kind==='victor';
- const body=mk('rect',{x,y,width:MW,height:MH,rx:26,fill:V?'#f07a1c':'#3f4a57',filter:'url(#fSh)',class:'grab','data-mbody':m.id},g);
+ const body=mk('rect',{x,y,width:MW,height:MH,rx:26,fill:V?'#f07a1c':'#1f6fd1',filter:'url(#fSh)',class:'grab','data-mbody':m.id},g); // sin marcas comerciales; el marco azul, como el A del esquema
  mk('rect',{x:x+10,y:y+10,width:MW-20,height:MH-20,rx:18,fill:V?'#26292d':'#e7eaee',class:'grab','data-mbody':m.id},g);
- txt(g,x+22,y+34,V?'VICTOR 88C':'PHYWE',{'font-size':V?14:15,'font-weight':800,fill:V?'#f07a1c':'#2a4f8f',class:'grab','data-mbody':m.id});
- txt(g,x+MW-22,y+34,V?'DIGITAL MULTIMETER':'07122-00',{'text-anchor':'end','font-size':9.5,'font-weight':700,fill:V?'#e8e8e8':'#3a4250',class:'grab','data-mbody':m.id});
+ txt(g,x+22,y+34,V?'VICTOR 88C':'POLÍMETRO',{'font-size':V?14:14,'font-weight':800,fill:V?'#f07a1c':'#1f6fd1',class:'grab','data-mbody':m.id});
+ txt(g,x+MW-22,y+34,V?'DIGITAL MULTIMETER':'DIGITAL',{'text-anchor':'end','font-size':9.5,'font-weight':700,fill:V?'#e8e8e8':'#3a4250',class:'grab','data-mbody':m.id});
  mk('rect',{x:x+22,y:y+44,width:MW-44,height:84,rx:6,fill:V?'url(#gLcd)':'url(#gLcdP)',stroke:'#0f1114','stroke-width':3},g);
  mk('g',{class:'lcd','data-lcd':m.id},g);
  // botón de encendido
