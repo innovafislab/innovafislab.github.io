@@ -520,7 +520,6 @@ function flowTick(t){if(!flowOn){flowRaf=0;flowT=0;return}const dt=flowT?Math.mi
 // [BOTÓN] «Corriente» va en la esquina superior izquierda de la placa (en la primera línea, que está libre)
 const L_ui=mk('g',null,VP);const FB={x:BX+12,y:BY+8,w:124,h:32};
 function drawFlowBtn(){L_ui.innerHTML='';const g=mk('g',{class:'btnz','data-act':'flow'},L_ui),on=flowOn;
- const tt=mk('title',null,g);tt.textContent='Ver cómo circula la corriente: sentido convencional, de + a −; los puntos van más deprisa cuanto mayor es la intensidad';
  mk('rect',{x:FB.x,y:FB.y,width:FB.w,height:FB.h,rx:16,fill:on?'#0f2236':'#ffffff',stroke:on?'#0f2236':'#cfd6de',filter:'url(#fSh2)'},g);
  const c=on?'#eaf6ff':'#17324d',cx=FB.x+14,cy=FB.y+FB.h/2;
  [[0,2,.35],[6,2.3,.65],[12.5,2.6,1]].forEach(([dx,r,o])=>mk('circle',{cx:cx+dx,cy,r,fill:c,opacity:o},g));
@@ -700,10 +699,10 @@ function applyPreset(){const B=[],C=[],part=state.part,sub=SUB[part];
  const W_=(cell,rot)=>B.push({id:'b'+(state.nid++),type:'W',key:'W',rot,cell});
  if(part===1){br('R1','4_2',1);br('R2','4_5',1);cb('R','S:P','M:m2:mA');cb('B','M:m2:COM','p3_1');cb('K','p3_7','S:N');
   const [va,vb]={asoc:['p5_1','p5_7'],R1:['p5_1','p5_4'],R2:['p5_4','p5_7']}[sub];cb('R','M:m1:V',va);cb('K','M:m1:COM',vb)}
- else{br('R3','1_2',1);br('R4','4_2',1);W_('2_4',0);cb('K','S:N','p0_4');
-  if(sub==='tot'){cb('R','S:P','M:m2:mA');cb('B','M:m2:COM','p0_1');W_('2_1',0)}
-  else if(sub==='R3'){cb('R','S:P','p3_1');cb('B','p3_1','M:m2:mA');cb('B','M:m2:COM','p2_1')}
-  else{cb('R','S:P','p0_1');cb('B','p2_1','M:m2:mA');cb('B','M:m2:COM','p3_1')}
+ else{br('R3','1_5',1);br('R4','4_5',1);W_('2_7',0);cb('K','S:N','p0_7'); // en las cuatro islas de abajo
+  if(sub==='tot'){cb('R','S:P','M:m2:mA');cb('B','M:m2:COM','p0_4');W_('2_4',0)}
+  else if(sub==='R3'){cb('R','S:P','p3_4');cb('B','p3_4','M:m2:mA');cb('B','M:m2:COM','p2_4')}
+  else{cb('R','S:P','p0_4');cb('B','p2_4','M:m2:mA');cb('B','M:m2:COM','p3_4')}
   cb('R','M:m1:V','S:P');cb('K','M:m1:COM','S:N')}
  state.bricks=B;state.cables=C}
 function presetDials(){const v=state.meters.find(m=>m.id==='m1'),a=state.meters.find(m=>m.id==='m2');if(v)v.dial='DCV20';if(a)a.dial='DCA0.2'}
