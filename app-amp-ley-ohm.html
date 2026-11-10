@@ -220,7 +220,7 @@ function drawSrcState(){const s=state.src;srcLed.setAttribute('fill',s.on?'#35e0
 /* ---------- bandejas ---------- */
 // [BANDEJA] piezas a la izquierda (resistencias y puente arriba, cables abajo) y el esquema del montaje a la derecha
 const SCH={x:1201,y:12,w:287.5,h:315};
-const TS=0.82,TRAYPOS={R1:{x:TRAY.x+62,y:TRAY.y+80},R2:{x:TRAY.x+TRAY.w-62,y:TRAY.y+80},R3:{x:TRAY.x+62,y:TRAY.y+162},R4:{x:TRAY.x+TRAY.w-62,y:TRAY.y+162},W:{x:TRAY.x+62,y:TRAY.y+246}};
+const TS=0.82,TRAYPOS={R1:{x:TRAY.x+62,y:TRAY.y+76},R2:{x:TRAY.x+TRAY.w-62,y:TRAY.y+76},R3:{x:TRAY.x+62,y:TRAY.y+153},R4:{x:TRAY.x+TRAY.w-62,y:TRAY.y+153},W:{x:TRAY.x+62,y:TRAY.y+230}};
 const L_trayBg=mk('g',null,L_tray);
 function drawTray(){const g=L_trayBg;g.innerHTML='';
  mk('rect',{x:TRAY.x,y:TRAY.y,width:TRAY.w,height:TRAY.h,rx:10,fill:'#f2ede4',stroke:'#cdbfa8'},g);
@@ -230,7 +230,7 @@ drawTray();
 function placeTray(){TRAYPOS.R1.x=TRAY.x+62;TRAYPOS.R2.x=TRAY.x+TRAY.w-62;TRAYPOS.R3.x=TRAY.x+62;TRAYPOS.R4.x=TRAY.x+TRAY.w-62;TRAYPOS.W.x=TRAY.x+62;
  COILPOS.R.x=TRAY.x+48;COILPOS.B.x=TRAY.x+TRAY.w/2;COILPOS.K.x=TRAY.x+TRAY.w-48}
 // bobinas de cable, en la misma bandeja (abajo a la derecha)
-const COILPOS={R:{x:TRAY.x+48,y:TRAY.y+330},B:{x:TRAY.x+TRAY.w/2,y:TRAY.y+330},K:{x:TRAY.x+TRAY.w-48,y:TRAY.y+330}};
+const COILPOS={R:{x:TRAY.x+48,y:TRAY.y+312},B:{x:TRAY.x+TRAY.w/2,y:TRAY.y+312},K:{x:TRAY.x+TRAY.w-48,y:TRAY.y+312}};
 
 /* ---------- utilidades de piezas ---------- */
 // Cada pieza ocupa dos huecos contiguos: (c,r) y el de su derecha (giro 0) o el de debajo (giro 1)
@@ -261,7 +261,7 @@ function drawTrayItems(){[...L_tray.querySelectorAll('[data-tray]')].forEach(e=>
  for(const c in COILPOS){const P=COILPOS[c],g=mk('g',{'data-tray':'C'+c,class:'grab'},L_tray),col={R:'#d0302a',B:'#2563c9',K:'#1e2226'}[c];
   for(let i=0;i<4;i++)mk('ellipse',{cx:P.x,cy:P.y+40-i*3,rx:30-i*2,ry:17-i,fill:'none',stroke:col,'stroke-width':5},g);
   mk('rect',{x:P.x-9,y:P.y+18,width:18,height:22,rx:4,fill:col},g);mk('rect',{x:P.x-4,y:P.y+8,width:8,height:14,rx:2,fill:'#c7ccd2'},g)}
- const zt=mk('text',{x:TRAY.x+14,y:COILPOS.R.y-22,'font-size':15,'font-weight':700,fill:'#5a4a32','data-tray':'lbl'},L_tray);zt.textContent='Cables';
+ const zt=mk('text',{x:TRAY.x+14,y:COILPOS.R.y-17,'font-size':15,'font-weight':700,fill:'#5a4a32','data-tray':'lbl'},L_tray);zt.textContent='Cables';
 }
 
 /* ---------- [ESQUEMA] esquema del montaje en la bandeja ---------- */
