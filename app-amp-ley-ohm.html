@@ -203,6 +203,7 @@ function knobAng(v,max){return -135+270*v/max}
    if(major)txt(g,K.x+(K.r+27)*Math.sin(a),K.y-(K.r+27)*Math.cos(a)+5,String(+v.toFixed(1)).replace('.',','),{'text-anchor':'middle','font-size':13,fill:'#2a2f36'})}
   txt(g,K.x,K.y+K.r+46,lab,{'text-anchor':'middle','font-size':16,'font-weight':700,fill:'#2a2f36'})}
  srcCC=mk('circle',{cx:KA.x,cy:KA.y-KA.r-38,r:5,fill:'#4a2222'},g);
+ txt(g,KA.x,KA.y-KA.r-52,'Limitador de corriente',{'text-anchor':'middle','font-size':11.5,'font-weight':600,fill:'#3b4250'});
  knobV=mk('g',{class:'btnz','data-act':'kv'},g);knobA=mk('g',{class:'btnz','data-act':'ka'},g);
  for(const [kg,K] of [[knobV,KV],[knobA,KA]]){mk('circle',{cx:K.x,cy:K.y,r:K.r+34,fill:'#000','fill-opacity':0},kg);mk('circle',{cx:K.x,cy:K.y,r:K.r,fill:'url(#gKnob)',stroke:'#80868c',filter:'url(#fSh2)'},kg);mk('circle',{cx:K.x,cy:K.y,r:K.r-9,fill:'none',stroke:'#b9bec3'},kg);mk('path',{d:`M${K.x} ${K.y-K.r+4} V${K.y-K.r+16}`,stroke:'#1b1e22','stroke-width':4,'stroke-linecap':'round','class':'ind'},kg)}
  // bornes
