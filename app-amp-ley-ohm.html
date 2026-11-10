@@ -112,18 +112,19 @@ const BW=2*MG+(NC-1)*P,BH=2*MG+(NR-1)*P;
 const holes={};const hx=c=>BX+MG+c*P,hy=r=>BY+MG+r*P;
 for(let c=0;c<NC;c++)for(let r=0;r<NR;r++)holes[`p${c}_${r}`]={x:hx(c),y:hy(r),c,r,isl:`I${Math.floor(c/3)}${Math.floor(r/3)}`};
 // [ESPACIO] fuente arriba a la izquierda, polímetros debajo, placa a la derecha y bandeja de piezas bajo la placa
-const SRC={x:0,y:0,w:520,h:280},SRCY=12,SS=1.125;let SRCX=12;
+const SRC={x:0,y:0,w:520,h:280},SS=1.125,MY0=12,SRCY0=12+470*1.15+12;let SRCX=12,SRCY=SRCY0; // [ORDEN] polímetros arriba, fuente debajo (los dos se pueden arrastrar)
 const TRAY={x:BX+BW+14,y:12,w:1488-(BX+BW+14),h:867.5};
 // [REPARTO] La escena mide 900 de alto y su ancho se adapta a la ventana (mínimo 1500). El ancho que sobra (p. ej. al ocultar la guía)
 // se reparte como separación entre la fuente y los polímetros, la placa y la bandeja, en lugar de dejar franjas vacías a los lados.
-const LAY={W:1500,m1x:12,m2x:309.5};
+const LAY={W:1500,m1x:12,m2x:309.5,srcx:12};
 function computeLayout(W){const e=W-1500,mg=12+e*.10,gm=10+e*.12,gcb=18+e*.26,gbt=14+e*.20,mgR=12+e*.10;
  const colW=Math.max(SRC.w*SS,2*MW*MS+gm),bx=mg+colW+gcb,tx=bx+BW+gbt;
  return {W,srcx:mg,m1x:mg,m2x:mg+MW*MS+gm,bx,tx,tw:W-mgR-tx}}
 const state={part:0,bricks:[],cables:[],meters:[],src:{on:false,v:0,ilim:1.0,cc:false},nid:1,warn:''};
 function initState(){
  state.bricks=[];state.cables=[];state.src={on:false,v:0,ilim:1.0,cc:false};
- state.meters=[{id:'m1',kind:'victor',x:LAY.m1x,y:339,on:false,dial:'DCV20',fuse:true},{id:'m2',kind:'phywe',x:LAY.m2x,y:339,on:false,dial:'DCV20',fuse:true}];
+ SRCX=LAY.srcx;SRCY=SRCY0;if(typeof placeSrc==='function'&&SRCJ.P)placeSrc();
+ state.meters=[{id:'m1',kind:'victor',x:LAY.m1x,y:MY0,on:false,dial:'DCV20',fuse:true},{id:'m2',kind:'phywe',x:LAY.m2x,y:MY0,on:false,dial:'DCV20',fuse:true}];
 }
 /* ---------- polímetros ---------- */
 // [ESCALAS] Selector agrupado en sectores con su símbolo (V⎓, V~, mA~, A⎓, mA⎓, Ω): así cada número es corto y se ve a qué magnitud y unidad pertenece.
@@ -565,7 +566,7 @@ const VB0=[0,0,1500,900];let vb=VB0.slice();
 function relayout(W){const L=computeLayout(W),dx=L.bx-BX;
  for(const m of state.meters){const def=m.id==='m1'?LAY.m1x:LAY.m2x,ndef=m.id==='m1'?L.m1x:L.m2x;m.x+=ndef-def}
  for(const c of state.cables){for(const e of c.ends)if(!e.at)e.x+=dx;if(c.h)for(const q of c.h)q.x+=dx}
- Object.assign(LAY,{W,m1x:L.m1x,m2x:L.m2x});BX=L.bx;SRCX=L.srcx;TRAY.x=L.tx;TRAY.w=L.tw;
+ SRCX+=L.srcx-LAY.srcx;Object.assign(LAY,{W,m1x:L.m1x,m2x:L.m2x,srcx:L.srcx});BX=L.bx;TRAY.x=L.tx;TRAY.w=L.tw;
  for(const id in holes)holes[id].x=hx(holes[id].c);placeSrc();placeTray();FB.x=BX+12;drawBoard();drawTray();
  VB0[2]=W;vb=VB0.slice();setVB();render();drawFlowBtn()}
 function fitScene(){const r=SV.getBoundingClientRect();if(!r.width||!r.height)return;const W=Math.round(Math.max(1500,Math.min(2300,900*r.width/r.height)));if(Math.abs(W-LAY.W)>6)relayout(W)}
@@ -612,6 +613,7 @@ SV.addEventListener('pointerdown',e=>{ptrs.set(e.pointerId,{x:e.clientX,y:e.clie
   if(z==='A'||z==='B'){const h=brickHoles(b);drag={k:'rot',b,end:z,pivot:z==='B'?h[0]:h[1],from:b.cell,rot0:b.rot,p0:p,moved:false};drawHint(b,z);return}
   const q=brickXY(b);drag={k:'brick',b,dx:q.x-p.x,dy:q.y-p.y,p0:p,moved:false,from:b.cell};return}}
  if(mb){const m=state.meters.find(q=>q.id===mb.getAttribute('data-mbody'));drag={k:'meter',m,dx:m.x-p.x,dy:m.y-p.y,p0:p,moved:false};return}
+ if(L_src.contains(t)){drag={k:'srcmove',dx:SRCX-p.x,dy:SRCY-p.y,p0:p,moved:false};return} // la fuente se arrastra por cualquier parte que no sea un mando o un botón
  drag={k:'pan',c0:{x:e.clientX,y:e.clientY},vb0:vb.slice()};
 });
 SV.addEventListener('pointermove',e=>{if(!ptrs.has(e.pointerId)){hoverAt(e);return}ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
@@ -629,6 +631,7 @@ SV.addEventListener('pointermove',e=>{if(!ptrs.has(e.pointerId)){hoverAt(e);retu
   if(s2&&slotFree(s2.cell,s2.rot,b))for(const k of slotHoles(s2.cell,s2.rot)){const q=holes[k];mk('circle',{cx:q.x,cy:q.y,r:15,fill:'#1d5fa822',stroke:'#1d5fa8','stroke-width':3},L_bricks)}
   drawHint(b,drag.end);return}
  if(drag.k==='brick'){if(!drag.moved)return;const b=drag.b;if(b.cell){b.cell=null;solveAll()}b.x=p.x+drag.dx;b.y=p.y+drag.dy;L_bricks.innerHTML='';state.bricks.forEach(q=>drawBrick(q,L_bricks));const cid=slotFor({x:b.x,y:b.y},b.rot);if(cid&&slotFree(cid,b.rot,b)){const h=slotHoles(cid,b.rot).map(k=>holes[k]);for(const q of h)mk('circle',{cx:q.x,cy:q.y,r:15,fill:'#1d5fa822',stroke:'#1d5fa8','stroke-width':3},L_bricks)}return}
+ if(drag.k==='srcmove'){SRCX=p.x+drag.dx;SRCY=p.y+drag.dy;placeSrc();L_cables.innerHTML='';state.cables.forEach(drawCable);if(flowOn)buildFlow();return}
  if(drag.k==='meter'){drag.m.x=p.x+drag.dx;drag.m.y=p.y+drag.dy;L_meters.innerHTML='';L_cables.innerHTML='';state.meters.forEach(drawMeter);state.cables.forEach(drawCable);updLcd(true);if(flowOn)buildFlow();return}
  if(drag.k==='kv'||drag.k==='ka'){const K=drag.K;if(Math.hypot(p.x-K.x,p.y-K.y)<10)return;const an=angOf(K,p),da=((an-drag.last)%360+540)%360-180;drag.last=an;
   const max=drag.k==='kv'?12:2,cur=drag.k==='kv'?state.src.v:state.src.ilim,nv=Math.max(0,Math.min(max,cur+da/270*max));if(drag.k==='kv')state.src.v=nv;else state.src.ilim=nv;drawSrcState();solveAll();return}
@@ -650,7 +653,7 @@ function endPtr(e){ptrs.delete(e.pointerId);if(ptrs.size<2)pinch=null;if(!drag)r
   else if(d.moved){const P=[endXY(c.ends[0]),...c.h,endXY(c.ends[1])],i=d.hi+1,A=P[i-1],B=P[i+1],q=P[i],L=Math.hypot(B.x-A.x,B.y-A.y)||1,dist=Math.abs((B.x-A.x)*(A.y-q.y)-(A.x-q.x)*(B.y-A.y))/L;
    if(dist<14)c.h.splice(d.hi,1)}
   L_cables.innerHTML='';state.cables.forEach(drawCable);return}
- if(d.k==='meter'){render();return}
+ if(d.k==='meter'||d.k==='srcmove'){render();return}
  if(d.k==='dial')return;
  if(d.k==='btn'&&!d.moved){if(d.a==='flow'){setFlow(!flowOn)}else if(d.a==='sch'){SCHK=d.id;drawSchem()}else if(d.a==='rflash'){flashR(d.id)}else if(d.a==='pwr'){state.src.on=!state.src.on;solveAll();drawSrcState()}else if(d.a==='mpwr'){const m=state.meters.find(q=>q.id===d.id);m.on=!m.on;updLcd(true);updMsg()}return}
 }
