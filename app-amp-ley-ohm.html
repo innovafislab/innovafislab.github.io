@@ -506,7 +506,7 @@ function buildFlow(){if(!flowOn)return;L_flow.innerHTML='';const {E,isrc}=flowSo
  const gT=mk('g',null,L_flow),gH=mk('g',null,L_flow),gC=mk('g',null,L_flow);
  const add=(key,d,I)=>{const a=Math.abs(I);if(a<5e-5)return;const sp=Math.min(260,2000*a),br=.72+.28*Math.min(1,a/.08);
   mk('path',{d,stroke:'#f5821f','stroke-width':2.2,fill:'none',opacity:.3,'stroke-linecap':'round'},gT);
-  const off=flowOff[key]||0,h=mk('path',{d,stroke:'#ffffff','stroke-width':8.2,fill:'none',opacity:.95,'stroke-linecap':'round','stroke-dasharray':`0 ${FSP}`,'stroke-dashoffset':off},gH);
+  const off=flowOff[key]||0,h=mk('path',{d,stroke:'#1a1a1a','stroke-width':7.8,fill:'none',opacity:1,'stroke-linecap':'round','stroke-dasharray':`0 ${FSP}`,'stroke-dashoffset':off},gH);
   const c=mk('path',{d,stroke:'#f5821f','stroke-width':5.4,fill:'none',opacity:br,'stroke-linecap':'round','stroke-dasharray':`0 ${FSP}`,'stroke-dashoffset':off},gC);
   flowItems.push({key,els:[h,c],v:sp,dir:Math.sign(I)})};
  for(const e of E)if(e.kind!=='met'||e.j!=='V')add(e.key,flowGeom(e),e.I);
