@@ -454,7 +454,7 @@ function roundPoly(p,rr){let d=`M${p[0].x} ${p[0].y}`;for(let i=1;i<p.length-1;i
   d+=` L${b.x+(a.x-b.x)/l1*r} ${b.y+(a.y-b.y)/l1*r} Q${b.x} ${b.y} ${b.x+(c.x-b.x)/l2*r} ${b.y+(c.y-b.y)/l2*r}`}const z=p[p.length-1];return d+` L${z.x} ${z.y}`}
 function flowGeom(e){if(e.kind==='isl'||e.kind==='brk'){const A=holes[e.a],B=holes[e.b];return `M${A.x} ${A.y} L${B.x} ${B.y}`}
  if(e.kind==='cab')return cablePath(e.c,endXY(e.c.ends[0]),endXY(e.c.ends[1]));
- const A=jackPos(e.m,e.j),B=jackPos(e.m,'COM'),yo=(e.j==='mA'?30:e.j==='A'?44:58)*MS;return roundPoly([A,{x:A.x,y:A.y-yo},{x:B.x,y:A.y-yo},B],12)}
+ const A=jackPos(e.m,e.j),B=jackPos(e.m,'COM'),yo=21*MS;return roundPoly([A,{x:A.x,y:A.y+yo},{x:B.x,y:A.y+yo},B],8)} // por debajo de los bornes, sin tapar sus rótulos
 const fmA=I=>{const a=Math.abs(I)*1e3;return (a>=100?fmtc(a,0):fmtc(a,1))+' mA'};
 function flowPill(x,y,t){const w=t.length*7.4+30,g=mk('g',null,L_flow);mk('rect',{x:x-w/2,y:y-14,width:w,height:28,rx:14,fill:'#ffffff',opacity:.94,filter:'url(#fSh2)'},g);
  mk('circle',{cx:x-w/2+14,cy:y,r:4,fill:'#38b6ff'},g);txt(g,x-w/2+24,y+5,t,{'font-size':14,'font-weight':600,fill:'#0b2540'})}
@@ -647,8 +647,8 @@ function applyPreset(){const B=[],C=[],part=state.part,sub=SUB[part];
  // Las resistencias no se mueven al cambiar el selector: solo cambia el cableado. Donde dos cables van al mismo punto, la clavija se apila sobre la otra.
  if(part===1){br('R1','2_1');br('R2','5_1');cb('R','S:P','p0_1');cb('B','p8_1','M:m2:mA');cb('K','M:m2:COM','S:N');
   const [va,vb]={asoc:['p0_1','p8_1'],R1:['p0_1','p4_2'],R2:['p4_2','p8_1']}[sub];cb('R','M:m1:V',va);cb('K','M:m1:COM',vb)}
- else{B.push({id:'b'+(state.nid++),type:'W',key:'W',rot:1,cell:'4_2'});br('R3','2_1');br('R4','2_4');cb('K','S:N','p5_1');
-  if(sub==='tot'){cb('R','S:P','M:m2:mA');cb('B','M:m2:COM','p0_1');B.push({id:'b'+(state.nid++),type:'W',key:'W',rot:1,cell:'1_2'})}
+ else{B.push({id:'b'+(state.nid++),type:'W',key:'W',rot:1,cell:'5_2'});br('R3','2_1');br('R4','2_4');cb('K','S:N','p5_1');
+  if(sub==='tot'){cb('R','S:P','M:m2:mA');cb('B','M:m2:COM','p0_1');B.push({id:'b'+(state.nid++),type:'W',key:'W',rot:1,cell:'2_2'})}
   else if(sub==='R3'){cb('R','S:P','p0_4');cb('B','p0_4','M:m2:mA');cb('B','M:m2:COM','p0_1')}
   else{cb('R','S:P','p0_1');cb('B','p0_1','M:m2:mA');cb('B','M:m2:COM','p0_4')}
   cb('R','M:m1:V','S:P');cb('K','M:m1:COM','S:N')}
