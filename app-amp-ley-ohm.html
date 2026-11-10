@@ -264,19 +264,24 @@ function drawTrayItems(){[...L_tray.querySelectorAll('[data-tray]')].forEach(e=>
 /* ---------- [ESQUEMA] esquema del montaje en la bandeja ---------- */
 // Muestra el circuito de la pestaña activa con el voltímetro (naranja, como el VICTOR) y el amperímetro (azul)
 // donde están conectados. En «Móntalo tú mismo» se elige ver el de la parte I o el de la parte II.
-let SCHK='serie',schB=null,schPos={},flashT=null;const L_sch=mk('g',null,L_tray);
+let SCHK='serie',FSUB={1:'asoc',2:'tot'},schB=null,schPos={},flashT=null;const L_sch=mk('g',null,L_tray);
 function flashR(key){if(!schB||!schPos[key])return;const old=schB.querySelector('.rfl');if(old)old.remove();clearTimeout(flashT);const P0=schPos[key],w=150,x=P0.side>0?P0.x-6:P0.x-w+6,y=P0.y+14;
  const g=mk('g',{class:'rfl','pointer-events':'none',style:'transition:opacity .5s'},schB);mk('rect',{x,y,width:w,height:30,rx:6,fill:'#17324d'},g);
  txt(g,x+w/2,y+20,`${{R1:'R₁',R2:'R₂',R3:'R₃',R4:'R₄'}[key]} ≈ ${RES[key].nom} (nominal)`,{'text-anchor':'middle','font-size':14,'font-weight':700,fill:'#fff'});
  flashT=setTimeout(()=>{g.style.opacity=0;flashT=setTimeout(()=>g.remove(),550)},1300)}
 function drawSchem(){L_sch.innerHTML='';const g=L_sch,X=SCH.x,Y=SCH.y;
  mk('rect',{x:X,y:Y,width:SCH.w,height:SCH.h,rx:8,fill:'#fff',stroke:'#cdbfa8'},g);
- const part=state.part||(SCHK==='serie'?1:2),sub=state.part?SUB[part]:(part===1?'asoc':'tot');
+ const part=state.part||(SCHK==='serie'?1:2),sub=state.part?SUB[part]:FSUB[part];
  const subt=part===1?{asoc:'voltímetro en la asociación',R1:'voltímetro en R₁',R2:'voltímetro en R₂'}[sub]:{tot:'amperímetro en la rama común',R3:'amperímetro en la rama de R₃',R4:'amperímetro en la rama de R₄'}[sub];
  txt(g,X+14,Y+24,'Esquema del montaje',{'font-size':15,'font-weight':700,fill:'#5a4a32'});
  if(state.part)txt(g,X+14,Y+43,(part===1?'Serie':'Paralelo')+' · '+subt,{'font-size':12.5,fill:'#5a4a32'});
  if(!state.part){let xx=X+14+150;for(const [k,l] of [['paralelo','Paralelo'],['serie','Serie']]){const w=l.length*8.2+18,on=SCHK===k,bg=mk('g',{class:'btnz','data-act':'sch','data-id':k},g);
-  mk('rect',{x:xx-w,y:Y+31,width:w,height:24,rx:6,fill:on?'#1d5fa8':'#fff',stroke:'#1d5fa8'},bg);txt(bg,xx-w/2,Y+48,l,{'text-anchor':'middle','font-size':13,'font-weight':600,fill:on?'#fff':'#1d5fa8'});xx-=w+6}}
+  mk('rect',{x:xx-w,y:Y+31,width:w,height:24,rx:6,fill:on?'#1d5fa8':'#fff',stroke:'#1d5fa8'},bg);txt(bg,xx-w/2,Y+48,l,{'text-anchor':'middle','font-size':13,'font-weight':600,fill:on?'#fff':'#1d5fa8'});xx-=w+6}
+  // [QUÉ SE MIDE] en «Móntalo tú mismo»: qué magnitud y dónde (V en la serie, I en el paralelo), con el color de su aparato
+  const mv=part===1,col=mv?'#e8711a':'#1f6fd1',opts=mv?[['asoc','asociación'],['R1','R₁'],['R2','R₂']]:[['tot','común'],['R3','R₃'],['R4','R₄']];
+  txt(g,X+14,Y+78,'Mide '+(mv?'V':'I')+' en',{'font-size':12.5,'font-weight':600,fill:col});let px=X+14+(mv?66:62);
+  for(const [k,l] of opts){const w=l.length*7+18,on=FSUB[part]===k,pg=mk('g',{class:'btnz','data-act':'fsub','data-id':k},g);
+   mk('rect',{x:px,y:Y+64,width:w,height:20,rx:10,fill:on?col:'#fff',stroke:col},pg);txt(pg,px+w/2,Y+78,l,{'text-anchor':'middle','font-size':12,'font-weight':600,fill:on?'#fff':col});px+=w+5}}
  const b=mk('g',null,g);
  // mismo trazado que las figuras de las fichas (serie: figura 2 de la ficha I; paralelo: figuras a y b de la ficha II)
  const W='#22262a',ln=(pts)=>mk('path',{d:'M'+pts.map(q=>q.join(' ')).join(' L'),stroke:W,'stroke-width':2.2,fill:'none','stroke-linejoin':'miter'},b);
@@ -305,7 +310,7 @@ function drawSchem(){L_sch.innerHTML='';const g=L_sch,X=SCH.x,Y=SCH.y;
  }
  // [ENCAJE] el dibujo se escala para ocupar todo el hueco libre de la ventana del esquema (sin cambiar la ventana)
  let bb=null;try{bb=b.getBBox()}catch(e){}if(!bb||!bb.width)bb={x:0,y:0,width:440,height:222};
- const ax=X+10,ay=Y+60,aw=SCH.w-20,ah=SCH.h-70,sc=Math.min(aw/bb.width,ah/bb.height,1.9);
+ const top_=state.part?60:92,ax=X+10,ay=Y+top_,aw=SCH.w-20,ah=SCH.h-top_-10,sc=Math.min(aw/bb.width,ah/bb.height,1.9);
  b.setAttribute('transform',`translate(${ax+(aw-bb.width*sc)/2} ${ay+(ah-bb.height*sc)/2}) scale(${sc}) translate(${-bb.x} ${-bb.y})`)}
 
 /* ---------- polímetros: dibujo ---------- */
@@ -655,7 +660,7 @@ function endPtr(e){ptrs.delete(e.pointerId);if(ptrs.size<2)pinch=null;if(!drag)r
   L_cables.innerHTML='';state.cables.forEach(drawCable);return}
  if(d.k==='meter'||d.k==='srcmove'){render();return}
  if(d.k==='dial')return;
- if(d.k==='btn'&&!d.moved){if(d.a==='flow'){setFlow(!flowOn)}else if(d.a==='reset'){$('#dlg').hidden=false;$('#dlgNo').focus()}else if(d.a==='sch'){SCHK=d.id;drawSchem()}else if(d.a==='rflash'){flashR(d.id)}else if(d.a==='pwr'){state.src.on=!state.src.on;solveAll();drawSrcState()}else if(d.a==='mpwr'){const m=state.meters.find(q=>q.id===d.id);m.on=!m.on;updLcd(true);updMsg()}return}
+ if(d.k==='btn'&&!d.moved){if(d.a==='flow'){setFlow(!flowOn)}else if(d.a==='reset'){$('#dlg').hidden=false;$('#dlgNo').focus()}else if(d.a==='sch'){SCHK=d.id;drawSchem()}else if(d.a==='fsub'){FSUB[SCHK==='serie'?1:2]=d.id;drawSchem()}else if(d.a==='rflash'){flashR(d.id)}else if(d.a==='pwr'){state.src.on=!state.src.on;solveAll();drawSrcState()}else if(d.a==='mpwr'){const m=state.meters.find(q=>q.id===d.id);m.on=!m.on;updLcd(true);updMsg()}return}
 }
 SV.addEventListener('pointerup',endPtr);
 // [GIRO] Cada pieza se gira alrededor de una de sus clavijas: cerca de la clavija B (derecha o inferior) gira en sentido horario,
