@@ -294,13 +294,21 @@ const CCOL={R:['#d0302a','#8f1a15'],B:['#2563c9','#163c7d'],K:['#2a2f35','#0d0f1
 function endXY(e){if(e.at){const s=sockXY(e.at);if(s)return s}return {x:e.x,y:e.y}}
 function sockXY(id){if(holes[id])return holes[id];if(id.startsWith('S:'))return SRCJ[id.slice(2)];if(id.startsWith('M:')){const [_,mid,j]=id.split(':'),m=state.meters.find(q=>q.id===mid);return jackPos(m,j)}return null}
 /* ---------- [CABLE] cables que cuelgan y se pueden recolocar a mano ---------- */
-// Sin puntos de paso, el cable cuelga entre sus dos clavijas. Al arrastrar un tramo se crea (o se mueve) un punto de paso y el cable
-// pasa por él con una curva suave (spline de Catmull-Rom con algo de caída por su peso). Doble clic sobre el cable lo deja suelto otra vez.
-function cablePath(c,a,b){const H=c.h||[];
- if(!H.length){const dx=b.x-a.x,dy=b.y-a.y,dist=Math.hypot(dx,dy),sag=Math.min(140,30+dist*.22);return `M${a.x} ${a.y} C${a.x+dx*.15} ${a.y+sag} ${b.x-dx*.15} ${b.y+sag} ${b.x} ${b.y}`}
- const P=[a,...H,b];let d=`M${a.x} ${a.y}`;
- for(let i=0;i<P.length-1;i++){const p0=P[Math.max(0,i-1)],p1=P[i],p2=P[i+1],p3=P[Math.min(P.length-1,i+2)],L=Math.hypot(p2.x-p1.x,p2.y-p1.y),sg=Math.min(45,L*.12);
-  d+=` C${p1.x+(p2.x-p0.x)/6} ${p1.y+(p2.y-p0.y)/6+sg} ${p2.x-(p3.x-p1.x)/6} ${p2.y-(p3.y-p1.y)/6+sg} ${p2.x} ${p2.y}`}
+// El cable pasa por sus clavijas y por los puntos de paso que el alumno ha movido; entre cada dos se añade un punto de caída por su peso.
+// Por todos ellos se traza un spline cúbico natural parametrizado por la longitud de cuerda: pendiente y curvatura continuas (C²) en todo
+// el cable, sin picos donde se ha agarrado. Doble clic sobre el cable quita los puntos de paso y vuelve a colgar suelto.
+function cablePts(c,a,b){const H=c.h||[],P=[a,...H,b],Q=[{x:a.x,y:a.y}];
+ for(let i=0;i<P.length-1;i++){const p=P[i],q=P[i+1],L=Math.hypot(q.x-p.x,q.y-p.y),sg=.75*Math.min(140,30+L*.22)*(H.length?.8:1);
+  Q.push({x:(p.x+q.x)/2,y:(p.y+q.y)/2+sg});Q.push({x:q.x,y:q.y})}
+ return Q}
+function natSpline(v,t){const n=v.length,M=new Array(n).fill(0);if(n<3)return M;const a=[],bb=[],cc=[],d=[];
+ for(let i=1;i<n-1;i++){const h0=t[i]-t[i-1],h1=t[i+1]-t[i];a.push(h0);bb.push(2*(h0+h1));cc.push(h1);d.push(6*((v[i+1]-v[i])/h1-(v[i]-v[i-1])/h0))}
+ const m=bb.length;for(let i=1;i<m;i++){const w=a[i]/bb[i-1];bb[i]-=w*cc[i-1];d[i]-=w*d[i-1]}
+ const x=new Array(m);x[m-1]=d[m-1]/bb[m-1];for(let i=m-2;i>=0;i--)x[i]=(d[i]-cc[i]*x[i+1])/bb[i];for(let i=0;i<m;i++)M[i+1]=x[i];return M}
+function cablePath(c,a,b){const Q=cablePts(c,a,b),n=Q.length,t=[0];for(let i=1;i<n;i++)t.push(t[i-1]+Math.max(1e-3,Math.hypot(Q[i].x-Q[i-1].x,Q[i].y-Q[i-1].y)));
+ const X=Q.map(q=>q.x),Y=Q.map(q=>q.y),MX=natSpline(X,t),MY=natSpline(Y,t);let d=`M${X[0]} ${Y[0]}`;
+ const der=(v,Mv,i,end)=>{const h=t[i+1]-t[i],s2=(v[i+1]-v[i])/h;return end?s2+h*(Mv[i]+2*Mv[i+1])/6:s2-h*(2*Mv[i]+Mv[i+1])/6};
+ for(let i=0;i<n-1;i++){const h=t[i+1]-t[i];d+=` C${X[i]+h/3*der(X,MX,i,0)} ${Y[i]+h/3*der(Y,MY,i,0)} ${X[i+1]-h/3*der(X,MX,i,1)} ${Y[i+1]-h/3*der(Y,MY,i,1)} ${X[i+1]} ${Y[i+1]}`}
  return d}
 // posición (longitud recorrida) de un punto sobre el trazado actual del cable, para mantener los puntos de paso en orden
 function alongPath(el,q){const L=el.getTotalLength();let best=0,bd=1e9;for(let k=0;k<=80;k++){const s2=L*k/80,r=el.getPointAtLength(s2),dd=Math.hypot(r.x-q.x,r.y-q.y);if(dd<bd){bd=dd;best=s2}}return best}
