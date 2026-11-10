@@ -79,7 +79,7 @@ svg text{font-family:Inter,system-ui,sans-serif}
 <h2>Datos y errores</h2>
 <p>Tensiones e intensidades se leen en los polímetros digitales; el error de cada lectura es una unidad de la última cifra del rango que uses. Elige el rango más pequeño que no se desborde.</p>
 <h2>Cómo se monta</h2>
-<p>En la placa, los 9 huecos de cada isla están unidos por las líneas negras: todo lo que se enchufa en una isla queda conectado. Por eso cada resistencia debe ir de una isla a la vecina; si sus dos clavijas quedan en la misma isla, está cortocircuitada. Arrastra cada resistencia por el centro para llevarla a la placa. Para girarla, acerca el puntero a una de sus clavijas y aparecerá una flecha de giro: un clic la gira 90° alrededor de la otra clavija (en sentido horario desde la clavija derecha y antihorario desde la izquierda), y si pinchas y arrastras la giras a mano hasta el hueco que quieras. En cuanto sacas una pieza o una clavija de cable, el circuito queda abierto y los polímetros lo muestran. Los puentes unen dos islas sin resistencia. Arrastra un cable desde su bobina y lleva cada clavija a un hueco, a un borne de la fuente o a un borne del polímetro. Gira el selector del polímetro arrastrándolo alrededor de su eje (o con la rueda del ratón) y enciéndelo con su botón POWER. Las posiciones del selector están agrupadas en sectores: V⎓ y A⎓ son tensión e intensidad continuas, V~ y A~ las alternas, y Ω la resistencia; los números del sector mA⎓ son miliamperios (200 es el rango de 200 mA) y el de A⎓ es el de 20 A. Los mandos de la fuente se giran igual. En los mandos y en los selectores también puedes pinchar directamente en un número o una marca de la escala para llevarlos a ese valor. Para retirar una pieza o un cable, devuélvelo a su bandeja.</p>
+<p>En la placa, los 9 huecos de cada isla están unidos por las líneas negras: todo lo que se enchufa en una isla queda conectado. Por eso cada resistencia debe ir de una isla a la vecina; si sus dos clavijas quedan en la misma isla, está cortocircuitada. Arrastra cada resistencia por el centro para llevarla a la placa. Para girarla, acerca el puntero a una de sus clavijas y aparecerá una flecha de giro: un clic la gira 90° alrededor de la otra clavija (en sentido horario desde la clavija derecha y antihorario desde la izquierda), y si pinchas y arrastras la giras a mano hasta el hueco que quieras. En cuanto sacas una pieza o una clavija de cable, el circuito queda abierto y los polímetros lo muestran. Los puentes unen dos islas sin resistencia. Arrastra un cable desde su bobina y lleva cada clavija a un hueco, a un borne de la fuente o a un borne del polímetro. Gira el selector del polímetro arrastrándolo alrededor de su eje (o con la rueda del ratón) y enciéndelo con su botón POWER. Las posiciones del selector están agrupadas en sectores: V⎓ y A⎓ son tensión e intensidad continuas, V~ y A~ las alternas, y Ω la resistencia; los números del sector mA⎓ son miliamperios (200 es el rango de 200 mA) y el de A⎓ es el de 20 A. Los mandos de la fuente se giran igual. En los mandos y en los selectores también puedes pinchar directamente en un número o una marca de la escala para llevarlos a ese valor. Si un cable tapa algo, pincha en cualquier tramo y arrástralo para apartarlo; puedes ir colocándolo por varios puntos, y con doble clic vuelve a colgar suelto. Para retirar una pieza o un cable, devuélvelo a su bandeja.</p>
 <p class="note">Gemelo de la práctica: resistencias con su tolerancia real, fuente con limitación de corriente y polímetros con fusible · CC BY-NC-SA 4.0</p>
 </aside></main>
 <div class="dlg" id="dlg" hidden><div class="dlgc" role="dialog" aria-modal="true"><p>¿Quieres volver a la configuración inicial? Se perderá todo el montaje.</p><div class="dlgb"><button class="hbtn" id="dlgNo" type="button">Cancelar</button><button class="hbtn pri" id="dlgYes" type="button">Sí, empezar de nuevo</button></div></div></div>
@@ -293,64 +293,28 @@ function setDial(m){const g=L_meters.querySelector(`[data-m="${m.id}"]`);if(!g)r
 const CCOL={R:['#d0302a','#8f1a15'],B:['#2563c9','#163c7d'],K:['#2a2f35','#0d0f12']};
 function endXY(e){if(e.at){const s=sockXY(e.at);if(s)return s}return {x:e.x,y:e.y}}
 function sockXY(id){if(holes[id])return holes[id];if(id.startsWith('S:'))return SRCJ[id.slice(2)];if(id.startsWith('M:')){const [_,mid,j]=id.split(':'),m=state.meters.find(q=>q.id===mid);return jackPos(m,j)}return null}
-/* ---------- [RUTAS] cables en ángulo recto que esquivan los aparatos ---------- */
-// Rejilla de 10 unidades sobre la mesa: cada casilla tiene un coste (mesa libre 1, placa algo más, interior de las islas y huecos ajenos más,
-// piezas, fuente y polímetros mucho más). Cada cable busca el camino más barato con penalización por codo (A*) y deja una pequeña
-// penalización en las casillas que ocupa para que los siguientes vayan al lado y no encima.
-const GR=10,GW=Math.ceil(1500/GR),GH=Math.ceil(900/GR);
-function costMap(){const M=new Float32Array(GW*GH).fill(1);
- const rect=(x0,y0,x1,y1,c)=>{for(let j=Math.max(0,Math.ceil((y0-GR/2)/GR));j<=Math.min(GH-1,Math.floor((y1-GR/2)/GR));j++)for(let i=Math.max(0,Math.ceil((x0-GR/2)/GR));i<=Math.min(GW-1,Math.floor((x1-GR/2)/GR));i++){const k=j*GW+i;if(M[k]<c)M[k]=c}};
- rect(BX,BY,BX+BW,BY+BH,1.3);
- for(let iy=0;iy<NR/3;iy++)for(let ix=0;ix<NC/3;ix++)rect(hx(3*ix)-14,hy(3*iy)-14,hx(3*ix+2)+14,hy(3*iy+2)+14,3);
- for(const id in holes){const h=holes[id];rect(h.x-11,h.y-11,h.x+11,h.y+11,14)}
- rect(TRAY.x,TRAY.y,TRAY.x+TRAY.w,TRAY.y+TRAY.h,2.5);
- rect(SRCX,SRCY,SRCX+SRC.w*SS,SRCY+SRC.h*SS,40);
- for(const m of state.meters)rect(m.x,m.y,m.x+MW*MS,m.y+MH*MS,40);
- for(const b of state.bricks){if(!b.cell)continue;const q=brickXY(b),hw=(b.rot?40:64)*KB+6,hh=(b.rot?64:40)*KB+6;rect(q.x-hw,q.y-hh,q.x+hw,q.y+hh,60)}
- return M}
-// zona de salida de cada clavija: los bornes de la fuente y de los polímetros salen hacia abajo hasta el borde del aparato
-function portCells(id,set){const P0=sockXY(id);if(!P0)return;const add=(x,y)=>{const i=Math.floor(x/GR),j=Math.floor(y/GR);if(i>=0&&j>=0&&i<GW&&j<GH)set.add(j*GW+i)};
- for(let dx=-12;dx<=12;dx+=GR/2)for(let dy=-12;dy<=12;dy+=GR/2)add(P0.x+dx,P0.y+dy);
- let yEnd=null;if(id.startsWith('S:'))yEnd=SRCY+SRC.h*SS+GR;else if(id.startsWith('M:')){const m=state.meters.find(q=>q.id===id.split(':')[1]);if(m)yEnd=m.y+MH*MS+GR}
- if(yEnd!=null)for(let y=P0.y;y<=yEnd;y+=GR/2)add(P0.x,y)}
-function routeOne(M,used,A,B,free){const si=Math.floor(A.x/GR),sj=Math.floor(A.y/GR),ti=Math.floor(B.x/GR),tj=Math.floor(B.y/GR);
- const N=GW*GH,dist=new Float64Array(N*4).fill(Infinity),prev=new Int32Array(N*4).fill(-1),DI=[1,0,-1,0],DJ=[0,1,0,-1],BEND=7;
- const heap=[];const push=(f,s2)=>{heap.push([f,s2]);let i=heap.length-1;while(i>0){const p2=(i-1)>>1;if(heap[p2][0]<=heap[i][0])break;[heap[p2],heap[i]]=[heap[i],heap[p2]];i=p2}};
- const pop=()=>{const top=heap[0],last=heap.pop();if(heap.length){heap[0]=last;let i=0;for(;;){const l=2*i+1,r=l+1;let m=i;if(l<heap.length&&heap[l][0]<heap[m][0])m=l;if(r<heap.length&&heap[r][0]<heap[m][0])m=r;if(m===i)break;[heap[m],heap[i]]=[heap[i],heap[m]];i=m}}return top};
- const h=(i,j)=>Math.abs(i-ti)+Math.abs(j-tj);
- for(let d=0;d<4;d++){const s2=(sj*GW+si)*4+d;dist[s2]=0;push(h(si,sj),s2)}
- let goal=-1,n=0;
- while(heap.length&&n<200000){n++;const [f,s2]=pop(),c=s2>>2,d=s2&3,i=c%GW,j=(c/GW)|0;if(f-h(i,j)>dist[s2]+1e-6)continue;if(i===ti&&j===tj){goal=s2;break}
-  for(let nd=0;nd<4;nd++){if(nd===((d+2)&3))continue;const ni=i+DI[nd],nj=j+DJ[nd];if(ni<0||nj<0||ni>=GW||nj>=GH)continue;const k=nj*GW+ni;
-   const cst=(free.has(k)?1:M[k])+used[k]+(nd!==d?BEND:0),ns=k*4+nd,nv=dist[s2]+cst;if(nv<dist[ns]){dist[ns]=nv;prev[ns]=s2;push(nv+h(ni,nj),ns)}}}
- if(goal<0)return null;
- const cells=[];for(let s2=goal;s2>=0;s2=prev[s2])cells.push(s2>>2);cells.reverse();
- for(const k of cells)used[k]+=3;
- // esquinas
- const pts=[];for(let q=0;q<cells.length;q++){const k=cells[q],x=(k%GW)*GR+GR/2,y=((k/GW)|0)*GR+GR/2;
-  if(q===0||q===cells.length-1){pts.push({x,y});continue}const a=cells[q-1],b=cells[q+1];if((k-a)!==(b-k))pts.push({x,y})}
- return snapPts(pts,A,B)}
-function snapPts(pts,A,B){if(pts.length<2)return [A,{x:A.x,y:(A.y+B.y)/2},{x:B.x,y:(A.y+B.y)/2},B];
- const n=pts.length;
- if(n===2){const v=Math.abs(pts[0].x-pts[1].x)<1;if(v){const ym=(A.y+B.y)/2;return Math.abs(A.x-B.x)<2?[A,B]:[A,{x:A.x,y:ym},{x:B.x,y:ym},B]}const xm=(A.x+B.x)/2;return Math.abs(A.y-B.y)<2?[A,B]:[A,{x:xm,y:A.y},{x:xm,y:B.y},B]}
- const p=pts.map(q=>({x:q.x,y:q.y}));
- if(Math.abs(p[0].x-p[1].x)<1)p[1].x=A.x;else p[1].y=A.y;
- if(Math.abs(p[n-1].x-p[n-2].x)<1)p[n-2].x=B.x;else p[n-2].y=B.y;
- p[0]={x:A.x,y:A.y};p[n-1]={x:B.x,y:B.y};return p}
-function roundedD(p){let d=`M${p[0].x} ${p[0].y}`;for(let i=1;i<p.length-1;i++){const a=p[i-1],b=p[i],c=p[i+1],l1=Math.hypot(b.x-a.x,b.y-a.y),l2=Math.hypot(c.x-b.x,c.y-b.y);
-  const r=Math.min(16,l1/2,l2/2);if(r<0.5){d+=` L${b.x} ${b.y}`;continue}const u1={x:(b.x-a.x)/l1,y:(b.y-a.y)/l1},u2={x:(c.x-b.x)/l2,y:(c.y-b.y)/l2};
-  d+=` L${b.x-u1.x*r} ${b.y-u1.y*r} Q${b.x} ${b.y} ${b.x+u2.x*r} ${b.y+u2.y*r}`}
- const z=p[p.length-1];return d+` L${z.x} ${z.y}`}
-const rkey=c=>c.ends.map(e=>{const q=endXY(e);return e.at?e.at+'@'+Math.round(q.x)+','+Math.round(q.y):'x'}).join('|');
-function routeAll(){const M=costMap(),used=new Float32Array(GW*GH);
- for(const c of state.cables){c.route=null;if(!c.ends[0].at||!c.ends[1].at)continue;const free=new Set();portCells(c.ends[0].at,free);portCells(c.ends[1].at,free);
-  const r=routeOne(M,used,endXY(c.ends[0]),endXY(c.ends[1]),free);if(r){c.route=r;c.rk=rkey(c)}}}
+/* ---------- [CABLE] cables que cuelgan y se pueden recolocar a mano ---------- */
+// Sin puntos de paso, el cable cuelga entre sus dos clavijas. Al arrastrar un tramo se crea (o se mueve) un punto de paso y el cable
+// pasa por él con una curva suave (spline de Catmull-Rom con algo de caída por su peso). Doble clic sobre el cable lo deja suelto otra vez.
+function cablePath(c,a,b){const H=c.h||[];
+ if(!H.length){const dx=b.x-a.x,dy=b.y-a.y,dist=Math.hypot(dx,dy),sag=Math.min(140,30+dist*.22);return `M${a.x} ${a.y} C${a.x+dx*.15} ${a.y+sag} ${b.x-dx*.15} ${b.y+sag} ${b.x} ${b.y}`}
+ const P=[a,...H,b];let d=`M${a.x} ${a.y}`;
+ for(let i=0;i<P.length-1;i++){const p0=P[Math.max(0,i-1)],p1=P[i],p2=P[i+1],p3=P[Math.min(P.length-1,i+2)],L=Math.hypot(p2.x-p1.x,p2.y-p1.y),sg=Math.min(45,L*.12);
+  d+=` C${p1.x+(p2.x-p0.x)/6} ${p1.y+(p2.y-p0.y)/6+sg} ${p2.x-(p3.x-p1.x)/6} ${p2.y-(p3.y-p1.y)/6+sg} ${p2.x} ${p2.y}`}
+ return d}
+// posición (longitud recorrida) de un punto sobre el trazado actual del cable, para mantener los puntos de paso en orden
+function alongPath(el,q){const L=el.getTotalLength();let best=0,bd=1e9;for(let k=0;k<=80;k++){const s2=L*k/80,r=el.getPointAtLength(s2),dd=Math.hypot(r.x-q.x,r.y-q.y);if(dd<bd){bd=dd;best=s2}}return best}
+function grabCable(c,el,p){c.h=c.h||[];let hi=-1,bd=34;c.h.forEach((q,i)=>{const dd=Math.hypot(q.x-p.x,q.y-p.y);if(dd<bd){bd=dd;hi=i}});
+ if(hi<0&&c.h.length>=6){bd=1e9;c.h.forEach((q,i)=>{const dd=Math.hypot(q.x-p.x,q.y-p.y);if(dd<bd){bd=dd;hi=i}})}
+ if(hi<0){const np={x:p.x,y:p.y},all=[...c.h,np].map(q=>({q,s:alongPath(el,q)}));all.sort((u,v)=>u.s-v.s);c.h=all.map(u=>u.q);hi=c.h.indexOf(np)}
+ return hi}
 function drawCable(c){const g=mk('g',{'data-c':c.id},L_cables),a=endXY(c.ends[0]),b=endXY(c.ends[1]),col=CCOL[c.color];
  const dx=b.x-a.x,dy=b.y-a.y,dist=Math.hypot(dx,dy),sag=Math.min(140,30+dist*.22);
- const d=c.route&&c.rk===rkey(c)?roundedD(c.route):`M${a.x} ${a.y} C${a.x+dx*.15} ${a.y+sag} ${b.x-dx*.15} ${b.y+sag} ${b.x} ${b.y}`;
+ const d=cablePath(c,a,b);
  mk('path',{d,stroke:'#00000030','stroke-width':9,fill:'none',transform:'translate(2 4)'},g);
  mk('path',{d,stroke:col[1],'stroke-width':8,fill:'none','stroke-linecap':'round'},g);
  mk('path',{d,stroke:col[0],'stroke-width':5,fill:'none','stroke-linecap':'round'},g);
+ if(c.ends[0].at&&c.ends[1].at)mk('path',{d,stroke:'#000','stroke-opacity':0,'stroke-width':20,fill:'none',class:'grab','data-cbody':c.id},g);
  c.ends.forEach((e,i)=>{const p=i?b:a,pg=mk('g',{class:'grab','data-plug':c.id+':'+i},g);
   mk('circle',{cx:p.x,cy:p.y,r:15,fill:col[1],filter:'url(#fSh2)'},pg);mk('circle',{cx:p.x,cy:p.y,r:12,fill:col[0]},pg);mk('circle',{cx:p.x,cy:p.y,r:5,fill:'#c7ccd2',stroke:'#6b7279'},pg);
   if(!e.at)mk('circle',{cx:p.x,cy:p.y,r:19,fill:'none',stroke:col[0],'stroke-width':1.5,'stroke-dasharray':'3 3'},pg)})}
@@ -358,7 +322,7 @@ function drawCable(c){const g=mk('g',{'data-c':c.id},L_cables),a=endXY(c.ends[0]
 /* ---------- render ---------- */
 function render(){L_top.innerHTML='';hov='';L_bricks.innerHTML='';L_meters.innerHTML='';L_cables.innerHTML='';
  for(const b of state.bricks)drawBrick(b,L_bricks);drawTrayItems();
- for(const m of state.meters)drawMeter(m);routeAll();for(const c of state.cables)drawCable(c);drawSrcState();solveAll();}
+ for(const m of state.meters)drawMeter(m);for(const c of state.cables)drawCable(c);drawSrcState();solveAll();}
 
 /* ---------- circuito ---------- */
 function solveLin(A,b){const n=b.length;for(let i=0;i<n;i++){let p=i;for(let r=i+1;r<n;r++)if(Math.abs(A[r][i])>Math.abs(A[p][i]))p=r;[A[i],A[p]]=[A[p],A[i]];[b[i],b[p]]=[b[p],b[i]];const d=A[i][i]||1e-30;
@@ -444,7 +408,7 @@ function zoomAt(cx,cy,f){const p=toSvg({clientX:cx,clientY:cy});const nw=Math.mi
 $('#viewBtn').onclick=()=>{vb=VB0.slice();setVB()};
 
 /* ---------- interacción ---------- */
-let drag=null;const ptrs=new Map();let pinch=null;
+let drag=null,lastTap={id:null,t:0};const ptrs=new Map();let pinch=null;
 function hitSocket(p,excludeCable){let best=null,bd=26;
  for(const id in holes){const h=holes[id],d=Math.hypot(h.x-p.x,h.y-p.y);if(d<bd){bd=d;best=id}}
  for(const k in SRCJ){const J=SRCJ[k],d=Math.hypot(J.x-p.x,J.y-p.y);if(d<bd){bd=d;best='S:'+k}}
@@ -462,6 +426,8 @@ SV.addEventListener('pointerdown',e=>{ptrs.set(e.pointerId,{x:e.clientX,y:e.clie
  if(ptrs.size>1)return;
  const p=toSvg(e),t=e.target,act=t.closest&&t.closest('[data-act]'),tr=t.closest&&t.closest('[data-tray]'),bk=t.closest&&t.closest('[data-b]'),pl=t.closest&&t.closest('[data-plug]'),mb=t.closest&&t.closest('[data-mbody]');
  SV.setPointerCapture(e.pointerId);
+ const cbd=t.closest&&t.closest('[data-cbody]');
+ if(cbd&&!pl){const c=state.cables.find(q=>q.id==cbd.getAttribute('data-cbody'));if(c){const now=performance.now();if(lastTap.id===c.id&&now-lastTap.t<380){c.h=[];lastTap={id:null,t:0};L_cables.innerHTML='';state.cables.forEach(drawCable);drag=null;return}lastTap={id:c.id,t:now};const n0=(c.h||[]).length,hi=grabCable(c,cbd,p);drag={k:'cbody',c,hi,isNew:c.h.length>n0,p0:p,moved:false};return}}
  if(pl){const [cid,i]=pl.getAttribute('data-plug').split(':');const c=state.cables.find(q=>q.id==cid);drag={k:'plug',c,i:+i,p0:p,moved:false};return}
  if(act){const a=act.getAttribute('data-act');
   if(a==='kv'||a==='ka'){const K=a==='kv'?KVg:KAg,Kl=a==='kv'?KV:KA,max=a==='kv'?12:2;
@@ -487,6 +453,7 @@ SV.addEventListener('pointermove',e=>{if(!ptrs.has(e.pointerId)){hoverAt(e);retu
  SV.classList.add('grabbing');
  if(drag.k==='dial'){dialTo(drag.m,p);return}
  if(drag.k==='pan'){const r=SV.getBoundingClientRect(),s=vb[2]/r.width;vb[0]=drag.vb0[0]-(e.clientX-drag.c0.x)*s;vb[1]=drag.vb0[1]-(e.clientY-drag.c0.y)*s;setVB();return}
+ if(drag.k==='cbody'){const q=drag.c.h[drag.hi];q.x=p.x;q.y=p.y;L_cables.innerHTML='';state.cables.forEach(drawCable);return}
  if(drag.k==='plug'){if(!drag.moved)return;const e2=drag.c.ends[drag.i];if(e2.at){e2.at=null;solveAll()}e2.x=p.x;e2.y=p.y;const hs=hitSocket(p);drag.hover=hs;L_cables.innerHTML='';state.cables.forEach(drawCable);if(hs){const q=sockXY(hs);mk('circle',{cx:q.x,cy:q.y,r:21,fill:'none',stroke:'#1d5fa8','stroke-width':3},L_cables)}return}
  if(drag.k==='rot'){if(!drag.moved)return;const b=drag.b,K=holes[drag.pivot];if(b.cell){b.cell=null;solveAll()}
   const L=Math.hypot(p.x-K.x,p.y-K.y);if(L<8)return;const ux=(p.x-K.x)/L,uy=(p.y-K.y)/L;b.x=K.x+ux*P/2;b.y=K.y+uy*P/2;b.ang=Math.atan2(drag.end==='B'?uy:-uy,drag.end==='B'?ux:-ux)*180/Math.PI;
@@ -511,11 +478,12 @@ function endPtr(e){ptrs.delete(e.pointerId);if(ptrs.size<2)pinch=null;if(!drag)r
   if(!d.moved){rotateEnd(b,d.end)}
   else{const K=holes[d.pivot],s2=slotFromPivot(d.pivot,dirOfAng(Math.atan2(p.y-K.y,p.x-K.x)));if(s2&&slotFree(s2.cell,s2.rot,b)){b.cell=s2.cell;b.rot=s2.rot}else{b.cell=d.from;b.rot=d.rot0}}
   render();return}
+ if(d.k==='cbody'){if(!d.moved&&d.isNew){d.c.h.splice(d.hi,1);L_cables.innerHTML='';state.cables.forEach(drawCable)}return}
  if(d.k==='meter'){render();return}
  if(d.k==='dial')return;
  if(d.k==='btn'&&!d.moved){if(d.a==='pwr'){state.src.on=!state.src.on;solveAll();drawSrcState()}else if(d.a==='mpwr'){const m=state.meters.find(q=>q.id===d.id);m.on=!m.on;updLcd(true)}return}
 }
-SV.addEventListener('pointerup',endPtr);SV.addEventListener('pointercancel',endPtr);
+SV.addEventListener('pointerup',endPtr);
 // [GIRO] Cada pieza se gira alrededor de una de sus clavijas: cerca de la clavija B (derecha o inferior) gira en sentido horario,
 // cerca de la A (izquierda o superior) en antihorario. Clic: 90°; arrastrar: giro a mano hasta el hueco vecino más próximo.
 const DIRS=[[1,0],[0,1],[-1,0],[0,-1]]; // derecha, abajo, izquierda, arriba (orden horario en pantalla)
