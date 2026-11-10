@@ -45,7 +45,7 @@ html.dk .st{background:#3a1d1b;border-color:#6b2c27;color:#ffb4ab}
 .side .p2{display:none}body[data-part="2"] .side .p2{display:block}body[data-part="2"] .side .p1{display:none}
 .side .note{font-size:.8em;color:var(--slate);margin-top:1.2em}
 svg text{font-family:Inter,system-ui,sans-serif}
-.grab{cursor:grab}.grabbing,.grabbing *{cursor:grabbing!important}
+.grab{cursor:grab}#bench.rotc [data-b]{cursor:pointer}.grabbing,.grabbing *{cursor:grabbing!important}
 .btnz{cursor:pointer}
 @media (max-width:820px){main{grid-template-columns:minmax(0,1fr);height:auto;padding:10px}header{padding:8px 10px}.left .card{height:auto}#bench{flex:none;height:auto;aspect-ratio:1500/900}.side{max-height:none}.vbtn{width:30px;height:30px;font-size:17px;right:6px;bottom:6px}}
 </style></head><body data-part="1">
@@ -73,7 +73,7 @@ svg text{font-family:Inter,system-ui,sans-serif}
 <h2>Datos y errores</h2>
 <p>Tensiones e intensidades se leen en los polímetros digitales; el error de cada lectura es una unidad de la última cifra del rango que uses. Elige el rango más pequeño que no se desborde.</p>
 <h2>Cómo se monta</h2>
-<p>En la placa, los 9 huecos de cada isla están unidos por las líneas negras: todo lo que se enchufa en una isla queda conectado. Por eso cada resistencia debe ir de una isla a la vecina; si sus dos clavijas quedan en la misma isla, está cortocircuitada. Arrastra cada resistencia a la placa y tócala para girarla. Los puentes unen dos islas sin resistencia. Arrastra un cable desde su bobina y lleva cada clavija a un hueco, a un borne de la fuente o a un borne del polímetro. Gira el selector del polímetro arrastrándolo alrededor de su eje (o con la rueda del ratón) y enciéndelo con su botón POWER. Las posiciones del selector están agrupadas en sectores: V⎓ y A⎓ son tensión e intensidad continuas, V~ y A~ las alternas, y Ω la resistencia; los números del sector mA⎓ son miliamperios (200 es el rango de 200 mA) y el de A⎓ es el de 20 A. Los mandos de la fuente se giran igual. En los mandos y en los selectores también puedes pinchar directamente en un número o una marca de la escala para llevarlos a ese valor. Para retirar una pieza o un cable, devuélvelo a su bandeja.</p>
+<p>En la placa, los 9 huecos de cada isla están unidos por las líneas negras: todo lo que se enchufa en una isla queda conectado. Por eso cada resistencia debe ir de una isla a la vecina; si sus dos clavijas quedan en la misma isla, está cortocircuitada. Arrastra cada resistencia por el centro para llevarla a la placa. Para girarla, acerca el puntero a una de sus clavijas y aparecerá una flecha de giro: un clic la gira 90° alrededor de la otra clavija (en sentido horario desde la clavija derecha y antihorario desde la izquierda), y si pinchas y arrastras la giras a mano hasta el hueco que quieras. En cuanto sacas una pieza o una clavija de cable, el circuito queda abierto y los polímetros lo muestran. Los puentes unen dos islas sin resistencia. Arrastra un cable desde su bobina y lleva cada clavija a un hueco, a un borne de la fuente o a un borne del polímetro. Gira el selector del polímetro arrastrándolo alrededor de su eje (o con la rueda del ratón) y enciéndelo con su botón POWER. Las posiciones del selector están agrupadas en sectores: V⎓ y A⎓ son tensión e intensidad continuas, V~ y A~ las alternas, y Ω la resistencia; los números del sector mA⎓ son miliamperios (200 es el rango de 200 mA) y el de A⎓ es el de 20 A. Los mandos de la fuente se giran igual. En los mandos y en los selectores también puedes pinchar directamente en un número o una marca de la escala para llevarlos a ese valor. Para retirar una pieza o un cable, devuélvelo a su bandeja.</p>
 <p class="note">Gemelo de la práctica: resistencias con su tolerancia real, fuente con limitación de corriente y polímetros con fusible · CC BY-NC-SA 4.0</p>
 </aside></main>
 <div class="dlg" id="dlg" hidden><div class="dlgc" role="dialog" aria-modal="true"><p>¿Quieres volver a la configuración inicial? Se perderá todo el montaje.</p><div class="dlgb"><button class="hbtn" id="dlgNo" type="button">Cancelar</button><button class="hbtn pri" id="dlgYes" type="button">Sí, empezar de nuevo</button></div></div></div>
@@ -143,7 +143,7 @@ defs.innerHTML=`
 <filter id="fSh" x="-10%" y="-10%" width="130%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="3.5" flood-color="#2b2016" flood-opacity=".28"/></filter>
 <filter id="fSh2" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity=".35"/></filter>`;
 const VP=mk('g',{id:'vp'},SV);
-const L_bg=mk('g',null,VP),L_board=mk('g',null,VP),L_src=mk('g',null,VP),L_tray=mk('g',null,VP),L_bricks=mk('g',null,VP),L_meters=mk('g',null,VP),L_cables=mk('g',null,VP),L_top=mk('g',null,VP);
+const L_bg=mk('g',null,VP),L_board=mk('g',null,VP),L_src=mk('g',null,VP),L_tray=mk('g',null,VP),L_bricks=mk('g',null,VP),L_meters=mk('g',null,VP),L_cables=mk('g',null,VP),L_top=mk('g',{'pointer-events':'none'},VP);
 mk('rect',{x:-2000,y:-2000,width:5600,height:4900,fill:'url(#gTable)'},L_bg);
 
 /* ---------- placa ---------- */
@@ -209,7 +209,7 @@ function brickXY(b){const h=brickHoles(b);if(h){const a=holes[h[0]],c=holes[h[1]
 function slotFor(p,rot){const c=Math.round((p.x-BX-MG)/P-(rot?0:.5)),r=Math.round((p.y-BY-MG)/P-(rot?.5:0)),cell=`${c}_${r}`,h=slotHoles(cell,rot);if(!h)return null;const a=holes[h[0]],b=holes[h[1]];return Math.hypot((a.x+b.x)/2-p.x,(a.y+b.y)/2-p.y)<.6*P?cell:null}
 function slotFree(cell,rot,self){const h=slotHoles(cell,rot);if(!h)return false;return !state.bricks.some(b=>b!==self&&b.cell&&brickHoles(b).some(x=>h.includes(x)))}
 function drawBrick(b,par){const g=mk('g',{'data-b':b.id,class:'grab'},par),p=brickXY(b);
- const gi=mk('g',{transform:`translate(${p.x} ${p.y}) scale(${KB}) rotate(${b.rot?90:0})`},g);
+ const gi=mk('g',{transform:`translate(${p.x} ${p.y}) scale(${KB}) rotate(${b.ang!=null?b.ang:(b.rot?90:0)})`},g);
  mk('rect',{x:-64,y:-40,width:128,height:80,rx:8,fill:'url(#gAcryl)',stroke:'#9fb4c2','stroke-width':1.5,filter:'url(#fSh2)'},gi);
  if(b.type==='R'){
   mk('path',{d:'M-46 0 L-26 -3 M26 -3 L46 0',stroke:'#9ba2a8','stroke-width':2.4},gi);
@@ -298,7 +298,7 @@ function drawCable(c){const g=mk('g',{'data-c':c.id},L_cables),a=endXY(c.ends[0]
   if(!e.at)mk('circle',{cx:p.x,cy:p.y,r:19,fill:'none',stroke:col[0],'stroke-width':1.5,'stroke-dasharray':'3 3'},pg)})}
 
 /* ---------- render ---------- */
-function render(){L_bricks.innerHTML='';L_meters.innerHTML='';L_cables.innerHTML='';
+function render(){L_top.innerHTML='';hov='';L_bricks.innerHTML='';L_meters.innerHTML='';L_cables.innerHTML='';
  for(const b of state.bricks)drawBrick(b,L_bricks);drawTrayItems();
  for(const m of state.meters)drawMeter(m);for(const c of state.cables)drawCable(c);drawSrcState();solveAll();}
 
@@ -416,19 +416,26 @@ SV.addEventListener('pointerdown',e=>{ptrs.set(e.pointerId,{x:e.clientX,y:e.clie
  if(tr){const k=tr.getAttribute('data-tray');
   if(k[0]==='C'&&k.length===2){const col=k[1],c={id:state.nid++,color:col,ends:[{at:null,x:p.x,y:p.y},{at:null,x:COILPOS[col].x,y:COILPOS[col].y+20}]};state.cables.push(c);drag={k:'plug',c,i:0,p0:p,moved:true,isNew:true};render();return}
   if(k==='R1'||k==='R2'||k==='R3'||k==='R4'||k==='W'){const b={id:'b'+(state.nid++),type:k[0]==='R'?'R':k,key:k,rot:0,cell:null,x:p.x,y:p.y};state.bricks.push(b);drag={k:'brick',b,dx:0,dy:0,p0:p,moved:true,isNew:true};render();return}}
- if(bk){const b=state.bricks.find(q=>q.id===bk.getAttribute('data-b'));if(b){const q=brickXY(b);drag={k:'brick',b,dx:q.x-p.x,dy:q.y-p.y,p0:p,moved:false,from:b.cell};return}}
+ if(bk){const b=state.bricks.find(q=>q.id===bk.getAttribute('data-b'));if(b){const z=b.cell?zoneAt(b,p):'M';
+  if(z==='A'||z==='B'){const h=brickHoles(b);drag={k:'rot',b,end:z,pivot:z==='B'?h[0]:h[1],from:b.cell,rot0:b.rot,p0:p,moved:false};drawHint(b,z);return}
+  const q=brickXY(b);drag={k:'brick',b,dx:q.x-p.x,dy:q.y-p.y,p0:p,moved:false,from:b.cell};return}}
  if(mb){const m=state.meters.find(q=>q.id===mb.getAttribute('data-mbody'));drag={k:'meter',m,dx:m.x-p.x,dy:m.y-p.y,p0:p,moved:false};return}
  drag={k:'pan',c0:{x:e.clientX,y:e.clientY},vb0:vb.slice()};
 });
-SV.addEventListener('pointermove',e=>{if(!ptrs.has(e.pointerId))return;ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+SV.addEventListener('pointermove',e=>{if(!ptrs.has(e.pointerId)){hoverAt(e);return}ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
  if(pinch&&ptrs.size===2){const [a,b]=[...ptrs.values()],d=Math.hypot(a.x-b.x,a.y-b.y),c={x:(a.x+b.x)/2,y:(a.y+b.y)/2};
   const r=SV.getBoundingClientRect(),s=vb[2]/r.width;vb[0]-=(c.x-pinch.c.x)*s;vb[1]-=(c.y-pinch.c.y)*s;setVB();zoomAt(c.x,c.y,d/pinch.d);pinch={d,c};return}
  if(!drag)return;const p=toSvg(e);if(Math.hypot(p.x-drag.p0.x,p.y-drag.p0.y)>4)drag.moved=true;
  SV.classList.add('grabbing');
  if(drag.k==='dial'){dialTo(drag.m,p);return}
  if(drag.k==='pan'){const r=SV.getBoundingClientRect(),s=vb[2]/r.width;vb[0]=drag.vb0[0]-(e.clientX-drag.c0.x)*s;vb[1]=drag.vb0[1]-(e.clientY-drag.c0.y)*s;setVB();return}
- if(drag.k==='plug'){const e2=drag.c.ends[drag.i];e2.at=null;e2.x=p.x;e2.y=p.y;const hs=hitSocket(p);drag.hover=hs;L_cables.innerHTML='';state.cables.forEach(drawCable);if(hs){const q=sockXY(hs);mk('circle',{cx:q.x,cy:q.y,r:21,fill:'none',stroke:'#1d5fa8','stroke-width':3},L_cables)}return}
- if(drag.k==='brick'){const b=drag.b;b.cell=null;b.x=p.x+drag.dx;b.y=p.y+drag.dy;L_bricks.innerHTML='';state.bricks.forEach(q=>drawBrick(q,L_bricks));const cid=slotFor({x:b.x,y:b.y},b.rot);if(cid&&slotFree(cid,b.rot,b)){const h=slotHoles(cid,b.rot).map(k=>holes[k]);for(const q of h)mk('circle',{cx:q.x,cy:q.y,r:15,fill:'#1d5fa822',stroke:'#1d5fa8','stroke-width':3},L_bricks)}return}
+ if(drag.k==='plug'){if(!drag.moved)return;const e2=drag.c.ends[drag.i];if(e2.at){e2.at=null;solveAll()}e2.x=p.x;e2.y=p.y;const hs=hitSocket(p);drag.hover=hs;L_cables.innerHTML='';state.cables.forEach(drawCable);if(hs){const q=sockXY(hs);mk('circle',{cx:q.x,cy:q.y,r:21,fill:'none',stroke:'#1d5fa8','stroke-width':3},L_cables)}return}
+ if(drag.k==='rot'){if(!drag.moved)return;const b=drag.b,K=holes[drag.pivot];if(b.cell){b.cell=null;solveAll()}
+  const L=Math.hypot(p.x-K.x,p.y-K.y);if(L<8)return;const ux=(p.x-K.x)/L,uy=(p.y-K.y)/L;b.x=K.x+ux*P/2;b.y=K.y+uy*P/2;b.ang=Math.atan2(drag.end==='B'?uy:-uy,drag.end==='B'?ux:-ux)*180/Math.PI;
+  L_bricks.innerHTML='';state.bricks.forEach(q=>drawBrick(q,L_bricks));const s2=slotFromPivot(drag.pivot,dirOfAng(Math.atan2(uy,ux)));
+  if(s2&&slotFree(s2.cell,s2.rot,b))for(const k of slotHoles(s2.cell,s2.rot)){const q=holes[k];mk('circle',{cx:q.x,cy:q.y,r:15,fill:'#1d5fa822',stroke:'#1d5fa8','stroke-width':3},L_bricks)}
+  drawHint(b,drag.end);return}
+ if(drag.k==='brick'){if(!drag.moved)return;const b=drag.b;if(b.cell){b.cell=null;solveAll()}b.x=p.x+drag.dx;b.y=p.y+drag.dy;L_bricks.innerHTML='';state.bricks.forEach(q=>drawBrick(q,L_bricks));const cid=slotFor({x:b.x,y:b.y},b.rot);if(cid&&slotFree(cid,b.rot,b)){const h=slotHoles(cid,b.rot).map(k=>holes[k]);for(const q of h)mk('circle',{cx:q.x,cy:q.y,r:15,fill:'#1d5fa822',stroke:'#1d5fa8','stroke-width':3},L_bricks)}return}
  if(drag.k==='meter'){drag.m.x=p.x+drag.dx;drag.m.y=p.y+drag.dy;L_meters.innerHTML='';L_cables.innerHTML='';state.meters.forEach(drawMeter);state.cables.forEach(drawCable);updLcd(true);return}
  if(drag.k==='kv'||drag.k==='ka'){const K=drag.K;if(Math.hypot(p.x-K.x,p.y-K.y)<10)return;const an=angOf(K,p),da=((an-drag.last)%360+540)%360-180;drag.last=an;
   const max=drag.k==='kv'?12:2,cur=drag.k==='kv'?state.src.v:state.src.ilim,nv=Math.max(0,Math.min(max,cur+da/270*max));if(drag.k==='kv')state.src.v=nv;else state.src.ilim=nv;drawSrcState();solveAll();return}
@@ -438,18 +445,42 @@ function endPtr(e){ptrs.delete(e.pointerId);if(ptrs.size<2)pinch=null;if(!drag)r
    if(d.isNew&&inCoils(p))state.cables=state.cables.filter(q=>q!==d.c)}
   render();return}
  if(d.k==='brick'){const b=d.b;
-  if(!d.moved&&d.from){b.cell=d.from;rotateBrick(b);render();return}
+  if(!d.moved&&d.from){b.cell=d.from;render();return}
   if(inTray(p)){state.bricks=state.bricks.filter(q=>q!==b);render();return}
   const cid=slotFor({x:b.x,y:b.y},b.rot);if(cid&&slotFree(cid,b.rot,b)){b.cell=cid}else if(d.from){b.cell=d.from}else{state.bricks=state.bricks.filter(q=>q!==b)}
+  render();return}
+ if(d.k==='rot'){const b=d.b;b.ang=null;
+  if(!d.moved){rotateEnd(b,d.end)}
+  else{const K=holes[d.pivot],s2=slotFromPivot(d.pivot,dirOfAng(Math.atan2(p.y-K.y,p.x-K.x)));if(s2&&slotFree(s2.cell,s2.rot,b)){b.cell=s2.cell;b.rot=s2.rot}else{b.cell=d.from;b.rot=d.rot0}}
   render();return}
  if(d.k==='meter'){render();return}
  if(d.k==='dial')return;
  if(d.k==='btn'&&!d.moved){if(d.a==='pwr'){state.src.on=!state.src.on;solveAll();drawSrcState()}else if(d.a==='mpwr'){const m=state.meters.find(q=>q.id===d.id);m.on=!m.on;updLcd(true)}return}
 }
 SV.addEventListener('pointerup',endPtr);SV.addEventListener('pointercancel',endPtr);
-function rotateBrick(b){ // gira 90° alrededor de su primera clavija; si no cabe, prueba hacia el otro lado
- const [c,r]=b.cell.split('_').map(Number),nr=1-b.rot,cand=nr?[`${c}_${r}`,`${c}_${r-1}`]:[`${c}_${r}`,`${c-1}_${r}`];
- for(const k of cand)if(slotFree(k,nr,b)){b.cell=k;b.rot=nr;return}}
+// [GIRO] Cada pieza se gira alrededor de una de sus clavijas: cerca de la clavija B (derecha o inferior) gira en sentido horario,
+// cerca de la A (izquierda o superior) en antihorario. Clic: 90°; arrastrar: giro a mano hasta el hueco vecino más próximo.
+const DIRS=[[1,0],[0,1],[-1,0],[0,-1]]; // derecha, abajo, izquierda, arriba (orden horario en pantalla)
+const dirOfAng=a=>((Math.round(a/(Math.PI/2))%4)+4)%4;
+function slotFromPivot(pid,d){const K=holes[pid],nc=K.c+DIRS[d][0],nr=K.r+DIRS[d][1];if(!holes[`p${nc}_${nr}`])return null;
+ return d===0?{cell:`${K.c}_${K.r}`,rot:0}:d===1?{cell:`${K.c}_${K.r}`,rot:1}:d===2?{cell:`${nc}_${nr}`,rot:0}:{cell:`${nc}_${nr}`,rot:1}}
+function rotateEnd(b,end){const h=brickHoles(b),pv=end==='B'?h[0]:h[1],mv=end==='B'?h[1]:h[0],K=holes[pv],M=holes[mv];
+ const d0=dirOfAng(Math.atan2(M.y-K.y,M.x-K.x)),st=end==='B'?1:3;
+ for(let k=1;k<4;k++){const s2=slotFromPivot(pv,(d0+st*k)%4);if(s2&&slotFree(s2.cell,s2.rot,b)){b.cell=s2.cell;b.rot=s2.rot;return}}}
+function brickEnds(b){let A,B;if(b.cell){const h=brickHoles(b);A=holes[h[0]];B=holes[h[1]]}else{const a=(b.ang!=null?b.ang:(b.rot?90:0))*Math.PI/180,c=Math.cos(a)*P/2,s2=Math.sin(a)*P/2;A={x:b.x-c,y:b.y-s2};B={x:b.x+c,y:b.y+s2}}
+ const L=Math.hypot(B.x-A.x,B.y-A.y)||1;return {A,B,ax:(B.x-A.x)/L,ay:(B.y-A.y)/L}}
+function zoneAt(b,p){const E=brickEnds(b),mx=(E.A.x+E.B.x)/2,my=(E.A.y+E.B.y)/2,t=((p.x-mx)*E.ax+(p.y-my)*E.ay)/(P/2);return t>0.55?'B':t<-0.55?'A':'M'}
+function rotIcon(par,x,y,cw){const g=mk('g',{transform:`translate(${x} ${y}) scale(${cw?1.3:-1.3},1.3)`},par);
+ mk('circle',{cx:0,cy:0,r:12,fill:'#fff',stroke:'#1d5fa8','stroke-width':1.6,filter:'url(#fSh2)'},g);
+ mk('path',{d:'M-6.06 3.5 A7 7 0 1 1 3.5 6.06',stroke:'#1d5fa8','stroke-width':2.2,fill:'none','stroke-linecap':'round'},g);
+ mk('path',{d:'M-0.4 8.6 L6.3 8.4 L2.4 2.4 Z',fill:'#1d5fa8'},g)}
+function drawHint(b,z){L_top.innerHTML='';if(!b||!(z==='A'||z==='B'))return;const E=brickEnds(b),e=E[z],sg=z==='B'?1:-1,nx=E.ay,ny=-E.ax;
+ rotIcon(L_top,e.x-sg*E.ax*6+nx*25*KB,e.y-sg*E.ay*6+ny*25*KB,z==='B')}
+let hov='';
+function hoverAt(e){if(e.pointerType&&e.pointerType!=='mouse')return;const t=e.target,bk=t.closest&&!t.closest('[data-tray]')&&t.closest('[data-b]');
+ let b=null,z='';if(bk){b=state.bricks.find(q=>q.id===bk.getAttribute('data-b'));if(b&&b.cell)z=zoneAt(b,toSvg(e));else b=null}
+ const key=b?b.id+z:'';if(key===hov)return;hov=key;SV.classList.toggle('rotc',z==='A'||z==='B');drawHint(b,z)}
+SV.addEventListener('pointerleave',()=>{if(!drag){hov='';SV.classList.remove('rotc');L_top.innerHTML=''}});
 SV.addEventListener('wheel',e=>{e.preventDefault();const t=e.target,act=t.closest&&t.closest('[data-act]');
  if(act&&(act.getAttribute('data-act')==='kv'||act.getAttribute('data-act')==='ka')){const kv=act.getAttribute('data-act')==='kv',max=kv?12:2,st=(e.shiftKey?0.01:0.05)*max/12*(kv?1:1);const dv=(e.deltaY<0?1:-1)*(kv?(e.shiftKey?0.02:0.1):(e.shiftKey?0.005:0.02));if(kv)state.src.v=Math.max(0,Math.min(12,state.src.v+dv));else state.src.ilim=Math.max(0,Math.min(2,state.src.ilim+dv));drawSrcState();solveAll();return}
  if(act&&act.getAttribute('data-act')==='dial'){const m=state.meters.find(q=>q.id===act.getAttribute('data-id')),D=DIALS[m.kind],i=D.findIndex(q=>q[0]===m.dial),j=Math.max(0,Math.min(D.length-1,i+(e.deltaY>0?1:-1)));m.dial=D[j][0];setDial(m);solveAll();return}
@@ -467,7 +498,7 @@ $('#dlgYes').onclick=()=>{$('#dlg').hidden=true;initState();vb=VB0.slice();setVB
 $('#fuseBtn').onclick=()=>{state.meters.forEach(m=>m.fuse=true);$('#fuseBtn').hidden=true;solveAll();updLcd(true)};
 try{document.querySelectorAll('.eq[data-tex]').forEach(e=>katex.render(e.dataset.tex,e,{displayMode:true,throwOnError:false}))}catch(e){}
 initState();render();
-window.__ohm={state,holes,render,solveAll,reading,RES,slotHoles,DIALS,dialC,KVg,KAg,SRCJ,jackPos,TRAYPOS,COILPOS};
+window.__ohm={zoneAt,brickEnds,state,holes,render,solveAll,reading,RES,slotHoles,DIALS,dialC,KVg,KAg,SRCJ,jackPos,TRAYPOS,COILPOS};
 })();
 </script>
 </body></html>
