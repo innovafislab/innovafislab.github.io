@@ -1,0 +1,534 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script id="thm">(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dk")}catch(e){}})()</script>
+<title>Inducción electromagnética · INNOVA-FIS-LAB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="lib/katex/0.16.9/katex.min.css">
+<style>
+:root{--bg:#fff;--paper:#f6f7f9;--ink:#1b2430;--slate:#4a5566;--line:#d9dee5;--b:#1d5fa8;--navy:#17324d;--warn:#b3261e}
+html.dk{--bg:#0f141a;--paper:#161d26;--ink:#e3e8ee;--slate:#9aa5b2;--line:#27313c;--navy:#9cc3ea;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);font:16px/1.45 Inter,system-ui,sans-serif}
+header{display:flex;align-items:center;gap:10px 14px;padding:8px 16px;background:var(--bg);border-bottom:1px solid var(--line);flex-wrap:nowrap;white-space:nowrap}
+header .back{font-size:24px;font-weight:600;color:var(--navy);text-decoration:none;width:38px;height:38px;display:grid;place-items:center;border-radius:8px}
+header .back:hover{background:var(--paper)}
+header h1{font-size:clamp(19px,2.2vw,26px);margin:0;color:var(--navy);font-weight:800;letter-spacing:-.01em}
+.tabs{display:inline-flex;border:1px solid #1d5fa8;border-radius:8px;overflow:hidden}
+.tab{font:inherit;font-weight:600;font-size:clamp(13px,1.6vw,15px);border:0;background:var(--bg);color:#1d5fa8;padding:4px 14px;cursor:pointer}
+.tab+.tab{border-left:1px solid #1d5fa8}.tab.on{background:#1d5fa8;color:#fff}
+html.dk .tab{color:#7fb2e5}html.dk .tab.on{background:#6ea6e8;color:#0b1622}
+header .sp{flex:1}
+.hbtn{font:inherit;font-weight:600;font-size:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.hbtn:hover{background:var(--paper)}
+body{display:flex;flex-direction:column}main{display:grid;grid-template-columns:minmax(0,1fr) clamp(340px,30vw,560px);gap:14px;padding:12px 14px;flex:1;min-height:0}
+body.noside main{grid-template-columns:minmax(0,1fr)}body.noside .side{display:none}
+.card{background:var(--bg);border:1px solid var(--line);border-radius:12px}
+.left{display:flex;flex-direction:column;min-height:0;min-width:0}
+.left .card{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.sim3{flex:1;min-height:0;position:relative;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+.sim3.dragging{cursor:grabbing}.sim3.ptr{cursor:pointer}
+.sim3 canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.tag{position:absolute;pointer-events:none;transform:translate(-50%,-100%);background:rgba(255,255,255,.94);border:1px solid #e9b98c;color:#7a3d06;font:600 13px/1.25 Inter,system-ui,sans-serif;padding:3px 9px;border-radius:7px;white-space:nowrap;box-shadow:0 1px 4px #0000001a}
+.tag[hidden]{display:none}.tag.hov{border-color:var(--line);color:#17324d}
+html.dk .tag{background:rgba(22,29,38,.94);color:#ffc58f;border-color:#6b4520}html.dk .tag.hov{color:#cfe3f7;border-color:#3a4654}
+.ctls{position:absolute;top:8px;left:8px;right:8px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;z-index:2}.ctl{display:flex;gap:6px;pointer-events:auto}
+.vbtn{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:17px/1 Inter,system-ui,sans-serif;cursor:pointer;display:grid;place-items:center;opacity:.95;padding:0}
+.vbtn:hover{background:var(--paper)}
+.fbtn{flex:none;height:30px;display:flex;align-items:center;gap:6px;padding:0 11px;border-radius:15px;border:1px solid var(--line);background:rgba(255,255,255,.92);color:#17324d;font:600 12.5px/1 Inter,system-ui,sans-serif;cursor:pointer;box-shadow:0 1px 3px #0000000f}
+.fbtn:hover{background:#fff}.fbtn[hidden]{display:none}.fbtn.warnb{color:var(--warn);border-color:#f1b8b3;background:#fff5f4}
+html.dk .fbtn{background:var(--bg);color:var(--ink)}
+.dlg{position:fixed;inset:0;background:#0006;display:grid;place-items:center;z-index:20}.dlg[hidden]{display:none}
+.dlgc{background:var(--bg);color:var(--ink);border-radius:12px;padding:20px 22px;max-width:420px;margin:16px;box-shadow:0 10px 40px #0004;font-size:16px}
+.dlgc p{margin:0 0 16px}.dlgb{display:flex;gap:10px;justify-content:flex-end}
+.hbtn.pri{background:#1d5fa8;border-color:#1d5fa8;color:#fff}
+.side{overflow:auto;padding:14px 18px;font-size:clamp(14px,1.05vw,17px)}
+.side h2{font-size:1.08em;margin:1em 0 .35em;color:var(--navy)}.side h2:first-child{margin-top:0}
+.side p{margin:.4em 0}
+.side .eq{margin:.5em 0;text-align:center;font-size:1.1em}
+.side table{border-collapse:collapse;width:100%;font-size:.9em;margin:.4em 0}
+.side th,.side td{border:1px solid var(--line);padding:.3em .4em;text-align:center}
+.side th{background:#e8f0fa}html.dk .side th{background:#1c2a3a}
+.side .rw{font-size:.62em;font-weight:500;color:var(--slate)}
+.side .p2{display:none}body[data-part="2"] .side .p2{display:revert}body[data-part="2"] .side .p1{display:none}
+.side .note{font-size:.8em;color:var(--slate);margin-top:1.2em}
+@media (max-width:1300px) and (min-width:821px){header{gap:8px;padding:8px 10px}.tab{padding:4px 10px}.hbtn{padding:6px 10px}}
+@media (max-width:820px){header{flex-wrap:wrap;white-space:normal}body{display:block}main{grid-template-columns:minmax(0,1fr);height:auto;padding:10px}header{padding:8px 10px}.left .card{height:auto}.sim3{flex:none;height:auto;aspect-ratio:1.3}.side{max-height:none}.vbtn{width:26px;height:26px;font-size:15px}.fbtn{height:26px;font-size:11px;padding:0 8px}}
+</style></head><body data-part="1">
+<header><a class="back" href="laboratorios.html#ampliacion" aria-label="Volver al Laboratorio de Ampliación de Física">←</a><h1>Inducción electromagnética</h1>
+<div class="tabs" role="tablist" id="ptabs"><button class="tab on" data-p="1" type="button">Parte I: intensidad</button><button class="tab" data-p="2" type="button">Parte II: frecuencia</button></div>
+<span class="sp"></span><button class="hbtn" id="gbtn" type="button">Ocultar guía</button></header>
+<main><section class="left"><div class="card">
+<div class="sim3" id="v3" aria-label="Montaje en 3D: generador de funciones, bobina de campo con una bobina de inducción dentro, bandeja de bobinas y dos polímetros digitales"><canvas id="cv"></canvas><div class="tag" id="tagIn" hidden></div><div class="tag hov" id="tagHov" hidden></div></div>
+<div class="ctls"><div class="ctl"><button class="fbtn" id="vwBtn" type="button">Vista inicial</button></div><div class="ctl"><button class="fbtn warnb" id="fuseBtn" type="button" hidden>Cambiar fusible</button><button class="vbtn" id="rstBtn" type="button" aria-label="Volver a la configuración inicial" title="Volver a la configuración inicial">↺</button></div></div>
+</div></section>
+<aside class="side card" id="side">
+<h2>Qué se observa</h2>
+<p>La corriente alterna de la bobina de campo (primaria) crea en su interior un campo magnético uniforme, <i>B</i> = <i>μ</i><sub>0</sub><i>n</i><sub>1</sub><i>I</i>. Su flujo a través de la bobina de inducción (secundaria) cambia con el tiempo e induce en ella una tensión, según la ley de Faraday. En valores eficaces:</p>
+<div class="eq" data-tex="V_{ef}=\mu_0\,n_1\,N_2\,A_2\,2\pi f\,I_{ef}"></div>
+<p><i>n</i><sub>1</sub> es el número de espiras por metro de la primaria; <i>N</i><sub>2</sub> y <i>A</i><sub>2</sub> = π<i>D</i><sub>2</sub><sup>2</sup>/4, las espiras y la sección de la secundaria; <i>f</i>, la frecuencia; e <i>I</i><sub>ef</sub>, la intensidad eficaz en la primaria.</p>
+<h2>Qué hay que medir</h2>
+<p>El montaje ya está hecho. Anota <i>n</i><sub>1</sub>, que está en la etiqueta de la bobina de campo, y <i>N</i><sub>2</sub> y <i>D</i><sub>2</sub>, que están en la etiqueta de la bobina de inducción (el número grande son las espiras); calcula <i>A</i><sub>2</sub>. Enciende el generador y los dos polímetros y pon el amperímetro en mA~ y el voltímetro en V~.</p>
+<p class="p1">Con la frecuencia fija en 10 kHz, mide <i>V</i><sub>ef</sub> en la secundaria para <i>I</i><sub>ef</sub> de 0 a 50 mA, de 5 en 5 mA: sube la amplitud <i>U</i> del generador hasta que el amperímetro marque cada valor.</p>
+<p class="p2">Mantén <i>I</i><sub>ef</sub> = 20 mA y mide <i>V</i><sub>ef</sub> para <i>f</i> de 1 a 5 kHz, de 500 en 500 Hz. Al cambiar la frecuencia cambia la intensidad: reajusta la amplitud <i>U</i> hasta que el amperímetro vuelva a marcar 20 mA.</p>
+<p>Para usar otra bobina de inducción, pincha en ella en la bandeja: se cambia por la que está dentro. La que está dentro de la bobina de campo se ve en línea discontinua.</p>
+<h2>Tabla de la ficha <small class="rw">(rellenar en Word)</small></h2>
+<table><tr><th><i>n</i><sub>1</sub></th><th><i>N</i><sub>2</sub></th><th><i>D</i><sub>2</sub></th><th><i>A</i><sub>2</sub></th></tr><tr><td>&nbsp;</td><td></td><td></td><td></td></tr></table>
+<table class="p1"><tr><th><i>f</i></th><th><i>ε</i><sub>f</sub></th><th><i>I</i><sub>ef</sub></th><th><i>ε</i><sub>Ief</sub></th><th><i>V</i><sub>ef</sub></th><th><i>ε</i><sub>Vef</sub></th></tr><tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr></table>
+<table class="p2"><tr><th><i>I</i><sub>ef</sub></th><th><i>ε</i><sub>Ief</sub></th><th><i>f</i></th><th><i>ε</i><sub>f</sub></th><th><i>V</i><sub>ef</sub></th><th><i>ε</i><sub>Vef</sub></th></tr><tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr></table>
+<h2>Datos y errores</h2>
+<p><i>I</i><sub>ef</sub> y <i>V</i><sub>ef</sub> se leen en los polímetros digitales, en alterna; el error de cada lectura es una unidad de la última cifra del rango que uses. Elige el rango más pequeño que no se desborde. La frecuencia se lee en la pantalla del generador; su error es una unidad de la última cifra. No pases de 200 mA: el amperímetro tiene un fusible.</p>
+<h2>Cómo se usa</h2>
+<p>Generador: enciéndelo con POWER. Los botones <i>f</i> y <i>U</i> eligen qué se ajusta, la frecuencia o la amplitud, y ◄ ► mueven el cursor a la cifra que quieres cambiar (también puedes pinchar directamente en una cifra de la pantalla). Gira el mando arrastrando alrededor de su eje, o con la rueda del ratón, para subir o bajar esa cifra.</p>
+<p>Polímetros: enciéndelos con POWER y gira el selector arrastrándolo, con la rueda del ratón o pinchando en una marca. V~ y mA~ son tensión e intensidad alternas. El amperímetro está conectado a los bornes mA y COM: mientras su selector no esté en mA, no pasa corriente por el circuito.</p>
+<p>Vista: arrastra para girar, usa la rueda (o dos dedos) para acercar donde está el puntero y arrastra con el botón derecho (o dos dedos) para desplazar. Con doble clic te acercas a un aparato; «Vista inicial» vuelve al encuadre de partida.</p>
+<p class="note">Gemelo de la práctica: bobinas con sus dimensiones reales, generador de funciones y polímetros con fusible · CC BY-NC-SA 4.0</p>
+</aside></main>
+<div class="dlg" id="dlg" hidden><div class="dlgc" role="dialog" aria-modal="true"><p>¿Quieres volver a la configuración inicial de esta parte?</p><div class="dlgb"><button class="hbtn" id="dlgNo" type="button">Cancelar</button><button class="hbtn pri" id="dlgYes" type="button">Sí, empezar de nuevo</button></div></div></div>
+<script src="lib/katex/0.16.9/katex.min.js"></script>
+<script src="lib/three/r128/three.min.js"></script>
+<script data-goatcounter="https://innovafislab.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s);
+const box=$('#v3'),cv=$('#cv');
+const dk=()=>document.documentElement.classList.contains('dk');
+
+/* ================= renderizador, escena y luces ================= */
+const R3=new THREE.WebGLRenderer({canvas:cv,antialias:true});
+R3.setPixelRatio(Math.min(2,devicePixelRatio));
+R3.outputEncoding=THREE.sRGBEncoding;R3.toneMapping=THREE.ACESFilmicToneMapping;R3.toneMappingExposure=1.0;
+R3.physicallyCorrectLights=true;R3.shadowMap.enabled=true;R3.shadowMap.type=THREE.PCFSoftShadowMap;
+const ANI=R3.capabilities.getMaxAnisotropy();
+const SC=new THREE.Scene();SC.background=new THREE.Color(dk()?'#0f141a':'#ffffff');
+const CAM=new THREE.PerspectiveCamera(34,1,0.02,30);
+SC.add(new THREE.HemisphereLight(0xf4f8ff,0x9b8f80,0.75));
+const sun=new THREE.DirectionalLight(0xfff4e6,2.4);sun.position.set(-0.8,2.3,1.5);sun.target.position.set(-0.1,0,-0.1);
+sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-1.2,right:1.2,top:1.0,bottom:-1.0,near:.5,far:6});
+sun.shadow.bias=-.0002;sun.shadow.normalBias=.0006;sun.shadow.radius=4;SC.add(sun,sun.target);
+const fill=new THREE.DirectionalLight(0xe7efff,.7);fill.position.set(1.6,1.2,1.2);SC.add(fill);
+(function(){ // reflejos suaves del laboratorio
+ const env=new THREE.Scene();env.background=new THREE.Color(.2,.22,.26);
+ const room=new THREE.Mesh(new THREE.BoxGeometry(9,7,9),new THREE.MeshBasicMaterial({color:new THREE.Color(.45,.47,.5),side:THREE.BackSide}));room.position.y=1.5;env.add(room);
+ const panel=(x,y,z,w,h,c)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({color:new THREE.Color(c,c,c*.98),side:THREE.DoubleSide}));m.position.set(x,y,z);m.lookAt(0,.4,0);env.add(m)};
+ panel(-2.6,1.8,1,1.6,1.6,4);panel(.3,4,-.3,3,2.2,2.6);panel(3,1.6,-1.6,.8,3,2.2);panel(0,-1.4,0,7,7,.3);
+ const pm=new THREE.PMREMGenerator(R3);SC.environment=pm.fromScene(env,.04).texture;
+})();
+
+/* ================= utilidades ================= */
+const V3=(x,y,z)=>new THREE.Vector3(x,y,z);
+const std=(c,r=.6,m=0,o={})=>new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:r,metalness:m},o));
+const shadow=o=>{o.traverse(q=>{if(q.isMesh){q.castShadow=true;q.receiveShadow=true}});return o};
+function canvasTex(w,h,draw){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');draw(x,w,h);const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=ANI;return t}
+function rr(x,X,Y,W,H,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+W,Y,X+W,Y+H,r);x.arcTo(X+W,Y+H,X,Y+H,r);x.arcTo(X,Y+H,X,Y,r);x.arcTo(X,Y,X+W,Y,r);x.closePath()}
+function roundBox(w,h,d,r,bev){const s=new THREE.Shape();const x=-w/2,y=-h/2;s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);
+ const g=new THREE.ExtrudeGeometry(s,{depth:d-2*bev,bevelEnabled:true,bevelThickness:bev,bevelSize:bev,bevelSegments:3,curveSegments:8});g.translate(0,0,-(d-2*bev)/2);return g}
+function windTex(base,hi,dark,per){return canvasTex(32,per*16,(x,w,h)=>{const s=h/per;for(let i=0;i<per;i++){const g=x.createLinearGradient(0,i*s,0,(i+1)*s);g.addColorStop(0,dark);g.addColorStop(.18,base);g.addColorStop(.48,hi);g.addColorStop(.8,base);g.addColorStop(1,dark);x.fillStyle=g;x.fillRect(0,i*s,w,s)}})}
+const FONT='Inter,system-ui,sans-serif';
+
+/* ================= mesa ================= */
+const benchMat=std(dk()?0xdfe0dc:0xf1f1ee,.92);
+const bench=new THREE.Mesh(new THREE.PlaneGeometry(4,3),benchMat);bench.rotation.x=-Math.PI/2;bench.receiveShadow=true;SC.add(bench);
+
+/* ================= bobina de campo (primaria) ================= */
+const N1PM=485,LW=0.75,R1=0.0375,RB=0.035; // espiras por metro, longitud, radio medio del devanado, radio del hueco
+const C=V3(0.17,0.088,-0.42),XL=C.x-LW/2,XR=C.x+LW/2;
+const field=new THREE.Group();SC.add(field);
+const wT=windTex('#7a2418','#b65a40','#3c0d08',16);wT.wrapS=wT.wrapT=THREE.RepeatWrapping;wT.repeat.set(1,N1PM*LW/16);
+const windMat=std(0xffffff,.42,.35,{map:wT,depthWrite:false}); // no escribe profundidad: deja ver la bobina interior
+const wind=new THREE.Mesh(new THREE.CylinderGeometry(.0405,.0405,LW,96,1,true),windMat);wind.rotation.z=Math.PI/2;wind.position.copy(C);wind.renderOrder=5;wind.castShadow=true;field.add(wind);
+const bore=new THREE.Mesh(new THREE.CylinderGeometry(RB,RB,LW+.04,64,1,true),std(0x8d9196,.6,0,{side:THREE.BackSide}));bore.rotation.z=Math.PI/2;bore.position.copy(C);field.add(bore);
+const standMat=std(0xb4b8bb,.5);
+function stand(x,flip){const s=new THREE.Shape();s.moveTo(-.066,0);s.lineTo(.066,0);s.lineTo(.062,.11);s.quadraticCurveTo(.058,.158,.03,.162);s.lineTo(-.03,.162);s.quadraticCurveTo(-.058,.158,-.062,.11);s.lineTo(-.066,0);
+ const h=new THREE.Path();h.absarc(0,C.y,RB+.001,0,Math.PI*2,true);s.holes.push(h);
+ const g=new THREE.ExtrudeGeometry(s,{depth:.026,bevelEnabled:true,bevelThickness:.003,bevelSize:.003,bevelSegments:2,curveSegments:40});g.translate(0,0,-.013);
+ const m=new THREE.Mesh(g,standMat);m.rotation.y=Math.PI/2;m.position.set(x,0,C.z);return shadow(m)}
+field.add(stand(XL-.016),stand(XR+.016));
+const rail=new THREE.Mesh(new THREE.CylinderGeometry(.0055,.0055,LW+.03,20),std(0xc9cdd1,.28,.9));rail.rotation.z=Math.PI/2;rail.position.set(C.x,.152,C.z);field.add(shadow(rail));
+for(const dx of[-.13,.13]){const b=new THREE.Mesh(roundBox(.045,.03,.036,.005,.002),standMat);b.position.set(C.x+dx,.152,C.z);field.add(shadow(b))}
+// bornes de la bobina de campo y su etiqueta
+const lblField=canvasTex(512,256,(x,w,h)=>{x.fillStyle='#f4f5f2';x.fillRect(0,0,w,h);x.strokeStyle='#9aa0a5';x.lineWidth=6;x.strokeRect(3,3,w-6,h-6);x.fillStyle='#1b2430';x.textAlign='center';
+ x.font=`800 50px ${FONT}`;x.fillText('BOBINA DE CAMPO',w/2,70);x.font=`700 62px ${FONT}`;x.fillText('485 esp./m',w/2,150);x.font=`600 44px ${FONT}`;x.fillText('l = 750 mm',w/2,215)});
+const tbL=new THREE.Mesh(roundBox(.075,.05,.018,.004,.002),standMat);tbL.position.set(XL-.016,.032,C.z+.075);field.add(shadow(tbL));
+const lab1=new THREE.Mesh(new THREE.PlaneGeometry(.07,.035),std(0xffffff,.7,0,{map:lblField}));lab1.position.set(XL-.016,.072,C.z+.0705);lab1.rotation.x=-.12;
+const lab1b=new THREE.Mesh(new THREE.BoxGeometry(.074,.039,.004),standMat);lab1b.position.set(XL-.016,.072,C.z+.068);lab1b.rotation.x=-.12;field.add(shadow(lab1b),lab1);
+const tbR=new THREE.Mesh(roundBox(.05,.05,.018,.004,.002),standMat);tbR.position.set(XR+.016,.032,C.z+.075);field.add(shadow(tbR));
+function socket(par,pos,col){const g=new THREE.Group();const r=new THREE.Mesh(new THREE.CylinderGeometry(.0068,.0072,.008,24),std(col,.45));r.rotation.x=Math.PI/2;g.add(r);const h=new THREE.Mesh(new THREE.CircleGeometry(.0028,16),std(0x0b0c0e,.8));h.position.z=.0041;g.add(h);g.position.copy(pos);par.add(g);return g}
+socket(field,V3(XL-.016,.032,C.z+.088),0x24272b);socket(field,V3(XR+.016,.032,C.z+.088),0x24272b);
+const PRI_A=V3(XL-.016,.032,C.z+.128),PRI_B=V3(XR+.016,.032,C.z+.128); // salida de los bornes (hacia +z)
+
+/* ================= bobinas de inducción ================= */
+// k: diámetro eficaz del devanado respecto al de la etiqueta (dispersión real de fabricación)
+const COILS=[{N:300,d:41,len:.160,R:3.5,k:1.012},{N:200,d:41,len:.105,R:2.2,k:.994},{N:100,d:41,len:.053,R:1.1,k:1.018},{N:300,d:33,len:.160,R:2.8,k:.989},{N:300,d:26,len:.160,R:2.2,k:1.021},{N:150,d:26,len:.105,R:.3,k:.986},{N:75,d:26,len:.053,R:.15,k:1.009}];
+const TRAY=V3(-.50,0,-.10),SLOTS=[[-.62,-.15],[-.54,-.15],[-.46,-.15],[-.38,-.15],[-.58,-.05],[-.50,-.05],[-.42,-.05]];
+const tray=new THREE.Mesh(roundBox(.36,.24,.012,.02,.003),std(0xc5c9cc,.55));tray.rotation.x=-Math.PI/2;tray.position.set(TRAY.x,.006,TRAY.z);SC.add(shadow(tray));
+const coilGrey=std(0xb9bdc0,.5);
+function labelTex(c){return canvasTex(512,512,(x,w,h)=>{x.translate(w,h);x.rotate(Math.PI);x.fillStyle='#d4d7da';x.beginPath();x.arc(w/2,h/2,w/2,0,7);x.fill();
+ x.fillStyle='#2b2f33';x.beginPath();x.arc(w/2,h/2+18,36,0,7);x.fill();
+ x.fillStyle='#1b2430';x.textAlign='center';x.font=`800 ${c.N>=100?96:104}px ${FONT}`;x.fillText(String(c.N),128,h/2+52);x.font=`700 44px ${FONT}`;x.fillText('esp.',128,h/2+104);
+ x.font=`800 80px ${FONT}`;x.fillText('ø'+c.d,388,h/2+48);x.font=`700 40px ${FONT}`;x.fillText('mm',388,h/2+98)})}
+const DASH=canvasTex(64,8,(x,w,h)=>{x.fillStyle='#000';x.fillRect(0,0,w,h);x.fillStyle='#fff';x.fillRect(0,0,w*.58,h)});DASH.wrapS=DASH.wrapT=THREE.RepeatWrapping;DASH.encoding=THREE.LinearEncoding;
+function dashMat(rep,alongV){const t=DASH.clone();t.needsUpdate=true;t.wrapS=t.wrapT=THREE.RepeatWrapping;if(alongV){t.rotation=Math.PI/2;t.repeat.set(rep,1)}else t.repeat.set(rep,1);
+ return new THREE.MeshBasicMaterial({color:0xe8761a,alphaMap:t,alphaTest:.5,transparent:false})}
+function makeCoil(c,i){const g=new THREE.Group();const r=c.d/2000,yw=.012+c.len/2,top=.012+c.len+.006;
+ const base=new THREE.Mesh(new THREE.CylinderGeometry(.031,.032,.006,48),coilGrey);base.position.y=.003;g.add(base);
+ const lowF=new THREE.Mesh(new THREE.CylinderGeometry(r+.0035,r+.0035,.006,40),coilGrey);lowF.position.y=.009;g.add(lowF);
+ const t=windTex('#c9822f','#f2be72','#7c4612',16);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(1,c.N/16);
+ const wm=std(0xffffff,.32,.55,{map:t});const w=new THREE.Mesh(new THREE.CylinderGeometry(r,r,c.len,56,1,true),wm);w.position.y=yw;g.add(w);
+ const lt=labelTex(c),topD=new THREE.Mesh(new THREE.CylinderGeometry(.029,.029,.006,56),[coilGrey,std(0xffffff,.6,0,{map:lt}),coilGrey]);topD.position.y=top;g.add(topD);
+ const sockL=[],sx=[-.0085,.0085];for(const s of sx){const k=new THREE.Mesh(new THREE.CylinderGeometry(.0042,.0045,.009,20),std(0xeeeeec,.45));k.position.set(-.019,top+.0075,s);g.add(k);sockL.push(V3(-.019,top+.012,s))}
+ shadow(g);
+ // contorno discontinuo: se ve aunque esté dentro de la bobina de campo
+ const dash=new THREE.Group();const R=r+.0022,tr=.0016;
+ for(const y of[.012,.012+c.len]){const m=new THREE.Mesh(new THREE.TorusGeometry(R,tr,6,96),dashMat(Math.round(2*Math.PI*R/.011)));m.rotation.x=Math.PI/2;m.position.y=y;dash.add(m)}
+ for(let a=0;a<8;a++){const m=new THREE.Mesh(new THREE.CylinderGeometry(tr,tr,c.len,6,1,true),dashMat(Math.round(c.len/.011),true));const an=a*Math.PI/4;m.position.set(R*Math.cos(an),yw,R*Math.sin(an));dash.add(m)}
+ dash.traverse(q=>{if(q.isMesh){q.renderOrder=6;q.castShadow=false}});dash.visible=false;g.add(dash);
+ g.userData={coil:i};g.traverse(q=>q.userData.coil=i);SC.add(g);
+ return {i,spec:c,g,wm,dash,yw,top,sockL,slot:i,pos:V3(),q:new THREE.Quaternion()}}
+const coils=COILS.map(makeCoil);
+// orientación: en la bandeja, la etiqueta se lee desde delante; dentro, eje a lo largo de +x con la etiqueta hacia la salida derecha
+const Q_TRAY=new THREE.Quaternion().setFromEuler(new THREE.Euler(0,-Math.PI/2,0));
+const Q_IN=new THREE.Quaternion().setFromEuler(new THREE.Euler(0,0,-Math.PI/2)).multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(0,-Math.PI/2,0)));
+const trayPose=c=>({p:V3(SLOTS[c.slot][0],.012,SLOTS[c.slot][1]),q:Q_TRAY.clone()});
+const inPose=c=>({p:V3(C.x-c.yw,C.y,C.z),q:Q_IN.clone()});
+const outPose=c=>({p:V3(XR+.06,C.y,C.z),q:Q_IN.clone()});
+function setPose(c,P){c.g.position.copy(P.p);c.g.quaternion.copy(P.q);c.g.updateMatrixWorld(true)}
+
+/* ================= instrumentos: lienzos ================= */
+const SEG={'0':'abcdef','1':'bc','2':'abged','3':'abgcd','4':'fgbc','5':'afgcd','6':'afgedc','7':'abc','8':'abcdefg','9':'abcdfg','-':'g',' ':''};
+function seg7(x,X,Y,w,h,t,ch,on,off){x.save();x.translate(X,Y);x.transform(1,0,-.1,1,0,0);
+ const S={a:[t*.6,0,w-t*.6,0],d:[t*.6,h,w-t*.6,h],g:[t*.6,h/2,w-t*.6,h/2],f:[0,t*.6,0,h/2-t*.6],b:[w,t*.6,w,h/2-t*.6],e:[0,h/2+t*.6,0,h-t*.6],c:[w,h/2+t*.6,w,h-t*.6]};
+ for(const k in S){const[x1,y1,x2,y2]=S[k],hz=y1===y2,a=t/2;x.beginPath();if(hz){x.moveTo(x1,y1);x.lineTo(x1+a,y1-a);x.lineTo(x2-a,y1-a);x.lineTo(x2,y1);x.lineTo(x2-a,y1+a);x.lineTo(x1+a,y1+a)}else{x.moveTo(x1,y1);x.lineTo(x1+a,y1+a);x.lineTo(x1+a,y2-a);x.lineTo(x1,y2);x.lineTo(x1-a,y2-a);x.lineTo(x1-a,y1+a)}x.closePath();
+  x.fillStyle=(SEG[ch]||'').includes(k)?on:off;x.fill()}x.restore()}
+// selector: [id, etiqueta, ángulo (0 = arriba, horario), función, rango, unidad mostrada, decimales, escala]
+function mkDial(groups){const n=groups.reduce((u,q)=>u+q[2].length,0),k=groups.length,st=360/((n-k)+1.6*k),out=[];let an=-(groups[0][2].length-1)*st/2;
+ groups.forEach(([sym,fn,list],gi)=>{for(const [lab,rg,un,dec,sc] of list){out.push({id:fn+lab,lab,an,fn,rg,un,dec,sc,gi,sym});an+=st}an+=.6*st});return {pos:out,st}}
+const DIAL=mkDial([['V','DCV',[['2',2,'V',3,1],['20',20,'V',2,1]]],['V~','ACV',[['200m',.2,'mV',1,1e3],['2',2,'V',3,1],['20',20,'V',2,1]]],['mA~','ACA',[['200',.2,'mA',1,1e3],['20',.02,'mA',2,1e3],['2',.002,'mA',3,1e3]]],['mA','DCA',[['200',.2,'mA',1,1e3],['20',.02,'mA',2,1e3]]],['Ω','OHM',[['200',200,'Ω',1,1],['2k',2e3,'kΩ',3,1e-3]]]]);
+const dpos=id=>DIAL.pos.find(p=>p.id===id);
+const DW=250,DH=470,DCX=125,DCY=268,DR=114,KR=42,JACK=[['mA','mA',62],['V','V·Ω',125],['COM','COM',188]],JY=422;
+function pol(cx,cy,r,a){const t=(a-90)*Math.PI/180;return [cx+r*Math.cos(t),cy+r*Math.sin(t)]}
+function drawDMM(m){const x=m.ctx,S=m.S;x.setTransform(S,0,0,S,0,0);x.clearRect(0,0,DW,DH);
+ rr(x,0,0,DW,DH,26);x.fillStyle='#1f6fd1';x.fill();rr(x,10,10,DW-20,DH-20,18);x.fillStyle='#e7eaee';x.fill();
+ x.fillStyle='#1f6fd1';x.font=`800 15px ${FONT}`;x.textAlign='left';x.fillText('POLÍMETRO',22,35);x.fillStyle='#3a4250';x.font=`700 11px ${FONT}`;x.textAlign='right';x.fillText(m.role,DW-22,35);
+ // pantalla
+ rr(x,22,44,DW-44,86,7);const lg=x.createLinearGradient(0,44,0,130);lg.addColorStop(0,'#cdd6c4');lg.addColorStop(1,'#b7c2ad');x.fillStyle=lg;x.fill();x.lineWidth=3;x.strokeStyle='#0f1114';x.stroke();
+ const on='#14191a',off='rgba(20,25,26,.055)';const d=m.disp||{cells:[' ',' ',' ',' '],dp:-1,neg:false,ac:'',un:''};
+ const cx=[50,92,134,176],w=30,h=54,y0=58,t=6.2;
+ for(let i=0;i<4;i++){if(i===0){seg7(x,cx[0],y0,w,h,t,d.cells[0]==='1'?'1':' ',on,off)}else seg7(x,cx[i],y0,w,h,t,m.on?d.cells[i]:'8',m.on?on:off,off)}
+ if(!m.on){for(let i=1;i<4;i++)seg7(x,cx[i],y0,w,h,t,' ',on,off)}
+ for(let i=0;i<3;i++){x.fillStyle=(m.on&&d.dp===i)?on:off;x.fillRect(cx[i]+w+3.5,y0+h-5,6,6)}
+ if(m.on){x.fillStyle=on;if(d.neg)x.fillRect(30,y0+h/2-3,14,6);x.font=`800 12px ${FONT}`;x.textAlign='left';x.fillText(d.ac,30,y0+8);x.textAlign='right';x.font=`800 14px ${FONT}`;x.fillText(d.un,DW-27,124)}
+ // botón de encendido
+ rr(x,22,138,64,24,7);x.fillStyle='#c9ced6';x.fill();x.strokeStyle='#00000033';x.lineWidth=1;x.stroke();x.fillStyle='#2a3340';x.font=`800 12px ${FONT}`;x.textAlign='center';x.fillText('POWER',54,154.5);
+ x.beginPath();x.arc(98,150,5,0,7);x.fillStyle=m.on?'#38d16a':'#59616b';x.fill();
+ // selector
+ x.beginPath();x.arc(DCX,DCY,DR,0,7);x.fillStyle='#f4f6f8';x.fill();x.strokeStyle='#c5ccd4';x.lineWidth=1.2;x.stroke();
+ const grp=[];for(const p of DIAL.pos){const L=grp[grp.length-1];if(L&&L.gi===p.gi)L.a.push(p.an);else grp.push({gi:p.gi,fn:p.fn,sym:p.sym,a:[p.an]})}
+ for(const G of grp){const cur=G.fn==='DCA'||G.fn==='ACA',col=cur?'#b33a2a':'#1f2a36',a1=G.a[0]-DIAL.st*.42,a2=G.a[G.a.length-1]+DIAL.st*.42;
+  x.beginPath();x.arc(DCX,DCY,103,(a1-90)*Math.PI/180,(a2-90)*Math.PI/180);x.strokeStyle=cur?'#f3d9d3':'#dbe2ea';x.lineWidth=18;x.lineCap='round';x.stroke();x.lineCap='butt';
+  const am=(a1+a2)/2,[px,py]=pol(DCX,DCY,103,am),rot=((am%360)+360)%360,rrot=G.sym==='Ω'?0:(rot>90&&rot<270?am+180:am);
+  x.save();x.translate(px,py);x.rotate(rrot*Math.PI/180);const ac=G.sym.endsWith('~'),L=G.sym.replace('~',''),lw=L==='Ω'?11:L.length*10,tw=L==='Ω'?lw:lw+2+(ac?11:14),x0=-tw/2;
+  x.fillStyle=col;x.strokeStyle=col;x.textAlign='left';x.font=`800 ${L==='Ω'?16:14.5}px ${FONT}`;x.fillText(L,x0,5.5);
+  if(L!=='Ω'){if(ac){x.font=`800 19px ${FONT}`;x.textAlign='center';x.fillText('~',x0+lw+7.5,6.5)}else{x.lineWidth=2;x.beginPath();x.moveTo(x0+lw+2,-2.5);x.lineTo(x0+lw+16,-2.5);x.stroke();x.setLineDash([3.6,1.6]);x.beginPath();x.moveTo(x0+lw+2,2.5);x.lineTo(x0+lw+16,2.5);x.stroke();x.setLineDash([])}}
+  x.restore()}
+ for(const p of DIAL.pos){const col=p.fn==='DCA'||p.fn==='ACA'?'#b33a2a':'#1f2a36',[x1,y1]=pol(DCX,DCY,KR+5,p.an),[x2,y2]=pol(DCX,DCY,KR+12,p.an),[lx,ly]=pol(DCX,DCY,77,p.an);
+  x.strokeStyle=col;x.lineWidth=2;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();x.fillStyle=col;x.textAlign='center';x.font=`800 13.5px ${FONT}`;x.fillText(p.lab,lx,ly+5)}
+ // bornes
+ for(const [j,lab,jx] of JACK){x.fillStyle='#1f2a36';x.font=`800 12.5px ${FONT}`;x.textAlign='center';x.fillText(lab,jx,JY-23);x.beginPath();x.arc(jx,JY,15,0,7);x.fillStyle=j==='COM'?'#26292d':'#b8261c';x.fill();x.beginPath();x.arc(jx,JY,6,0,7);x.fillStyle='#0b0c0e';x.fill()}
+ x.fillStyle='#4a5566';x.font=`600 9.5px ${FONT}`;x.textAlign='center';x.fillText('mA 200 mA MÁX · fusible',DW/2,DH-18);
+ m.tex.needsUpdate=true}
+const GW=600,GH=340,GKX=505,GKY=125,GKR=58;
+const GBTN={f:[24,212,62,40],U:[96,212,62,40],L:[186,212,62,40],R:[258,212,62,40],P:[24,276,112,40]};
+const GJ=[['+',438,292],['⊥',528,292]];
+function fstr(v){return (v/1000).toFixed(3).padStart(6,' ')} // valores en Hz o mV, mostrados en kHz o V
+function drawGen(G){const x=G.ctx,S=G.S,st=G.st;x.setTransform(S,0,0,S,0,0);x.clearRect(0,0,GW,GH);
+ rr(x,0,0,GW,GH,14);x.fillStyle='#cfdbe7';x.fill();rr(x,8,8,GW-16,GH-16,10);x.fillStyle='#dfe8f1';x.fill();
+ x.fillStyle='#17324d';x.font=`800 17px ${FONT}`;x.textAlign='left';x.fillText('GENERADOR DE FUNCIONES',24,36);
+ x.strokeStyle='#17324d';x.lineWidth=2.4;x.beginPath();for(let i=0;i<=40;i++){const px=292+i*1.6,py=31-7*Math.sin(i/40*2*Math.PI);i?x.lineTo(px,py):x.moveTo(px,py)}x.stroke();
+ // pantalla
+ rr(x,24,50,348,146,8);x.fillStyle=st.on?'#12325c':'#0d1a2b';x.fill();x.lineWidth=3;x.strokeStyle='#0a1220';x.stroke();
+ G.rects=[];
+ if(st.on){const mono='"DejaVu Sans Mono",Menlo,Consolas,"Courier New",monospace';
+  const rows=[['f',st.f,'kHz',106],['U',st.U,'V',172]];
+  for(const [p,v,un,y] of rows){const sel=st.sel===p;
+   if(sel){rr(x,36,y-36,38,46,6);x.fillStyle='#e8f1fb';x.fill()}
+   x.fillStyle=sel?'#12325c':'#d6e6f7';x.font=`italic 700 32px ${FONT}`;x.textAlign='center';x.fillText(p,55,y);
+   x.font=`700 44px ${mono}`;x.textAlign='left';const s=fstr(v),cw=x.measureText('0').width,x0=96;
+   for(let i=0;i<6;i++){const ch=s[i],cx0=x0+i*cw;x.fillStyle='#ffffff';x.fillText(ch,cx0,y);
+    if(i!==2)G.rects.push({p,i,x0:cx0,x1:cx0+cw,y0:y-40,y1:y+10});
+    if(sel&&st.cur[p]===i){x.fillRect(cx0+2,y+6,cw-4,5)}}
+   x.fillStyle='#d6e6f7';x.font=`700 28px ${FONT}`;x.textAlign='left';x.fillText(un,x0+6*cw+14,y)}}
+ // botones
+ const btn=(k,lab,lit)=>{const[bx,by,bw,bh]=GBTN[k];rr(x,bx,by,bw,bh,7);x.fillStyle=lit?'#ffffff':'#c4d0dc';x.fill();x.lineWidth=1.4;x.strokeStyle=lit?'#1d5fa8':'#93a3b4';x.stroke();x.fillStyle='#17324d';x.textAlign='center';x.font=k==='f'||k==='U'?`italic 800 24px ${FONT}`:`800 20px ${FONT}`;x.fillText(lab,bx+bw/2,by+bh/2+8)};
+ btn('f','f',st.on&&st.sel==='f');btn('U','U',st.on&&st.sel==='U');btn('L','◄',false);btn('R','►',false);
+ {const[bx,by,bw,bh]=GBTN.P;rr(x,bx,by,bw,bh,8);x.fillStyle='#c4d0dc';x.fill();x.strokeStyle='#93a3b4';x.lineWidth=1.4;x.stroke();x.fillStyle='#17324d';x.font=`800 17px ${FONT}`;x.textAlign='center';x.fillText('POWER',bx+bw/2-10,by+26);x.beginPath();x.arc(bx+bw-17,by+bh/2,6,0,7);x.fillStyle=st.on?'#38d16a':'#59616b';x.fill()}
+ x.fillStyle='#4a5566';x.font=`700 13px ${FONT}`;x.textAlign='center';x.fillText('elegir',91,268);x.fillText('cifra',253,268);
+ // corona del mando
+ x.beginPath();x.arc(GKX,GKY,GKR+16,0,7);x.fillStyle='#d2dde8';x.fill();x.strokeStyle='#93a3b4';x.lineWidth=1.2;x.stroke();
+ for(let i=0;i<24;i++){const[a1,b1]=pol(GKX,GKY,GKR+6,i*15),[a2,b2]=pol(GKX,GKY,GKR+13,i*15);x.strokeStyle='#6c7c8d';x.lineWidth=1.6;x.beginPath();x.moveTo(a1,b1);x.lineTo(a2,b2);x.stroke()}
+ x.fillStyle='#4a5566';x.font=`700 13px ${FONT}`;x.fillText('−',GKX-GKR-6,GKY+GKR+18);x.fillText('+',GKX+GKR+6,GKY+GKR+18);x.fillText('AJUSTE',GKX,GKY+GKR+34);
+ // salida
+ x.fillStyle='#17324d';x.font=`800 14px ${FONT}`;x.fillText('SALIDA',(GJ[0][1]+GJ[1][1])/2,258);
+ for(const [lab,jx,jy] of GJ){x.beginPath();x.arc(jx,jy,17,0,7);x.fillStyle=lab==='+'?'#b8261c':'#26292d';x.fill();x.beginPath();x.arc(jx,jy,6.5,0,7);x.fillStyle='#0b0c0e';x.fill();x.fillStyle='#17324d';x.font=`800 16px ${FONT}`;x.fillText(lab,jx+(lab==='+'?-28:28),jy+6)}
+ G.tex.needsUpdate=true}
+
+/* ================= instrumentos: cuerpos 3D ================= */
+const INST=[];
+function faceGroup(root,W,H,wM,hM,S){const can=document.createElement('canvas');can.width=W*S;can.height=H*S;const tex=new THREE.CanvasTexture(can);tex.encoding=THREE.sRGBEncoding;tex.anisotropy=ANI;
+ const face=new THREE.Mesh(new THREE.PlaneGeometry(wM,hM),std(0xffffff,.55,0,{map:tex,transparent:true,alphaTest:.5}));face.receiveShadow=true;root.add(face);return {can,ctx:can.getContext('2d'),tex,face}}
+function addPlug(par,lx,ly,col){const g=new THREE.Group();const a=new THREE.Mesh(new THREE.CylinderGeometry(.0058,.0058,.012,20),std(col,.45));a.rotation.x=Math.PI/2;a.position.z=.006;g.add(a);
+ const b=new THREE.Mesh(new THREE.CylinderGeometry(.0045,.0062,.026,20),std(col,.5));b.rotation.x=Math.PI/2;b.position.z=.025;g.add(b);g.position.set(lx,ly,0);par.add(shadow(g));return g}
+function makeDMM(id,role,x,z,yaw){const wM=.19,hM=wM*DH/DW,dM=.046,TH=55*Math.PI/180;
+ const root=new THREE.Group();root.position.set(x,0,z);root.rotation.y=yaw;SC.add(root);
+ const tilt=new THREE.Group();tilt.rotation.x=-TH;root.add(tilt); // apoyado hacia atrás sobre su soporte
+ const body=new THREE.Mesh(roundBox(wM,hM,dM,.014,.004),std(0x1856a8,.55));body.position.set(0,hM/2,dM/2);tilt.add(shadow(body));
+ const fr=new THREE.Group();fr.position.set(0,hM/2,dM+.0006);tilt.add(fr);
+ const F=faceGroup(fr,DW,DH,wM,hM,3);
+ {const sh=new THREE.Shape();const a=hM*Math.sin(TH)*.96,b=hM*Math.cos(TH)*.96;sh.moveTo(0,0);sh.lineTo(a,0);sh.lineTo(a,b);sh.lineTo(0,0); // soporte en cuña bajo el polímetro
+  const wg=new THREE.ExtrudeGeometry(sh,{depth:wM*.78,bevelEnabled:false});wg.translate(0,0,-wM*.39);const wd=new THREE.Mesh(wg,std(0x2a2f36,.6));wd.rotation.y=Math.PI/2;root.add(shadow(wd))}
+ const kn=new THREE.Group();const L=(u,v)=>[(u/DW-.5)*wM,(.5-v/DH)*hM];const[kx,ky]=L(DCX,DCY);kn.position.set(kx,ky,0);fr.add(kn);
+ const kr=KR/DW*wM;const k1=new THREE.Mesh(new THREE.CylinderGeometry(kr,kr*1.03,.012,48),std(0xf2f4f6,.45));k1.rotation.x=Math.PI/2;k1.position.z=.006;kn.add(k1);
+ const k2=new THREE.Mesh(roundBox(kr*.5,kr*2.02,.008,.004,.0015),std(0xffffff,.4));k2.position.z=.014;kn.add(k2);
+ const k3=new THREE.Mesh(new THREE.PlaneGeometry(.0024,kr*.75),new THREE.MeshBasicMaterial({color:0x1f2a36}));k3.position.set(0,kr*.55,.0182);kn.add(k3);shadow(kn);
+ const m={kind:'dmm',id,role,root,fr,W:DW,H:DH,wM,hM,S:3,can:F.can,ctx:F.ctx,tex:F.tex,face:F.face,kn,L,on:false,dial:'DCV20',fuse:true,disp:null,plugs:{}};
+ m.jack=(j)=>{const jx=JACK.find(q=>q[0]===j)[2];const[lx,ly]=L(jx,JY);return {p:fr.localToWorld(V3(lx,ly,.04)),n:V3(0,0,1).applyQuaternion(fr.getWorldQuaternion(new THREE.Quaternion()))}};
+ m.root.traverse(q=>q.userData.inst=m);INST.push(m);return m}
+function makeGen(x,z,yaw){const wM=.34,hM=wM*GH/GW,dM=.24,GT=.2;
+ const root=new THREE.Group();root.position.set(x,0,z);root.rotation.y=yaw;SC.add(root); // origen: arista inferior trasera
+ const T=new THREE.Group();T.rotation.x=-GT;root.add(T); // patas delanteras: la cara queda algo inclinada hacia arriba
+ const body=new THREE.Mesh(roundBox(wM+.012,hM+.012,dM,.01,.004),std(0x26292d,.55));body.position.set(0,(hM+.012)/2+.008,dM/2);T.add(shadow(body));
+ for(let i=0;i<13;i++){const rb=new THREE.Mesh(new THREE.BoxGeometry(.012,.012,dM*.62),std(0x1b1d20,.6));rb.position.set(-wM*.36+i*wM*.06,hM+.02,dM*.45);T.add(shadow(rb))}
+ for(const fx of[-1,1]){const f=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,.008,16),std(0x111214,.7));f.position.set(fx*wM*.42,.004,.03);T.add(f);
+  const lh=(dM-.03)*Math.sin(GT)+.008,lg=new THREE.Mesh(new THREE.CylinderGeometry(.007,.009,lh,16),std(0x111214,.6));lg.position.set(fx*wM*.42,lh/2,(dM-.03)*Math.cos(GT));root.add(shadow(lg))}
+ const fr=new THREE.Group();fr.position.set(0,(hM+.012)/2+.008,dM+.0006);T.add(fr);const F=faceGroup(fr,GW,GH,wM,hM,2.5);
+ const L=(u,v)=>[(u/GW-.5)*wM,(.5-v/GH)*hM];const[kx,ky]=L(GKX,GKY),kr=GKR/GW*wM;
+ const kn=new THREE.Group();kn.position.set(kx,ky,0);fr.add(kn);
+ const k1=new THREE.Mesh(new THREE.CylinderGeometry(kr*.96,kr,.024,64),std(0x2b2e33,.4,.2));k1.rotation.x=Math.PI/2;k1.position.z=.012;kn.add(k1);
+ const k2=new THREE.Mesh(new THREE.CylinderGeometry(kr*.8,kr*.8,.002,64),std(0x3c4047,.3,.5));k2.rotation.x=Math.PI/2;k2.position.z=.0245;kn.add(k2);
+ const k3=new THREE.Mesh(new THREE.CylinderGeometry(.0028,.0028,.002,16),std(0xf2f2f2,.4));k3.rotation.x=Math.PI/2;k3.position.set(0,kr*.62,.026);kn.add(k3);
+ for(let i=0;i<36;i++){const r=new THREE.Mesh(new THREE.BoxGeometry(.0016,.0014,.022),std(0x1f2226,.5));const a=i/36*Math.PI*2;r.position.set(Math.cos(a)*kr*.985,Math.sin(a)*kr*.985,.012);r.rotation.z=a;kn.add(r)}
+ shadow(kn);
+ const G={kind:'gen',root,fr,W:GW,H:GH,wM,hM,S:2.5,can:F.can,ctx:F.ctx,tex:F.tex,face:F.face,kn,L,rects:[],st:null};
+ G.jack=(k)=>{const J=GJ[k==='+'?0:1];const[lx,ly]=L(J[1],J[2]);return {p:fr.localToWorld(V3(lx,ly,.04)),n:V3(0,0,1).applyQuaternion(fr.getWorldQuaternion(new THREE.Quaternion()))}};
+ root.traverse(q=>q.userData.inst=G);INST.push(G);return G}
+const GEN=makeGen(-.45,-.66,.10);
+const AMM=makeDMM(0,'AMPERÍMETRO',-.07,.10,.05),VOLT=makeDMM(1,'VOLTÍMETRO',.27,.10,-.05);
+{const[a,b]=AMM.L(62,JY),[c,d]=AMM.L(188,JY);addPlug(AMM.fr,a,b,0xc8281e);addPlug(AMM.fr,c,d,0xc8281e)}
+{const[a,b]=VOLT.L(125,JY),[c,d]=VOLT.L(188,JY);addPlug(VOLT.fr,a,b,0xc8281e);addPlug(VOLT.fr,c,d,0x1f5fd0)}
+{const[a,b]=GEN.L(GJ[0][1],GJ[0][2]),[c,d]=GEN.L(GJ[1][1],GJ[1][2]);addPlug(GEN.fr,a,b,0xc8281e);addPlug(GEN.fr,c,d,0x1f5fd0)}
+// clavijas en los bornes de la bobina de campo
+for(const [P,col] of[[PRI_A,0xc8281e],[PRI_B,0x1f5fd0]]){const g=new THREE.Group();addPlug(g,0,0,col);g.position.set(P.x,P.y,P.z-.04);SC.add(g)}
+
+/* ================= cables ================= */
+const cabMat={r:std(0xc8281e,.5),b:std(0x1f5fd0,.5)};
+function cable(col){const m=new THREE.Mesh(new THREE.BufferGeometry(),cabMat[col]);m.castShadow=true;m.receiveShadow=true;SC.add(m);return m}
+function hangPts(A,nA,B,nB,side,via){ // del extremo A al B: sale recto, cae sobre la mesa y vuelve a subir
+ const a1=A.clone().addScaledVector(nA,.035),b1=B.clone().addScaledVector(nB,.035);
+ const a2=a1.clone().addScaledVector(nA,.05);a2.y=Math.max(.006,a1.y*.35);const b2=b1.clone().addScaledVector(nB,.05);b2.y=Math.max(.006,b1.y*.35);
+ if(via)return [A,a1,a2,...via.map(([x,z])=>V3(x,.0045,z)),b2,b1,B];
+ const mid=a2.clone().lerp(b2,.5);const dir=b2.clone().sub(a2);const perp=V3(-dir.z,0,dir.x).normalize().multiplyScalar(side*Math.min(.06,dir.length()*.12));mid.add(perp);mid.y=.0045;
+ const q1=a2.clone().lerp(mid,.55);q1.y=.0045;const q2=b2.clone().lerp(mid,.55);q2.y=.0045;
+ return [A,a1,a2,q1,mid,q2,b2,b1,B]}
+function setTube(m,pts,r=.0034){const cu=new THREE.CatmullRomCurve3(pts,false,'centripetal');m.geometry.dispose();m.geometry=new THREE.TubeGeometry(cu,Math.max(60,pts.length*16),r,8,false)}
+const CB={g2a:cable('r'),a2p:cable('r'),g2p:cable('b'),s1:cable('r'),s2:cable('b')};
+function staticCables(){SC.updateMatrixWorld(true);const gp=GEN.jack('+'),gn=GEN.jack('⊥'),am=AMM.jack('mA'),ac=AMM.jack('COM');
+ setTube(CB.g2a,hangPts(gp.p,gp.n,am.p,am.n,1,[[-.32,-.3],[-.29,-.02],[-.22,.17],[-.15,.21]]));setTube(CB.a2p,hangPts(ac.p,ac.n,PRI_A,V3(0,0,1),-1,[[-.04,.21],[.02,.14],[.0,-.04],[-.1,-.2],[-.21,-.24]]));setTube(CB.g2p,hangPts(gn.p,gn.n,PRI_B,V3(0,0,1),1,[[-.36,-.32],[-.2,-.27],[.1,-.27],[.5,-.27]]))}
+// par trenzado de la bobina de inducción al voltímetro
+class Twist extends THREE.Curve{constructor(base,o0,o1,ph){super();this.b=base;this.o0=o0;this.o1=o1;this.ph=ph;this.L=base.getLength()}
+ getPoint(t,tg=new THREE.Vector3()){const p=this.b.getPointAt(t),d=this.b.getTangentAt(t);let n=V3(0,1,0).cross(d);if(n.lengthSq()<1e-6)n=V3(1,0,0).cross(d);n.normalize();const bn=d.clone().cross(n).normalize();
+  const sm=(a,b,x)=>{const u=Math.min(1,Math.max(0,(x-a)/(b-a)));return u*u*(3-2*u)};const w=sm(0,.05,t)*(1-sm(.95,1,t));const ang=this.ph+t*this.L/.028*2*Math.PI;
+  const tw=n.multiplyScalar(Math.cos(ang)*.0034).add(bn.multiplyScalar(Math.sin(ang)*.0034));const eo=this.o0.clone().lerp(this.o1,t);
+  return tg.copy(p).addScaledVector(eo,1-w).addScaledVector(tw,w)}}
+let sockSrc=null; // [punto rojo, punto azul] en el mundo (enchufes de la bobina conectada)
+function sockWorld(c){return c.sockL.map(p=>c.g.localToWorld(p.clone()))}
+function secCable(){const S=sockSrc;if(!S)return;const vV=VOLT.jack('V'),vC=VOLT.jack('COM');const mS=S[0].clone().lerp(S[1],.5),mJ=vV.p.clone().lerp(vC.p,.5),nJ=vV.n;
+ const ax=V3(1,0,0);let up=V3(0,1,0);const pts=[mS];
+ // dirección de salida de los enchufes: el eje de la bobina (de la base a la etiqueta)
+ const cAx=V3(0,1,0).applyQuaternion(coilOf(sockFrom).g.quaternion);
+ pts.push(mS.clone().addScaledVector(cAx,.03));
+ if(mS.x<XR+.02&&Math.abs(mS.y-C.y)<.03&&Math.abs(mS.z-C.z)<.03){pts.push(V3(XR+.05,C.y-.012,C.z));pts.push(V3(XR+.10,.03,C.z+.03));pts.push(V3(XR+.1,.0045,C.z+.22),V3(XR-.02,.0045,.2))}
+ else{const t=pts[pts.length-1].clone();t.y=Math.max(.02,t.y*.4);t.addScaledVector(V3(0,0,1),.04);pts.push(t)}
+ const j1=mJ.clone().addScaledVector(nJ,.035),j2=j1.clone().addScaledVector(nJ,.05);j2.y=Math.max(.006,j1.y*.35);
+ const last=pts[pts.length-1],mid=last.clone().lerp(j2,.5);mid.y=.0045;pts.push(mid,j2,j1,mJ);
+ const base=new THREE.CatmullRomCurve3(pts,false,'centripetal');
+ const oS0=S[0].clone().sub(mS),oS1=S[1].clone().sub(mS),oJ0=vV.p.clone().sub(mJ),oJ1=vC.p.clone().sub(mJ);
+ for(const [m,o0,o1,ph] of[[CB.s1,oS0,oJ0,0],[CB.s2,oS1,oJ1,Math.PI]]){const cu=new Twist(base,o0,o1,ph);m.geometry.dispose();m.geometry=new THREE.TubeGeometry(cu,260,.0024,7,false)}}
+let coilIn=true,sockFrom=0;const coilOf=i=>coils[i];
+
+/* ================= estado ================= */
+const seed=Math.random();const rnd=(()=>{let s=Math.floor(seed*2147483646)+1;return()=>(s=s*16807%2147483647)/2147483647})();
+const gA=1+(rnd()-.5)*.008,gV=1+(rnd()-.5)*.008,VN=.00022+rnd()*.0002; // calibración de los polímetros y ruido de fondo de la secundaria (V)
+const LC=1.0e-3*(0.97+rnd()*.06),RC=0.3,RG=1.0,MU0=4*Math.PI*1e-7;
+function initState(p){return {gen:{on:false,f:p===1?10000:1000,U:0,sel:'U',cur:{f:p===1?1:3,U:3}},m:[{on:false,dial:'DCV20',fuse:true},{on:false,dial:'DCV20',fuse:true}],coil:0}}
+const ST={1:initState(1),2:initState(2)};let part=1,S=ST[1];
+let anim=null; // animación de cambio de bobina
+function applyState(){GEN.st=S.gen;AMM.on=S.m[0].on;AMM.dial=S.m[0].dial;AMM.fuse=S.m[0].fuse;VOLT.on=S.m[1].on;VOLT.dial=S.m[1].dial;VOLT.fuse=S.m[1].fuse;
+ coils.forEach((c,i)=>{c.slot=i;setPose(c,i===S.coil?inPose(c):trayPose(c));c.dash.visible=i===S.coil});coilIn=true;sockFrom=S.coil;sockSrc=sockWorld(coils[S.coil]);secCable();
+ setKnob(AMM);setKnob(VOLT);measure(true);drawGen(GEN);$('#fuseBtn').hidden=S.m[0].fuse;dirty=true}
+function setKnob(m){const p=dpos(m.dial);m.kn.rotation.z=-p.an*Math.PI/180}
+
+/* ================= física ================= */
+function fsol(z){const a=z+LW/2,b=z-LW/2;return .5*(a/Math.hypot(R1,a)-b/Math.hypot(R1,b))} // B(z)/(μ0 n1 I) en el eje
+function coupling(c){ // flujo medio por espira relativo al de una bobina infinita, según la posición de la bobina
+ const ax=V3(0,1,0).applyQuaternion(c.g.quaternion),cen=c.g.localToWorld(V3(0,c.yw,0)),rel=cen.clone().sub(C),z=rel.x,rho=Math.hypot(rel.y,rel.z),ct=ax.x;
+ let s=0;const n=24;for(let i=0;i<=n;i++){const u=(i/n-.5)*c.spec.len*ct;s+=fsol(z+u)*(i===0||i===n?.5:1)}s/=n;
+ return s*ct*Math.exp(-((rho/.045)**2))}
+function solve(){const g=S.gen,am=S.m[0],r=dpos(am.dial);const closed=g.on&&am.fuse&&(r.fn==='ACA'||r.fn==='DCA');
+ const Rsh=r.fn==='ACA'||r.fn==='DCA'?{0.2:1,0.02:10,0.002:100}[r.rg]:0,w=2*Math.PI*g.f;
+ let I=closed?(g.U/1000)/Math.SQRT2/Math.hypot(RG+RC+Rsh,w*LC):0;
+ if(I>0.2&&am.fuse){am.fuse=false;AMM.fuse=false;$('#fuseBtn').hidden=false;I=0}
+ const ci=anim?anim.cur:S.coil;if(ci<0)return {I,V:0,R2:1e9,f:g.f}; // durante el cambio la secundaria está desconectada
+ const c=coils[ci],sp=c.spec,A=Math.PI*(sp.d*sp.k/2000)**2;
+ const V=w*MU0*N1PM*sp.N*A*I*Math.abs(coupling(c));
+ return {I,V,R2:sp.R,f:g.f}}
+const gauss=()=>{let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
+function lcd(m,val,p){ // val en unidades del rango (V, A, Ω)
+ const ac=p.fn==='ACV'||p.fn==='ACA'?'AC':p.fn==='OHM'?'':'DC',sc=p.sc,dec=p.dec,res=Math.pow(10,-dec);
+ if(val===null)return {cells:['1',' ',' ',' '],dp:-1,neg:false,ac,un:p.un};
+ let v=val*sc;if(Math.abs(v)>2*res)v+=gauss()*.3*res;let cnt=Math.round(Math.abs(v)/res);const neg=v<0&&cnt>0&&ac==='DC';
+ if(cnt>1999)return {cells:['1',' ',' ',' '],dp:-1,neg:false,ac,un:p.un};
+ const s=String(cnt).padStart(4,'0').split(''),dpi=3-dec;s[0]=s[0]==='1'?'1':' ';
+ for(let i=1;i<dpi;i++){if(s[i]==='0'&&s.slice(0,i).every(q=>q===' '))s[i]=' ';else break}return {cells:s,dp:dec>0?dpi:-1,neg,ac,un:p.un}}
+let lastMeas=0;
+function measure(force){const r=solve();
+ // amperímetro (bornes mA y COM)
+ {const p=dpos(AMM.dial);let v;if(p.fn==='ACA')v=r.I*gA;else if(p.fn==='DCA')v=0;else if(p.fn==='OHM')v=null;else v=0;AMM.disp=lcd(AMM,v,p);drawDMM(AMM)}
+ // voltímetro (bornes V y COM)
+ {const p=dpos(VOLT.dial);let v;if(p.fn==='ACV')v=Math.hypot(r.V,VN)*gV;else if(p.fn==='DCV')v=0;else if(p.fn==='OHM')v=r.R2+.12;else v=0;
+  if(p.fn==='OHM'&&r.V>.002)v=null;VOLT.disp=lcd(VOLT,v,p);drawDMM(VOLT)}
+ dirty=true;lastMeas=performance.now()}
+
+/* ================= cámara ================= */
+const PM=()=>matchMedia('(max-width:820px)').matches;
+const V0=()=>({az:0,el:PM()?.95:.88});
+let az,el,dist;const TG=V3();
+const BB=[];for(const x of[-.67,.6])for(const y of[0,.2])for(const z of[-.66,.22])BB.push(V3(x,y,z));
+function fitV0(){ // distancia mínima para que quepa todo el montaje con la orientación de partida
+ const v=V0(),c=V3(-.04,.05,-.26);let lo=.5,hi=5;const ok=d=>{const p=V3(c.x+d*Math.cos(v.el)*Math.sin(v.az),c.y+d*Math.sin(v.el),c.z+d*Math.cos(v.el)*Math.cos(v.az));CAM.position.copy(p);CAM.lookAt(c);CAM.updateMatrixWorld();
+  return BB.every(q=>{const n=q.clone().project(CAM);return Math.abs(n.x)<.97&&n.y<.82&&n.y>-.95})};
+ for(let i=0;i<30;i++){const m=(lo+hi)/2;ok(m)?hi=m:lo=m}return {az:v.az,el:v.el,dist:hi,tg:c}}
+function camReset(){const v=fitV0();az=v.az;el=v.el;dist=v.dist;TG.copy(v.tg)}
+function camSet(){CAM.position.set(TG.x+dist*Math.cos(el)*Math.sin(az),TG.y+dist*Math.sin(el),TG.z+dist*Math.cos(el)*Math.cos(az));CAM.lookAt(TG)}
+function size(){const w=box.clientWidth,h=box.clientHeight;if(!w||!h)return;R3.setSize(w,h,false);CAM.aspect=w/h;
+ // en pantallas estrechas se abre el campo de visión para que quepa todo el montaje
+ CAM.updateProjectionMatrix();dirty=true}
+let touched=false;new ResizeObserver(()=>{size();if(!touched&&CAM.aspect)camReset()}).observe(box);
+function pan(dx,dy){const k=2*dist*Math.tan(CAM.fov*Math.PI/360)/box.clientHeight,ca=Math.cos(az),sa=Math.sin(az),ce=Math.cos(el),se=Math.sin(el);
+ TG.x+=k*(-dx*ca-dy*se*sa);TG.y+=k*dy*ce;TG.z+=k*(dx*sa-dy*se*ca);TG.x=Math.max(-1.3,Math.min(1,TG.x));TG.y=Math.max(-.2,Math.min(.6,TG.y));TG.z=Math.max(-1,Math.min(.8,TG.z));dirty=true}
+function zAt(cx,cy,f){const b=box.getBoundingClientRect();camSet();CAM.updateMatrixWorld();const v=TG.clone().project(CAM);const sx=cx-b.left-(v.x+1)/2*box.clientWidth,sy=cy-b.top-(1-v.y)/2*box.clientHeight;pan(-(1-f)*sx,-(1-f)*sy)}
+let fly=null;function flyTo(tg,d,a,e){touched=true;fly={t0:performance.now(),dur:650,a:{az,el,dist,tg:TG.clone()},b:{az:a===undefined?az:a,el:e===undefined?el:e,dist:d,tg:tg.clone()}};dirty=true}
+
+/* ================= interacción ================= */
+const ray=new THREE.Raycaster(),ndc=new THREE.Vector2();
+const PICK=[...INST.map(i=>i.root),...coils.map(c=>c.g)];
+function setRay(e){const b=cv.getBoundingClientRect();ndc.set((e.clientX-b.left)/b.width*2-1,-(e.clientY-b.top)/b.height*2+1);camSet();CAM.updateMatrixWorld();ray.setFromCamera(ndc,CAM)}
+function pick(e){setRay(e);const h=ray.intersectObjects(PICK,true);for(const q of h){if(q.object.userData.coil!==undefined&&q.object.parent&&q.object.parent.visible===false)continue;return q}return null}
+function faceUV(inst){const n=V3(0,0,1).applyQuaternion(inst.fr.getWorldQuaternion(new THREE.Quaternion())),p=inst.fr.getWorldPosition(V3());const pl=new THREE.Plane().setFromNormalAndCoplanarPoint(n,p);const o=V3();if(!ray.ray.intersectPlane(pl,o))return null;const l=inst.fr.worldToLocal(o);return {u:(l.x/inst.wM+.5)*inst.W,v:(.5-l.y/inst.hM)*inst.H}}
+function inR(u,v,[x,y,w,h],pad=4){return u>=x-pad&&u<=x+w+pad&&v>=y-pad&&v<=y+h+pad}
+function hitCtl(inst,uv){if(!uv)return null;const{u,v}=uv;
+ if(inst.kind==='dmm'){if(inR(u,v,[22,138,90,24]))return {t:'pwr'};const d=Math.hypot(u-DCX,v-DCY);if(d<=KR+2)return {t:'knob'};if(d<=DR+2)return {t:'ring'};return null}
+ for(const k of['P','f','U','L','R'])if(inR(u,v,GBTN[k]))return {t:'btn',k};
+ if(Math.hypot(u-GKX,v-GKY)<=GKR+16)return {t:'gk'};
+ for(const r of inst.rects)if(u>=r.x0&&u<=r.x1&&v>=r.y0-6&&v<=r.y1+6)return {t:'dig',p:r.p,i:r.i};return null}
+const angOf=(uv,cx,cy)=>{let a=Math.atan2(uv.u-cx,-(uv.v-cy))*180/Math.PI;return a};
+function nearestPos(a){let best=null,bd=1e9;for(const p of DIAL.pos){const d=Math.abs(((a-p.an)%360+540)%360-180);if(d<bd){bd=d;best=p}}return best}
+function setDial(m,id){if(m.dial===id)return;m.dial=id;S.m[m.id].dial=id;setKnob(m);measure()}
+const CUR=[0,1,3,4,5],WT={0:10000,1:1000,3:100,4:10,5:1};
+function genStep(dir){const g=S.gen;if(!g.on)return;const k=g.sel,wt=WT[g.cur[k]];g[k]=Math.round(Math.min(k==='f'?20000:10000,Math.max(k==='f'?1:0,g[k]+dir*wt)));GEN.kn.rotation.z-=dir*Math.PI/12;drawGen(GEN);measure()}
+function genCursor(dir){const g=S.gen;if(!g.on)return;const k=g.sel,ix=CUR.indexOf(g.cur[k]);g.cur[k]=CUR[Math.max(0,Math.min(CUR.length-1,ix+dir))];drawGen(GEN);dirty=true}
+function ctlDown(inst,c,uv){
+ if(inst.kind==='dmm'){const st=S.m[inst.id];
+  if(c.t==='pwr'){st.on=!st.on;inst.on=st.on;measure();return null}
+  if(c.t==='ring'){const p=nearestPos(angOf(uv,DCX,DCY));setDial(inst,p.id);return {inst,t:'dial'}}
+  return {inst,t:'dial'}}
+ const g=S.gen;
+ if(c.t==='btn'){if(c.k==='P'){g.on=!g.on;drawGen(GEN);measure();return null}if(!g.on)return null;
+  if(c.k==='f'||c.k==='U'){g.sel=c.k;drawGen(GEN);dirty=true}else genCursor(c.k==='L'?-1:1);return null}
+ if(c.t==='dig'){if(!g.on)return null;g.sel=c.p;g.cur[c.p]=c.i;drawGen(GEN);dirty=true;return null}
+ if(c.t==='gk')return {inst,t:'gk',a:angOf(uv,GKX,GKY),acc:0};return null}
+function ctlMove(D){const uv=faceUV(D.inst);if(!uv)return;
+ if(D.t==='dial'){const p=nearestPos(angOf(uv,DCX,DCY));setDial(D.inst,p.id);return}
+ if(D.t==='gk'){if(Math.hypot(uv.u-GKX,uv.v-GKY)<8)return;const a=angOf(uv,GKX,GKY);let da=((a-D.a)%360+540)%360-180;D.a=a;D.acc+=da;while(D.acc>=15){D.acc-=15;genStep(1)}while(D.acc<=-15){D.acc+=15;genStep(-1)}}}
+let mode=null,down=null,ctl=null;const PTR=new Map();let pd0=0,pm0=null;
+const pdist=()=>{const p=[...PTR.values()];return Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1])},pmid=()=>{const p=[...PTR.values()];return [(p[0][0]+p[1][0])/2,(p[0][1]+p[1][1])/2]};
+box.addEventListener('contextmenu',e=>e.preventDefault());
+box.addEventListener('pointerdown',e=>{box.setPointerCapture(e.pointerId);PTR.set(e.pointerId,[e.clientX,e.clientY]);
+ if(PTR.size>=2){mode='pinch';touched=true;ctl=null;pd0=pdist();pm0=pmid();return}
+ down={x:e.clientX,y:e.clientY,moved:false};const h=pick(e);
+ if(h&&h.object.userData.inst){const inst=h.object.userData.inst,uv=faceUV(inst),c=hitCtl(inst,uv);if(c){const D=ctlDown(inst,c,uv);ctl=D;mode=D?'ctl':'none';return}}
+ if(h&&h.object.userData.coil!==undefined&&!anim){const i=h.object.userData.coil;if(i!==S.coil){mode='coil';down.coil=i;return}}
+ mode=(e.button===2||e.shiftKey)?'pan':'orbit';touched=true;box.classList.add('dragging')});
+box.addEventListener('pointermove',e=>{
+ if(PTR.has(e.pointerId))PTR.set(e.pointerId,[e.clientX,e.clientY]);
+ if(mode==='pinch'&&PTR.size>=2){const d1=pdist(),m1=pmid();if(pd0>0&&d1>0){const nd=Math.max(.25,Math.min(4,dist*pd0/d1));zAt(m1[0],m1[1],nd/dist);dist=nd}if(pm0)pan(m1[0]-pm0[0],m1[1]-pm0[1]);pd0=d1;pm0=m1;dirty=true;return}
+ if(!down){hover(e);return}
+ const dx=e.clientX-down.x,dy=e.clientY-down.y;if(Math.hypot(dx,dy)>5)down.moved=true;
+ if(mode==='ctl'&&ctl){setRay(e);ctlMove(ctl);return}
+ if(mode==='orbit'){az-=(e.clientX-(down.px??down.x))*.008;el=Math.max(.05,Math.min(1.45,el+(e.clientY-(down.py??down.y))*.006));down.px=e.clientX;down.py=e.clientY;dirty=true}
+ else if(mode==='pan'){pan(e.clientX-(down.px??down.x),e.clientY-(down.py??down.y));down.px=e.clientX;down.py=e.clientY}});
+function endPtr(e){PTR.delete(e.pointerId);if(mode==='pinch'){if(PTR.size<2){mode=null;down=null}else{pd0=pdist();pm0=pmid()}return}
+ if(mode==='coil'&&down&&!down.moved)swapCoil(down.coil);
+ mode=null;down=null;ctl=null;box.classList.remove('dragging')}
+['pointerup','pointercancel'].forEach(k=>box.addEventListener(k,endPtr));
+box.addEventListener('wheel',e=>{e.preventDefault();const h=pick(e);
+ if(h&&h.object.userData.inst){const inst=h.object.userData.inst,uv=faceUV(inst),c=hitCtl(inst,uv);const dir=e.deltaY<0?1:-1;
+  if(c&&inst.kind==='dmm'&&(c.t==='knob'||c.t==='ring')){const L=DIAL.pos,i=L.findIndex(p=>p.id===inst.dial);setDial(inst,L[(i+dir+L.length)%L.length].id);return}
+  if(c&&inst.kind==='gen'&&c.t==='gk'){genStep(dir);return}}
+ const nd=Math.max(.25,Math.min(4,dist*Math.exp(e.deltaY*.0012)));zAt(e.clientX,e.clientY,nd/dist);dist=nd;touched=true;dirty=true},{passive:false});
+box.addEventListener('dblclick',e=>{const h=pick(e);if(!h)return;if(h.object.userData.inst){const inst=h.object.userData.inst;if(hitCtl(inst,faceUV(inst)))return;const p=inst.fr.getWorldPosition(V3()),n=V3(0,0,1).applyQuaternion(inst.fr.getWorldQuaternion(new THREE.Quaternion()));
+  const t=Math.tan(CAM.fov*Math.PI/360),d=Math.max(inst.hM*1.12,inst.wM*1.12/CAM.aspect)/(2*t)+.02;flyTo(p,d,Math.atan2(n.x,n.z),Math.max(.15,Math.asin(Math.min(1,n.y))));return}
+ flyTo(h.point,Math.max(.35,dist*.55))});
+let hovC=-1;
+function hover(e){const h=pick(e);let ptr=false,hc=-1;
+ if(h&&h.object.userData.inst){const inst=h.object.userData.inst;if(hitCtl(inst,faceUV(inst)))ptr=true}
+ else if(h&&h.object.userData.coil!==undefined&&h.object.userData.coil!==S.coil&&!anim){ptr=true;hc=h.object.userData.coil}
+ box.classList.toggle('ptr',ptr);if(hc!==hovC){if(hovC>=0)coils[hovC].wm.emissive.setHex(0);hovC=hc;if(hc>=0)coils[hc].wm.emissive.setHex(0x3a1c00);dirty=true}}
+box.addEventListener('pointerleave',()=>{if(hovC>=0){coils[hovC].wm.emissive.setHex(0);hovC=-1;dirty=true}});
+
+/* ================= cambio de bobina ================= */
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+function path(c,keys){return {c,keys}} // keys: [{p,q,t}] con t acumulado en segundos
+function poseAt(keys,t){let i=0;while(i<keys.length-2&&t>keys[i+1].t)i++;const a=keys[i],b=keys[i+1],u=ease(Math.min(1,Math.max(0,(t-a.t)/(b.t-a.t))));return {p:a.p.clone().lerp(b.p,u),q:a.q.clone().slerp(b.q,u)}}
+function outKeys(c){const pin=inPose(c),pout=outPose(c),tp=trayPose(c),up=V3(XR+.12,.36,C.z+.02),over=tp.p.clone();over.y=.36;
+ return [{...pin,t:0},{...pout,t:.9},{p:up,q:Q_IN.clone().slerp(Q_TRAY,.5),t:1.5},{p:over,q:Q_TRAY.clone(),t:2.4},{...tp,t:2.85}]}
+function inKeys(c){return outKeys(c).reverse().map((k,i,a)=>({p:k.p,q:k.q,t:a[0].t-k.t}))}
+function swapCoil(i){if(anim||i===S.coil)return;const old=coils[S.coil],nw=coils[i];const k1=outKeys(old),k2=inKeys(nw),tO=k1[k1.length-1].t,tG=.45,tI=k2[k2.length-1].t;
+ anim={t0:performance.now(),old,nw,k1,k2,tO,tG,tI,cur:S.coil};$('#tagHov').hidden=true;if(hovC>=0){coils[hovC].wm.emissive.setHex(0);hovC=-1}box.classList.remove('ptr')}
+function stepAnim(now){const A=anim,t=(now-A.t0)/1000;
+ if(t<A.tO){const P=poseAt(A.k1,t);setPose(A.old,P);A.old.dash.visible=Math.abs(V3(0,1,0).applyQuaternion(P.q).x)>.99;sockSrc=sockWorld(A.old);A.cur=A.old.i}
+ else if(t<A.tO+A.tG){setPose(A.old,trayPose(A.old));A.old.dash.visible=false;const u=ease((t-A.tO)/A.tG),a=sockWorld(A.old),b=sockWorld(A.nw);sockSrc=[a[0].lerp(b[0],u),a[1].lerp(b[1],u)];A.cur=-1}
+ else{const tt=Math.min(A.tI,t-A.tO-A.tG),P=poseAt(A.k2,tt);setPose(A.nw,P);A.nw.dash.visible=Math.abs(V3(0,1,0).applyQuaternion(P.q).x)>.99;sockSrc=sockWorld(A.nw);A.cur=A.nw.i;
+  if(tt>=A.tI){S.coil=A.nw.i;anim=null;setPose(A.nw,inPose(A.nw));A.nw.dash.visible=true}}
+ sockFrom=A.cur<0?A.nw.i:A.cur;coilIn=true;secCable();
+ if(anim&&anim.cur<0){/* sin bobina conectada: el voltímetro no ve tensión */}
+ dirty=true}
+
+/* ================= etiquetas flotantes ================= */
+function place(el,w){const v=w.clone().project(CAM);if(v.z>1){el.hidden=true;return}el.style.left=((v.x+1)/2*box.clientWidth)+'px';el.style.top=((1-v.y)/2*box.clientHeight)+'px'}
+function tags(){const ti=$('#tagIn');if(anim){ti.hidden=true}else{const c=coils[S.coil];ti.hidden=false;ti.textContent=`Dentro: ${c.spec.N} esp., ø ${c.spec.d} mm`;place(ti,V3(C.x,C.y+.085,C.z))}
+ const th=$('#tagHov');if(hovC>=0&&!anim){const c=coils[hovC];th.hidden=false;th.textContent=`${c.spec.N} esp., ø ${c.spec.d} mm · pulsa para meterla`;place(th,c.g.localToWorld(V3(0,c.top+.03,0)))}else th.hidden=true}
+
+/* ================= bucle ================= */
+let dirty=true;
+function loop(now){requestAnimationFrame(loop);
+ if(fly){const u=ease(Math.min(1,(now-fly.t0)/fly.dur));az=fly.a.az+(((fly.b.az-fly.a.az)%(2*Math.PI)+3*Math.PI)%(2*Math.PI)-Math.PI)*u;el=fly.a.el+(fly.b.el-fly.a.el)*u;dist=fly.a.dist+(fly.b.dist-fly.a.dist)*u;TG.copy(fly.a.tg).lerp(fly.b.tg,u);if(u>=1)fly=null;dirty=true}
+ if(anim){stepAnim(now);if(now-lastMeas>250)measure()}
+ else if((AMM.on||VOLT.on)&&now-lastMeas>650)measure();
+ if(dirty){camSet();R3.render(SC,CAM);tags();dirty=false}}
+
+/* ================= interfaz ================= */
+function setPart(p){part=p;S=ST[p];document.body.dataset.part=p;document.querySelectorAll('#ptabs .tab').forEach(q=>q.classList.toggle('on',+q.dataset.p===p));anim=null;applyState()}
+document.querySelectorAll('#ptabs .tab').forEach(t=>t.onclick=()=>setPart(+t.dataset.p));
+$('#gbtn').onclick=()=>{const h=document.body.classList.toggle('noside');$('#gbtn').textContent=h?'Mostrar guía':'Ocultar guía'};
+$('#vwBtn').onclick=()=>{const v=fitV0();flyTo(v.tg,v.dist,v.az,v.el);touched=false};
+$('#fuseBtn').onclick=()=>{S.m[0].fuse=true;AMM.fuse=true;$('#fuseBtn').hidden=true;measure()};
+$('#rstBtn').onclick=()=>{$('#dlg').hidden=false};$('#dlgNo').onclick=()=>{$('#dlg').hidden=true};
+$('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg')$('#dlg').hidden=true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#dlg').hidden=true});
+$('#dlgYes').onclick=()=>{$('#dlg').hidden=true;ST[part]=initState(part);S=ST[part];anim=null;applyState()};
+try{document.querySelectorAll('.eq[data-tex]').forEach(e=>katex.render(e.dataset.tex,e,{displayMode:true,throwOnError:false}))}catch(e){}
+staticCables();size();camReset();setPart(1);requestAnimationFrame(loop);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{drawGen(GEN);measure(true);coils.forEach(c=>{const m=c.g.children.find(q=>Array.isArray(q.material));if(m){m.material[1].map=labelTex(c.spec);m.material[1].needsUpdate=true}});dirty=true});
+window.__ind={DIAL,scr:(inst,u,v)=>{const[lx,ly]=inst.L(u,v),w=inst.fr.localToWorld(V3(lx,ly,0)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},coilScr:i=>{const c=coils[i],w=c.g.localToWorld(V3(.012,c.top,.012)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},S:()=>S,solve,coils,COILS,AMM,VOLT,GEN,swapCoil,setPart,genStep,setDial,measure,camState:()=>({az,el,dist,TG}),flyTo,coupling};
+})();
+</script>
+</body></html>
