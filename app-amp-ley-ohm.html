@@ -265,7 +265,7 @@ function drawTrayItems(){[...L_tray.querySelectorAll('[data-tray]')].forEach(e=>
 /* ---------- [ESQUEMA] esquema del montaje en la bandeja ---------- */
 // Muestra el circuito de la pestaña activa con el voltímetro (naranja, como el VICTOR) y el amperímetro (azul)
 // donde están conectados. En «Móntalo tú mismo» se elige ver el de la parte I o el de la parte II.
-let SCHK='serie',FSUB={1:'asoc',2:'tot'},schB=null,schPos={},flashT=null;const L_sch=mk('g',null,L_tray);
+const SCHREF={w:292,h:212};let SCHK='serie',FSUB={1:'asoc',2:'tot'},schB=null,schPos={},flashT=null;const L_sch=mk('g',null,L_tray);
 function flashR(key){if(!schB||!schPos[key])return;const old=schB.querySelector('.rfl');if(old)old.remove();clearTimeout(flashT);const P0=schPos[key],w=150,x=P0.side>0?P0.x-6:P0.x-w+6,y=P0.y+14;
  const g=mk('g',{class:'rfl','pointer-events':'none',style:'transition:opacity .5s'},schB);mk('rect',{x,y,width:w,height:30,rx:6,fill:'#17324d'},g);
  txt(g,x+w/2,y+20,`${{R1:'R₁',R2:'R₂',R3:'R₃',R4:'R₄'}[key]} ≈ ${RES[key].nom} (nominal)`,{'text-anchor':'middle','font-size':14,'font-weight':700,fill:'#fff'});
@@ -300,10 +300,10 @@ function drawSchem(){L_sch.innerHTML='';const g=L_sch,X=SCH.x,Y=SCH.y;
   ln([[L,T],[Rx,T],[Rx,35]]);ln([[Rx,95],[Rx,125]]);res(Rx,35,95,'R₁','R1',-1);res(Rx,125,185,'R₂','R2',-1);
   const VX=338,[na,nb]={asoc:[27,197],R1:[27,110],R2:[110,197]}[sub],vy=(na+nb)/2;
   ln([[Rx,na],[VX,na],[VX,vy-17]]);ln([[VX,vy+17],[VX,nb],[Rx,nb]]);met(VX,vy,'V');dot(Rx,na);dot(Rx,nb);
- }else{const L=80,T=20,Bt=205,X3=248,X4=318,VL=150;mk('rect',{x:L,y:T-20,width:1,height:Bt-T+24,opacity:0},b); // marco fijo: mismo tamaño con el amperímetro en cualquier sitio
+ }else{const L=74,T=20,Bt=205,X3=204,X4=264,VL=124;mk('rect',{x:L,y:T-20,width:1,height:Bt-T+24,opacity:0},b); // marco fijo: mismo tamaño con el amperímetro en cualquier sitio
   ln([[L,T],[L,118]]);ln([[L,132],[L,Bt]]);src(L,118);
   ln([[L,62],[VL,62],[VL,95]]);ln([[VL,129],[VL,168],[L,168]]);met(VL,112,'V');dot(L,62);dot(L,168);
-  if(sub==='tot'){ln([[L,T],[180,T]]);met(197,T,'A');ln([[214,T],[X4,T]])}else ln([[L,T],[X4,T]]);dot(X3,T);
+  if(sub==='tot'){ln([[L,T],[151,T]]);met(168,T,'A');ln([[185,T],[X4,T]])}else ln([[L,T],[X4,T]]);dot(X3,T);
   for(const [x,key,lab,sd] of [[X3,'R3','R₃',-1],[X4,'R4','R₄',1]]){
    if(sub===key){ln([[x,T],[x,38]]);met(x,55,'A');ln([[x,72],[x,95]])}else ln([[x,T],[x,95]]);
    res(x,95,155,lab,key,sd);ln([[x,155],[x,Bt]])}
@@ -311,7 +311,7 @@ function drawSchem(){L_sch.innerHTML='';const g=L_sch,X=SCH.x,Y=SCH.y;
  }
  // [ENCAJE] el dibujo se escala para ocupar todo el hueco libre de la ventana del esquema (sin cambiar la ventana)
  let bb=null;try{bb=b.getBBox()}catch(e){}if(!bb||!bb.width)bb={x:0,y:0,width:440,height:222};
- const top_=state.part?60:92,ax=X+10,ay=Y+top_,aw=SCH.w-20,ah=SCH.h-top_-10,sc=Math.min(aw/bb.width,ah/bb.height,1.9);
+ const top_=state.part?60:92,ax=X+10,ay=Y+top_,aw=SCH.w-20,ah=SCH.h-top_-10,sc=Math.min(aw/SCHREF.w,ah/SCHREF.h,1.9); // misma escala para serie y paralelo
  b.setAttribute('transform',`translate(${ax+(aw-bb.width*sc)/2} ${ay+(ah-bb.height*sc)/2}) scale(${sc}) translate(${-bb.x} ${-bb.y})`)}
 
 /* ---------- polímetros: dibujo ---------- */
