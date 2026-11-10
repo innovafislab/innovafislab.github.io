@@ -107,17 +107,23 @@ const gauss=()=>{let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();r
 const RES={R1:{nom:'100 Ω',v:100*(1+(rnd()-.5)*0.06)},R2:{nom:'220 Ω',v:220*(1+(rnd()-.5)*0.06)},R3:{nom:'150 Ω',v:150*(1+(rnd()-.5)*0.06)},R4:{nom:'220 Ω',v:220*(1+(rnd()-.5)*0.06)}};
 // [PLACA] Placa PHYWE (aquí solo 3 × 2 islas, suficiente para los dos montajes): islas de 3 × 3 huecos en las esquinas de las casillas. Las líneas negras unen los 9 huecos de cada isla,
 // así que una isla es un único punto eléctrico; entre islas vecinas hay una casilla de separación (paso uniforme P).
-const P=94,BX=615,BY=12,MG=40,NC=6,NR=9,KB=P/100,CELL=P; // [VERTICAL] 2 columnas × 3 filas de islas
+const P=98.4,BY=12,MG=40,NC=6,NR=9,KB=P/100,CELL=P;let BX=615; // [VERTICAL] 2 columnas × 3 filas de islas; borde inferior a la altura del de los polímetros
 const BW=2*MG+(NC-1)*P,BH=2*MG+(NR-1)*P;
 const holes={};const hx=c=>BX+MG+c*P,hy=r=>BY+MG+r*P;
 for(let c=0;c<NC;c++)for(let r=0;r<NR;r++)holes[`p${c}_${r}`]={x:hx(c),y:hy(r),c,r,isl:`I${Math.floor(c/3)}${Math.floor(r/3)}`};
 // [ESPACIO] fuente arriba a la izquierda, polímetros debajo, placa a la derecha y bandeja de piezas bajo la placa
-const SRC={x:0,y:0,w:520,h:280},SRCX=12,SRCY=12,SS=1.125;
-const TRAY={x:BX+BW+14,y:12,w:1488-(BX+BW+14),h:876};
+const SRC={x:0,y:0,w:520,h:280},SRCY=12,SS=1.125;let SRCX=12;
+const TRAY={x:BX+BW+14,y:12,w:1488-(BX+BW+14),h:867.5};
+// [REPARTO] La escena mide 900 de alto y su ancho se adapta a la ventana (mínimo 1500). El ancho que sobra (p. ej. al ocultar la guía)
+// se reparte como separación entre la fuente y los polímetros, la placa y la bandeja, en lugar de dejar franjas vacías a los lados.
+const LAY={W:1500,m1x:12,m2x:309.5};
+function computeLayout(W){const e=W-1500,mg=12+e*.10,gm=10+e*.12,gcb=18+e*.26,gbt=14+e*.20,mgR=12+e*.10;
+ const colW=Math.max(SRC.w*SS,2*MW*MS+gm),bx=mg+colW+gcb,tx=bx+BW+gbt;
+ return {W,srcx:mg,m1x:mg,m2x:mg+MW*MS+gm,bx,tx,tw:W-mgR-tx}}
 const state={part:0,bricks:[],cables:[],meters:[],src:{on:false,v:0,ilim:1.0,cc:false},nid:1,warn:''};
 function initState(){
  state.bricks=[];state.cables=[];state.src={on:false,v:0,ilim:1.0,cc:false};
- state.meters=[{id:'m1',kind:'victor',x:12,y:339,on:false,dial:'DCV20',fuse:true},{id:'m2',kind:'phywe',x:309.5,y:339,on:false,dial:'DCV20',fuse:true}];
+ state.meters=[{id:'m1',kind:'victor',x:LAY.m1x,y:339,on:false,dial:'DCV20',fuse:true},{id:'m2',kind:'phywe',x:LAY.m2x,y:339,on:false,dial:'DCV20',fuse:true}];
 }
 /* ---------- polímetros ---------- */
 // [ESCALAS] Selector agrupado en sectores con su símbolo (V⎓, V~, mA~, A⎓, mA⎓, Ω): así cada número es corto y se ve a qué magnitud y unidad pertenece.
@@ -161,21 +167,23 @@ const L_bg=mk('g',null,VP),L_board=mk('g',null,VP),L_src=mk('g',null,VP),L_tray=
 mk('rect',{x:-2000,y:-2000,width:5600,height:4900,fill:'url(#gTable)'},L_bg);
 
 /* ---------- placa ---------- */
-(function drawBoard(){const g=L_board;
+function drawBoard(){const g=L_board;g.innerHTML='';
  mk('rect',{x:BX,y:BY,width:BW,height:BH,rx:10,fill:'url(#gBoard)',stroke:'#c9ccc6','stroke-width':2,filter:'url(#fSh)'},g);
  txt(g,BX+BW-30,BY+BH-13,'PHYWE',{'text-anchor':'end','font-size':17,'font-weight':800,fill:'#2b2f33','letter-spacing':'.06em'});
  txt(g,BX+30,BY+BH-13,'06033.00',{'font-size':12,fill:'#5b6168'});
  for(let my=0;my<NR/3;my++)for(let mx=0;mx<NC/3;mx++){const x0=hx(3*mx),y0=hy(3*my);
   for(let k=0;k<3;k++){mk('path',{d:`M${x0} ${y0+k*P} H${x0+2*P}`,stroke:'#22262a','stroke-width':2.4},g);mk('path',{d:`M${x0+k*P} ${y0} V${y0+2*P}`,stroke:'#22262a','stroke-width':2.4},g)}}
  for(const id in holes){const h=holes[id];mk('circle',{cx:h.x,cy:h.y,r:9.5,fill:'#f4f5f2'},g);mk('circle',{cx:h.x,cy:h.y,r:7.2,fill:'url(#gHole)'},g)}
-})();
+}
+drawBoard();
 
 /* ---------- fuente ---------- */
 const SRCJL={P:{x:352,y:236,col:'R',lab:'+'},N:{x:402,y:236,col:'B',lab:'−'},A0:{x:60,y:236,col:'K',lab:'0'},A6:{x:112,y:236,col:'K',lab:'6V~'},A12:{x:164,y:236,col:'K',lab:'12V~'}};
 const SG=(x,y)=>({x:SRCX+SS*x,y:SRCY+SS*y});
 const SRCJ={};for(const k in SRCJL)SRCJ[k]=Object.assign({},SRCJL[k],SG(SRCJL[k].x,SRCJL[k].y));
 const KV={x:300,y:132,r:30},KA={x:432,y:132,r:30},KVg=SG(KV.x,KV.y),KAg=SG(KA.x,KA.y);
-L_src.setAttribute('transform',`translate(${SRCX} ${SRCY}) scale(${SS})`);
+function placeSrc(){for(const k in SRCJL)Object.assign(SRCJ[k],SG(SRCJL[k].x,SRCJL[k].y));Object.assign(KVg,SG(KV.x,KV.y));Object.assign(KAg,SG(KA.x,KA.y));L_src.setAttribute('transform',`translate(${SRCX} ${SRCY}) scale(${SS})`)}
+placeSrc();
 let srcLed,srcCC,knobV,knobA,pwrBtn;
 function knobAng(v,max){return -135+270*v/max}
 (function drawSrc(){const g=L_src,x=SRC.x,y=SRC.y;
@@ -210,10 +218,15 @@ function drawSrcState(){const s=state.src;srcLed.setAttribute('fill',s.on?'#35e0
 // [BANDEJA] piezas a la izquierda (resistencias y puente arriba, cables abajo) y el esquema del montaje a la derecha
 const SCH={x:TRAY.x+8,y:TRAY.y+8,w:TRAY.w-16,h:300};
 const TS=0.86,TRAYPOS={R1:{x:TRAY.x+86,y:TRAY.y+400},R2:{x:TRAY.x+TRAY.w-86,y:TRAY.y+400},R3:{x:TRAY.x+86,y:TRAY.y+488},R4:{x:TRAY.x+TRAY.w-86,y:TRAY.y+488},W:{x:TRAY.x+86,y:TRAY.y+580}};
-(function drawTray(){const g=L_tray;
+const L_trayBg=mk('g',null,L_tray);
+function drawTray(){const g=L_trayBg;g.innerHTML='';
  mk('rect',{x:TRAY.x,y:TRAY.y,width:TRAY.w,height:TRAY.h,rx:10,fill:'#f2ede4',stroke:'#cdbfa8'},g);
  txt(g,TRAY.x+14,TRAY.y+346,'Resistencias y puentes',{'font-size':15,'font-weight':700,fill:'#5a4a32'});
-})();
+}
+drawTray();
+function placeTray(){SCH.x=TRAY.x+8;SCH.y=TRAY.y+8;SCH.w=TRAY.w-16;
+ Object.assign(TRAYPOS.R1,{x:TRAY.x+86});Object.assign(TRAYPOS.R2,{x:TRAY.x+TRAY.w-86});Object.assign(TRAYPOS.R3,{x:TRAY.x+86});Object.assign(TRAYPOS.R4,{x:TRAY.x+TRAY.w-86});Object.assign(TRAYPOS.W,{x:TRAY.x+86});
+ COILPOS.R.x=TRAY.x+66;COILPOS.B.x=TRAY.x+TRAY.w/2;COILPOS.K.x=TRAY.x+TRAY.w-66}
 // bobinas de cable, en la misma bandeja (abajo a la derecha)
 const COILPOS={R:{x:TRAY.x+66,y:TRAY.y+700},B:{x:TRAY.x+TRAY.w/2,y:TRAY.y+700},K:{x:TRAY.x+TRAY.w-66,y:TRAY.y+700}};
 
@@ -546,6 +559,14 @@ setInterval(()=>updLcd(false),400);
 
 /* ---------- vista: zoom y desplazamiento ---------- */
 const VB0=[0,0,1500,900];let vb=VB0.slice();
+function relayout(W){const L=computeLayout(W),dx=L.bx-BX;
+ for(const m of state.meters){const def=m.id==='m1'?LAY.m1x:LAY.m2x,ndef=m.id==='m1'?L.m1x:L.m2x;m.x+=ndef-def}
+ for(const c of state.cables){for(const e of c.ends)if(!e.at)e.x+=dx;if(c.h)for(const q of c.h)q.x+=dx}
+ Object.assign(LAY,{W,m1x:L.m1x,m2x:L.m2x});BX=L.bx;SRCX=L.srcx;TRAY.x=L.tx;TRAY.w=L.tw;
+ for(const id in holes)holes[id].x=hx(holes[id].c);placeSrc();placeTray();FB.x=BX+12;drawBoard();drawTray();
+ VB0[2]=W;vb=VB0.slice();setVB();render();drawFlowBtn()}
+function fitScene(){const r=SV.getBoundingClientRect();if(!r.width||!r.height)return;const W=Math.round(Math.max(1500,Math.min(2300,900*r.width/r.height)));if(Math.abs(W-LAY.W)>6)relayout(W)}
+let fitT=null;window.addEventListener('resize',()=>{clearTimeout(fitT);fitT=setTimeout(fitScene,120)});
 function setVB(){SV.setAttribute('viewBox',vb.join(' '))}
 function toSvg(e){const p=SV.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(SV.getScreenCTM().inverse())}
 function zoomAt(cx,cy,f){const p=toSvg({clientX:cx,clientY:cy});const nw=Math.min(VB0[2]*1.3,Math.max(300,vb[2]/f)),k=nw/vb[2];vb=[p.x-(p.x-vb[0])*k,p.y-(p.y-vb[1])*k,nw,vb[3]*k];setVB()}
@@ -691,7 +712,7 @@ function setPart(np){if(np===state.part)return;if(state.part===0)freeSave=clone(
  if(np===0){state.bricks=clone(freeSave.bricks);state.cables=clone(freeSave.cables)}else{applyPreset();presetDials()}
  render();updSub()}
 document.querySelectorAll('#ptabs .tab').forEach(t=>t.onclick=()=>setPart(+t.dataset.p));
-$('#gbtn').onclick=()=>{const h=document.body.classList.toggle('noside');$('#gbtn').textContent=h?'Mostrar guía':'Ocultar guía'};
+$('#gbtn').onclick=()=>{const h=document.body.classList.toggle('noside');$('#gbtn').textContent=h?'Mostrar guía':'Ocultar guía';requestAnimationFrame(fitScene)};
 // [CONFIRMAR] volver a empezar borra el montaje: se pide confirmación
 $('#dlgNo').onclick=()=>{$('#dlg').hidden=true};
 $('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg')$('#dlg').hidden=true});
@@ -699,8 +720,8 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#dlg').hidden=tru
 $('#dlgYes').onclick=()=>{$('#dlg').hidden=true;initState();SUB[1]='asoc';SUB[2]='tot';if(state.part){applyPreset();presetDials();updSub()}vb=VB0.slice();setVB();$('#fuseBtn').hidden=true;render()};
 $('#fuseBtn').onclick=()=>{state.meters.forEach(m=>m.fuse=true);$('#fuseBtn').hidden=true;solveAll();updLcd(true)};
 try{document.querySelectorAll('.eq[data-tex]').forEach(e=>katex.render(e.dataset.tex,e,{displayMode:true,throwOnError:false}))}catch(e){}
-initState();render();
-window.__ohm={setFlow,flowSolve,setPart,SUB,applyPreset,zoneAt,brickEnds,state,holes,render,solveAll,reading,RES,slotHoles,DIALS,dialC,KVg,KAg,SRCJ,jackPos,TRAYPOS,COILPOS};
+initState();render();requestAnimationFrame(fitScene);
+window.__ohm={LAY,fitScene,setFlow,flowSolve,setPart,SUB,applyPreset,zoneAt,brickEnds,state,holes,render,solveAll,reading,RES,slotHoles,DIALS,dialC,KVg,KAg,SRCJ,jackPos,TRAYPOS,COILPOS};
 })();
 </script>
 </body></html>
