@@ -87,7 +87,7 @@ svg text{font-family:Inter,system-ui,sans-serif}
 <p>Tensiones e intensidades se leen en los polímetros digitales; el error de cada lectura es una unidad de la última cifra del rango que uses. Elige el rango más pequeño que no se desborde.</p>
 <h2>Cómo se monta</h2>
 <p>En la placa, los 9 huecos de cada isla están unidos por las líneas negras: todo lo que se enchufa en una isla queda conectado. Por eso cada resistencia debe ir de una isla a la vecina; si sus dos clavijas quedan en la misma isla, está cortocircuitada. Arrastra cada resistencia por el centro para llevarla a la placa. Para girarla, acerca el puntero a una de sus clavijas y aparecerá una flecha de giro: un clic la gira 90° alrededor de la otra clavija (en sentido horario desde la clavija derecha y antihorario desde la izquierda), y si pinchas y arrastras la giras a mano hasta el hueco que quieras. En cuanto sacas una pieza o una clavija de cable, el circuito queda abierto y los polímetros lo muestran. Los puentes unen dos islas sin resistencia. Arrastra un cable desde su bobina y lleva cada clavija a un hueco, a un borne de la fuente o a un borne del polímetro. Gira el selector del polímetro arrastrándolo alrededor de su eje (o con la rueda del ratón) y enciéndelo con su botón POWER. Las posiciones del selector están agrupadas en sectores: V⎓ y A⎓ son tensión e intensidad continuas, V~ y A~ las alternas, y Ω la resistencia; los números del sector mA⎓ son miliamperios (200 es el rango de 200 mA) y el de A⎓ es el de 20 A. Los mandos de la fuente se giran igual. En los mandos y en los selectores también puedes pinchar directamente en un número o una marca de la escala para llevarlos a ese valor. Si un cable tapa algo, pincha en cualquier tramo y arrástralo para apartarlo; el cable es rígido y admite como mucho dos puntos de agarre; si lo dejas casi recto se endereza, y con doble clic vuelve a colgar suelto. Para retirar una pieza o un cable, devuélvelo a su bandeja.</p>
-<p>Con «Ver corriente» se superpone el recorrido de la corriente por todo el circuito: los puntos avanzan en el sentido convencional, de + a −, y más deprisa cuanto mayor es la intensidad. Puedes seguir ajustando la fuente con la vista activa.</p>
+<p>Con el botón «Ver corriente» se superpone el recorrido de la corriente por todo el circuito: los puntos avanzan en el sentido convencional, de + a −, y más deprisa cuanto mayor es la intensidad. Puedes seguir ajustando la fuente con la vista activa.</p>
 <p class="note">Gemelo de la práctica: resistencias con su tolerancia real, fuente con limitación de corriente y polímetros con fusible · CC BY-NC-SA 4.0</p>
 </aside></main>
 <div class="dlg" id="dlg" hidden><div class="dlgc" role="dialog" aria-modal="true"><p>¿Quieres volver a la configuración inicial? Se perderá todo el montaje.</p><div class="dlgb"><button class="hbtn" id="dlgNo" type="button">Cancelar</button><button class="hbtn pri" id="dlgYes" type="button">Sí, empezar de nuevo</button></div></div></div>
@@ -519,13 +519,13 @@ function flowTick(t){if(!flowOn){flowRaf=0;flowT=0;return}const dt=flowT?Math.mi
  flowRaf=requestAnimationFrame(flowTick)}
 // [BOTÓN] «Corriente» va en la esquina superior izquierda de la placa (en la primera línea, que está libre)
 const L_ui=mk('g',null,VP);VP.insertBefore(L_msg,L_ui); // los mensajes, por encima del velo de la vista de corriente
-const FB={x:TRAY.x+12,y:TRAY.y+402,w:124,h:32}; // [AVISOS] botón «Corriente» y mensajes al pie de la bandeja de la izquierda
+const FB={x:TRAY.x+12,y:TRAY.y+398,w:158,h:36}; // [AVISOS] botón «Corriente» y mensajes al pie de la bandeja de la izquierda
 function drawFlowBtn(){L_ui.innerHTML='';const g=mk('g',{class:'btnz','data-act':'flow'},L_ui),on=flowOn;
- mk('rect',{x:FB.x,y:FB.y,width:FB.w,height:FB.h,rx:16,fill:on?'#0f2236':'#ffffff',stroke:on?'#0f2236':'#cfd6de',filter:'url(#fSh2)'},g);
- const c=on?'#eaf6ff':'#17324d',cx=FB.x+14,cy=FB.y+FB.h/2;
- [[0,2,.35],[6,2.3,.65],[12.5,2.6,1]].forEach(([dx,r,o])=>mk('circle',{cx:cx+dx,cy,r,fill:c,opacity:o},g));
+ mk('rect',{x:FB.x,y:FB.y,width:FB.w,height:FB.h,rx:18,fill:on?'#f5821f':'#fff4e8',stroke:'#f5821f','stroke-width':1.8,filter:'url(#fSh2)'},g);
+ const c=on?'#ffffff':'#7a3d06',cx=FB.x+15,cy=FB.y+FB.h/2;
+ [[0,2,.35],[6,2.3,.65],[12.5,2.6,1]].forEach(([dx,r,o])=>mk('circle',{cx:cx+dx,cy,r,fill:on?'#ffffff':'#f5821f',opacity:o},g));
  mk('path',{d:`M${cx+16} ${cy-3.5} L${cx+18.5} ${cy} L${cx+16} ${cy+3.5}`,stroke:c,'stroke-width':1.6,fill:'none','stroke-linecap':'round','stroke-linejoin':'round'},g);
- txt(g,cx+26,cy+5,'Corriente',{'font-size':14,'font-weight':600,fill:c});
+ txt(g,cx+26,cy+5.5,'Ver corriente',{'font-size':15,'font-weight':700,fill:c});
  // ↺ volver a la configuración inicial, en la esquina superior derecha de la placa
  const rg=mk('g',{class:'btnz','data-act':'reset'},L_ui),rx=BX+BW-28,ry=BY+24;mk('circle',{cx:rx,cy:ry,r:16,fill:'#fff',stroke:'#cfd6de',filter:'url(#fSh2)'},rg);
  mk('path',{d:`M${rx+5.6} ${ry-5} A7.5 7.5 0 1 0 ${rx+7.4} ${ry+1.5}`,stroke:'#17324d','stroke-width':1.9,fill:'none','stroke-linecap':'round'},rg);
