@@ -64,7 +64,7 @@ svg text{font-family:Inter,system-ui,sans-serif}
 <main><section class="left"><div class="card">
 <svg id="bench" viewBox="0 0 1500 900" preserveAspectRatio="xMidYMid meet" aria-label="Mesa de laboratorio con la placa de montaje, la fuente, las resistencias, los cables y dos polímetros"></svg>
 <div class="ctls"><div></div><div class="ctl"><button class="fbtn warnb" id="fuseBtn" type="button" hidden>Cambiar fusible</button>
-<button class="vbtn" id="viewBtn" type="button" title="Volver a la configuración inicial" aria-label="Volver a la configuración inicial">⟲</button></div></div>
+</div></div>
 </div></section>
 <aside class="side card" id="side">
 <h2>Qué se observa</h2>
@@ -113,18 +113,20 @@ const holes={};const hx=c=>BX+MG+c*P,hy=r=>BY+MG+r*P;
 for(let c=0;c<NC;c++)for(let r=0;r<NR;r++)holes[`p${c}_${r}`]={x:hx(c),y:hy(r),c,r,isl:`I${Math.floor(c/3)}${Math.floor(r/3)}`};
 // [ESPACIO] fuente arriba a la izquierda, polímetros debajo, placa a la derecha y bandeja de piezas bajo la placa
 const SRC={x:0,y:0,w:520,h:280},SS=1.125,MY0=12,SRCY0=12+470*1.15+12;let SRCX=12,SRCY=SRCY0; // [ORDEN] polímetros arriba, fuente debajo (los dos se pueden arrastrar)
-const TRAY={x:BX+BW+14,y:12,w:1488-(BX+BW+14),h:867.5};
+const TRAY={x:12,y:12,w:250,h:540.5};
 // [REPARTO] La escena mide 900 de alto y su ancho se adapta a la ventana (mínimo 1500). El ancho que sobra (p. ej. al ocultar la guía)
 // se reparte como separación entre la fuente y los polímetros, la placa y la bandeja, en lugar de dejar franjas vacías a los lados.
-const LAY={W:1500,m1x:12,m2x:309.5,srcx:12};
-function computeLayout(W){const e=W-1500,mg=12+e*.10,gm=10+e*.12,gcb=18+e*.26,gbt=14+e*.20,mgR=12+e*.10;
- const colW=Math.max(SRC.w*SS,2*MW*MS+gm),bx=mg+colW+gcb,tx=bx+BW+gbt;
- return {W,srcx:mg,m1x:mg,m2x:mg+MW*MS+gm,bx,tx,tw:W-mgR-tx}}
+// [DISTRIBUCIÓN] Izquierda: bandeja de piezas y amperímetro (PHYWE) arriba, fuente debajo. Centro: placa. Derecha: esquema arriba
+// y voltímetro (VICTOR) debajo. Así los cables se cruzan lo menos posible.
+const LAY={W:1500,m1x:1201,m2x:274,srcx:12};
+function computeLayout(W){const e=W-1500,mg=12+e*.08,trw=250+e*.10,gtm=12+e*.08,gcb=18+e*.26,gbt=14+e*.20,mW=MW*MS;
+ const colW=Math.max(SRC.w*SS,trw+gtm+mW),bx=mg+colW+gcb,rx=bx+BW+gbt,rw=Math.max(mW,W-mg-rx);
+ return {W,srcx:mg,trx:mg,trw,m2x:mg+trw+gtm,m1x:rx+(rw-mW)/2,bx,rx,rw}}
 const state={part:0,bricks:[],cables:[],meters:[],src:{on:false,v:0,ilim:1.0,cc:false},nid:1,warn:''};
 function initState(){
  state.bricks=[];state.cables=[];state.src={on:false,v:0,ilim:1.0,cc:false};
  SRCX=LAY.srcx;SRCY=SRCY0;if(typeof placeSrc==='function'&&SRCJ.P)placeSrc();
- state.meters=[{id:'m1',kind:'victor',x:LAY.m1x,y:MY0,on:false,dial:'DCV20',fuse:true},{id:'m2',kind:'phywe',x:LAY.m2x,y:MY0,on:false,dial:'DCV20',fuse:true}];
+ state.meters=[{id:'m1',kind:'victor',x:LAY.m1x,y:339,on:false,dial:'DCV20',fuse:true},{id:'m2',kind:'phywe',x:LAY.m2x,y:MY0,on:false,dial:'DCV20',fuse:true}];
 }
 /* ---------- polímetros ---------- */
 // [ESCALAS] Selector agrupado en sectores con su símbolo (V⎓, V~, mA~, A⎓, mA⎓, Ω): así cada número es corto y se ve a qué magnitud y unidad pertenece.
@@ -217,19 +219,18 @@ function drawSrcState(){const s=state.src;srcLed.setAttribute('fill',s.on?'#35e0
 
 /* ---------- bandejas ---------- */
 // [BANDEJA] piezas a la izquierda (resistencias y puente arriba, cables abajo) y el esquema del montaje a la derecha
-const SCH={x:TRAY.x+8,y:TRAY.y+8,w:TRAY.w-16,h:300};
-const TS=0.86,TRAYPOS={R1:{x:TRAY.x+86,y:TRAY.y+400},R2:{x:TRAY.x+TRAY.w-86,y:TRAY.y+400},R3:{x:TRAY.x+86,y:TRAY.y+488},R4:{x:TRAY.x+TRAY.w-86,y:TRAY.y+488},W:{x:TRAY.x+86,y:TRAY.y+580}};
+const SCH={x:1201,y:12,w:287.5,h:315};
+const TS=0.82,TRAYPOS={R1:{x:TRAY.x+62,y:TRAY.y+86},R2:{x:TRAY.x+TRAY.w-62,y:TRAY.y+86},R3:{x:TRAY.x+62,y:TRAY.y+176},R4:{x:TRAY.x+TRAY.w-62,y:TRAY.y+176},W:{x:TRAY.x+62,y:TRAY.y+268}};
 const L_trayBg=mk('g',null,L_tray);
 function drawTray(){const g=L_trayBg;g.innerHTML='';
  mk('rect',{x:TRAY.x,y:TRAY.y,width:TRAY.w,height:TRAY.h,rx:10,fill:'#f2ede4',stroke:'#cdbfa8'},g);
- txt(g,TRAY.x+14,TRAY.y+346,'Resistencias y puentes',{'font-size':15,'font-weight':700,fill:'#5a4a32'});
+ txt(g,TRAY.x+14,TRAY.y+28,'Resistencias y puentes',{'font-size':15,'font-weight':700,fill:'#5a4a32'});
 }
 drawTray();
-function placeTray(){SCH.x=TRAY.x+8;SCH.y=TRAY.y+8;SCH.w=TRAY.w-16;
- Object.assign(TRAYPOS.R1,{x:TRAY.x+86});Object.assign(TRAYPOS.R2,{x:TRAY.x+TRAY.w-86});Object.assign(TRAYPOS.R3,{x:TRAY.x+86});Object.assign(TRAYPOS.R4,{x:TRAY.x+TRAY.w-86});Object.assign(TRAYPOS.W,{x:TRAY.x+86});
- COILPOS.R.x=TRAY.x+66;COILPOS.B.x=TRAY.x+TRAY.w/2;COILPOS.K.x=TRAY.x+TRAY.w-66}
+function placeTray(){TRAYPOS.R1.x=TRAY.x+62;TRAYPOS.R2.x=TRAY.x+TRAY.w-62;TRAYPOS.R3.x=TRAY.x+62;TRAYPOS.R4.x=TRAY.x+TRAY.w-62;TRAYPOS.W.x=TRAY.x+62;
+ COILPOS.R.x=TRAY.x+48;COILPOS.B.x=TRAY.x+TRAY.w/2;COILPOS.K.x=TRAY.x+TRAY.w-48}
 // bobinas de cable, en la misma bandeja (abajo a la derecha)
-const COILPOS={R:{x:TRAY.x+66,y:TRAY.y+700},B:{x:TRAY.x+TRAY.w/2,y:TRAY.y+700},K:{x:TRAY.x+TRAY.w-66,y:TRAY.y+700}};
+const COILPOS={R:{x:TRAY.x+48,y:TRAY.y+385},B:{x:TRAY.x+TRAY.w/2,y:TRAY.y+385},K:{x:TRAY.x+TRAY.w-48,y:TRAY.y+385}};
 
 /* ---------- utilidades de piezas ---------- */
 // Cada pieza ocupa dos huecos contiguos: (c,r) y el de su derecha (giro 0) o el de debajo (giro 1)
@@ -255,7 +256,7 @@ function drawBrick(b,par){const g=mk('g',{'data-b':b.id,class:'grab'},par),p=bri
 function drawTrayItems(){[...L_tray.querySelectorAll('[data-tray]')].forEach(e=>e.remove());
  for(const k of ['R1','R2','R3','R4']){if(state.bricks.some(b=>b.key===k))continue;const Q=TRAYPOS[k];const g=drawBrick({id:'t'+k,type:'R',key:k,rot:0,x:Q.x,y:Q.y},L_tray);g.setAttribute('data-tray',k);g.setAttribute('transform',`translate(${Q.x} ${Q.y}) scale(${TS}) translate(${-Q.x} ${-Q.y})`)}
  for(const k of ['W']){const Q=TRAYPOS[k];const g=drawBrick({id:'t'+k,type:k,key:k,rot:0,x:Q.x,y:Q.y},L_tray);g.setAttribute('data-tray',k);g.setAttribute('transform',`translate(${Q.x} ${Q.y}) scale(${TS}) translate(${-Q.x} ${-Q.y})`);
-  txt(L_tray,Q.x+68,Q.y-3,'Puente',{'font-size':14,'font-weight':700,fill:'#5a4a32','data-tray':'lbl'});txt(L_tray,Q.x+68,Q.y+15,'(los que quieras)',{'font-size':12,fill:'#5a4a32','data-tray':'lbl'})}
+  txt(L_tray,Q.x+60,Q.y-3,'Puente',{'font-size':14,'font-weight':700,fill:'#5a4a32','data-tray':'lbl'});txt(L_tray,Q.x+60,Q.y+15,'(los que quieras)',{'font-size':12,fill:'#5a4a32','data-tray':'lbl'})}
  // bobinas de cable
  for(const c in COILPOS){const P=COILPOS[c],g=mk('g',{'data-tray':'C'+c,class:'grab'},L_tray),col={R:'#d0302a',B:'#2563c9',K:'#1e2226'}[c];
   for(let i=0;i<4;i++)mk('ellipse',{cx:P.x,cy:P.y+40-i*3,rx:30-i*2,ry:17-i,fill:'none',stroke:col,'stroke-width':5},g);
@@ -456,7 +457,7 @@ function updMsg(){L_msg.innerHTML='';let t='',warn=false;const s=state.src;
  else if(state.part){if(!s.on)t='La fuente está apagada: pulsa Power para encenderla.';else if(s.v<0.05)t='Sube la tensión con el mando V de la fuente.';else if(state.meters.some(m=>!m.on))t='Enciende los polímetros con su botón POWER.'}
  else if(!state.bricks.length&&!state.cables.length)t='Arrastra las resistencias a la placa y conecta los cables.';
  else if(!s.on&&state.cables.length)t='La fuente está apagada: pulsa Power para encenderla.';
- if(!t)return;const x0=FB.x+FB.w+10,maxw=BX+BW-10-x0,cpl=Math.floor((maxw-50)/7.0),words=t.split(' '),lines=[];let cur='';
+ if(!t)return;const x0=FB.x+FB.w+10,maxw=BX+BW-54-x0,cpl=Math.floor((maxw-50)/7.0),words=t.split(' '),lines=[];let cur='';
  for(const wd of words){if((cur+' '+wd).trim().length>cpl&&cur){lines.push(cur);cur=wd}else cur=(cur+' '+wd).trim()}if(cur)lines.push(cur);
  const w=Math.min(maxw,Math.max(...lines.map(l=>l.length))*7.0+50),h=18*lines.length+16,x=x0,y=FB.y;
  mk('rect',{x,y,width:w,height:h,rx:Math.min(16,h/2),fill:warn?'#fff5f4':'#ffffff',opacity:.97,stroke:warn?'#f1b8b3':'#d5dde7',filter:'url(#fSh2)'},L_msg);
@@ -526,7 +527,11 @@ function drawFlowBtn(){L_ui.innerHTML='';const g=mk('g',{class:'btnz','data-act'
  const c=on?'#eaf6ff':'#17324d',cx=FB.x+14,cy=FB.y+FB.h/2;
  [[0,2,.35],[6,2.3,.65],[12.5,2.6,1]].forEach(([dx,r,o])=>mk('circle',{cx:cx+dx,cy,r,fill:c,opacity:o},g));
  mk('path',{d:`M${cx+16} ${cy-3.5} L${cx+18.5} ${cy} L${cx+16} ${cy+3.5}`,stroke:c,'stroke-width':1.6,fill:'none','stroke-linecap':'round','stroke-linejoin':'round'},g);
- txt(g,cx+26,cy+5,'Corriente',{'font-size':14,'font-weight':600,fill:c})}
+ txt(g,cx+26,cy+5,'Corriente',{'font-size':14,'font-weight':600,fill:c});
+ // ↺ volver a la configuración inicial, en la esquina superior derecha de la placa
+ const rg=mk('g',{class:'btnz','data-act':'reset'},L_ui),rx=BX+BW-28,ry=FB.y+FB.h/2;mk('circle',{cx:rx,cy:ry,r:16,fill:'#fff',stroke:'#cfd6de',filter:'url(#fSh2)'},rg);
+ mk('path',{d:`M${rx+5.6} ${ry-5} A7.5 7.5 0 1 0 ${rx+7.4} ${ry+1.5}`,stroke:'#17324d','stroke-width':1.9,fill:'none','stroke-linecap':'round'},rg);
+ mk('path',{d:`M${rx+1.6} ${ry-6.6} L${rx+6.6} ${ry-5.6} L${rx+6.2} ${ry-10.6}`,stroke:'#17324d','stroke-width':1.9,fill:'none','stroke-linecap':'round','stroke-linejoin':'round'},rg)}
 function setFlow(on){flowOn=on;updMsg();drawFlowBtn();
  if(on){buildFlow();requestAnimationFrame(()=>L_flow.style.opacity=1);if(!flowRaf)flowRaf=requestAnimationFrame(flowTick)}else{L_flow.style.opacity=0;setTimeout(()=>{if(!flowOn)L_flow.innerHTML=''},480)}}
 drawFlowBtn();
@@ -567,7 +572,7 @@ const VB0=[0,0,1500,900];let vb=VB0.slice();
 function relayout(W){const L=computeLayout(W),dx=L.bx-BX;
  for(const m of state.meters){const def=m.id==='m1'?LAY.m1x:LAY.m2x,ndef=m.id==='m1'?L.m1x:L.m2x;m.x+=ndef-def}
  for(const c of state.cables){for(const e of c.ends)if(!e.at)e.x+=dx;if(c.h)for(const q of c.h)q.x+=dx}
- SRCX+=L.srcx-LAY.srcx;Object.assign(LAY,{W,m1x:L.m1x,m2x:L.m2x,srcx:L.srcx});BX=L.bx;TRAY.x=L.tx;TRAY.w=L.tw;
+ SRCX+=L.srcx-LAY.srcx;Object.assign(LAY,{W,m1x:L.m1x,m2x:L.m2x,srcx:L.srcx});BX=L.bx;TRAY.x=L.trx;TRAY.w=L.trw;SCH.x=L.rx;SCH.w=L.rw;
  for(const id in holes)holes[id].x=hx(holes[id].c);placeSrc();placeTray();FB.x=BX+12;drawBoard();drawTray();
  VB0[2]=W;vb=VB0.slice();setVB();render();drawFlowBtn()}
 function fitScene(){const r=SV.getBoundingClientRect();if(!r.width||!r.height)return;const W=Math.round(Math.max(1500,Math.min(2300,900*r.width/r.height)));if(Math.abs(W-LAY.W)>6)relayout(W)}
@@ -575,7 +580,6 @@ let fitT=null;window.addEventListener('resize',()=>{clearTimeout(fitT);fitT=setT
 function setVB(){SV.setAttribute('viewBox',vb.join(' '))}
 function toSvg(e){const p=SV.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(SV.getScreenCTM().inverse())}
 function zoomAt(cx,cy,f){const p=toSvg({clientX:cx,clientY:cy});const nw=Math.min(VB0[2]*1.3,Math.max(300,vb[2]/f)),k=nw/vb[2];vb=[p.x-(p.x-vb[0])*k,p.y-(p.y-vb[1])*k,nw,vb[3]*k];setVB()}
-$('#viewBtn').onclick=()=>{$('#dlg').hidden=false;$('#dlgNo').focus()};
 
 /* ---------- interacción ---------- */
 let drag=null,lastTap={id:null,t:0};const ptrs=new Map();let pinch=null;
@@ -656,7 +660,7 @@ function endPtr(e){ptrs.delete(e.pointerId);if(ptrs.size<2)pinch=null;if(!drag)r
   L_cables.innerHTML='';state.cables.forEach(drawCable);return}
  if(d.k==='meter'||d.k==='srcmove'){render();return}
  if(d.k==='dial')return;
- if(d.k==='btn'&&!d.moved){if(d.a==='flow'){setFlow(!flowOn)}else if(d.a==='sch'){SCHK=d.id;drawSchem()}else if(d.a==='rflash'){flashR(d.id)}else if(d.a==='pwr'){state.src.on=!state.src.on;solveAll();drawSrcState()}else if(d.a==='mpwr'){const m=state.meters.find(q=>q.id===d.id);m.on=!m.on;updLcd(true);updMsg()}return}
+ if(d.k==='btn'&&!d.moved){if(d.a==='flow'){setFlow(!flowOn)}else if(d.a==='reset'){$('#dlg').hidden=false;$('#dlgNo').focus()}else if(d.a==='sch'){SCHK=d.id;drawSchem()}else if(d.a==='rflash'){flashR(d.id)}else if(d.a==='pwr'){state.src.on=!state.src.on;solveAll();drawSrcState()}else if(d.a==='mpwr'){const m=state.meters.find(q=>q.id===d.id);m.on=!m.on;updLcd(true);updMsg()}return}
 }
 SV.addEventListener('pointerup',endPtr);
 // [GIRO] Cada pieza se gira alrededor de una de sus clavijas: cerca de la clavija B (derecha o inferior) gira en sentido horario,
@@ -707,7 +711,7 @@ function applyPreset(){const B=[],C=[],part=state.part,sub=SUB[part];
   if(sub==='tot'){cb('R','S:P','M:m2:mA');cb('B','M:m2:COM','p0_4');W_('2_4',0)}
   else if(sub==='R3'){cb('R','S:P','p3_4');cb('B','p3_4','M:m2:mA');cb('B','M:m2:COM','p2_4')}
   else{cb('R','S:P','p0_4');cb('B','p2_4','M:m2:mA');cb('B','M:m2:COM','p3_4')}
-  cb('R','M:m1:V','S:P');cb('K','M:m1:COM','S:N')}
+  cb('R','M:m1:V','S:P');C[C.length-1].h=[{x:BX+BW*.72,y:886},{x:BX+BW*.28,y:886}];cb('K','M:m1:COM','S:N');C[C.length-1].h=[{x:BX+BW*.72,y:893},{x:BX+BW*.28,y:893}]} // el voltímetro va a la fuente pasando bajo el borde de la placa
  state.bricks=B;state.cables=C}
 function presetDials(){const v=state.meters.find(m=>m.id==='m1'),a=state.meters.find(m=>m.id==='m2');if(v)v.dial='DCV20';if(a)a.dial='DCA0.2'}
 function updSub(){const el=$('#sub'),p=state.part;el.hidden=!p;if(!p)return;$('#sublab').textContent=p===1?'Voltímetro en':'Amperímetro en la rama';
