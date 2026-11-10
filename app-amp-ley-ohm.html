@@ -73,7 +73,7 @@ svg text{font-family:Inter,system-ui,sans-serif}
 <h2>Datos y errores</h2>
 <p>Tensiones e intensidades se leen en los polímetros digitales; el error de cada lectura es una unidad de la última cifra del rango que uses. Elige el rango más pequeño que no se desborde.</p>
 <h2>Cómo se monta</h2>
-<p>En la placa, los 9 huecos de cada isla están unidos por las líneas negras: todo lo que se enchufa en una isla queda conectado. Por eso cada resistencia debe ir de una isla a la vecina; si sus dos clavijas quedan en la misma isla, está cortocircuitada. Arrastra cada resistencia a la placa y tócala para girarla. Los puentes unen dos islas sin resistencia. Arrastra un cable desde su bobina y lleva cada clavija a un hueco, a un borne de la fuente o a un borne del polímetro. Gira el selector del polímetro arrastrándolo alrededor de su eje (o con la rueda del ratón) y enciéndelo con su botón POWER. Las posiciones del selector están agrupadas en sectores: V⎓ y A⎓ son tensión e intensidad continuas, V~ y A~ las alternas, y Ω la resistencia; los números del sector mA⎓ son miliamperios (200 es el rango de 200 mA) y el de A⎓ es el de 20 A. Los mandos de la fuente se giran igual. Para retirar una pieza o un cable, devuélvelo a su bandeja.</p>
+<p>En la placa, los 9 huecos de cada isla están unidos por las líneas negras: todo lo que se enchufa en una isla queda conectado. Por eso cada resistencia debe ir de una isla a la vecina; si sus dos clavijas quedan en la misma isla, está cortocircuitada. Arrastra cada resistencia a la placa y tócala para girarla. Los puentes unen dos islas sin resistencia. Arrastra un cable desde su bobina y lleva cada clavija a un hueco, a un borne de la fuente o a un borne del polímetro. Gira el selector del polímetro arrastrándolo alrededor de su eje (o con la rueda del ratón) y enciéndelo con su botón POWER. Las posiciones del selector están agrupadas en sectores: V⎓ y A⎓ son tensión e intensidad continuas, V~ y A~ las alternas, y Ω la resistencia; los números del sector mA⎓ son miliamperios (200 es el rango de 200 mA) y el de A⎓ es el de 20 A. Los mandos de la fuente se giran igual. En los mandos y en los selectores también puedes pinchar directamente en un número o una marca de la escala para llevarlos a ese valor. Para retirar una pieza o un cable, devuélvelo a su bandeja.</p>
 <p class="note">Gemelo de la práctica: resistencias con su tolerancia real, fuente con limitación de corriente y polímetros con fusible · CC BY-NC-SA 4.0</p>
 </aside></main>
 <div class="dlg" id="dlg" hidden><div class="dlgc" role="dialog" aria-modal="true"><p>¿Quieres volver a la configuración inicial? Se perderá todo el montaje.</p><div class="dlgb"><button class="hbtn" id="dlgNo" type="button">Cancelar</button><button class="hbtn pri" id="dlgYes" type="button">Sí, empezar de nuevo</button></div></div></div>
@@ -182,7 +182,7 @@ function knobAng(v,max){return -135+270*v/max}
   txt(g,K.x,K.y+K.r+46,lab,{'text-anchor':'middle','font-size':16,'font-weight':700,fill:'#2a2f36'})}
  srcCC=mk('circle',{cx:KA.x,cy:KA.y-KA.r-38,r:5,fill:'#4a2222'},g);
  knobV=mk('g',{class:'btnz','data-act':'kv'},g);knobA=mk('g',{class:'btnz','data-act':'ka'},g);
- for(const [kg,K] of [[knobV,KV],[knobA,KA]]){mk('circle',{cx:K.x,cy:K.y,r:K.r+20,fill:'#000','fill-opacity':0},kg);mk('circle',{cx:K.x,cy:K.y,r:K.r,fill:'url(#gKnob)',stroke:'#80868c',filter:'url(#fSh2)'},kg);mk('circle',{cx:K.x,cy:K.y,r:K.r-9,fill:'none',stroke:'#b9bec3'},kg);mk('path',{d:`M${K.x} ${K.y-K.r+4} V${K.y-K.r+16}`,stroke:'#1b1e22','stroke-width':4,'stroke-linecap':'round','class':'ind'},kg)}
+ for(const [kg,K] of [[knobV,KV],[knobA,KA]]){mk('circle',{cx:K.x,cy:K.y,r:K.r+34,fill:'#000','fill-opacity':0},kg);mk('circle',{cx:K.x,cy:K.y,r:K.r,fill:'url(#gKnob)',stroke:'#80868c',filter:'url(#fSh2)'},kg);mk('circle',{cx:K.x,cy:K.y,r:K.r-9,fill:'none',stroke:'#b9bec3'},kg);mk('path',{d:`M${K.x} ${K.y-K.r+4} V${K.y-K.r+16}`,stroke:'#1b1e22','stroke-width':4,'stroke-linecap':'round','class':'ind'},kg)}
  // bornes
  txt(g,x+112,y+198,'AC  máx. 5 A',{'text-anchor':'middle','font-size':12,fill:'#3b4250'});
  txt(g,x+377,y+198,'DC',{'text-anchor':'middle','font-size':13,'font-weight':700,fill:'#3b4250'});
@@ -406,7 +406,11 @@ SV.addEventListener('pointerdown',e=>{ptrs.set(e.pointerId,{x:e.clientX,y:e.clie
  SV.setPointerCapture(e.pointerId);
  if(pl){const [cid,i]=pl.getAttribute('data-plug').split(':');const c=state.cables.find(q=>q.id==cid);drag={k:'plug',c,i:+i,p0:p,moved:false};return}
  if(act){const a=act.getAttribute('data-act');
-  if(a==='kv'||a==='ka'){const K=a==='kv'?KVg:KAg;drag={k:a,K,last:angOf(K,p),p0:p,moved:false};return}
+  if(a==='kv'||a==='ka'){const K=a==='kv'?KVg:KAg,Kl=a==='kv'?KV:KA,max=a==='kv'?12:2;
+   // [ESCALA] pinchar en la escala graduada (fuera del mando) lleva el mando a ese valor; si cae cerca de una marca, se ajusta a ella
+   if(Math.hypot(p.x-K.x,p.y-K.y)>Kl.r*SS*1.02){let an=angOf(K,p);an=Math.max(-135,Math.min(135,an));let nv=(an+135)/270*max;const mt=max/24,vt=Math.round(nv/mt)*mt;if(Math.abs(vt-nv)/max*270<4)nv=vt;
+    if(a==='kv')state.src.v=nv;else state.src.ilim=nv;drawSrcState();solveAll()}
+   drag={k:a,K,last:angOf(K,p),p0:p,moved:false};return}
   if(a==='dial'){const m=state.meters.find(q=>q.id===act.getAttribute('data-id'));drag={k:'dial',m,p0:p,moved:false};dialTo(m,p);return}
   drag={k:'btn',a,id:act.getAttribute('data-id'),p0:p,moved:false};return}
  if(tr){const k=tr.getAttribute('data-tray');
