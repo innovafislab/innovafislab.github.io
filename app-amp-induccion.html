@@ -1395,11 +1395,17 @@ function endPtr(e){PTR.delete(e.pointerId);if(mode==='pinch'){if(PTR.size<2){mod
  if(mode==='coil'&&down&&!down.moved)swapCoil(down.coil);
  mode=null;down=null;ctl=null;box.classList.remove('dragging')}
 ['pointerup','pointercancel'].forEach(k=>box.addEventListener(k,endPtr));
-box.addEventListener('wheel',e=>{e.preventDefault();const h=pick(e);
- if(h&&h.object.userData.inst){const inst=h.object.userData.inst,uv=faceUV(inst),c=hitCtl(inst,uv);const dir=e.deltaY<0?1:-1;
-  if(c&&inst.kind==='dmm'&&(c.t==='knob'||c.t==='ring')){const L=DIAL.pos,i=L.findIndex(p=>p.id===inst.dial);setDial(inst,L[(i+dir+L.length)%L.length].id);return}
-  if(c&&inst.kind==='gen'&&c.t==='gk'){genStep(dir);return}}
- const nd=Math.max(.056,Math.min(4,dist*Math.exp(e.deltaY*.0012)));zAt(e.clientX,e.clientY,nd/dist);dist=nd;touched=true;invalidate()},{passive:false});
+// Pellizco con dos dedos en el panel táctil (el navegador lo envía como rueda con Ctrl): siempre zoom.
+// Rueda del ratón o deslizamiento de dos dedos sobre un mando: lo gira, un paso por muesca.
+let ruedaAcum=0;
+box.addEventListener('wheel',e=>{e.preventDefault();const h=e.ctrlKey?null:pick(e);
+ if(h&&h.object.userData.inst){const inst=h.object.userData.inst,uv=faceUV(inst),c=hitCtl(inst,uv);
+  const enMando=c&&((inst.kind==='dmm'&&(c.t==='knob'||c.t==='ring'))||(inst.kind==='gen'&&c.t==='gk'));
+  if(enMando){const dy=e.deltaMode===1?e.deltaY*33:e.deltaY;let dir=0;
+   if(Math.abs(dy)>=50){dir=dy<0?1:-1;ruedaAcum=0}else{ruedaAcum+=dy;if(Math.abs(ruedaAcum)>=50){dir=ruedaAcum<0?1:-1;ruedaAcum=0}}
+   if(dir){if(inst.kind==='dmm'){const L=DIAL.pos,i=L.findIndex(p=>p.id===inst.dial);setDial(inst,L[(i+dir+L.length)%L.length].id)}else genStep(dir)}
+   return}}
+ const nd=Math.max(.056,Math.min(4,dist*Math.exp(e.deltaY*(e.ctrlKey?.01:.0012))));zAt(e.clientX,e.clientY,nd/dist);dist=nd;touched=true;invalidate()},{passive:false});
 box.addEventListener('dblclick',e=>{const h=pick(e);if(!h)return;if(h.object.userData.inst){const inst=h.object.userData.inst;if(hitCtl(inst,faceUV(inst)))return;const p=inst.fr.getWorldPosition(V3()),n=V3(0,0,1).applyQuaternion(inst.fr.getWorldQuaternion(new THREE.Quaternion()));
   const t=Math.tan(CAM.fov*Math.PI/360),d=inst.root.scale.x*Math.max(inst.hM*1.12,inst.wM*1.12/CAM.aspect)/(2*t)+.02;flyTo(p,d,Math.atan2(n.x,n.z),Math.max(.15,Math.asin(Math.min(1,n.y))));return}
  flyTo(h.point,Math.max(.35,dist*.55))});
