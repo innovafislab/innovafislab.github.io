@@ -466,8 +466,7 @@ function placaDelBorneIzquierdo(){
   densidadPrimaria(ctx,w/2,72,3.15);
   ctx.textAlign='center';ctx.font='bold 48px Arial, sans-serif';
   ctx.fillText('L = '+Math.round(1000*LW)+' mm',w/2,139);
-  ctx.font='bold 43px Arial, sans-serif';
-  ctx.fillText('D efectivo = '+Math.round(2000*R1)+' mm',w/2,204);
+  ctx.fillText('Ø = '+Math.round(2000*R1)+' mm',w/2,204);
  });
  // El rótulo y su marco forman una sola superficie, incluso al acercar la cámara.
  const g=roundBox(ancho,alto,grosor,.0009,.0003);
@@ -617,7 +616,7 @@ function makeCoil(c,i){const g=new THREE.Group(),r=c.d/2000,yw=.012+c.len/2,top=
 const coils=COILS.map(makeCoil);
 // Portarrótulos entre los dos deslizadores del carril superior de la primaria.
 function crearLetreroInterior(){
- const ancho=.203,alto=.058,grosor=.0028,inclinacion=.57,ESC=.7; // placa al 70 %
+ const ancho=.203,alto=.058,grosor=.0028,inclinacion=.57,ESC=.84; // placa al 84 %
  const soporte=new THREE.Group();
  soporte.position.set(C.x,.1555,C.z+.0025);soporte.rotation.x=-inclinacion;
  for(const lado of [-1,1]){
