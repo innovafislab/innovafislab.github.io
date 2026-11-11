@@ -541,7 +541,7 @@ const rellenoInterior=materialInterior(`
  }`,boreClip+`
  varying float devanado;varying vec3 mundo,normalVista,alOjo;
  void main(){
-  if(fueraDelTubo(mundo))discard;
+  if(fueraDelTubo(mundo)||devanado>.5)discard; // del devanado sólo se ve la silueta discontinua
   float frente=abs(dot(normalize(normalVista),normalize(alOjo)));
   vec3 tinta=mix(vec3(.40,.65,.96),vec3(.98,.74,.36),devanado);
   gl_FragColor=vec4(tinta*(.84+.16*frente),mix(.50,.30,devanado)*(.78+.22*frente));
