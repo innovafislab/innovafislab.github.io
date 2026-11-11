@@ -71,7 +71,7 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 <p>La intensidad la fija la resistencia externa <i>R</i><sub>e</sub> del circuito, que aquí son dos reóstatos en serie:</p>
 <div class="eq" data-tex="I=\dfrac{\varepsilon}{R_i+R_e}" aria-label="Intensidad del circuito"><i>I</i> = <i>ε</i> / (<i>R</i><sub>i</sub> + <i>R</i><sub>e</sub>)</div>
 <h2>Qué hay que medir</h2>
-<p>El circuito ya está montado: la <span class="p1">pila de petaca</span><span class="p2">pila de 9 V</span>, los dos reóstatos en serie y el amperímetro, también en serie. El voltímetro está en paralelo con la pila, pinzado a sus bornes. Enciende los dos polímetros, pon el amperímetro en 10 A⎓ y el voltímetro en 20 V⎓.</p>
+<p>El circuito ya está montado: la <span class="p1">pila de petaca</span><span class="p2">pila de 9 V</span>, los dos reóstatos en serie y el amperímetro, también en serie. El voltímetro está en paralelo con la pila, pinzado a sus bornes. Enciende los dos polímetros: el amperímetro ya está en 10 A⎓ y el voltímetro en 20 V⎓.</p>
 <p>Mueve los cursores de los reóstatos hasta que el amperímetro marque 0,1 A y anota <i>I</i> y <i>V</i>. Repite subiendo la intensidad de 0,1 A en 0,1 A hasta llegar a 1 A. El reóstato de 100 Ω sirve para el ajuste grueso y el de 10 Ω para el ajuste fino.</p>
 <h2>Tabla de la ficha <small class="rw">(rellenar en Word)</small></h2>
 <table><tr><th><i>I</i></th><th><i>ε</i><sub>I</sub></th><th><i>V</i></th><th><i>ε</i><sub>V</sub></th></tr><tr><td>&nbsp;</td><td></td><td></td><td></td></tr></table>
@@ -617,7 +617,7 @@ function batteryCables(){SC.updateMatrixWorld(true);
 /* ================= estado ================= */
 // Calibración de los polímetros y valores reales de los reóstatos (tolerancia de fabricación)
 const gA=1+(rnd()-.5)*.012,gV=1+(rnd()-.5)*.008,RREAL=[100*(.96+rnd()*.08),10*(.96+rnd()*.08)],RWIRE=.05+rnd()*.03;
-function initState(){return {bat:1,u:[.62,.5],m:[{on:false,dial:'DCV20'},{on:false,dial:'DCV20'}]}}
+function initState(){return {bat:1,u:[.62,.5],m:[{on:false,dial:'DCA10'},{on:false,dial:'DCV20'}]}}
 let S=initState();
 function applyState(){AMM.on=S.m[0].on;AMM.dial=S.m[0].dial;VOLT.on=S.m[1].on;VOLT.dial=S.m[1].dial;RA.set(S.u[0]);RB.set(S.u[1]);
  for(const k of[1,2])BAT[k].g.visible=k===S.bat;batteryCables();document.body.dataset.part=S.bat;
