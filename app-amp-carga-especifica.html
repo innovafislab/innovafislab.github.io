@@ -57,11 +57,12 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 @media (max-width:1300px) and (min-width:821px){header{gap:8px;padding:8px 10px}.tab{padding:4px 10px}.hbtn{padding:6px 10px}}
 @media (max-width:820px){header{flex-wrap:wrap;white-space:normal}body{display:block}main{grid-template-columns:minmax(0,1fr);height:auto;padding:10px}header{padding:8px 10px}.left .card{height:auto}.sim3{flex:none;height:auto;aspect-ratio:1.2}.side{max-height:none}.vbtn{width:26px;height:26px;font-size:15px}.fbtn{height:26px;font-size:11px;padding:0 8px}}
 </style></head><body data-part="1">
+<style>.fbtn.tog.on{background:#e3f6f8;border-color:#63c1cc;color:#0a6f7c}html.dk .fbtn.tog.on{background:#0f3d44;border-color:#2c95a2;color:#c9f3f8}.fnote{align-self:center;font:500 12px/1.2 Inter,system-ui,sans-serif;color:var(--slate);background:rgba(255,255,255,.9);border-radius:10px;padding:4px 9px}.fnote[hidden]{display:none}html.dk .fnote{background:rgba(20,26,33,.9)}</style>
 <header><a class="back" href="laboratorios.html#ampliacion" aria-label="Volver al Laboratorio de Ampliación de Física">←</a><h1>Carga específica del electrón</h1>
 <span class="sp"></span><button class="hbtn" id="gbtn" type="button">Ocultar guía</button></header>
 <main><section class="left"><div class="card">
 <div class="sim3" id="v3" aria-label="Montaje en 3D: tubo de haz filiforme entre dos bobinas de Helmholtz, con su escalerilla de travesaños y el haz de electrones, dos fuentes de alimentación y dos polímetros digitales"><canvas id="cv"></canvas></div>
-<div class="ctls"><div class="ctl"><button class="fbtn" id="vwBtn" type="button">Vista inicial</button></div><div class="ctl"><button class="vbtn" id="rstBtn" type="button" aria-label="Volver a la configuración inicial" title="Volver a la configuración inicial">↺</button></div></div>
+<div class="ctls"><div class="ctl"><button class="fbtn" id="vwBtn" type="button">Vista inicial</button><button class="fbtn tog" id="fldBtn" type="button" aria-pressed="false">Corriente y campo B</button><span class="fnote" id="fldNote" hidden>Enciende la fuente de las bobinas y sube la intensidad</span></div><div class="ctl"><button class="vbtn" id="rstBtn" type="button" aria-label="Volver a la configuración inicial" title="Volver a la configuración inicial">↺</button></div></div>
 </div></section>
 <aside class="side card" id="side">
 <h2>Qué se observa</h2>
@@ -70,7 +71,7 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 <p><i>I</i> es la intensidad que circula por las bobinas y <i>λ</i> = 2,393·10<sup>−7</sup> V·A<sup>−2</sup>·m<sup>−2</sup>·kg·C<sup>−1</sup> reúne sus datos (154 espiras, radio 0,2 m); se toma sin error.</p>
 <h2>Qué hay que medir</h2>
 <p>El montaje ya está hecho. La fuente de la derecha alimenta el tubo: calienta el cátodo, enfoca el haz y da la tensión de aceleración <i>V</i>, que mide el polímetro de la derecha. La fuente de la izquierda hace pasar la intensidad <i>I</i> por las dos bobinas, en serie con el polímetro de la izquierda.</p>
-<p>Enciende las dos fuentes y los dos polímetros: los mandos ya están preparados y se ve el haz, fino y anaranjado, que sale por la punta del emisor. Con <i>I</i> = 0 A el haz es recto; al aumentar <i>I</i> se curva hasta cerrarse en una circunferencia. El haz se ve a partir de unos 100 V.</p>
+<p>Enciende las dos fuentes, pinchando en su piloto «Power», y los dos polímetros: los mandos ya están preparados y se ve el haz, fino y anaranjado, que sale por la punta del emisor. Con <i>I</i> = 0 A el haz es recto; al aumentar <i>I</i> se curva hasta cerrarse en una circunferencia. El haz se ve a partir de unos 100 V.</p>
 <p>Elige un radio <i>R</i>: 2, 3, 4 o 5 cm. Para <i>V</i> de 120 a 190 V, de 10 en 10 V, ajusta <i>I</i> hasta que el haz incida en el centro del travesaño de ese radio y anota <i>V</i> e <i>I</i>.</p>
 <h2>Cómo se lee el radio</h2>
 <p>Dentro del bulbo hay una escalerilla horizontal con cuatro travesaños fluorescentes, a 4, 6, 8 y 10 cm del orificio del cañón, contados desde él. El haz sale hacia arriba, da media vuelta y cae sobre la escalerilla: si incide en un travesaño, este se ilumina y esa distancia es el diámetro de la órbita. Los travesaños marcan, por tanto, <i>R</i> = 2, 3, 4 y 5 cm.</p>
@@ -80,11 +81,13 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 <h2>Datos y errores</h2>
 <p><i>V</i> se lee en el polímetro «TENSIÓN DE ACELERACIÓN» e <i>I</i> en el polímetro «INTENSIDAD EN LAS BOBINAS»; el error de cada una es una unidad de la última cifra de su lectura. El radio <i>R</i> es el del travesaño elegido y se toma sin error, igual que <i>λ</i>.</p>
 <h2>Cómo se usa</h2>
-<p>Fuente del tubo (derecha): se enciende con su interruptor; el cátodo tarda un par de segundos en calentarse. El mando de 0…300 V fija <i>V</i>. El de 0…50 V es la tensión del cilindro de Wehnelt, que enfoca el haz sin cambiar su radio: déjalo en 50 V, donde el haz es más fino. El de 0…12 V no se usa.</p>
-<p>Fuente de las bobinas (izquierda): deja el mando de tensión al máximo, como está, y regula <i>I</i> con el mando de 0…5 A.</p>
+<p>Fuente del tubo (derecha): se enciende pinchando en su piloto «Power»; el cátodo tarda un par de segundos en calentarse. El mando de 0…300 V fija <i>V</i>. El de 0…50 V es la tensión del cilindro de Wehnelt, que enfoca el haz sin cambiar su radio: déjalo en 50 V, donde el haz es más fino. El de 0…12 V no se usa.</p>
+<p>Fuente de las bobinas (izquierda): se enciende igual, en su piloto «Power». Deja el mando de tensión V al máximo, como está, y regula <i>I</i> con el mando A.</p>
 <p>Mandos: gíralos arrastrando o pincha en su escala. Con la rueda del ratón sobre el mando, girándola seguido avanza deprisa y, muesca a muesca, afina.</p>
 <p>Tubo: con doble clic sobre el bulbo la vista se coloca de frente a él, para ver bien el haz y los travesaños; otro doble clic devuelve la vista anterior.</p>
-<p>Conexiones, como en el montaje real. Bobinas: del + de la fuente al borne de 10 A del polímetro, del COM a la bobina delantera, de esta a la trasera y de la trasera al − de la fuente (tres cables rojos y uno azul). Tubo: los dos bornes de caldeo a 6,3 V ~ (amarillos); el cátodo K al + de 0…50 V (amarillo); el cilindro de Wehnelt W al − de 0…50 V (azul); el ánodo A al + de 0…300 V (rojo); un puente corto une el + de 0…50 V con el − de 0…300 V. El voltímetro va entre el + y el − de 0…300 V.</p>
+<p>Conexiones, como en el montaje real. Bobinas: del + de la fuente al borne de 10 A del polímetro (rojo); del COM a la bobina delantera (rojo); de esta a la trasera (azul) y de la trasera al − de la fuente (azul).</p>
+<p>Tubo, con los rótulos de su capuchón: «+250 V», el ánodo, al + de 0…300 V (rojo); «−50 V», el cilindro de Wehnelt, al − de 0…50 V (azul); «0», el cátodo, al borne de tierra (negro); los dos bornes «6,3 V ~», el caldeo, a la salida de 6,3 V ~ (amarillos). Dos puentes cortos negros unen el + de 0…50 V con el − de 0…300 V, y este con el borne de tierra: ese punto común es el cero del tubo. El voltímetro va entre el + y el − de 0…300 V, enchufado encima de las otras clavijas. Las salidas de 0…12 V y de 300 V fija quedan libres.</p>
+<p>Corriente y campo B: el botón de arriba dibuja, sobre el montaje, el sentido de la corriente en las bobinas (flechas amarillas) y las líneas del campo magnético que crean (en azul verdoso), casi paralelas y uniformes en la zona del bulbo. Es una ayuda visual: en el laboratorio no se ve.</p>
 <p>Polímetros: se encienden con POWER. Ya están en 10 A⎓ el de la izquierda y en 200 V⎓ el de la derecha. El selector se gira arrastrándolo, con la rueda o pinchando en una marca.</p>
 <p>Vista: arrastra para girar, usa la rueda (o dos dedos) para acercar donde está el puntero y arrastra con el botón derecho (o dos dedos) para desplazar. Con doble clic te acercas a un aparato y, con otro doble clic sobre él, vuelves a la vista anterior; «Vista inicial» vuelve al encuadre de partida.</p>
 <p class="note">Gemelo de la práctica: tubo de haz filiforme, bobinas de Helmholtz de 154 espiras y 0,2 m de radio, fuentes y polímetros digitales · CC BY-NC-SA 4.0</p>
@@ -397,82 +400,92 @@ function cordContact(path,r){const n=86,xyz=[],colors=[],indices=[],p=V3(),t=V3(
  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(xyz,3));g.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));g.setIndex(indices);
  const mat=new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.DoubleSide,transparent:true,blending:THREE.MultiplyBlending,depthWrite:false,toneMapped:false});const shade=new THREE.Mesh(g,mat);shade.renderOrder=1;SC.add(shade);return shade;
 }
-function setTube(m,pts,r=.0034){const path=new SupportedCord(pts,r);m.geometry.dispose();m.geometry=new THREE.TubeGeometry(path,Math.max(76,pts.length*11),r,10,false);
+function setTube(m,pts,r=.0034){const path=new SupportedCord(pts,r);m.geometry.dispose();m.geometry=new THREE.TubeGeometry(path,Math.max(90,Math.min(460,pts.length*5)),r,10,false);
  if(m.userData.rib){SC.remove(m.userData.rib);m.userData.rib.geometry.dispose();m.userData.rib.material.dispose()}m.userData.rib=cordContact(path,r)}
 /* ================= materiales y piezas comunes ================= */
-const sockRed=finish(0xb5302a,.42),sockBlue=finish(0x2a55a0,.42),sockYellow=finish(0xcdb824,.45),nickel=finish(0xc9cdcb,.3,.85),brassMat=finish(0xb89655,.34,.82);
-const plugMat={r:finish(0xc53d37,.39),b:finish(0x275da9,.38),y:finish(0xd9b61f,.42),k:finish(0x2a2c30,.45)};
+const sockRed=finish(0xb5302a,.42),sockBlue=finish(0x2a55a0,.42),sockYellow=finish(0xd9b61f,.45),sockPE=finish(0xa9c22a,.45),sockWhite=finish(0xeeeeea,.45),nickel=finish(0xc9cdcb,.3,.85);
+const plugMat={r:finish(0xc53d37,.39),b:finish(0x275da9,.38),y:finish(0xe2b91c,.42),k:finish(0x25272b,.45)};
+// clavija recta: el cable sale por detrás, en la dirección del borne
 function plugAt(par,x,y,col,z=0){const g=new THREE.Group();const shell=new THREE.Mesh(plugShell,plugMat[col]);shell.rotation.x=Math.PI/2;shell.scale.x=1.13;shell.scale.z=.88;
  const neck=new THREE.Mesh(plugNeck,stainless);neck.rotation.x=Math.PI/2;g.add(neck,shell);g.position.set(x,y,z-.0034);par.add(shadow(g));return g}
-// clavija acodada apilable: cuerpo en escuadra, con la salida del cable por un costado y un borne encima
-function elbowPlug(par,x,y,z,col,ang){const g=new THREE.Group();g.position.set(x,y,z);g.rotation.z=ang;par.add(g);const m=plugMat[col];
- const body=new THREE.Mesh(roundBox(.019,.019,.021,.0035,.0012),m);body.position.z=.0105;g.add(body);
- const boot=new THREE.Mesh(new THREE.CylinderGeometry(.0056,.0046,.020,16),m);boot.rotation.z=-Math.PI/2;boot.position.set(.0195,0,.0105);g.add(boot);
- const pin=new THREE.Mesh(new THREE.CylinderGeometry(.0036,.0036,.006,14),nickel);pin.rotation.x=Math.PI/2;pin.position.z=-.002;g.add(pin);
- const hole=new THREE.Mesh(new THREE.CircleGeometry(.0042,18),finish(0x15171a,.7));hole.position.z=.0212;g.add(hole);shadow(g);hole.castShadow=false;
- return {g,out:()=>({p:g.localToWorld(V3(.0295,0,.0105)),n:V3(1,0,0).applyQuaternion(g.getWorldQuaternion(new THREE.Quaternion()))})}}
-const blackAno=finish(0x1d1f23,.45,.55),blackPlastic=finish(0x1c1d20,.5,.03),alu=finish(0xc7cbcd,.36,.88),tubeBlue=finish(0x1c2f86,.3,.05);
+// clavija de seguridad apilable (medidas reales, en metros): cuerpo recto, borne trasero para enchufar otra encima y salida lateral del cable.
+// ang: hacia dónde sale el cable en el plano del panel (0 abajo, 90 derecha, −90 izquierda, 180 arriba)
+const sBody=turned([[.0038,-.004],[.0040,.0005],[.0052,.002],[.0056,.012],[.0056,.0225],[.0048,.0235],[0,.0235]],plugMat.r,20).geometry,sBlock=roundBox(.0125,.0125,.0150,.003,.001),sBoot=new THREE.CylinderGeometry(.0037,.0037,.007,12),sHole=new THREE.CircleGeometry(.0028,16),holeMat=finish(0x101114,.7);
+const SPL=.038; // longitud de una clavija fuera del borne
+function sPlug(par,x,y,z0,col,ang,k){const g=new THREE.Group();g.position.set(x,y,z0);g.scale.setScalar(k);par.add(g);const m=plugMat[col],a=ang*Math.PI/180,dx=Math.sin(a),dy=-Math.cos(a);
+ const b=new THREE.Mesh(sBody,m);b.rotation.x=Math.PI/2;g.add(b);
+ const blk=new THREE.Mesh(sBlock,m);blk.position.z=.0305;blk.rotation.z=a;g.add(blk);
+ const boot=new THREE.Mesh(sBoot,m);boot.position.set(dx*.0085,dy*.0085,.0305);boot.rotation.z=a;g.add(boot);
+ const hole=new THREE.Mesh(sHole,holeMat);hole.position.z=.0382;g.add(hole);shadow(g);hole.castShadow=false;
+ return {g,back:z0+SPL*k,out:()=>({p:g.localToWorld(V3(dx*.0118,dy*.0118,.0305)),n:V3(dx,dy,0).transformDirection(g.matrixWorld)})}}
+const blackAno=finish(0x1d1f23,.45,.55),blackPlastic=finish(0x1c1d20,.5,.03),alu=finish(0xc7cbcd,.36,.88),tubeBlue=finish(0x18246e,.3,.05),caseDark=finish(0x20222f,.5,.08);
 
 /* ================= bobinas de Helmholtz y tubo de haz filiforme ================= */
 // El conjunto se modela en metros reales dentro de un grupo ampliado (GS). El eje de las bobinas es z; el tubo va a lo largo de x.
 const GS=1.25,ZC=-.35,RB=.20,YC=.244; // radio de las bobinas y altura de su centro (reales)
 const APP=new THREE.Group();APP.position.set(0,0,ZC);APP.scale.setScalar(GS);SC.add(APP);
 const COIL={};
-{ // devanados, abrazaderas, patas y base
- const wire=canvasTex(64,256,(x,w,h)=>{x.fillStyle='#8c3d22';x.fillRect(0,0,w,h);for(let i=0;i<h;i+=8){x.fillStyle='rgba(38,12,6,.6)';x.fillRect(0,i,w,2.2);x.fillStyle='rgba(255,176,128,.28)';x.fillRect(0,i+3.4,w,1.6)}});wire.wrapS=wire.wrapT=THREE.RepeatWrapping;
- const copper=std(0xffffff,.36,.38,{map:wire,envMapIntensity:.9}),a=.012,b=.0095,prof=[[RB-a,-b],[RB-b,-a],[RB+b,-a],[RB+a,-b],[RB+a,b],[RB+b,a],[RB-b,a],[RB-a,b],[RB-a,-b]];
+{ // devanados de hilo esmaltado rojo, bridas, placas con los bornes y largueros de la base
+ const wire=canvasTex(64,256,(x,w,h)=>{x.fillStyle='#8f1a22';x.fillRect(0,0,w,h);for(let i=0;i<h;i+=32){x.fillStyle='rgba(40,4,8,.55)';x.fillRect(0,i,w,4);x.fillStyle='rgba(255,150,150,.22)';x.fillRect(0,i+12,w,5)}});wire.wrapS=wire.wrapT=THREE.RepeatWrapping;
+ const copper=std(0xffffff,.3,.35,{map:wire,envMapIntensity:.9}),a=.0048,b=.014,e=.0015,prof=[[RB-a,-b+e],[RB-a+e,-b],[RB+a-e,-b],[RB+a,-b+e],[RB+a,b-e],[RB+a-e,b],[RB-a+e,b],[RB-a,b-e],[RB-a,-b+e]];
  for(const s of[-1,1]){const zc=s*RB/2,g=new THREE.Group();g.position.set(0,YC,zc);APP.add(g);
-  const ring=new THREE.Mesh(new THREE.LatheGeometry(prof.map(([r,y])=>new THREE.Vector2(r,y)),120),copper);ring.rotation.x=Math.PI/2;g.add(ring);
-  for(let k=0;k<8;k++){const t=(22.5+45*k)*Math.PI/180,c=new THREE.Mesh(roundBox(.012,.030,.030,.003,.001),blackPlastic);c.position.set(RB*Math.sin(t),-RB*Math.cos(t),0);c.rotation.z=t+Math.PI/2;g.add(c)}
-  // patas de pletina y calzo inferior
-  for(const sx of[-1,1]){const t=38*Math.PI/180,p1=[sx*.118,.024-YC],p2=[sx*RB*Math.sin(t),-RB*Math.cos(t)],L=Math.hypot(p2[0]-p1[0],p2[1]-p1[1]);
-   const leg=new THREE.Mesh(new THREE.BoxGeometry(.0035,L+.02,.018),alu);leg.position.set((p1[0]+p2[0])/2,(p1[1]+p2[1])/2,s*.0125);leg.rotation.z=-Math.atan2(p2[0]-p1[0],p2[1]-p1[1]);g.add(leg)}
-  const shoe=new THREE.Mesh(roundBox(.05,.014,.03,.003,.001),blackPlastic);shoe.position.set(0,-RB-a-.006,0);g.add(shoe);
-  const bar=new THREE.Mesh(roundBox(.27,.024,.032,.004,.0015),blackAno);bar.position.set(0,.012,zc);APP.add(bar);
-  // bornes de cada bobina, en la cara exterior de su barra
-  const fr=new THREE.Group();fr.position.set(0,.013,zc+s*.0166);if(s<0)fr.rotation.y=Math.PI;APP.add(fr);
-  for(const sx of[-1,1])socketMetal(fr,sx*.088,0,1/GS,sockRed);
-  COIL[s>0?'F':'B']={fr,jack:sx=>({p:fr.localToWorld(V3((s>0?sx:-sx)*.088,0,.040/GS)),n:V3(0,0,s)}),plug:(sx,col)=>plugAt(fr,(s>0?sx:-sx)*.088,0,col).scale.setScalar(1/GS)};
+  const ring=new THREE.Mesh(new THREE.LatheGeometry(prof.map(([r,y])=>new THREE.Vector2(r,y)),128),copper);ring.rotation.x=Math.PI/2;g.add(ring);
+  for(let k=0;k<4;k++){const t=(55+90*k)*Math.PI/180,c=new THREE.Mesh(roundBox(.0125,.012,.0305,.002,.0008),blackPlastic);c.position.set(RB*Math.sin(t),-RB*Math.cos(t),0);c.rotation.z=t+Math.PI/2;g.add(c)}
+  for(const sx of[-1,1]){const t=36*Math.PI/180,p1=[sx*.150,.028-YC],p2=[sx*RB*Math.sin(t),-RB*Math.cos(t)],L=Math.hypot(p2[0]-p1[0],p2[1]-p1[1]);
+   const leg=new THREE.Mesh(new THREE.BoxGeometry(.003,L+.016,.018),alu);leg.position.set((p1[0]+p2[0])/2,(p1[1]+p2[1])/2,0);leg.rotation.z=-Math.atan2(p2[0]-p1[0],p2[1]-p1[1]);g.add(leg)}
+  // placa de la base, por fuera de la bobina, con sus dos bornes
+  const zp=s*(RB/2+.020),plate=new THREE.Mesh(roundBox(.30,.046,.010,.003,.001),blackAno);plate.position.set(0,.035,zp);APP.add(plate);
+  const fr=new THREE.Group();fr.position.set(0,.035,zp+s*.0052);if(s<0)fr.rotation.y=Math.PI;APP.add(fr);
+  for(const sx of[-1,1]){socketMetal(fr,sx*.125,0,.62/GS,sockRed);const sc=new THREE.Mesh(new THREE.CircleGeometry(.004,14),screwFace);sc.position.set(sx*.142,-.014,.0003);fr.add(sc)}
+  COIL[s>0?'F':'B']={fr,jack:sx=>({p:fr.localToWorld(V3((s>0?sx:-sx)*.125,0,.040/GS)),n:V3(0,0,s)}),plug:(sx,col)=>plugAt(fr,(s>0?sx:-sx)*.125,0,col).scale.setScalar(1/GS)};
   shadow(g)}
- for(const sx of[-1,1]){const cb=new THREE.Mesh(roundBox(.022,.016,RB+.03,.003,.001),blackAno);cb.position.set(sx*.118,.008,0);APP.add(cb)}
- const mid=new THREE.Mesh(roundBox(.35,.016,.024,.003,.001),blackAno);mid.position.set(0,.008,0);APP.add(mid);
+ for(const sx of[-1,1]){const rail=new THREE.Mesh(roundBox(.024,.024,RB+.07,.003,.001),blackAno);rail.position.set(sx*.150,.016,0);APP.add(rail);
+  for(const sz of[-1,1]){const ft=turned([[0,0],[.009,0],[.009,.004],[0,.004]],blackPlastic,16);ft.position.set(sx*.150,0,sz*.11);APP.add(ft)}}
+ const top=new THREE.Mesh(roundBox(.030,.008,RB+.034,.002,.0008),finish(0x8d9499,.5,.3));top.position.set(0,YC+RB+a+.004,0);APP.add(top);
 }
-const TUBE={RG:.083,XG:.055,RUNG:[.02,.03,.04,.05],XN:.32}; // radio del bulbo, posición del cañón, radios de órbita que marcan los travesaños, semilongitud del tubo
+const TUBE={RG:.083,XG:.055,RUNG:[.02,.03,.04,.05],XN:.32}; // radio del bulbo, posición del emisor, radios de órbita que marcan los travesaños, semilongitud del tubo
 { // soportes del tubo, cuellos y capuchones azules
- for(const sx of[-1,1]){const x=sx*.165,rod=new THREE.Mesh(new THREE.CylinderGeometry(.004,.004,YC-.034-.016,16),stainless);rod.position.set(x,(YC-.034+.016)/2,0);APP.add(rod);
-  const cr=new THREE.Group();cr.position.set(x,YC,0);cr.rotation.y=Math.PI/2;APP.add(cr);const arc=new THREE.Mesh(new THREE.TorusGeometry(.0305,.0035,10,28,Math.PI),alu);arc.rotation.z=Math.PI;cr.add(arc);
+ for(const sx of[-1,1]){const x=sx*.150,post=new THREE.Mesh(roundBox(.016,YC-.046-.028,.016,.002,.0008),blackAno);post.position.set(x,(YC-.046+.028)/2,0);APP.add(post);
+  const blk=new THREE.Mesh(roundBox(.030,.022,.044,.003,.001),blackAno);blk.position.set(x,YC-.038,0);APP.add(blk);
+  const knob=turned([[0,0],[.008,0],[.008,.010],[0,.010]],finish(0x8d9499,.5,.3),20);knob.rotation.x=Math.PI/2;knob.position.set(x,YC-.040,.022);APP.add(knob);
+  const cr=new THREE.Group();cr.position.set(x,YC,0);cr.rotation.y=Math.PI/2;APP.add(cr);const arc=new THREE.Mesh(new THREE.TorusGeometry(.0282,.0016,8,32,Math.PI),alu);arc.scale.z=5;cr.add(arc);
   const neck=new THREE.Mesh(new THREE.CylinderGeometry(.027,.027,TUBE.XN-.0795,40),tubeBlue);neck.rotation.z=Math.PI/2;neck.position.set(sx*(TUBE.XN+.0795)/2,YC,0);APP.add(neck);
   const col=turned([[.027,0],[.0315,.002],[.0315,.012],[.027,.014]],tubeBlue,40);col.rotation.z=-sx*Math.PI/2;col.position.set(sx*.0795,YC,0);APP.add(col);
-  const cap=turned([[0,0],[.034,0],[.0375,.003],[.0375,.052],[.034,.056],[.027,.058]],tubeBlue,48);cap.rotation.z=sx*Math.PI/2;cap.position.set(sx*(TUBE.XN+.004),YC,0);APP.add(cap)}
- // cara del capuchón derecho, con los cinco bornes del tubo
+  const cap=turned([[0,0],[.034,0],[.0375,.003],[.0375,.066],[.034,.070],[.027,.072]],tubeBlue,48);cap.rotation.z=sx*Math.PI/2;cap.position.set(sx*(TUBE.XN+.004),YC,0);APP.add(cap)}
+ // cara del capuchón derecho: placa blanca con el esquema del tubo y sus cinco bornes, como en el tubo real
  const fr=new THREE.Group();fr.position.set(TUBE.XN+.0052,YC,0);fr.rotation.y=Math.PI/2;APP.add(fr);TUBE.fr=fr;
- const q=.0168;TUBE.SK={K:[q,q,'y',bezelBlack,'K'],W:[q,-q,'b',sockBlue,'W'],A:[0,0,'r',sockRed,'A'],H1:[-q,q,'y',sockYellow,'~'],H2:[-q,-q,'y',sockYellow,'~']};
- const art=canvasTex(512,512,(x,w,h)=>{x.fillStyle='#1c2f86';x.fillRect(0,0,w,h);x.fillStyle='#e9ecf6';x.textAlign='center';x.font='bold 34px Arial, sans-serif';const k=w/.068,T=(t,a,b)=>x.fillText(t,w/2+a*k,h/2-b*k+12);
-  T('~',-.0046,q);T('K',.0046,q);T('~',-.0046,-q);T('W',.0046,-q);T('A',.0128,0)}); // rótulos entre los bornes
- const face=new THREE.Mesh(new THREE.CircleGeometry(.034,48),std(0xffffff,.4,.04,{map:art,envMapIntensity:.6}));fr.add(face);
- for(const n in TUBE.SK){const [a,b,c,m]=TUBE.SK[n];socketMetal(fr,a,b,.72/GS,m);plugAt(fr,a,b,c).scale.setScalar(1/GS)}
- TUBE.jack=n=>{const [a,b]=TUBE.SK[n];return {p:fr.localToWorld(V3(a,b,.040/GS)),n:V3(1,0,0)}};shadow(fr);face.castShadow=false;
+ // [x, y, color de la clavija, collarín, ángulo de salida del cable]
+ TUBE.SK={K:[0,.0195,'k',sockWhite,0],W:[-.0195,.002,'b',sockBlue,-34],A:[.0195,.002,'r',sockRed,34],H1:[-.0150,-.0170,'y',sockYellow,0],H2:[.0150,-.0170,'y',sockYellow,0]};
+ const art=canvasTex(512,512,(x,w,h)=>{x.fillStyle='#18246e';x.fillRect(0,0,w,h);x.fillStyle='#f1f1ec';x.beginPath();x.arc(w/2,h/2,w*.445,0,7);x.fill();const k=w/.068,X=a=>w/2+a*k,Y=b=>h/2-b*k;
+  x.strokeStyle='#22262b';x.lineWidth=3;x.lineJoin='round'; // esquema: ampolla con ánodo, cilindro de Wehnelt, cátodo y filamento
+  x.beginPath();x.moveTo(X(-.0058),Y(-.0068));x.lineTo(X(-.0058),Y(.0030));x.arc(X(0),Y(.0030),.0058*k,Math.PI,0);x.lineTo(X(.0058),Y(-.0068));x.closePath();x.stroke();
+  x.beginPath();x.moveTo(X(-.0034),Y(.0052));x.lineTo(X(.0034),Y(.0052));x.moveTo(X(.0034),Y(.0052));x.lineTo(X(.0105),Y(.0052));x.lineTo(X(.0105),Y(.002));x.stroke(); // ánodo
+  x.setLineDash([9,7]);x.beginPath();x.moveTo(X(-.0040),Y(.0018));x.lineTo(X(.0040),Y(.0018));x.stroke();x.setLineDash([]);x.beginPath();x.moveTo(X(-.0040),Y(.0018));x.lineTo(X(-.0105),Y(.0018));x.stroke(); // Wehnelt
+  x.beginPath();x.moveTo(X(-.0030),Y(-.0016));x.lineTo(X(.0030),Y(-.0016));x.moveTo(X(0),Y(-.0016));x.lineTo(X(0),Y(-.0044));x.stroke(); // cátodo
+  x.beginPath();x.moveTo(X(-.0044),Y(-.0105));x.lineTo(X(-.0044),Y(-.0050));x.arc(X(0),Y(-.0050),.0044*k,Math.PI,0);x.lineTo(X(.0044),Y(-.0105));x.stroke(); // filamento
+  x.fillStyle='#22262b';x.textAlign='center';x.font='bold 30px Arial, sans-serif';x.fillText('0',X(-.0105),Y(.0195)+11);x.font='bold 24px Arial, sans-serif';x.fillText('−50 V',X(-.0178),Y(.0118));x.fillText('+250 V',X(.0172),Y(.0118));x.fillText('6,3 V ~',X(0),Y(-.0262))});
+ const face=new THREE.Mesh(new THREE.CircleGeometry(.034,48),std(0xffffff,.45,.03,{map:art,envMapIntensity:.5}));fr.add(face);TUBE.pl={};
+ for(const n in TUBE.SK){const [a,b,c,m,ang]=TUBE.SK[n];socketMetal(fr,a,b,.62/GS,m);TUBE.pl[n]=sPlug(fr,a,b,0,c,ang,1)}
+ TUBE.jack=n=>TUBE.pl[n].out();shadow(fr);face.castShadow=false;
 }
-// interior del bulbo: cañón de electrones, escalerilla con travesaños fluorescentes, haz
+// interior del bulbo: emisor de electrones, escalerilla con travesaños fluorescentes, haz
 const IN=new THREE.Group();IN.position.set(0,YC,0);APP.add(IN);
-{const wireM=finish(0xb9bec2,.3,.9),gunM=finish(0xaeb4b8,.32,.85);
- // cañón: el haz sale hacia arriba por el orificio del ánodo
+{const wireM=finish(0xc4c8cb,.3,.9);
+ // emisor: como una bala achatada con la punta hacia arriba; los electrones salen por el orificio de la punta
  const gun=new THREE.Group();gun.position.set(TUBE.XG,0,0);IN.add(gun);
- // emisor: cono achatado, como una bala con la punta hacia arriba; los electrones salen por el orificio de la punta
- TUBE.CONE=[[.0011,0],[.0021,-.0011],[.0037,-.0036],[.0052,-.0070],[.0064,-.0110],[.0071,-.0150],[.0074,-.0190],[.0074,-.0238],[.0066,-.0252],[0,-.0252]];
- const cone=turned(TUBE.CONE.slice().reverse(),finish(0xc3c8cb,.26,.9),48);gun.add(cone);
- const lid=new THREE.Mesh(new THREE.CircleGeometry(.0011,20),finish(0x2a2c30,.6,.3));lid.rotation.x=-Math.PI/2;lid.position.y=.00005;gun.add(lid);
- const tab=new THREE.Mesh(roundBox(.0058,.0052,.0012,.0008,.0003),finish(0xaeb4b8,.3,.85));tab.position.set(-.0092,-.0200,0);gun.add(tab); // pletina lateral de sujeción
- const hot=new THREE.Mesh(new THREE.CircleGeometry(.0010,16),new THREE.MeshBasicMaterial({color:0xffa040,transparent:true,opacity:0,toneMapped:false}));hot.rotation.x=-Math.PI/2;hot.position.y=.0002;gun.add(hot);TUBE.hot=hot;
- const glow=new THREE.Mesh(new THREE.SphereGeometry(.0030,16,12),new THREE.MeshBasicMaterial({color:0xff7a1c,transparent:true,opacity:0,depthWrite:false,toneMapped:false}));glow.position.y=-.0262;glow.scale.y=.6;gun.add(glow);TUBE.glow=glow;
- for(const dz of[-.004,.004]){const w=new THREE.Mesh(new THREE.CylinderGeometry(.0005,.0005,TUBE.RG-TUBE.XG+.004,8),wireM);w.rotation.z=Math.PI/2;w.position.set((TUBE.RG-TUBE.XG+.004)/2+.006,-.024,dz);gun.add(w)}
- const pinch=new THREE.Mesh(new THREE.CylinderGeometry(.006,.009,.016,16),new THREE.MeshStandardMaterial({color:0xdfe7ea,roughness:.1,transparent:true,opacity:.35}));pinch.rotation.z=-Math.PI/2;pinch.position.set(TUBE.RG-TUBE.XG-.004,-.024,0);gun.add(pinch);
- // escalerilla: dos largueros y un travesaño a 2R = 4, 6, 8 y 10 cm del orificio del cañón
- const x0=-(TUBE.RG-.004),x1=TUBE.XG-.0030,Lr=x1-x0;
- for(const dz of[-.011,.011]){const r=new THREE.Mesh(new THREE.CylinderGeometry(.0007,.0007,Lr,8),wireM);r.rotation.z=Math.PI/2;r.position.set((x0+x1)/2,0,dz);IN.add(r)}
- TUBE.rungs=TUBE.RUNG.map(R=>{const m=new THREE.Mesh(new THREE.CylinderGeometry(.0013,.0013,.0234,12),std(new THREE.Color(0xf1f3ea).convertSRGBToLinear(),.55,.05,{emissive:new THREE.Color(0x35ff6a),emissiveIntensity:0}));m.rotation.x=Math.PI/2;m.position.set(TUBE.XG-2*R,0,0);IN.add(m);
+ TUBE.CONE=[[.0010,0],[.0024,-.0016],[.0041,-.0046],[.0054,-.0080],[.0062,-.0114],[.0064,-.0135],[.0064,-.0190],[.0073,-.0195],[.0073,-.0212],[0,-.0212]];
+ const cone=turned(TUBE.CONE.slice().reverse(),finish(0xdcdedb,.38,.35),48);gun.add(cone);
+ const lid=new THREE.Mesh(new THREE.CircleGeometry(.0010,20),finish(0x2a2c30,.6,.3));lid.rotation.x=-Math.PI/2;lid.position.y=.00005;gun.add(lid);
+ const foot=new THREE.Mesh(roundBox(.010,.006,.010,.001,.0004),finish(0xe9e7de,.6,.02));foot.position.y=-.0242;gun.add(foot); // zócalo cerámico
+ const hot=new THREE.Mesh(new THREE.CircleGeometry(.0009,16),new THREE.MeshBasicMaterial({color:0xffa040,transparent:true,opacity:0,toneMapped:false}));hot.rotation.x=-Math.PI/2;hot.position.y=.0002;gun.add(hot);TUBE.hot=hot;
+ const glow=new THREE.Mesh(new THREE.SphereGeometry(.0034,16,12),new THREE.MeshBasicMaterial({color:0xff7a1c,transparent:true,opacity:0,depthWrite:false,toneMapped:false}));glow.position.y=-.0280;glow.scale.y=.5;gun.add(glow);TUBE.glow=glow;
+ // hilos en zigzag que bajan del emisor al pie del tubo
+ const zig=(dz)=>{const P=[];for(let i=0;i<=7;i++)P.push(V3(.004+i*(TUBE.RG-TUBE.XG-.006)/7,-.0272-(i%2?.0045:0)-i*.0016,dz));const m=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(P,false,'catmullrom',.1),40,.00042,6,false),wireM);gun.add(m)};zig(-.0032);zig(0);zig(.0032);
+ // escalerilla: dos largueros de lado a lado del bulbo y un travesaño a 2R = 4, 6, 8 y 10 cm del orificio del emisor
+ const x0=-(TUBE.RG-.003),x1=TUBE.RG-.003,Lr=x1-x0;
+ for(const dz of[-.011,.011]){const r=new THREE.Mesh(new THREE.CylinderGeometry(.0006,.0006,Lr,8),wireM);r.rotation.z=Math.PI/2;r.position.set((x0+x1)/2,0,dz);IN.add(r)}
+ TUBE.rungs=TUBE.RUNG.map(R=>{const m=new THREE.Mesh(new THREE.CylinderGeometry(.0013,.0013,.0234,12),std(new THREE.Color(0xe9e2b8).convertSRGBToLinear(),.55,.05,{emissive:new THREE.Color(0x35ff6a),emissiveIntensity:0}));m.rotation.x=Math.PI/2;m.position.set(TUBE.XG-2*R,0,0);IN.add(m);
   const hit=new THREE.Mesh(new THREE.SphereGeometry(.0032,16,12),new THREE.MeshBasicMaterial({color:0x8dffa6,transparent:true,opacity:0,depthWrite:false,toneMapped:false}));hit.position.copy(m.position);hit.scale.set(1,1,2.2);hit.renderOrder=4;IN.add(hit);return {R,m,hit}});
- const stem=new THREE.Mesh(new THREE.CylinderGeometry(.0006,.0006,.014,8),wireM);stem.rotation.z=Math.PI/2;stem.position.set(x0-.005,0,0);IN.add(stem);
  shadow(IN);TUBE.hot.castShadow=TUBE.glow.castShadow=false;TUBE.rungs.forEach(r=>r.hit.castShadow=false);
 }
 // haz: tubo de radio creciente a lo largo de la trayectoria, con un halo alrededor
@@ -491,114 +504,157 @@ const BULB=new THREE.Mesh(new THREE.SphereGeometry(TUBE.RG,64,40),glassMat);BULB
 APP.traverse(q=>{if(q.isMesh&&!q.material.transparent&&!q.material.isMeshBasicMaterial){q.castShadow=true;q.receiveShadow=true}});
 
 /* ================= fuentes de alimentación ================= */
-function makePSU(cfg){const P=Object.assign({kind:'psu',W:640,H:400,wM:.33,hM:.206},cfg);
+// Caja oscura con rejillas arriba, costados grises y panel frontal blanco, 1,25 veces el tamaño real (como el resto del montaje).
+const PSK=1.25,PANEL='#f3f3ee',INK='#22262b',MINT='#c2e6e1';
+function makePSU(cfg){const P=Object.assign({kind:'psu',W:700,H:489,wM:.262,hM:.183},cfg);
  const root=new THREE.Group();root.position.set(P.x,0,P.z);SC.add(root);P.root=root;
- const tilt=new THREE.Group();tilt.rotation.x=-.12;tilt.position.y=.004;root.add(tilt);
- const W=.35,H=.225,D=.27,body=new THREE.Mesh(roundBox(W,H,D,.008,.003),finish(0x2c3140,.5,.08));body.position.set(0,H/2+.012,-D/2);tilt.add(body);P.body=body;
- const vents=canvasTex(512,256,(c,w,h)=>{c.fillStyle='#2c3140';c.fillRect(0,0,w,h);c.fillStyle='#0f1116';for(let i=0;i<22;i++)rr(c,40+i*20,36,9,h-72,4),c.fill()});
- const top=new THREE.Mesh(new THREE.PlaneGeometry(W-.03,D-.05),std(0xffffff,.55,.06,{map:vents,envMapIntensity:.4}));top.rotation.x=-Math.PI/2;top.position.set(0,H+.0122,-D/2);tilt.add(top);
- for(const sx of[-1,1]){const f=new THREE.Mesh(roundBox(.05,.024,.20,.004,.0015),blackPlastic);f.position.set(sx*.12,.006,-D/2);root.add(f);
-  const s=new THREE.Mesh(roundBox(.014,.032,.022,.003,.001),blackPlastic);s.position.set(sx*.12,.014,-.02);root.add(s)}
- const fr=new THREE.Group();fr.position.set(0,H/2+.012,.0034);tilt.add(fr);P.fr=fr;
+ const tilt=new THREE.Group();tilt.position.y=.010;root.add(tilt);
+ const W=.2875,H=.210,D=.295,body=new THREE.Mesh(roundBox(W,H,D,.010,.004),caseDark);body.position.set(0,H/2,-D/2);tilt.add(body);P.body=body;
+ const vents=canvasTex(512,512,(c,w,h)=>{c.fillStyle='#20222f';c.fillRect(0,0,w,h);c.fillStyle='#0c0d12';for(const y0 of[70,330])for(let i=0;i<17;i++){rr(c,64+i*23,y0,11,112,5);c.fill()}c.fillStyle='#17181f';rr(c,60,214,392,84,10);c.fill()});
+ const top=new THREE.Mesh(new THREE.PlaneGeometry(W-.03,D-.04),std(0xffffff,.55,.06,{map:vents,envMapIntensity:.4}));top.rotation.x=-Math.PI/2;top.position.set(0,H+.0003,-D/2);tilt.add(top);
+ const ribs=canvasTex(256,256,(c,w,h)=>{c.fillStyle='#d9dad6';c.fillRect(0,0,w,h);c.fillStyle='rgba(0,0,0,.10)';for(let i=0;i<16;i++)c.fillRect(0,i*16+11,w,3)});
+ for(const sx of[-1,1]){const sp=new THREE.Mesh(new THREE.PlaneGeometry(D-.07,H-.07),std(0xffffff,.6,.03,{map:ribs,envMapIntensity:.4}));sp.rotation.y=sx*Math.PI/2;sp.position.set(sx*(W/2+.0003),H/2,-D/2);tilt.add(sp);
+  for(const z of[-.035,-D+.035]){const f=turned([[0,0],[.011,0],[.011,.010],[0,.010]],blackPlastic,16);f.position.set(sx*(W/2-.03),0,z);root.add(f)}}
+ if(P.handle){for(const sx of[-1,1]){const p=new THREE.Mesh(roundBox(.016,.050,.024,.004,.0015),caseDark);p.position.set(sx*.105,H+.022,-D+.045);tilt.add(p)}const hb=new THREE.Mesh(roundBox(.226,.018,.024,.006,.002),caseDark);hb.position.set(0,H+.048,-D+.045);tilt.add(hb)}
+ const fr=new THREE.Group();fr.position.set(0,H/2,.0006);tilt.add(fr);P.fr=fr;
  P.L=(u,v)=>[(u/P.W-.5)*P.wM,(.5-v/P.H)*P.hM];
- const can=document.createElement('canvas');can.width=1280;can.height=800;const tex=new THREE.CanvasTexture(can);tex.encoding=THREE.sRGBEncoding;tex.anisotropy=ANI;P.ctx=can.getContext('2d');P.tex=tex;
+ const can=document.createElement('canvas');can.width=1400;can.height=978;const tex=new THREE.CanvasTexture(can);tex.encoding=THREE.sRGBEncoding;tex.anisotropy=ANI;P.ctx=can.getContext('2d');P.tex=tex;
  const face=new THREE.Mesh(new THREE.PlaneGeometry(P.wM,P.hM),std(0xffffff,.62,.03,{map:tex,envMapIntensity:.5}));face.receiveShadow=true;fr.add(face);P.face=face;
- const hw=new THREE.Group();fr.add(hw);const SM={r:sockRed,b:sockBlue,y:sockYellow,k:bezelBlack};
- for(const k in P.SK){const [u,v,c]=P.SK[k],[a,b]=P.L(u,v);socketMetal(hw,a,b,1,SM[c])}
- for(const [u,v,c] of P.deco||[]){const [a,b]=P.L(u,v);socketMetal(hw,a,b,1,SM[c])}
+ const hw=new THREE.Group();fr.add(hw);const SM={r:sockRed,b:sockBlue,y:sockYellow,k:bezelBlack,e:sockPE};
+ for(const k in P.SK){const [u,v,c]=P.SK[k],[a,b]=P.L(u,v);socketMetal(hw,a,b,.60,SM[c])}
+ for(const [u,v,r] of P.fuse||[]){const [a,b]=P.L(u,v),R=r/P.W*P.wM,f=turned([[0,0],[R,0],[R,.006],[R*.72,.009],[0,.009]],blackPlastic,28);f.rotation.x=Math.PI/2;f.position.set(a,b,0);hw.add(f)}
  P.kn=P.K.map(K=>{const k=new THREE.Group(),[a,b]=P.L(K.c[0],K.c[1]);k.position.set(a,b,0);fr.add(k);const R=K.r/P.W*P.wM;
-  const skirt=turned([[0,0],[R*1.06,0],[R*1.08,.002],[R*1.02,.006],[R*.9,.006]],blackPlastic,48);skirt.rotation.x=Math.PI/2;k.add(skirt);
-  const cap=new THREE.Mesh(ribbedGrip(R*.9),finish(0x34373c,.5,.04));cap.position.z=.004;k.add(cap);
-  const topc=new THREE.Mesh(new THREE.CircleGeometry(R*.76,40),finish(0xb9bdc0,.32,.8));topc.position.z=.0286;k.add(topc);
-  const mark=new THREE.Mesh(new THREE.BoxGeometry(R*.11,R*.66,.0008),new THREE.MeshBasicMaterial({color:0x16181b,toneMapped:false}));mark.position.set(0,R*.40,.0292);k.add(mark);
-  const tick=new THREE.Mesh(new THREE.BoxGeometry(R*.10,R*.26,.0008),new THREE.MeshBasicMaterial({color:0xf2f1e8,toneMapped:false}));tick.position.set(0,R*.93,.0066);k.add(tick);
-  shadow(k);mark.castShadow=tick.castShadow=false;return k});
- const [px,py]=P.L(P.PW[0]+P.PW[2]/2,P.PW[1]+P.PW[3]/2),rk=new THREE.Group();rk.position.set(px,py,.001);fr.add(rk);
- rk.add(rimFrame(.034,.047,.004,.004,.004,blackPlastic));
- const rock=new THREE.Mesh(roundBox(.025,.038,.008,.003,.001),finish(0x15171a,.42,.03));rock.position.z=.004;rk.add(rock);P.rock=rock;shadow(rk);
+  const bodyK=turned([[0,0],[R*1.02,0],[R*1.02,.004],[R,.005],[R,.019],[0,.019]],finish(0x1b1c20,.5,.04),40);bodyK.rotation.x=Math.PI/2;k.add(bodyK);
+  const cap=turned([[0,.019],[R*.86,.019],[R*.86,.0225],[R*.80,.0238],[0,.0238]],finish(0xc9ccce,.4,.25),40);cap.rotation.x=Math.PI/2;k.add(cap);
+  const mark=new THREE.Mesh(new THREE.BoxGeometry(R*.10,R*.74,.0006),new THREE.MeshBasicMaterial({color:0x16181b,toneMapped:false}));mark.position.set(0,R*.42,.0241);k.add(mark);
+  shadow(k);mark.castShadow=false;return k});
+ if(P.lever){const [a,b]=P.L(P.lever[0],P.lever[1]),lv=new THREE.Group();lv.position.set(a,b,0);lv.rotation.z=-P.lever[2]*Math.PI/180;fr.add(lv);const hub=turned([[0,0],[.009,0],[.009,.008],[0,.008]],blackPlastic,24);hub.rotation.x=Math.PI/2;lv.add(hub);const bar=new THREE.Mesh(roundBox(.012,.046,.010,.003,.001),blackPlastic);bar.position.set(0,.006,.012);lv.add(bar);shadow(lv)}
  shadow(hw);shadow(root);face.castShadow=false;
- // lvl: 0 clavija recta en el borne; 1 y 2, apilada sobre una o dos clavijas acodadas
- P.jack=(k,lvl=0)=>{const [u,v]=P.SK[k],[a,b]=P.L(u,v);return {p:fr.localToWorld(V3(a,b,.040+lvl*.021+(lvl?.0025:0))),n:V3(0,0,1).applyQuaternion(fr.getWorldQuaternion(new THREE.Quaternion()))}};
- P.plug=(k,col,lvl=0)=>{const [u,v]=P.SK[k],[a,b]=P.L(u,v);plugAt(fr,a,b,col,lvl*.021+(lvl?.0025:0))};
- P.elbow=(k,col,ang,lvl=0)=>{const [u,v]=P.SK[k],[a,b]=P.L(u,v);return elbowPlug(fr,a,b,.0025+lvl*.021,col,ang)};
+ // clavijas: nivel 0 en el borne; cada nivel siguiente, enchufada en la trasera de la anterior
+ P.stack={};P.sp=(k,col,ang)=>{const [u,v]=P.SK[k],[a,b]=P.L(u,v),z=P.stack[k]||0,p=sPlug(fr,a,b,z,col,ang,PSK);P.stack[k]=p.back;return p};
+ P.straight=(k,col)=>{const [u,v]=P.SK[k],[a,b]=P.L(u,v),z=P.stack[k]||0;plugAt(fr,a,b,col,z);P.stack[k]=z+.040;return ()=>({p:fr.localToWorld(V3(a,b,z+.040)),n:V3(0,0,1).transformDirection(fr.matrixWorld)})};
  root.traverse(q=>{if(q.isMesh)q.userData.inst=P});
- if(P.handle){const hm=finish(0x2c3140,.5,.08);for(const sx of[-1,1]){const p=new THREE.Mesh(roundBox(.022,.07,.03,.004,.0015),hm);p.position.set(sx*.135,H+.012+.03,-D+.03);tilt.add(p)}const hb=new THREE.Mesh(roundBox(.292,.022,.03,.006,.002),hm);hb.position.set(0,H+.012+.066,-D+.03);tilt.add(hb);shadow(tilt);face.castShadow=false}
- P.picks=[face,body,rock,...P.kn.flatMap(k=>k.children)];return P}
+ P.picks=[face,body,...P.kn.flatMap(k=>k.children)];return P}
 function drawPSU(P){const x=P.ctx,st=S?S[P.sid]:null;x.setTransform(2,0,0,2,0,0);
- x.fillStyle='#2c3140';x.fillRect(0,0,640,400);const g=x.createLinearGradient(0,0,0,400);g.addColorStop(0,'#e3e4df');g.addColorStop(1,'#d3d5cf');x.fillStyle=g;rr(x,10,10,620,380,10);x.fill();
- x.fillStyle='#1d2327';x.textAlign='left';x.font='bold 19px Arial, sans-serif';x.fillText(P.title,26,40);x.fillRect(26,50,588,1.6);
- for(const K of P.K){const [cx,cy]=K.c,r=K.r,ra=r+14;x.strokeStyle='#1d2327';x.fillStyle='#1d2327';x.textAlign='center';
-  x.lineWidth=1.6;x.beginPath();x.arc(cx,cy,ra,(-135-90)*Math.PI/180,(135-90)*Math.PI/180);x.stroke();
-  const n=K.max/K.st;for(let i=0;i<=n*5;i++){const a=(-135+270*i/(n*5)-90)*Math.PI/180,big=i%5===0,r1=ra+(big?11:6);x.lineWidth=big?2.2:1.1;x.beginPath();x.moveTo(cx+ra*Math.cos(a),cy+ra*Math.sin(a));x.lineTo(cx+r1*Math.cos(a),cy+r1*Math.sin(a));x.stroke();
-   if(big){x.font='bold '+(r>34?15:12.5)+'px Arial, sans-serif';x.fillText(String(i/5*K.st),cx+(ra+(r>34?28:23))*Math.cos(a),cy+(ra+(r>34?28:23))*Math.sin(a)+5)}}
-  x.font='bold '+(r>34?17:15)+'px Arial, sans-serif';x.fillText(K.cap,cx,cy+K.dy)}
+ x.fillStyle=PANEL;x.fillRect(0,0,700,489);x.strokeStyle='#b9bbb6';x.lineWidth=2;x.strokeRect(1,1,698,487);
+ x.fillStyle=INK;x.textAlign='left';x.font='bold 21px Arial, sans-serif';P.title.forEach((t,i)=>x.fillText(t,24,46+i*27));
  if(P.art)P.art(x);
- x.font='bold 21px Arial, sans-serif';x.textAlign='center';
- for(const k in P.SK){const [u,v,c,,sg]=P.SK[k];x.fillStyle=c==='r'?'#b3261e':c==='b'?'#1f4f9c':'#7a6a00';x.fillText(sg||(c==='r'?'+':c==='b'?'−':'~'),u+(P.sgx||0),v+(P.sgy===undefined?-22:P.sgy))}
- const [px,py,pw,ph]=P.PW;x.fillStyle='#1d2327';x.textAlign='center';x.font='bold 15px Arial, sans-serif';x.fillText('RED',px+pw/2,py+ph+24);x.fillText('I',px+pw+10,py+24);x.fillText('O',px+pw+11,py+ph-12);
- const on=st&&st.on,lamp=x.createRadialGradient(px+pw/2,py-18,0,px+pw/2,py-18,9);lamp.addColorStop(0,on?'#d6ffc0':'#9aa39a');lamp.addColorStop(.5,on?'#58c14a':'#6d776f');lamp.addColorStop(1,on?'#2c7d32':'#49524c');x.fillStyle=lamp;x.beginPath();x.arc(px+pw/2,py-18,8,0,7);x.fill();
+ for(const K of P.K){const [cx,cy]=K.c,ra=K.r+13;x.strokeStyle=INK;x.fillStyle=INK;x.textAlign='center';
+  x.lineWidth=1.8;x.beginPath();x.arc(cx,cy,ra,(-135-90)*Math.PI/180,(135-90)*Math.PI/180);x.stroke();
+  const n=K.max/K.tick;for(let i=0;i<=n;i++){const v=i*K.tick,a=(-135+270*v/K.max-90)*Math.PI/180,big=Math.abs(v/K.big-Math.round(v/K.big))<1e-6||i===n,r1=ra+(big?9:5);x.lineWidth=big?2:1.1;x.beginPath();x.moveTo(cx+ra*Math.cos(a),cy+ra*Math.sin(a));x.lineTo(cx+r1*Math.cos(a),cy+r1*Math.sin(a));x.stroke()}
+  x.font='bold 13px Arial, sans-serif';for(const v of K.lab){const a=(-135+270*v/K.max-90)*Math.PI/180,t=String(v),rl=ra+13+3.2*t.length;x.fillText(t,cx+rl*Math.cos(a),cy+rl*Math.sin(a)+4.5)}
+  if(K.cap){x.font='bold 14px Arial, sans-serif';x.fillText(K.cap,cx,cy-ra-30)}
+  if(K.led){x.font='12.5px Arial, sans-serif';if(K.led!==true)x.fillText(K.led,cx,cy-ra-44);x.fillStyle='#7d2323';x.beginPath();x.arc(cx,cy-ra-(K.led===true?16:30),4,0,7);x.fill()}}
+ // piloto de encendido: es también el interruptor de la simulación
+ const [px,py]=P.pilot,on=st&&st.on;x.fillStyle=INK;x.textAlign='center';x.font='13px Arial, sans-serif';x.fillText('Power',px,py-14);
+ if(on){x.fillStyle='rgba(88,200,80,.30)';x.beginPath();x.arc(px,py,12,0,7);x.fill()}const lamp=x.createRadialGradient(px-1,py-1,0,px,py,6);lamp.addColorStop(0,on?'#e2ffd0':'#aab3aa');lamp.addColorStop(.5,on?'#4fcf45':'#7c867e');lamp.addColorStop(1,on?'#23802b':'#58615a');x.fillStyle=lamp;x.beginPath();x.arc(px,py,5.5,0,7);x.fill();
  P.tex.needsUpdate=true}
 
 /* ================= aparatos ================= */
-const FLD='#c3e3f1';
-const PL=makePSU({sid:'L',x:-.70,z:-.52,title:'FUENTE DE ALIMENTACIÓN UNIVERSAL',sgx:-38,sgy:7,handle:true,
- K:[{c:[106,146],max:18,st:3,cap:'0…18 V ⎓',r:36,dy:104},{c:[290,146],max:5,st:1,cap:'0…5 A',r:36,dy:104}],
- SK:{p:[196,298,'r'],n:[196,352,'b']},deco:[[330,325,'y'],[470,298,'k'],[470,352,'k']],PW:[566,84,44,70],
- art:x=>{x.fillStyle=FLD;rr(x,146,264,82,118,8);x.fill();rr(x,420,264,82,118,8);x.fill();
-  x.fillStyle='#1d2327';x.textAlign='center';x.font='bold 14px Arial, sans-serif';x.fillText('⏚',330,366);x.fillText('2…15 V ~',470,250);x.fillStyle='#7a6a00';x.font='bold 21px Arial, sans-serif';x.fillText('~',432,305);x.fillText('~',432,359);
-  x.fillStyle='#1d2327';x.lineWidth=1.6;x.strokeStyle='#1d2327';for(let i=0;i<8;i++){const a=(-140+40*i-90)*Math.PI/180;x.beginPath();x.arc(470+50*Math.cos(a),142+50*Math.sin(a),3.4,0,7);x.fill()}
-  x.fillStyle='#34373c';x.beginPath();x.arc(470,142,30,0,7);x.fill();x.fillStyle='#b9bdc0';x.beginPath();x.arc(470,142,21,0,7);x.fill();x.fillStyle='#16181b';x.fillRect(468.5,121,3,17)}});
-const PR=makePSU({sid:'R',x:.70,z:-.52,title:'FUENTE REGULADA 0…600 V ⎓',sgx:-38,sgy:7,
- K:[{c:[85,138],max:12,st:3,cap:'0…12 V ⎓',r:28,dy:86},{c:[220,138],max:50,st:10,cap:'0…50 V ⎓',r:28,dy:86},{c:[355,138],max:300,st:100,cap:'0…300 V ⎓',r:28,dy:86}],
- SK:{p12:[85,298,'r'],n12:[85,352,'b'],p50:[220,298,'r'],n50:[220,352,'b'],p300:[355,298,'r'],n300:[355,352,'b'],pF:[448,298,'r'],nF:[448,352,'b'],h1:[538,298,'y'],h2:[538,352,'y']},PW:[566,84,44,70],
- art:x=>{x.fillStyle=FLD;for(const u of[85,220,355,448,538]){rr(x,u-50,264,82,118,8);x.fill()}
-  x.fillStyle='#1d2327';x.textAlign='center';x.font='bold 14px Arial, sans-serif';x.fillText('300 V ⎓',440,250);x.fillText('6,3 V ~',532,250)}});
-const ZD=.16,AMM=makeDMM(0,'AMPERÍMETRO',-.32,ZD,0),VOLT=makeDMM(1,'VOLTÍMETRO',.32,ZD,0);
+const fld=(x,cx,y0,h)=>{x.fillStyle=MINT;rr(x,cx-38,y0,76,h,9);x.fill()};
+const sgn=(x,t,u,v,c)=>{x.fillStyle=c;x.font='bold 19px Arial, sans-serif';x.textAlign='center';x.fillText(t,u,v)};
+const sml=(x,t,u,v,b)=>{x.fillStyle=INK;x.font=(b?'bold ':'')+'12.5px Arial, sans-serif';x.textAlign='center';x.fillText(t,u,v)};
+const gnd=(x,u,v)=>{x.strokeStyle=INK;x.lineWidth=2;x.beginPath();x.moveTo(u,v-9);x.lineTo(u,v);x.moveTo(u-10,v);x.lineTo(u+10,v);x.moveTo(u-6.5,v+5);x.lineTo(u+6.5,v+5);x.moveTo(u-3,v+10);x.lineTo(u+3,v+10);x.stroke()};
+// Fuente de las bobinas: mandos de tensión y de intensidad, salida de continua (rojo y azul), tierra y sección de alterna, que no se usa
+const PL=makePSU({sid:'L',x:-.70,z:-.30,title:['Fuente de alimentación universal'],pilot:[511,100],PW:[470,68,82,46],hitR:70,
+ K:[{c:[115,262],r:34,max:18,tick:1,big:5,lab:[0,5,10,15],cap:'V'},{c:[275,250],r:34,max:5,tick:.5,big:1,lab:[0,1,2,3,4,5],cap:'A',led:true}],
+ SK:{p:[228,394,'r'],n:[228,452,'b'],pe:[392,436,'e'],a1:[511,396,'k'],a2:[511,452,'k']},fuse:[[511,322,17]],lever:[511,218,-150],
+ art:x=>{x.fillStyle='#fbfbf8';x.strokeStyle='#cfd1cc';x.lineWidth=1.5;x.beginPath();x.arc(511,218,58,0,7);x.fill();x.stroke();
+  [[4,-100],[6,-62],[8,-22],[10,20],[12,62],[15,100]].forEach(([t,a])=>{const r=a*Math.PI/180;x.fillStyle='#1b1c20';x.beginPath();x.arc(511+44*Math.sin(r),218-44*Math.cos(r),7.5,0,7);x.fill();x.fillStyle=INK;x.font='bold 12.5px Arial, sans-serif';x.textAlign='center';x.fillText(String(t),511+72*Math.sin(r),218-72*Math.cos(r)+5)});
+  sml(x,'2…15 V ~',511,356,true);sml(x,'máx. 5 A',511,371);sml(x,'AC',478,428,true);
+  sml(x,'0…18 V ⎓',228,352,true);sml(x,'0…5 A',228,367);sgn(x,'+',259,400,'#b3261e');sgn(x,'−',259,458,'#1f4f9c');sml(x,'DC',196,428,true);gnd(x,392,468)}});
+// Fuente del tubo: tres salidas regulables (0…12 V, 0…50 V y 0…300 V), tierra, 300 V fija y 6,3 V de alterna para el caldeo
+const PR=makePSU({sid:'R',x:.70,z:-.30,handle:true,title:['Fuente de alimentación regulada','0…600 V ⎓'],pilot:[632,138],PW:[591,106,82,46],hitR:55,
+ K:[{c:[112,236],r:30,max:12,tick:1,big:6,lab:[0,5,12],led:'I máx.'},{c:[224,236],r:30,max:50,tick:5,big:10,lab:[0,10,20,30,40,50],led:'I máx.'},{c:[343,228],r:30,max:300,tick:10,big:100,lab:[0,100,200,300],led:'I máx.'}],
+ SK:{p12:[112,388,'r'],n12:[112,448,'b'],p50:[224,388,'r'],n50:[224,448,'b'],p300:[343,388,'r'],n300:[343,448,'b'],pe:[445,418,'e'],pF:[546,388,'r'],nF:[546,448,'b'],h1:[632,388,'k'],h2:[632,448,'k']},fuse:[[632,262,15]],
+ art:x=>{[[112,236,'0…12 V ⎓','0,5 A'],[224,236,'0…50 V ⎓','50 mA'],[343,228,'0…300 V ⎓','50 mA']].forEach(([cx,cy,a,b])=>{x.fillStyle=MINT;x.fillRect(cx-11,cy+30,22,330-cy-30);fld(x,cx,318,154);sml(x,a,cx,335,true);sml(x,b,cx,350);sgn(x,'+',cx+30,394,'#b3261e');sgn(x,'−',cx+30,454,'#1f4f9c');sml(x,'DC',cx,423,true)});
+  fld(x,546,318,154);sml(x,'300 V ⎓',546,335,true);sml(x,'50 mA',546,350);sgn(x,'+',576,394,'#b3261e');sgn(x,'−',576,454,'#1f4f9c');sml(x,'DC',546,423,true);
+  fld(x,632,196,276);x.strokeStyle=INK;x.lineWidth=1.6;x.strokeRect(621,211,22,9);x.beginPath();x.moveTo(608,215.5);x.lineTo(656,215.5);x.stroke();sml(x,'6,3 V ~',632,318,true);sml(x,'2 A',632,333);sml(x,'AC',632,423,true);
+  x.lineWidth=2;x.lineJoin='round';x.beginPath();x.moveTo(445,326);x.lineTo(463,357);x.lineTo(427,357);x.closePath();x.stroke();x.fillStyle=INK;x.font='bold 17px Arial, sans-serif';x.textAlign='center';x.fillText('!',445,353);gnd(x,445,462)}});
+const ZD=.19,AMM=makeDMM(0,'AMPERÍMETRO',-.32,ZD,0),VOLT=makeDMM(1,'VOLTÍMETRO',.32,ZD,0);
 {const p=(m,j,c)=>{const[a,b]=m.L(JACK.find(q=>q[0]===j)[2],JY);plugAt(m.fr,a,b,c)};p(AMM,'10A','r');p(AMM,'COM','r');p(VOLT,'V','r');p(VOLT,'COM','b')}
-// clavijas de las fuentes y de las bobinas
-PL.plug('p','r');PL.plug('n','b');
-COIL.F.plug(-1,'r');COIL.F.plug(1,'r');COIL.B.plug(1,'r');COIL.B.plug(-1,'b');
-PR.plug('h1','y');PR.plug('h2','y');PR.plug('n50','b');
-const D2R=Math.PI/180,EJ={a:PR.elbow('p50','b',-45*D2R),vr:PR.elbow('p300','r',-22*D2R),vb:PR.elbow('n300','b',-62*D2R),b:PR.elbow('n300','b',215*D2R,1)};
-PR.plug('p50','y',1);PR.plug('p300','r',1);
+// Clavijas. Bobinas: rectas. Tubo y su fuente: de seguridad, apilables, con el cable saliendo por un costado.
+const EJ={Lp:PL.straight('p','r'),Ln:PL.straight('n','b')};
+COIL.F.plug(-1,'r');COIL.F.plug(1,'b');COIL.B.plug(1,'b');COIL.B.plug(-1,'b');
+EJ.W=PR.sp('n50','b',0);          // − de 0…50 V: cilindro de Wehnelt
+EJ.Ja=PR.sp('p50','k',64);        // + de 0…50 V: puente con el − de 0…300 V
+EJ.A=PR.sp('p300','r',-135);      // + de 0…300 V: ánodo…
+EJ.Vr=PR.straight('p300','r');    // …y, encima, el voltímetro
+EJ.Jb=PR.sp('n300','k',244);      // − de 0…300 V: puente con el + de 0…50 V…
+EJ.Lb=PR.sp('n300','k',106);      // …puente con tierra…
+EJ.Vb=PR.straight('n300','b');    // …y el voltímetro
+EJ.K=PR.sp('pe','k',0);           // tierra: cátodo…
+EJ.La=PR.sp('pe','k',-74);        // …y puente con el − de 0…300 V
+EJ.H1=PR.sp('h1','y',90);EJ.H2=PR.sp('h2','y',0); // 6,3 V ~: caldeo
 for(const inst of INST)collectHardware(inst.root,new Set([inst.kn,inst.face,inst.body]));
 
 /* ================= cables ================= */
-const CB={c1:cable('r'),c2:cable('r'),c3:cable('r'),c4:cable('b'),h1:cable('y'),h2:cable('y'),k:cable('y'),w:cable('b'),a:cable('r'),j:cable('b'),vr:cable('r'),vb:cable('b')};
-// Tramo que cuelga de una clavija hasta la mesa: sale recto, se dobla por su peso y se posa en L=[x,z].
-function drop(e,L,c=.05,toL=false,ex=.8){const p0=e.p.clone().addScaledVector(e.n,-.006),a1=e.p.clone().addScaledVector(e.n,.024),a2=a1.clone().addScaledVector(e.n,.022);a2.y-=.005;
- const h=V3(e.n.x,0,e.n.z);if(toL||h.lengthSq()<.04)h.set(L[0]-a2.x,0,L[1]-a2.z);h.normalize();const out=[p0,a1];let s=a2;
- if(e.n.y>.3){const b=a2.clone().addScaledVector(h,.008),a3=b.clone().addScaledVector(h,.026);a3.y+=.006;s=a3.clone().addScaledVector(h,.022);s.y=a3.y-.009;out.push(b,a3,s)}else out.push(a2); // borne que mira hacia arriba: el cable hace una joroba antes de caer
- const C=s.clone().addScaledVector(h,c),H=s.y-.0035;
- for(const t of[.2,.4,.6,.8,1]){const u=1-t,w=Math.pow(t,ex),sm=w*w*(3-2*w);out.push(V3(u*u*s.x+2*t*u*C.x+t*t*L[0],.0035+H*(1-sm),u*u*s.z+2*t*u*C.z+t*t*L[1]))}return out}
-const VIA=q=>V3(q[0],q.length>2?q[2]:.0035,q[1]); // punto de paso: [x,z] sobre la mesa o [x,z,y]
-function connect(mesh,A,B,vias,r=.0034){setTube(mesh,[...A,...vias.map(VIA),...B.reverse()],r)}
-// recorrido sobre la mesa con las esquinas redondeadas; devuelve los puntos intermedios (sin los extremos)
-function lane(pts,r=.03){const o=[];for(let i=1;i<pts.length-1;i++){const B=pts[i],A=pts[i-1],C=pts[i+1],d1=Math.hypot(B[0]-A[0],B[1]-A[1]),d2=Math.hypot(C[0]-B[0],C[1]-B[1]),d=Math.min(r,d1*.45,d2*.45),
-  P=[B[0]+(A[0]-B[0])/d1*d,B[1]+(A[1]-B[1])/d1*d],Q=[B[0]+(C[0]-B[0])/d2*d,B[1]+(C[1]-B[1])/d2*d];o.push(P,[.25*P[0]+.5*B[0]+.25*Q[0],.25*P[1]+.5*B[1]+.25*Q[1]],Q)}return o}
-const elb=(E,more)=>{const o=E.out();return [o.p.clone().addScaledVector(o.n,-.004),o.p.clone().addScaledVector(o.n,.016),...more.map(VIA)]};
+// Rojo: positivo (ánodo, + de las bobinas). Azul: negativo (Wehnelt, retorno de las bobinas). Negro: punto cero (cátodo, tierra, puentes). Amarillo: caldeo.
+const CB={c1:cable('r'),c2:cable('r'),c3:cable('b'),c4:cable('b'),h1:cable('y'),h2:cable('y'),k:cable('k'),w:cable('b'),a:cable('r'),j:cable('k'),l:cable('k'),vr:cable('r'),vb:cable('b')};
+const FY=.0036;
+const B3=(a,b,c,d,n=14)=>{const o=[];for(let i=1;i<=n;i++){const t=i/n,u=1-t,w0=u*u*u,w1=3*u*u*t,w2=3*u*t*t,w3=t*t*t;o.push(V3(w0*a.x+w1*b.x+w2*c.x+w3*d.x,w0*a.y+w1*b.y+w2*c.y+w3*d.y,w0*a.z+w1*b.z+w2*c.z+w3*d.z))}return o};
+// De una clavija a la mesa: el cable sale en la dirección de la clavija, cae por su peso (g) y se posa en L con rumbo d, sin quiebros.
+function fall(e,L,d,k1,k2=.05,g=0,bx=0){const a=e.p.clone().addScaledVector(e.n,-.004),p=e.p.clone().addScaledVector(e.n,.006),Lp=V3(L[0],FY,L[1]),D=V3(d[0],0,d[1]).normalize();
+ if(k1===undefined)k1=e.n.y<-.5?Math.min(.16,.55*(p.y-FY)):.05;const c1=p.clone().addScaledVector(e.n,k1);c1.y=Math.max(FY+.004,c1.y-g);c1.x+=bx; // bx: el cable se abre hacia su destino mientras cuelga
+ return [a,p,...B3(p,c1,Lp.clone().addScaledVector(D,-k2),Lp)]}
+// Tramo sobre la mesa: curva suave por los puntos W, con el rumbo de salida y el de llegada dados.
+function floorPath(W,d0,d1,per=9){const n=W.length,T=W.map((q,i)=>{if(i===0){const l=Math.hypot(W[1][0]-q[0],W[1][1]-q[1]);return [d0[0]*l,d0[1]*l]}if(i===n-1){const l=Math.hypot(q[0]-W[i-1][0],q[1]-W[i-1][1]);return [d1[0]*l,d1[1]*l]}return [(W[i+1][0]-W[i-1][0])/2,(W[i+1][1]-W[i-1][1])/2]}),o=[];
+ for(let i=0;i<n-1;i++)for(let j=1;j<=per;j++){if(i===n-2&&j===per)break;const t=j/per,t2=t*t,t3=t2*t,h0=2*t3-3*t2+1,h1=t3-2*t2+t,h2=-2*t3+3*t2,h3=t3-t2;o.push(V3(h0*W[i][0]+h1*T[i][0]+h2*W[i+1][0]+h3*T[i+1][0],FY,h0*W[i][1]+h1*T[i][1]+h2*W[i+1][1]+h3*T[i+1][1]))}return o}
+const unit=(a,b)=>{const x=b[0]-a[0],z=b[1]-a[1],l=Math.hypot(x,z)||1;return [x/l,z/l]};
+// Cable completo: baja de la clavija A, recorre la mesa por W y sube a la clavija B. o: tensiones de las curvas de los extremos.
+function route(mesh,eA,eB,W,o={}){const n=W.length,d0=o.d0||unit(W[0],W[1]),d1=o.d1||unit(W[n-2],W[n-1]);
+ setTube(mesh,[...fall(eA,W[0],d0,o.a1,o.a2,o.ag,o.ax),...floorPath(W,d0,d1),...fall(eB,W[n-1],[-d1[0],-d1[1]],o.b1,o.b2,o.bg,o.bx).reverse()],o.r)}
+// Puente corto entre dos clavijas: un lazo en el aire que se abomba hacia fuera.
+function air(mesh,eA,eB,bulge){const a=eA.p,b=eB.p;setTube(mesh,[a.clone().addScaledVector(eA.n,-.004),a.clone(),...B3(a,a.clone().addScaledVector(eA.n,.014).add(bulge),b.clone().addScaledVector(eB.n,.014).add(bulge),b,12),b.clone().addScaledVector(eB.n,-.004)])}
 function fixedCables(){SC.updateMatrixWorld(true);
- // bobinas, en serie con el amperímetro: fuente + → amperímetro → bobina delantera → bobina trasera → fuente −
- {const p=PL.jack('p'),n=PL.jack('n'),zl=PL.root.position.z,a=AMM.jack('10A').p.x,c=AMM.jack('COM').p.x;
-  let A=[p.p.x-.022,p.p.z+.088],B=[a,ZD+.155];connect(CB.c1,drop(p,A,.06,false,1.1),drop(AMM.jack('10A'),B,.05),lane([A,[A[0],zl+.20],[-.47,ZD-.06],[-.47,ZD+.195],[a,ZD+.195],B],.04));
-  A=[c,ZD+.15];B=[-.118,-.09];connect(CB.c2,drop(AMM.jack('COM'),A,.05),drop(COIL.F.jack(-1),B,.04),lane([A,[c,ZD+.185],[-.18,ZD+.185],[-.18,-.04],B],.035));
-  A=[.118,-.09];B=[.118,-.61];connect(CB.c3,drop(COIL.F.jack(1),A,.04),drop(COIL.B.jack(1),B,.04),lane([A,[.118,-.062],[.236,-.062],[.236,-.638],[.118,-.638],B],.035));
-  A=[-.118,-.61];B=[n.p.x+.022,n.p.z+.055];connect(CB.c4,drop(COIL.B.jack(-1),A,.04),drop(n,B,.02,false,.75),lane([A,[-.118,-.638],[-.44,-.638],[-.44,zl+.145],[B[0],zl+.145],B],.035))}
- // tubo → fuente regulada. Cada cable cae a la mesa, corre por su carril y gira hacia su borne; los carriles van ordenados para que no se crucen
- {const zr=PR.root.position.z,T=(n,k,lvl,xl,dx,zo,ct,et)=>{const e=TUBE.jack(n),s=PR.jack(k,lvl),A=[xl,zr+zo],B=[s.p.x+dx,s.p.z+(dx>0?.088:.055)];connect(CB[n==='H1'?'h1':n==='H2'?'h2':n.toLowerCase()],drop(e,A,ct,false,et),drop(s,B,dx>0?.06:.02,false,dx>0?1.1:.75),lane([A,[B[0],A[1]],B],.028))};
-  T('W','n50',0,.52,-.02,.150,.012,.7); // cilindro de Wehnelt (azul) al − de 0…50 V
-  T('K','p50',1,.59,.02,.166,.065,1.2);  // cátodo (amarillo) al + de 0…50 V, sobre la clavija del puente
-  T('A','p300',1,.555,-.016,.182,.04,.9); // ánodo (rojo) al + de 0…300 V, sobre la clavija del voltímetro
-  T('H2','h2',0,.52,-.02,.198,.012,.7);T('H1','h1',0,.59,.02,.214,.065,1.2); // caldeo (amarillos) a 6,3 V ~
-  // puente corto entre el + de 0…50 V y el − de 0…300 V: es el potencial del cátodo
-  {const a=EJ.a.out(),b=EJ.b.out(),m=(a.p.x+b.p.x)/2;setTube(CB.j,[...elb(EJ.a,[[m-.002,(a.p.z+b.p.z)/2+.004,Math.min(a.p.y,b.p.y)-.016]]),b.p.clone().addScaledVector(b.n,.016),b.p.clone().addScaledVector(b.n,-.004)])}
-  // voltímetro, entre el + y el − de 0…300 V: los cables salen por el pie de la fuente, bajo las clavijas de la derecha, y rodean por delante
-  const v=VOLT.jack('V').p.x,c=VOLT.jack('COM').p.x,r0=EJ.vr.out().p,b0=EJ.vb.out().p,xe=PR.jack('h1').p.x;
-  let A=[r0.x+.062,zr+.034],B=[v,ZD+.15];connect(CB.vr,elb(EJ.vr,[[r0.x+.026,(r0.z+zr+.034)/2,.034],[r0.x+.046,zr+.034,.011]]).concat([VIA(A)]),drop(VOLT.jack('V'),B,.05),lane([A,[xe+.040,zr+.034],[xe+.040,zr+.24],[.47,ZD-.06],[.47,ZD+.19],[v,ZD+.19],B],.04));
-  A=[b0.x+.045,zr+.016];B=[c,ZD+.155];connect(CB.vb,elb(EJ.vb,[[b0.x+.014,zr+.016,.009]]).concat([VIA(A)]),drop(VOLT.jack('COM'),B,.05),lane([A,[xe+.058,zr+.016],[xe+.058,zr+.25],[.488,ZD-.052],[.488,ZD+.208],[c,ZD+.208],B],.04))}
+ // Bobinas, en serie con el amperímetro: + de la fuente → amperímetro → bobina delantera → (puente) → bobina trasera → − de la fuente
+ // En los polímetros la clavija apunta hacia delante: el cable baja a la mesa por delante del aparato y allí da la vuelta, sin quiebros.
+ route(CB.c1,EJ.Lp(),AMM.jack('10A'),[[-.752,-.185],[-.70,-.05],[-.565,.10],[-.485,.25],[-.468,.325],[-.428,.388],[-.3816,.34]],{a1:.05,d1:[0,-1],b1:.07,b2:.075});
+ route(CB.c2,AMM.jack('COM'),COIL.F.jack(-1),[[-.2995,.34],[-.248,.388],[-.20,.325],[-.186,.16],[-.172,.02],[-.157,-.08]],{d0:[0,1],a1:.07,a2:.075,d1:[0,-1],b1:.04,b2:.03});
+ route(CB.c3,COIL.F.jack(1),COIL.B.jack(1),[[.162,-.08],[.248,-.15],[.268,-.35],[.248,-.55],[.162,-.62]],{a1:.04,a2:.03,b1:.04,b2:.03});
+ route(CB.c4,COIL.B.jack(-1),EJ.Ln(),[[-.166,-.62],[-.262,-.585],[-.305,-.41],[-.365,-.245],[-.53,-.19],[-.70,-.20]],{a1:.04,a2:.03,b1:.035,b2:.03});
+ // Voltímetro: entre el + y el − de 0…300 V. Sus clavijas son las últimas de cada pila; los cables saltan por encima de los del tubo.
+ route(CB.vr,EJ.Vr(),VOLT.jack('V'),[[.655,-.07],[.59,.07],[.50,.22],[.468,.315],[.428,.385],[.3816,.34]],{a1:.07,ax:-.03,a2:.06,d1:[0,-1],b1:.07,b2:.075});
+ route(CB.vb,EJ.Vb(),VOLT.jack('COM'),[[.748,-.025],[.70,.10],[.585,.26],[.50,.365],[.40,.428],[.335,.40],[.2995,.345]],{a1:.06,ax:.035,a2:.06,d1:[0,-1],b1:.07,b2:.075});
+ // Tubo → fuente. Cada cable cuelga del capuchón, corre por la mesa y sube a su borne.
+ route(CB.a,TUBE.jack('A'),EJ.A.out(),[[.487,-.385],[.585,-.288]],{a1:.03,ag:.20,a2:.03,b1:.07,b2:.045});
+ route(CB.w,TUBE.jack('W'),EJ.W.out(),[[.487,-.305],[.60,-.24]],{a1:.03,ag:.20,a2:.03,b2:.03});
+ route(CB.k,TUBE.jack('K'),EJ.K.out(),[[.535,-.262],[.63,-.200],[.705,-.198]],{a1:.14,ax:.05,a2:.07,b2:.03});
+ route(CB.h2,TUBE.jack('H2'),EJ.H2.out(),[[.565,-.228],[.68,-.160],[.775,-.16]],{a1:.10,ax:.09,a2:.09,b2:.03});
+ route(CB.h1,TUBE.jack('H1'),EJ.H1.out(),[[.595,-.195],[.72,-.122],[.83,-.122],[.878,-.17]],{a1:.10,ax:.13,a2:.11,b1:.04,b2:.04});
+ // Puentes: + de 0…50 V con − de 0…300 V, y − de 0…300 V con tierra. Ese punto común es el cero del tubo (cátodo).
+ air(CB.j,EJ.Ja.out(),EJ.Jb.out(),V3(0,-.004,.030));
+ air(CB.l,EJ.La.out(),EJ.Lb.out(),V3(0,-.012,.030));
 }
 function floorLabel(x,z,l1,l2,W=.36,H=.060){const t=canvasTex(1024,Math.round(1024*H/W),(c,w,h)=>{c.clearRect(0,0,w,h);c.fillStyle='#8a939d';const put=(tx,wt,px,y)=>{const P=tx.split('_'),f=s=>wt+Math.round(px*s)+'px Arial, sans-serif';let m=0;P.forEach((s,i)=>{c.font=f(i%2?.68:1);m+=c.measureText(s).width});c.save();c.translate(w/2,y);c.scale(Math.min(1,(w-16)/m),1);let q=-m/2;c.textAlign='left';P.forEach((s,i)=>{c.font=f(i%2?.68:1);c.fillText(s,q,i%2?px*.22:0);q+=c.measureText(s).width});c.restore()};put(l1,'bold ',h*.40,h*.42);put(l2,'',h*.33,h*.86)});const m=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false,toneMapped:false,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-8}));m.rotation.x=-Math.PI/2;m.position.set(x,.0007,z);m.renderOrder=2;SC.add(m);return m} // rótulo en la mesa, como grabado en ella; _x_ escribe x como subíndice
 floorLabel(-.32,ZD+.265,'INTENSIDAD EN LAS BOBINAS','I, en amperios');floorLabel(.32,ZD+.265,'TENSIÓN DE ACELERACIÓN','V, en voltios');
+
+/* ================= corriente y campo B (vista añadida, no se ve en el montaje real) ================= */
+const FLD=new THREE.Group();FLD.position.set(0,YC,0);FLD.visible=false;APP.add(FLD);let fldOn=false;const FM={};
+function buildFld(){if(FM.ok)return;FM.ok=true;const R=RB,seg=72,TEAL=new THREE.Color(0x0aa6b8).convertSRGBToLinear(),AMB=new THREE.Color(0xffd04a).convertSRGBToLinear();
+ // campo de las dos espiras (Biot y Savart, sumando tramos); corriente en sentido antihorario vista desde delante → B hacia delante
+ const Bf=(rho,z)=>{let br=0,bz=0;for(const z0 of[-R/2,R/2])for(let i=0;i<seg;i++){const f=(i+.5)/seg*2*Math.PI,c=Math.cos(f),s=Math.sin(f),dx=rho-R*c,dy=R*s,dz=z-z0,r3=Math.pow(dx*dx+dy*dy+dz*dz,1.5);br+=R*c*dz/r3;bz+=(R*R-R*rho*c)/r3}return [br,bz]};
+ const line=rho0=>{const half=dir=>{const P=[];let r=rho0,z=0;for(let i=0;i<300;i++){const h=.006*dir,[a,b]=Bf(r,z),m=Math.hypot(a,b)||1,[a2,b2]=Bf(r+a/m*h/2,z+b/m*h/2),m2=Math.hypot(a2,b2)||1;r+=a2/m2*h;z+=b2/m2*h;if(Math.abs(z)>.262||r>.30||r<0)break;P.push([r,z])}return P};return [...half(-1).reverse(),[rho0,0],...half(1)]};
+ FM.dash=canvasTex(256,8,(x,w,h)=>{x.clearRect(0,0,w,h);for(let i=0;i<w;i++){const t=i/w,a=t<.86?.20+.80*Math.pow(t/.86,2.2):.20+.80*(1-(t-.86)/.14);x.fillStyle='rgba(255,255,255,'+a.toFixed(3)+')';x.fillRect(i,0,1,h)}});FM.dash.wrapS=THREE.RepeatWrapping;
+ FM.lineM=new THREE.MeshBasicMaterial({map:FM.dash,color:TEAL,transparent:true,depthWrite:false,toneMapped:false});FM.headM=new THREE.MeshBasicMaterial({color:TEAL,transparent:true,depthWrite:false,toneMapped:false});
+ const cone=new THREE.ConeGeometry(.0038,.013,14);
+ for(const [rho,azs] of[[0,[0]],[.055,[30,90,150,210,270,330]],[.11,[22.5,67.5,112.5,157.5,202.5,247.5,292.5,337.5]]]){const L=line(rho);
+  for(const az of azs){const f=az*Math.PI/180,P=L.map(([r,z])=>V3(r*Math.cos(f),r*Math.sin(f),z)),cv=new THREE.CatmullRomCurve3(P),g=new THREE.TubeGeometry(cv,P.length*2,.0013,6,false),uv=g.attributes.uv,k=cv.getLength()/.075;for(let i=0;i<uv.count;i++)uv.setX(i,uv.getX(i)*k);
+   const m=new THREE.Mesh(g,FM.lineM);m.renderOrder=2.5;FLD.add(m);
+   const t=cv.getTangent(1),c=new THREE.Mesh(cone,FM.headM);c.position.copy(P[P.length-1]).addScaledVector(t,.006);c.quaternion.setFromUnitVectors(V3(0,1,0),t);c.renderOrder=2.5;FLD.add(c)}}
+ // corriente: puntas de flecha que recorren el devanado
+ FM.chev=canvasTex(64,64,(x,w,h)=>{x.clearRect(0,0,w,h);x.fillStyle='#fff';x.beginPath();x.moveTo(12,6);x.lineTo(36,32);x.lineTo(12,58);x.lineTo(27,58);x.lineTo(51,32);x.lineTo(27,6);x.closePath();x.fill()});FM.chev.wrapS=THREE.RepeatWrapping;
+ FM.chevM=new THREE.MeshBasicMaterial({map:FM.chev,color:AMB,transparent:true,depthWrite:false,toneMapped:false,side:THREE.DoubleSide});
+ const NCH=30,a=.0048,b=.014;for(const zc of[-R/2,R/2]){
+  const rim=new THREE.CylinderGeometry(R+a+.0012,R+a+.0012,2*b*.82,128,1,true),uv=rim.attributes.uv;for(let i=0;i<uv.count;i++)uv.setX(i,uv.getX(i)*NCH*1.7);const rm=new THREE.Mesh(rim,FM.chevM);rm.rotation.x=Math.PI/2;rm.position.z=zc;rm.renderOrder=2.6;FLD.add(rm);
+  const n=128,pos=[],uvs=[],idx=[];for(let i=0;i<=n;i++){const t=i/n*2*Math.PI;for(const [r,v] of[[R-a*.9,0],[R+a*.9,1]]){pos.push(r*Math.cos(t),r*Math.sin(t),0);uvs.push(i/n*NCH*4.6,v)}if(i<n){const k=i*2;idx.push(k,k+1,k+2,k+1,k+3,k+2)}}
+  const fg=new THREE.BufferGeometry();fg.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));fg.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2));fg.setIndex(idx);const fm=new THREE.Mesh(fg,FM.chevM);fm.position.z=zc+b+.0008;fm.renderOrder=2.6;FLD.add(fm)}
+ // rótulos
+ const tag=(t,col,x,y,z)=>{const tx=canvasTex(128,128,(c,w,h)=>{c.clearRect(0,0,w,h);c.fillStyle=col;c.font='italic bold 96px Georgia, "Times New Roman", serif';c.textAlign='center';c.fillText(t,w/2,96)}),s=new THREE.Sprite(new THREE.SpriteMaterial({map:tx,transparent:true,depthWrite:false,toneMapped:false}));s.scale.set(.05,.05,1);s.position.set(x,y,z);s.renderOrder=7;FLD.add(s)};
+ tag('B','#078a99',.026,.026,.272);tag('I','#c98a00',R*.80,R*.80,R/2+.03)}
+function syncFld(){const I=solve().I,show=fldOn&&I>.02;if(show)buildFld();FLD.visible=show;$('#fldNote').hidden=!(fldOn&&!show);
+ if(show){const o=.40+.60*Math.min(1,I/2.5);FM.lineM.opacity=o*.9;FM.headM.opacity=o;FM.chevM.opacity=Math.min(1,o+.1)}}
+function setFld(on){fldOn=on;const b=$('#fldBtn');b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);syncFld();invalidate()}
 
 /* ================= estado ================= */
 const gA=1+(rnd()-.5)*.008,gV=1+(rnd()-.5)*.006,gB=1+(rnd()-.5)*.016; // calibración de los polímetros y del campo de las bobinas
@@ -606,8 +662,8 @@ const MU0=4e-7*Math.PI,NESP=154,RBOB=.2,KB=Math.pow(.8,1.5)*MU0*NESP/RBOB,EM=1.7
 function initState(){return {L:{on:false,u:[18,1]},R:{on:false,u:[0,50,100]},m:[{on:false,dial:'DCA10'},{on:false,dial:'DCV200'}]}}
 let S=initState(),heat=0;
 function setKnob(m){const p=dpos(m.dial);m.kn.rotation.z=-p.an*Math.PI/180;R3.shadowMap.needsUpdate=true;invalidate()}
-function drawKnobs(){for(const P of[PL,PR]){const st=S[P.sid];P.kn.forEach((k,i)=>{k.rotation.z=-(st.u[i]/P.K[i].max*270-135)*Math.PI/180});P.rock.rotation.x=st.on?-.16:.16}
- updateBeam();R3.shadowMap.needsUpdate=true;invalidate()}
+function drawKnobs(){for(const P of[PL,PR]){const st=S[P.sid];P.kn.forEach((k,i)=>{k.rotation.z=-(st.u[i]/P.K[i].max*270-135)*Math.PI/180})}
+ updateBeam();syncFld();R3.shadowMap.needsUpdate=true;invalidate()}
 function applyState(){AMM.on=S.m[0].on;AMM.dial=S.m[0].dial;VOLT.on=S.m[1].on;VOLT.dial=S.m[1].dial;drawPSU(PL);drawPSU(PR);drawKnobs();setKnob(AMM);setKnob(VOLT);measure(true);invalidate()}
 
 /* ================= física ================= */
@@ -652,7 +708,7 @@ function measure(force){const r=solve();
 const PM=()=>matchMedia('(max-width:820px)').matches;
 const V0=()=>({az:0,el:.47});
 let az,el,dist;const TG=V3();
-const BB=[];for(const sx of[-1,1]){BB.push(V3(sx*.275,.575,-.225),V3(sx*.28,.03,-.20),V3(sx*.885,0,-.79),V3(sx*.885,.25,-.52),V3(sx*.885,0,-.27),V3(sx*.50,0,ZD+.21),V3(sx*.51,0,ZD+.30))}BB.push(V3(0,.575,-.225));
+const BB=[];for(const sx of[-1,1]){BB.push(V3(sx*.275,.575,-.225),V3(sx*.28,.03,-.20),V3(sx*.86,0,-.60),V3(sx*.86,.27,-.42),V3(sx*.915,0,-.16),V3(sx*.50,0,ZD+.25),V3(sx*.51,0,ZD+.30))}BB.push(V3(0,.575,-.225));
 function fitV0(){ // encuadre de partida: el punto de mira y la distancia que más acercan el montaje sin recortarlo
  const v=V0(),top=PM()?.77:.875;let best=null;
  for(let cz=-.45;cz<=.10;cz+=.015){const c=V3(0,.16,cz);let lo=.5,hi=7;
@@ -681,7 +737,7 @@ function faceUV(inst){const n=V3(0,0,1).applyQuaternion(inst.fr.getWorldQuaterni
 function inR(u,v,[x,y,w,h],pad=4){return u>=x-pad&&u<=x+w+pad&&v>=y-pad&&v<=y+h+pad}
 function hitCtl(inst,uv){if(!uv)return null;const{u,v}=uv;
  if(inst.kind==='dmm'){if(inR(u,v,[22,138,90,24]))return {t:'pwr'};const d=Math.hypot(u-DCX,v-DCY);if(d<=KR+2)return {t:'knob'};if(d<=DR+2)return {t:'ring'};return null}
- if(inR(u,v,inst.PW,6))return {t:'spw'};for(let i=0;i<inst.K.length;i++){const K=inst.K[i];if(Math.hypot(u-K.c[0],v-K.c[1])<=K.r+(K.r>34?50:40))return {t:'sk',i}}return null}
+ if(inR(u,v,inst.PW,6))return {t:'spw'};for(let i=0;i<inst.K.length;i++){const K=inst.K[i];if(Math.hypot(u-K.c[0],v-K.c[1])<=inst.hitR)return {t:'sk',i}}return null}
 const angOf=(uv,cx,cy)=>Math.atan2(uv.u-cx,-(uv.v-cy))*180/Math.PI;
 function nearestPos(a){let best=null,bd=1e9;for(const p of DIAL.pos){const d=Math.abs(((a-p.an)%360+540)%360-180);if(d<bd){bd=d;best=p}}return best}
 function setDial(m,id){if(m.dial===id)return;m.dial=id;S.m[m.id].dial=id;setKnob(m);measure()}
@@ -741,25 +797,27 @@ function loop(now){frame=0;if(document.hidden)return;const dt=Math.min(.3,(now-(
  if(fly){const u=ease(Math.min(1,(now-fly.t0)/fly.dur));az=fly.a.az+(((fly.b.az-fly.a.az)%(2*Math.PI)+3*Math.PI)%(2*Math.PI)-Math.PI)*u;el=fly.a.el+(fly.b.el-fly.a.el)*u;dist=fly.a.dist+(fly.b.dist-fly.a.dist)*u;TG.copy(fly.a.tg).lerp(fly.b.tg,u);if(u>=1)fly=null;invalidate()}
  // el cátodo tarda un par de segundos en calentarse y en enfriarse
  const hT=S.R.on?1:0,warming=heat!==hT;if(warming){heat=hT>heat?Math.min(1,heat+dt/2.2):Math.max(0,heat-dt/1.2);updateBeam();invalidate()}
+ const flow=fldOn&&FLD.visible;if(flow){const I=solve().I,v=.35+.5*Math.min(1,I/2.5);FM.dash.offset.x-=dt*v*1.6;FM.chev.offset.x-=dt*v*1.3;invalidate()} // el campo y la corriente «fluyen» en su sentido
  if((AMM.on||VOLT.on)&&now-lastMeas>650)measure();
  if(dirty){camSet();CAM.updateMatrixWorld();R3.render(SC,CAM);dirty=false}
- if(fly||warming){if(!frame)frame=requestAnimationFrame(loop)}
+ if(fly||warming||flow){if(!frame)frame=requestAnimationFrame(loop)}
  else{tPrev=0;if((AMM.on||VOLT.on)&&!poll){poll=setTimeout(()=>{poll=0;if(!document.hidden&&!frame)frame=requestAnimationFrame(loop)},Math.max(12,651-(performance.now()-lastMeas)))}}
 }
 document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(poll);poll=0;if(frame)cancelAnimationFrame(frame);frame=0;tPrev=0}else invalidate()});
 
 /* ================= interfaz ================= */
 $('#gbtn').onclick=()=>{const h=document.body.classList.toggle('noside');$('#gbtn').textContent=h?'Mostrar guía':'Ocultar guía'};
+$('#fldBtn').onclick=()=>setFld(!fldOn);
 $('#vwBtn').onclick=()=>{const v=fitV0();zb=null;flyTo(v.tg,v.dist,v.az,v.el);touched=false};
 $('#rstBtn').onclick=()=>{$('#dlg').hidden=false};$('#dlgNo').onclick=()=>{$('#dlg').hidden=true};
 $('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg')$('#dlg').hidden=true});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#dlg').hidden=true});
-$('#dlgYes').onclick=()=>{$('#dlg').hidden=true;S=initState();heat=0;applyState()};
+$('#dlgYes').onclick=()=>{$('#dlg').hidden=true;S=initState();heat=0;applyState();setFld(false)};
 try{document.querySelectorAll('.eq[data-tex]').forEach(e=>katex.render(e.dataset.tex,e,{displayMode:true,throwOnError:false}))}catch(e){}
 fixedCables();size();camReset();applyState();invalidate();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{drawPSU(PL);drawPSU(PR);measure(true);invalidate()});
 window.__em={DIAL,CB,SC,APP,IN,TUBE,BEAM,COIL,scr:(inst,u,v)=>{const[lx,ly]=inst.L(u,v),w=inst.fr.localToWorld(V3(lx,ly,0)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},
- S:()=>S,solve,PL,PR,AMM,VOLT,setSup,setDial,measure,camState:()=>({az,el,dist,TG}),flyTo,gB,gA,gV,beamPath,setHeat:h=>{heat=h;updateBeam();invalidate()},EJ};
+ S:()=>S,solve,PL,PR,AMM,VOLT,setSup,setDial,measure,camState:()=>({az,el,dist,TG}),flyTo,gB,gA,gV,beamPath,setHeat:h=>{heat=h;updateBeam();invalidate()},EJ,FLD:()=>FLD,setFld};
 }
 async function arrancar(){
  function cargar(src){return new Promise((resolve,reject)=>{const el=document.createElement('script');el.onload=resolve;el.onerror=reject;el.src=src;document.head.appendChild(el)})}
