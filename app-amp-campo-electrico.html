@@ -87,7 +87,7 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 <p>Δ<i>V</i> se lee en el polímetro «TENSIÓN ΔV»; su error es una unidad de la última cifra. La distancia <i>d</i> entre las caras internas de las placas se lee en la regla del banco, bajo el índice rojo de la placa móvil; su error es una división, 1 mm. El cero de la regla está en la cara interna de la placa fija.</p>
 <p><i>E</i> se obtiene de la lectura del polímetro «SALIDA E». Su error es una unidad de la última cifra de esa lectura, convertida a campo con la escala del medidor: depende de la escala que uses.</p>
 <h2>Cómo se usa</h2>
-<p>Fuente: se enciende con su interruptor. El mando de 0…300 V fija la tensión Δ<i>V</i> entre las placas: gíralo arrastrando o pincha en su escala, y afina con la rueda del ratón hasta leer en el polímetro el valor que buscas. El mando de 0…15 V alimenta el medidor de campo y debe quedarse en 15 V; si lo bajas, el medidor deja de funcionar y sus aspas se paran.</p>
+<p>Fuente: se enciende con su interruptor. El mando de 0…300 V fija la tensión Δ<i>V</i> entre las placas: gíralo arrastrando o pincha en su escala, y usa la rueda del ratón sobre él: girándola seguido avanza deprisa y, muesca a muesca, afina hasta leer en el polímetro el valor que buscas. El mando de 0…15 V alimenta el medidor de campo y debe quedarse en 15 V; si lo bajas, el medidor deja de funcionar y sus aspas se paran.</p>
 <p>Medidor de campo: sus mandos y sus bornes están en la cara trasera, la del extremo derecho. Con doble clic sobre el medidor la vista se coloca delante de ella. El pulsador «Escala» pasa a la escala siguiente cada vez que se pulsa (1, 10, 100 y de nuevo 1 kV/m). La ruedecilla «← 0 →» se gira arrastrando alrededor de ella o con la rueda del ratón. Los bornes de la izquierda son la alimentación de 15 V (cables amarillo y negro) y los de la derecha la salida hacia el polímetro (rojo y azul); el cable azul del vástago pone a tierra la carcasa y, con ella, la placa fija.</p>
 <p>Placa móvil: arrastra la placa de la izquierda, o su soporte, a lo largo del banco. Para leer <i>d</i>, haz doble clic sobre la placa: la vista se acerca a la regla, donde la línea roja del índice marca la distancia. Desde ahí puedes arrastrar el índice para ajustar la placa milímetro a milímetro, y acercarte aún más con la rueda.</p>
 <p>Polímetros: se encienden con POWER. Ya están en tensión continua (V⎓): 200 V el de la izquierda y 20 V el de la derecha. El selector se gira arrastrándolo, con la rueda o pinchando en una marca.</p>
@@ -515,7 +515,8 @@ const FM={kind:'fm',W:700,H:700,wM:.07,hM:.07,root:{scale:{x:GS}},BTN:{c:[112,15
  shadow(g);shadow(fr);face.castShadow=false;sp.castShadow=tp.castShadow=false;
  FM.picks=[face,FM.btn,...FM.kZ.children];for(const m of FM.picks)m.userData.inst=FM;
 }
-function drawFM(){const x=FM.ctx;x.setTransform(2,0,0,2,0,0);x.fillStyle='#e9e9e4';x.fillRect(0,0,700,700);x.strokeStyle='#9aa09b';x.lineWidth=2;rr(x,10,10,680,680,22);x.stroke();
+function drawFM(){const kk=(S&&solve().fmOn?1:0)+'|'+(S?S.rng:0);if(FM.key===kk)return;FM.key=kk; // sólo se redibuja si cambia el piloto encendido
+ const x=FM.ctx;x.setTransform(2,0,0,2,0,0);x.fillStyle='#e9e9e4';x.fillRect(0,0,700,700);x.strokeStyle='#9aa09b';x.lineWidth=2;rr(x,10,10,680,680,22);x.stroke();
  x.fillStyle='#1d2327';x.textAlign='center';x.font='bold 30px Arial, sans-serif';x.fillText('Escala',FM.BTN.c[0],FM.BTN.c[1]+92);
  const on=S&&solve().fmOn;x.textAlign='left';x.font='bold 33px Arial, sans-serif';
  FM.LED.forEach(([u,v],i)=>{const lit=on&&S.rng===i,g=x.createRadialGradient(u-3,v-3,1,u,v,15);g.addColorStop(0,lit?'#d9ffd2':'#b8bdb4');g.addColorStop(.55,lit?'#2fd04c':'#8d948b');g.addColorStop(1,lit?'#12862b':'#6c726b');
@@ -746,11 +747,13 @@ function endPtr(e){PTR.delete(e.pointerId);if(mode==='pinch'){if(PTR.size<2){mod
 // Pellizco con dos dedos en el panel táctil (rueda con Ctrl): siempre zoom. Rueda o deslizamiento sobre un mando o sobre la placa: ajuste fino.
 let ruedaAcum=0;
 function paso(e){const dy=e.deltaMode===1?e.deltaY*33:e.deltaY;if(Math.abs(dy)>=50){ruedaAcum=0;return dy<0?1:-1}ruedaAcum+=dy;if(Math.abs(ruedaAcum)>=50){const d=ruedaAcum<0?1:-1;ruedaAcum=0;return d}return 0}
+// Rueda sobre un mando continuo: muesca a muesca afina; si se gira seguido en el mismo sentido, cada muesca avanza cada vez más.
+let ruedaT=0,ruedaG=1,ruedaS=0;function ruedaGan(e,k){const s=Math.sign(k),dt=e.timeStamp-ruedaT;ruedaG=(dt<220&&s===ruedaS)?Math.min(32,ruedaG*1.3):1;ruedaT=e.timeStamp;ruedaS=s;return ruedaG}
 box.addEventListener('wheel',e=>{e.preventDefault();const h=e.ctrlKey?null:pick(e);
  if(h&&h.object.userData.inst){const inst=h.object.userData.inst,c=hitCtl(inst,faceUV(inst)),k=-Math.max(-1,Math.min(1,(e.deltaMode===1?e.deltaY*33:e.deltaY)/100));
   if(c&&(c.t==='knob'||c.t==='ring')){const dir=paso(e);if(dir){const L=DIAL.pos,i=L.findIndex(p=>p.id===inst.dial);setDial(inst,L[(i+dir+L.length)%L.length].id)}return}
-  if(c&&c.t==='sk'){setSup(c.i,S.sup.u[c.i]+k*(c.i?.05:.2));return}
-  if(c&&c.t==='zero'){setZero(S.zero+k*.5);return}}
+  if(c&&c.t==='sk'){setSup(c.i,S.sup.u[c.i]+k*ruedaGan(e,k)*(c.i?.05:.25));return}
+  if(c&&c.t==='zero'){setZero(S.zero+k*ruedaGan(e,k)*.5);return}}
  const nd=Math.max(.03,Math.min(5,dist*Math.exp(e.deltaY*(e.ctrlKey?.01:.0012))));zAt(e.clientX,e.clientY,nd/dist);dist=nd;touched=true;invalidate()},{passive:false});
 const AZB=Math.atan2(-Math.sin(TH),Math.cos(TH)); // desde delante del banco
 box.addEventListener('dblclick',e=>{const h=pick(e);if(!h)return;
