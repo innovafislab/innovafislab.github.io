@@ -70,12 +70,12 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 <div class="eq" data-tex="E=\dfrac{\Delta V}{d}" aria-label="Campo eléctrico entre las placas"><i>E</i> = Δ<i>V</i> / <i>d</i></div>
 <h2>Qué hay que medir</h2>
 <p>El montaje ya está hecho. La fuente da la tensión Δ<i>V</i>, que mide el polímetro de la izquierda. La placa móvil recibe esa tensión a través de la resistencia de protección de 10 MΩ, enchufada en ese polímetro. La placa fija va atornillada al medidor de campo y está a tierra; la salida del medidor se lee en el polímetro de la derecha.</p>
-<p>Las conexiones son las del montaje real, y cada circuito lleva sus colores. Rojo: del borne + de 0…300 V al borne V·Ω del polímetro «TENSIÓN ΔV»; sobre esa clavija se enchufa la resistencia de 10 MΩ, y de su otro extremo sale el cable hacia la placa móvil. Azul: del borne − de 0…300 V al COM de ese polímetro y, con una segunda clavija, al vástago del medidor de campo, que queda a tierra. Amarillo (+) y negro (−): de la salida de 0…15 V a la entrada de 14…18 V del medidor. Verde (+) y violeta (⊥): de la salida de ±10 V del medidor a los bornes V·Ω y COM del polímetro «SALIDA E».</p>
+<p>Las conexiones son las del montaje real. Rojo, en el lado izquierdo: del borne + de 0…300 V al borne V·Ω del polímetro «TENSIÓN ΔV»; sobre esa clavija se enchufa la resistencia de 10 MΩ, y de su otro extremo sale el cable hacia la placa móvil. Azul: del borne − de 0…300 V al COM de ese polímetro y, con una segunda clavija, al vástago del medidor de campo, que queda a tierra. Amarillo (+) y negro (−): de la salida de 0…15 V a la entrada de 14…18 V del medidor. Rojo (+) y azul (⊥), en el lado derecho: de la salida de ±10 V del medidor a los bornes V·Ω y COM del polímetro «SALIDA E».</p>
 <p>Enciende la fuente y los dos polímetros. Antes de cada serie, y cada vez que muevas la placa, ajusta el cero del medidor como se explica más abajo.</p>
 <p class="p1">Con <i>d</i> = 10 cm, mide <i>E</i> para Δ<i>V</i> de 0 a 150 V, de 15 en 15 V.</p>
 <p class="p2">Con Δ<i>V</i> = 150 V, mide <i>E</i> para <i>d</i> de 5 a 15 cm, de 1 en 1 cm.</p>
 <h2>Cómo se lee el campo</h2>
-<p>El medidor no muestra el campo: da una tensión de salida entre 0 y 10 V, proporcional al campo, que se lee en el polímetro «SALIDA E». La escala elegida fija a qué campo corresponden esos 10 V: 1, 10 o 100 kV/m. Se cambia con el pulsador «Escala» de la cara trasera del medidor, y un piloto amarillo indica cuál está activa.</p>
+<p>El medidor no muestra el campo: da una tensión de salida entre 0 y 10 V, proporcional al campo, que se lee en el polímetro «SALIDA E». La escala elegida fija a qué campo corresponden esos 10 V: 1, 10 o 100 kV/m. Se cambia con el pulsador «Escala» de la cara trasera del medidor, y un piloto verde indica cuál está activa.</p>
 <div class="eq" data-tex="E=\dfrac{V_{\text{salida}}}{10\ \text{V}}\times\text{escala}" aria-label="Conversión de la tensión de salida en campo"><i>E</i> = (<i>V</i><sub>salida</sub> / 10 V) × escala</div>
 <p>Por ejemplo, una salida de 7,35 V es un campo de 0,735 kV/m en la escala 1, de 7,35 kV/m en la escala 10 y de 73,5 kV/m en la escala 100.</p>
 <p>Elige siempre la escala más baja posible, porque es la que da más cifras. Si la salida llega a 10 V, el medidor está saturado y esa lectura no vale: pulsa «Escala» para pasar a la siguiente.</p>
@@ -88,7 +88,7 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 <p><i>E</i> se obtiene de la lectura del polímetro «SALIDA E». Su error es una unidad de la última cifra de esa lectura, convertida a campo con la escala del medidor: depende de la escala que uses.</p>
 <h2>Cómo se usa</h2>
 <p>Fuente: se enciende con su interruptor. El mando de 0…300 V fija la tensión Δ<i>V</i> entre las placas: gíralo arrastrando o pincha en su escala, y afina con la rueda del ratón hasta leer en el polímetro el valor que buscas. El mando de 0…15 V alimenta el medidor de campo y debe quedarse en 15 V; si lo bajas, el medidor deja de funcionar y sus aspas se paran.</p>
-<p>Medidor de campo: sus mandos y sus bornes están en la cara trasera, la del extremo derecho. Con doble clic sobre el medidor la vista se coloca delante de ella. El pulsador «Escala» pasa a la escala siguiente cada vez que se pulsa (1, 10, 100 y de nuevo 1 kV/m). La ruedecilla «← 0 →» se gira arrastrando alrededor de ella o con la rueda del ratón. Los bornes de la izquierda son la alimentación de 15 V (cables amarillo y negro) y los de la derecha la salida hacia el polímetro (verde y violeta); el cable azul del vástago pone a tierra la carcasa y, con ella, la placa fija.</p>
+<p>Medidor de campo: sus mandos y sus bornes están en la cara trasera, la del extremo derecho. Con doble clic sobre el medidor la vista se coloca delante de ella. El pulsador «Escala» pasa a la escala siguiente cada vez que se pulsa (1, 10, 100 y de nuevo 1 kV/m). La ruedecilla «← 0 →» se gira arrastrando alrededor de ella o con la rueda del ratón. Los bornes de la izquierda son la alimentación de 15 V (cables amarillo y negro) y los de la derecha la salida hacia el polímetro (rojo y azul); el cable azul del vástago pone a tierra la carcasa y, con ella, la placa fija.</p>
 <p>Placa móvil: arrastra la placa de la izquierda, o su soporte, a lo largo del banco. Para leer <i>d</i>, haz doble clic sobre la placa: la vista se acerca a la regla, donde la línea roja del índice marca la distancia. Desde ahí puedes arrastrar el índice para ajustar la placa milímetro a milímetro, y acercarte aún más con la rueda.</p>
 <p>Polímetros: se encienden con POWER. Ya están en tensión continua (V⎓): 200 V el de la izquierda y 20 V el de la derecha. El selector se gira arrastrándolo, con la rueda o pinchando en una marca.</p>
 <p>Vista: arrastra para girar, usa la rueda (o dos dedos) para acercar donde está el puntero y arrastra con el botón derecho (o dos dedos) para desplazar. Con doble clic te acercas a un aparato y, con otro doble clic sobre él, vuelves a la vista anterior; «Vista inicial» vuelve al encuadre de partida.</p>
@@ -469,7 +469,7 @@ const MOV=slide(0,true);
 const XB0=XF+.002,XB1=XB0+.150,XS=XB0+.075;
 const FIX=slide(XS,false);
 const FM={kind:'fm',W:700,H:700,wM:.07,hM:.07,root:{scale:{x:GS}},BTN:{c:[112,150],r:46},ZERO:{c:[572,150],r:36},LED:[[262,95],[262,150],[262,205]],
- SKP:{pp:[150,400,'r','y'],pn:[150,572,'b','k'],op:[330,400,'r','g'],on:[330,572,'b','v']}};
+ SKP:{pp:[150,400,'r','y'],pn:[150,572,'b','k'],op:[330,400,'r','r'],on:[330,572,'b','b']}};
 {const g=new THREE.Group();BG.add(g);
  const rod=new THREE.Mesh(new THREE.CylinderGeometry(.005,.005,YC-.035-.10,20),stainless);rod.position.set(XS,(.10+YC-.035)/2,0);g.add(rod);
  const sh=new THREE.Shape();sh.moveTo(-PL/2,-PL/2);sh.lineTo(PL/2,-PL/2);sh.lineTo(PL/2,PL/2);sh.lineTo(-PL/2,PL/2);sh.closePath();const ho=new THREE.Path();ho.absarc(0,0,.0275,0,2*Math.PI,true);sh.holes.push(ho);
@@ -518,8 +518,8 @@ const FM={kind:'fm',W:700,H:700,wM:.07,hM:.07,root:{scale:{x:GS}},BTN:{c:[112,15
 function drawFM(){const x=FM.ctx;x.setTransform(2,0,0,2,0,0);x.fillStyle='#e9e9e4';x.fillRect(0,0,700,700);x.strokeStyle='#9aa09b';x.lineWidth=2;rr(x,10,10,680,680,22);x.stroke();
  x.fillStyle='#1d2327';x.textAlign='center';x.font='bold 30px Arial, sans-serif';x.fillText('Escala',FM.BTN.c[0],FM.BTN.c[1]+92);
  const on=S&&solve().fmOn;x.textAlign='left';x.font='bold 33px Arial, sans-serif';
- FM.LED.forEach(([u,v],i)=>{const lit=on&&S.rng===i,g=x.createRadialGradient(u-3,v-3,1,u,v,15);g.addColorStop(0,lit?'#fff7b0':'#b8bdb4');g.addColorStop(.55,lit?'#f2c81e':'#8d948b');g.addColorStop(1,lit?'#b98a06':'#6c726b');
-  if(lit){x.fillStyle='rgba(246,205,40,.28)';x.beginPath();x.arc(u,v,25,0,7);x.fill()}x.fillStyle=g;x.beginPath();x.arc(u,v,14,0,7);x.fill();x.strokeStyle='#5d635d';x.lineWidth=1.4;x.stroke();
+ FM.LED.forEach(([u,v],i)=>{const lit=on&&S.rng===i,g=x.createRadialGradient(u-3,v-3,1,u,v,15);g.addColorStop(0,lit?'#d9ffd2':'#b8bdb4');g.addColorStop(.55,lit?'#2fd04c':'#8d948b');g.addColorStop(1,lit?'#12862b':'#6c726b');
+  if(lit){x.fillStyle='rgba(60,215,90,.30)';x.beginPath();x.arc(u,v,25,0,7);x.fill()}x.fillStyle=g;x.beginPath();x.arc(u,v,14,0,7);x.fill();x.strokeStyle='#5d635d';x.lineWidth=1.4;x.stroke();
   x.fillStyle='#1d2327';x.fillText(['1','10','100'][i]+' kV/m',u+30,v+12)});
  const [zx,zy]=FM.ZERO.c;x.textAlign='center';x.font='bold 34px Arial, sans-serif';x.fillText('←  0  →',zx,zy-64);x.font='bold 30px Arial, sans-serif';x.fillText('Cero',zx,zy+92);
  x.font='bold 27px Arial, sans-serif';x.fillText('ENTRADA',150,292);x.fillText('SALIDA',330,292);x.font='bold 27px Arial, sans-serif';x.fillText('14…18 V ⎓',150,328);x.fillText('± 10 V',330,328);
@@ -580,7 +580,7 @@ function drawSupply(){const x=SUP.ctx;x.setTransform(2,0,0,2,0,0);
 /* ================= instrumentos y cables ================= */
 makeSupply(0,.14,0);
 const DV=makeDMM(0,'TENSIÓN ΔV',-.37,.20,0),DE=makeDMM(1,'SALIDA E',.50,.20,0);
-{const p=(m,j,c)=>{const[a,b]=m.L(JACK.find(q=>q[0]===j)[2],JY);plugAt(m.fr,a,b,c)};p(DE,'V','g');p(DE,'COM','v');p(DV,'COM','b')}
+{const p=(m,j,c)=>{const[a,b]=m.L(JACK.find(q=>q[0]===j)[2],JY);plugAt(m.fr,a,b,c)};p(DE,'V','r');p(DE,'COM','b');p(DV,'COM','b')}
 // Borne V del voltímetro: clavija acodada del cable de la fuente; encima, la resistencia de protección de 10 MΩ; y sobre ella, la clavija del cable de la placa.
 const RES={uv:DV.L(JACK.find(q=>q[0]==='V')[2],JY),len:.100};
 {const [a,b]=RES.uv,z0=.0025+.021;RES.base=elbowPlug(DV.fr,a,b,.0025,'r',-Math.PI/4);
@@ -593,7 +593,7 @@ SUP.plug('p15','y');SUP.plug('n15','k');{const [a,b]=SUP.L(SUP.SK.nHV[0],SUP.SK.
 SUP.plug('nHV','b',true); // y, apilada sobre ella, la del voltímetro
 SUP.plug('pHV','r');
 for(const inst of INST)collectHardware(inst.root,new Set([inst.kn,inst.face,inst.body]));
-const CB={a:cable('r'),b:cable('b'),c:cable('r'),e1:cable('y'),e2:cable('k'),f1:cable('g'),f2:cable('v'),g:cable('b')} // un par de colores por circuito;
+const CB={a:cable('r'),b:cable('b'),c:cable('r'),e1:cable('y'),e2:cable('k'),f1:cable('r'),f2:cable('b'),g:cable('b')} // un par de colores por circuito;
 // Tramo que cuelga de una clavija hasta la mesa: sale recto, se dobla por su peso y se posa en L=[x,z].
 function drop(e,L,c=.05,toL=false,ex=.8){const p0=e.p.clone().addScaledVector(e.n,-.006),a1=e.p.clone().addScaledVector(e.n,.024),a2=a1.clone().addScaledVector(e.n,.022);a2.y-=.005;
  const h=V3(e.n.x,0,e.n.z);if(toL||h.lengthSq()<.04)h.set(L[0]-a2.x,0,L[1]-a2.z);h.normalize();const out=[p0,a1];let s=a2;
@@ -622,7 +622,7 @@ function plateCable(){SC.updateMatrixWorld(true);const qd=DV.fr.getWorldQuaterni
  const A=[p.clone().addScaledVector(n,-.004),p.clone().addScaledVector(n,.026),o(.047,-.012,-.022),o(.062,-.075,-.052),o(.066,-.150,-.090),V3(p.x+.068,.0035,p.z-.16),V3(p.x+.060,.0035,p.z-.32)];
  // en la placa: la clavija entra por arriba; el cable hace una horquilla hacia atrás, cuelga por detrás del banco y lo rodea por su extremo izquierdo
  const T=MOV.localToWorld(MOV.userData.top.clone()),hb=V3(Math.sin(TH),0,-Math.cos(TH)),u=(a,y)=>V3(T.x+hb.x*a,y,T.z+hb.z*a),y0=T.y+.028;
- const B=[T,V3(T.x,y0,T.z),u(.008,y0+.028),u(.032,y0+.046),u(.058,y0+.034),u(.072,y0-.004),u(.080,y0*.62),u(.090,y0*.28),u(.118,.05),u(.175,.0035)],L=B[B.length-1];
+ const B=[V3(T.x,T.y-.014,T.z),T,V3(T.x,y0,T.z),u(.008,y0+.028),u(.032,y0+.046),u(.058,y0+.034),u(.072,y0-.004),u(.080,y0*.62),u(.090,y0*.28),u(.118,.05),u(.175,.0035)],L=B[B.length-1];
  const V=[[-.228,-.21],[-.34,-.285],[-.51,-.32],[-.615,-.46],[Math.min(-.52,L.x-.10),L.z-.015]].map(q=>V3(q[0],.0035,q[1]));
  setTube(CB.c,[...A,...V,...B.reverse()]);}
 // rótulos en la mesa, delante de cada polímetro
@@ -665,14 +665,14 @@ function measure(force){const r=solve();
 
 /* ================= cámara ================= */
 const PM=()=>matchMedia('(max-width:820px)').matches;
-const V0=()=>({az:0,el:.80});
+const V0=()=>({az:0,el:.53});
 let az,el,dist;const TG=V3();
 const BB=[];{const w=(x,y,z)=>BG.localToWorld(V3(x,y,z));BG.updateMatrixWorld(true);
  for(const x of[-.30,.30])BB.push(w(x,0,-.1),w(x,0,.1),w(x,.08,0));for(const x of[XF-.23,XF+.16])for(const z of[-PL/2,PL/2])BB.push(w(x,YC+PL/2,z),w(x,YC-PL/2,z));
  for(const x of[-.58,.66])BB.push(V3(x,0,.50),V3(x,.2,-.10));BB.push(V3(-.64,0,-.46),V3(-.5,0,-.72))}
 function fitV0(){ // encuadre de partida: el punto de mira y la distancia que más acercan el montaje sin recortarlo
  const v=V0(),top=PM()?.77:.875;let best=null;
- for(let cz=-.40;cz<=.05;cz+=.015){const c=V3(.035,.10,cz);let lo=.5,hi=6;
+ for(let cz=-.40;cz<=.05;cz+=.015){const c=V3(.045,.10,cz);let lo=.5,hi=6;
   const ok=d=>{const p=V3(c.x+d*Math.cos(v.el)*Math.sin(v.az),c.y+d*Math.sin(v.el),c.z+d*Math.cos(v.el)*Math.cos(v.az));CAM.position.copy(p);CAM.lookAt(c);CAM.updateMatrixWorld();
    return BB.every(q=>{const n=q.clone().project(CAM);return Math.abs(n.x)<.97&&n.y<top&&n.y>-.95})};
   for(let i=0;i<26;i++){const m=(lo+hi)/2;ok(m)?hi=m:lo=m}if(!best||hi<best.dist)best={az:v.az,el:v.el,dist:hi,tg:c}}

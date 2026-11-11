@@ -1108,7 +1108,7 @@ function makeGen(x,z,yaw){const wM=.34,hM=wM*GH/GW,dM=.24,GT=.2;
  generatorExtras(G,T,GT,dM);addLens(fr,L,GW,GH,wM,hM,[29,54,337,135]);G.body=body;G.jack=(k)=>{const J=GJ[k==='+'?0:1];const[lx,ly]=L(J[1],J[2]);return {p:fr.localToWorld(V3(lx,ly,.04)),n:V3(0,0,1).applyQuaternion(fr.getWorldQuaternion(new THREE.Quaternion()))}};
  root.traverse(q=>q.userData.inst=G);INST.push(G);return G}
 const GEN=makeGen(-.59,-.69,.10);
-const AMM=makeDMM(0,'AMPERÍMETRO',-.07,.10,.05),VOLT=makeDMM(1,'VOLTÍMETRO',.27,.10,-.05);
+const AMM=makeDMM(0,'AMPERÍMETRO',-.07,.10,.05),VOLT=makeDMM(1,'VOLTÍMETRO',.27,.10,-.05);function floorLabel(x,z,l1,l2,W=.36,H=.060){const t=canvasTex(1024,Math.round(1024*H/W),(c,w,h)=>{c.clearRect(0,0,w,h);c.fillStyle='#8a939d';const put=(tx,wt,px,y)=>{const P=tx.split('_'),f=s=>wt+Math.round(px*s)+'px Arial, sans-serif';let m=0;P.forEach((s,i)=>{c.font=f(i%2?.68:1);m+=c.measureText(s).width});c.save();c.translate(w/2,y);c.scale(Math.min(1,(w-16)/m),1);let q=-m/2;c.textAlign='left';P.forEach((s,i)=>{c.font=f(i%2?.68:1);c.fillText(s,q,i%2?px*.22:0);q+=c.measureText(s).width});c.restore()};put(l1,'bold ',h*.40,h*.42);put(l2,'',h*.33,h*.86)});const m=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false,toneMapped:false,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-8}));m.rotation.x=-Math.PI/2;m.position.set(x,.0007,z);m.renderOrder=2;SC.add(m);return m}floorLabel(-.095,.292,'INTENSIDAD EN LA PRIMARIA','I_ef_, valor eficaz',.33,.058);floorLabel(.295,.292,'TENSIÓN EN LA SECUNDARIA','V_ef_, valor eficaz',.33,.058); // rótulo en la mesa, como grabado en ella; _x_ escribe x como subíndice
 {const[a,b]=AMM.L(62,JY),[c,d]=AMM.L(188,JY);addPlug(AMM.fr,a,b,0xc8281e);addPlug(AMM.fr,c,d,0xc8281e)}
 {const[a,b]=VOLT.L(125,JY),[c,d]=VOLT.L(188,JY);addPlug(VOLT.fr,a,b,0xc8281e);addPlug(VOLT.fr,c,d,0x1f5fd0)}
 {const[a,b]=GEN.L(GJ[0][1],GJ[0][2]),[c,d]=GEN.L(GJ[1][1],GJ[1][2]);addPlug(GEN.fr,a,b,0xc8281e);addPlug(GEN.fr,c,d,0x1f5fd0)}
@@ -1155,9 +1155,9 @@ function staticCables(){
  SC.updateMatrixWorld(true);
  const gp=GEN.jack('+'),gn=GEN.jack('⊥'),am=AMM.jack('mA'),ac=AMM.jack('COM');
  const fieldA={p:field.localToWorld(PRI_A.clone()),n:V3(0,0,1)},fieldB={p:field.localToWorld(PRI_B.clone()),n:V3(0,0,1)};
- function connect(mesh,a,b,bends){const points=[a.p,a.p.clone().addScaledVector(a.n,.020),...bends.map(q=>V3(...q)),b.p.clone().addScaledVector(b.n,.020),b.p];setTube(mesh,points)}
+ function connect(mesh,a,b,bends){const points=[a.p.clone().addScaledVector(a.n,-.004),a.p,a.p.clone().addScaledVector(a.n,.020),...bends.map(q=>V3(...q)),b.p.clone().addScaledVector(b.n,.020),b.p,b.p.clone().addScaledVector(b.n,-.004)];setTube(mesh,points)} // los extremos nacen dentro del manguito de la clavija, sin rendija
  connect(CB.g2a,gp,am,[[gp.p.x+.013,.080,gp.p.z+.072],[gp.p.x+.067,.030,gp.p.z+.124],[-.341,.008,-.254],[-.302,.0035,-.198],[-.278,.0035,-.055],[-.256,.0035,.079],[-.228,.0035,.174],[-.184,.004,.231],[-.144,.011,.238],[-.114,.049,.209],[-.111,.100,.174]]);
- connect(CB.a2p,ac,fieldA,[[.004,.106,.167],[.044,.070,.193],[.076,.020,.171],[.086,.0035,.095],[.056,.0035,-.050],[.010,.0035,-.155],[-.060,.0035,-.213],[-.146,.0036,-.219],[-.201,.014,-.225],[fieldA.p.x,fieldA.p.y-.005,fieldA.p.z+.044]]);
+ connect(CB.a2p,ac,fieldA,[[.004,.106,.167],[.044,.070,.193],[.076,.020,.171],[.086,.0035,.095],[.062,.0035,-.050],[.046,.0035,-.150],[.020,.0035,-.212],[-.030,.0035,-.236],[-.100,.0035,-.238],[-.160,.0036,-.230],[-.201,.014,-.225],[fieldA.p.x,fieldA.p.y-.005,fieldA.p.z+.044]]);
  connect(CB.g2p,gn,fieldB,[[gn.p.x+.024,.084,gn.p.z+.058],[gn.p.x+.094,.038,gn.p.z+.105],[-.229,.013,-.305],[-.133,.007,-.282],[.018,.0035,-.268],[.231,.0035,-.252],[.440,.0035,-.234],[.520,.009,-.220],[fieldB.p.x+.003,fieldB.p.y-.008,fieldB.p.z+.052]]);
 }
 
@@ -1465,7 +1465,7 @@ $('#dlgYes').onclick=()=>{$('#dlg').hidden=true;ST[part]=initState(part);S=ST[pa
 try{document.querySelectorAll('.eq[data-tex]').forEach(e=>katex.render(e.dataset.tex,e,{displayMode:true,throwOnError:false}))}catch(e){}
 staticCables();size();camReset();setPart(1);invalidate();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{drawGen(GEN);measure(true);invalidate()});
-window.__ind={DIAL,scr:(inst,u,v)=>{const[lx,ly]=inst.L(u,v),w=inst.fr.localToWorld(V3(lx,ly,0)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},coilScr:i=>{const c=coils[i],w=c.g.localToWorld(V3(.012,c.top,.012)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},S:()=>S,solve,coils,COILS,AMM,VOLT,GEN,swapCoil,setPart,genStep,setDial,measure,camState:()=>({az,el,dist,TG}),flyTo,coupling};
+window.__ind={DIAL,SC,scr:(inst,u,v)=>{const[lx,ly]=inst.L(u,v),w=inst.fr.localToWorld(V3(lx,ly,0)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},coilScr:i=>{const c=coils[i],w=c.g.localToWorld(V3(.012,c.top,.012)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},S:()=>S,solve,coils,COILS,AMM,VOLT,GEN,swapCoil,setPart,genStep,setDial,measure,camState:()=>({az,el,dist,TG}),flyTo,coupling};
 }
 async function arrancar(){
  function cargar(src){return new Promise((resolve,reject)=>{const el=document.createElement('script');el.onload=resolve;el.onerror=reject;el.src=src;document.head.appendChild(el)})}
