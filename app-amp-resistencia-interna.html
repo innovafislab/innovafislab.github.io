@@ -98,7 +98,7 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 <h2>Datos y errores</h2>
 <p><i>I</i> se lee en el amperímetro, en el rango de 10 A, y <i>V</i> en el voltímetro, en el rango de 20 V. El error de cada lectura es una unidad de la última cifra de la pantalla: 0,01 A y 0,01 V.</p>
 <h2>Cómo se usa</h2>
-<p>Reóstatos: arrastra el cursor negro a lo largo de la ranura. Con la rueda del ratón sobre el cursor se mueve muy poco a poco, para afinar. Cuanto más lejos queda el cursor del frontal de los bornes, mayor es la resistencia. La etiqueta del cursor indica cuál es el de 100 Ω y cuál el de 10 Ω.</p>
+<p>Reóstatos: arrastra el cursor negro a lo largo de la ranura. Para afinar, acércate con la rueda del ratón y arrastra despacio el cursor del reóstato de 10 Ω. Cuanto más lejos queda el cursor del frontal de los bornes, mayor es la resistencia. La etiqueta del cursor indica cuál es el de 100 Ω y cuál el de 10 Ω.</p>
 <p>Polímetros: enciéndelos con POWER y gira el selector arrastrándolo, con la rueda del ratón o pinchando en una marca. V⎓ y A⎓ son tensión e intensidad continuas. El amperímetro está conectado a los bornes 10 A y COM, y el voltímetro a los bornes V·Ω y COM.</p>
 <p>Pila: con el selector de la cabecera se cambia la pila de petaca por la de 9 V. Los reóstatos y los polímetros se quedan como estaban.</p>
 <p>Vista: arrastra para girar, usa la rueda (o dos dedos) para acercar donde está el puntero y arrastra con el botón derecho (o dos dedos) para desplazar. Con doble clic te acercas a un aparato; «Vista inicial» vuelve al encuadre de partida.</p>
@@ -730,7 +730,7 @@ function endPtr(e){PTR.delete(e.pointerId);if(mode==='pinch'){if(PTR.size<2){mod
  mode=null;down=null;ctl=null;box.classList.remove('dragging')}
 ['pointerup','pointercancel'].forEach(k=>box.addEventListener(k,endPtr));
 // Pellizco con dos dedos en el panel táctil (el navegador lo envía como rueda con Ctrl): siempre zoom.
-// Rueda del ratón o deslizamiento de dos dedos sobre un mando: lo mueve; sobre el cursor de un reóstato, ajuste fino.
+// La rueda del ratón sólo gira los mandos giratorios; los cursores de los reóstatos se mueven arrastrándolos.
 let ruedaAcum=0;
 box.addEventListener('wheel',e=>{e.preventDefault();const h=e.ctrlKey?null:pick(e);
  if(h&&h.object.userData.inst){const inst=h.object.userData.inst,c=hitCtl(inst,faceUV(inst));
@@ -738,8 +738,7 @@ box.addEventListener('wheel',e=>{e.preventDefault();const h=e.ctrlKey?null:pick(
    if(Math.abs(dy)>=50){dir=dy<0?1:-1;ruedaAcum=0}else{ruedaAcum+=dy;if(Math.abs(ruedaAcum)>=50){dir=ruedaAcum<0?1:-1;ruedaAcum=0}}
    if(dir){const L=DIAL.pos,i=L.findIndex(p=>p.id===inst.dial);setDial(inst,L[(i+dir+L.length)%L.length].id)}
    return}}
- if(h&&h.object.userData.slide!==undefined){const k=h.object.userData.slide,dy=e.deltaMode===1?e.deltaY*33:e.deltaY;setSlide(k,S.u[k]-Math.max(-1,Math.min(1,dy/100))*.0025);return}
- const nd=Math.max(.056,Math.min(4,dist*Math.exp(e.deltaY*(e.ctrlKey?.01:.0012))));zAt(e.clientX,e.clientY,nd/dist);dist=nd;touched=true;invalidate()},{passive:false});
+ const nd=Math.max(.04,Math.min(4,dist*Math.exp(e.deltaY*(e.ctrlKey?.01:.0012))));zAt(e.clientX,e.clientY,nd/dist);dist=nd;touched=true;invalidate()},{passive:false});
 box.addEventListener('dblclick',e=>{const h=pick(e);if(!h)return;if(h.object.userData.slide!==undefined)return;if(h.object.userData.inst){const inst=h.object.userData.inst;if(hitCtl(inst,faceUV(inst)))return;const p=inst.fr.getWorldPosition(V3()),n=V3(0,0,1).applyQuaternion(inst.fr.getWorldQuaternion(new THREE.Quaternion()));
   const t=Math.tan(CAM.fov*Math.PI/360),d=inst.root.scale.x*Math.max(inst.hM*1.12,inst.wM*1.12/CAM.aspect)/(2*t)+.02;flyTo(p,d,Math.atan2(n.x,n.z),Math.max(.15,Math.asin(Math.min(1,n.y))));return}
  flyTo(h.point,Math.max(.35,dist*.55))});
