@@ -625,7 +625,7 @@ function lead(e,k=1,dx=0){ // bajada desde un borne o una pinza hasta la mesa; d
  for(const t of[.3,.62,1]){const q=P.clone().addScaledVector(h,reach*t);q.x+=dx*Math.pow(t,.8);q.y=.0035+(P.y-.0035)*Math.pow(1-t,1.7);out.push(q)}return out}
 function connect(mesh,a,b,vias,r,ka,kb,da=0,db=0){setTube(mesh,[...lead(a,ka,da),...vias.map(q=>V3(q[0],.0035,q[1])),...lead(b,kb,db).reverse()],r)}
 function fixedCables(){SC.updateMatrixWorld(true);
- connect(CB.c2,RA.sock('e'),RB.sock('w'),[[-.02,.075]],.0034,1,1,.030,0);
+ connect(CB.c2,RA.sock('e'),RB.sock('w'),[],.0034,.55,.50,.045,-.060); // puente corto entre los dos reóstatos
  connect(CB.c3,RB.sock('e'),AMM.jack('10A'),[[.225,.0],[.30,-.12]],.0034,1,.85);
 }
 function batteryCables(){SC.updateMatrixWorld(true);
