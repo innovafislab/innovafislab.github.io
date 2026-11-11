@@ -76,7 +76,7 @@ svg text{font-family:Inter,system-ui,sans-serif}
 <div class="eq p2" data-tex="\frac{1}{R_{eq}}=\frac{1}{R_3}+\frac{1}{R_4}"></div>
 <h2>Qué hay que medir</h2>
 <p class="p0">Monta tú el circuito de la parte I o el de la parte II sobre la placa. En la bandeja tienes el esquema de cada uno.</p>
-<p class="pre">El circuito ya está montado: enciende la fuente y los polímetros, ajusta la tensión, elige en cada polímetro el rango adecuado y mide. Con el selector de la cabecera cambias dónde está conectado el <span class="p1">voltímetro</span><span class="p2">amperímetro</span>; las resistencias no se mueven, solo cambian los cables. El esquema de la bandeja muestra en cada momento lo que está conectado.</p>
+<p class="pre">El circuito ya está montado y, al abrir, la fuente y los polímetros están encendidos y midiendo: ajusta la tensión, elige en cada polímetro el rango adecuado y mide. Con el selector de la cabecera cambias dónde está conectado el <span class="p1">voltímetro</span><span class="p2">amperímetro</span>; las resistencias no se mueven, solo cambian los cables. El esquema de la bandeja muestra en cada momento lo que está conectado.</p>
 <p>Las resistencias no llevan su valor: hay que determinarlo con las medidas. Su código de colores da el valor nominal, que también aparece un instante si pulsas su nombre en el esquema.</p>
 <p class="p1">Parte I: R<sub>1</sub> y R<sub>2</sub> en serie con la fuente y con un polímetro en serie como amperímetro (bornes COM y mA). Con el otro polímetro, como voltímetro (COM y V), mide en paralelo la tensión de la asociación, la de R<sub>1</sub> y la de R<sub>2</sub>. Repite para varios valores de la tensión de la fuente. No superes 120 mA.</p>
 <p class="p2">Parte II: R<sub>3</sub> y R<sub>4</sub> en paralelo. Mide con un polímetro la tensión V de la fuente. Primero mide con el amperímetro la intensidad total, en la rama común (figura a); después, para las mismas tensiones, la intensidad de cada rama (figura b). No superes 120 mA.</p>
@@ -733,7 +733,7 @@ function applyPreset(){const B=[],C=[],part=state.part,sub=SUB[part];
   else{cb('R','S:P','p0_1');const c=sub==='R3'?1:4;cb('B',`p${c}_2`,'M:m2:mA');cb('B','M:m2:COM',`p${c}_3`)}
   cb('R','M:m1:V','S:P');C[C.length-1].h=[{x:BX+BW*.72,y:886},{x:BX+BW*.28,y:886}];cb('K','M:m1:COM','S:N');C[C.length-1].h=[{x:BX+BW*.72,y:893},{x:BX+BW*.28,y:893}]} // el voltímetro va a la fuente pasando bajo el borde de la placa
  state.bricks=B;state.cables=C}
-function presetDials(){const v=state.meters.find(m=>m.id==='m1'),a=state.meters.find(m=>m.id==='m2');if(v)v.dial='DCV20';if(a)a.dial='DCA0.2'}
+function presetDials(){const v=state.meters.find(m=>m.id==='m1'),a=state.meters.find(m=>m.id==='m2');if(v){v.dial='DCV20';v.on=true}if(a){a.dial='DCA0.2';a.on=true}state.src.on=true;if(!state.src.v)state.src.v=6} // montaje ya hecho: se abre encendido y midiendo, con 6 V
 function updSub(){const el=$('#sub'),p=state.part;el.hidden=!p;if(!p)return;$('#sublab').textContent=p===1?'Voltímetro en':'Amperímetro en la rama';
  const opts=p===1?[['asoc','asociación'],['R1','R₁'],['R2','R₂']]:[['tot','común'],['R3','R₃'],['R4','R₄']];
  const T=$('#subtabs');T.innerHTML='';for(const [k,l] of opts){const b=document.createElement('button');b.type='button';b.className='tab'+(SUB[p]===k?' on':'');b.textContent=l;

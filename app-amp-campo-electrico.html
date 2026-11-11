@@ -72,7 +72,7 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 <h2>Qué hay que medir</h2>
 <p>El montaje ya está hecho. La fuente da la tensión Δ<i>V</i>, que mide el polímetro de la izquierda. La placa móvil recibe esa tensión a través de la resistencia de protección de 10 MΩ, enchufada en ese polímetro. La placa fija va atornillada al medidor de campo y está a tierra; la salida del medidor se lee en el polímetro de la derecha.</p>
 <p>Las conexiones son las del montaje real. Rojo, en el lado izquierdo: del borne + de 0…300 V al borne V·Ω del polímetro «TENSIÓN ΔV»; sobre esa clavija se enchufa la resistencia de 10 MΩ, y de su otro extremo sale el cable hacia la placa móvil. Azul: del borne − de 0…300 V al COM de ese polímetro y, con una segunda clavija, al vástago del medidor de campo, que queda a tierra. Amarillo (+) y negro (−): de la salida de 0…15 V a la entrada de 14…18 V del medidor. Rojo (+) y azul (⊥), en el lado derecho: de la salida de ±10 V del medidor a los bornes V·Ω y COM del polímetro «SALIDA E».</p>
-<p>Enciende la fuente y los dos polímetros. Antes de cada serie, y cada vez que muevas la placa, ajusta el cero del medidor como se explica más abajo.</p>
+<p>Al abrir, la fuente y los dos polímetros están ya encendidos y midiendo, con Δ<i>V</i> = 150 V y <i>d</i> = 10 cm. Antes de cada serie, y cada vez que muevas la placa, ajusta el cero del medidor como se explica más abajo.</p>
 <p class="p1">Con <i>d</i> = 10 cm, mide <i>E</i> para Δ<i>V</i> de 0 a 150 V, de 15 en 15 V.</p>
 <p class="p2">Con Δ<i>V</i> = 150 V, mide <i>E</i> para <i>d</i> de 5 a 15 cm, de 1 en 1 cm.</p>
 <h2>Cómo se lee el campo</h2>
@@ -92,7 +92,7 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 <p>Medidor de campo: sus mandos y sus bornes están en la cara trasera, la del extremo derecho. Con doble clic sobre el medidor la vista se coloca delante de ella. El pulsador «Escala» pasa a la escala siguiente cada vez que se pulsa (1, 10, 100 y de nuevo 1 kV/m). La ruedecilla «← 0 →» se gira arrastrando alrededor de ella o con la rueda del ratón. Los bornes de la izquierda son la alimentación de 15 V (cables amarillo y negro) y los de la derecha la salida hacia el polímetro (rojo y azul); el cable azul del vástago pone a tierra la carcasa y, con ella, la placa fija.</p>
 <p>Placa móvil: arrastra la placa de la izquierda, o su soporte, a lo largo del banco. Para leer <i>d</i>, haz doble clic sobre la placa: la vista se acerca a la regla, donde la línea roja del índice marca la distancia. Desde ahí puedes arrastrar el índice para ajustar la placa milímetro a milímetro, y acercarte aún más con la rueda.</p>
 <p>Polímetros: se encienden con POWER. Ya están en tensión continua (V⎓): 200 V el de la izquierda y 20 V el de la derecha. El selector se gira arrastrándolo, con la rueda o pinchando en una marca.</p>
-<p>Ver campo eléctrico: el botón de arriba dibuja, entre las placas, las líneas del campo, que van de la placa con tensión (+) a la placa unida a tierra (−). Son rectas y paralelas porque el campo es uniforme. Hay más líneas, y más marcadas, cuanto mayor es el campo: aumentan al subir Δ<i>V</i> o al acercar las placas y disminuyen al separarlas. Es una ayuda visual: en el laboratorio no se ve.</p>
+<p>Ver campo eléctrico: el botón de arriba muestra u oculta, entre las placas, las líneas del campo, que van de la placa con tensión (+) a la placa unida a tierra (−). Son rectas y paralelas porque el campo es uniforme. Hay más líneas, y más marcadas, cuanto mayor es el campo: aumentan al subir Δ<i>V</i> o al acercar las placas y disminuyen al separarlas. Es una ayuda visual: en el laboratorio no se ve.</p>
 <p>Vista: arrastra para girar, usa la rueda (o dos dedos) para acercar donde está el puntero y arrastra con el botón derecho (o dos dedos) para desplazar. Con doble clic te acercas a un aparato y, con otro doble clic sobre él, vuelves a la vista anterior; «Vista inicial» vuelve al encuadre de partida.</p>
 <p class="note">Gemelo de la práctica: condensador de placas de 283 mm de lado, medidor de campo con tres escalas y polímetros digitales · CC BY-NC-SA 4.0</p>
 </aside></main>
@@ -658,7 +658,7 @@ function setEF(on){efOn=on;const b=$('#efBtn');b.classList.toggle('on',on);b.set
 const gV1=1+(rnd()-.5)*.006,gV2=1+(rnd()-.5)*.006,gE=1+(rnd()-.5)*.02; // calibración de los polímetros y del medidor
 const strayA=(rnd()-.5)*.05,strayP=rnd()*6.28; // campo parásito (kV/m), que cambia al mover la placa
 const RANGES=[1,10,100],DMIN=.02,DMAX=.22;
-function initState(){return {sup:{on:false,u:[0,15]},d:.10,rng:1,zero:0,m:[{on:false,dial:'DCV200'},{on:false,dial:'DCV20'}]}}
+function initState(){return {sup:{on:true,u:[150,15]},d:.10,rng:1,zero:0,m:[{on:true,dial:'DCV200'},{on:true,dial:'DCV20'}]}} // al abrir, todo encendido y midiendo
 let S=initState(),part=1,cableDirty=false;
 function setKnob(m){const p=dpos(m.dial);m.kn.rotation.z=-p.an*Math.PI/180;R3.shadowMap.needsUpdate=true;invalidate()}
 function drawKnobs(){SUP.kn.forEach((k,i)=>{k.rotation.z=-(S.sup.u[i]/SUP.K[i].max*270-135)*Math.PI/180});SUP.rock.rotation.x=S.sup.on?-.16:.16;

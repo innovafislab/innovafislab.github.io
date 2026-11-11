@@ -73,7 +73,7 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 <p>La intensidad la fija la resistencia externa <i>R</i><sub>e</sub> del circuito, que aquí son dos reóstatos en serie:</p>
 <div class="eq" data-tex="I=\dfrac{\varepsilon}{R_i+R_e}" aria-label="Intensidad del circuito"><i>I</i> = <i>ε</i> / (<i>R</i><sub>i</sub> + <i>R</i><sub>e</sub>)</div>
 <h2>Qué hay que medir</h2>
-<p>El circuito ya está montado: la <span class="p1">pila de petaca</span><span class="p2">pila de 9 V</span>, los dos reóstatos en serie y el amperímetro, también en serie. El voltímetro está en paralelo con la pila, pinzado a sus bornes. Enciende los dos polímetros: el amperímetro ya está en 10 A⎓ y el voltímetro en 20 V⎓.</p>
+<p>El circuito ya está montado: la <span class="p1">pila de petaca</span><span class="p2">pila de 9 V</span>, los dos reóstatos en serie y el amperímetro, también en serie. El voltímetro está en paralelo con la pila, pinzado a sus bornes. Al abrir, los dos polímetros están ya encendidos y midiendo: el amperímetro en 10 A⎓ y el voltímetro en 20 V⎓.</p>
 <svg class="esq" viewBox="0 0 350 186" role="img" aria-label="Esquema del montaje: pila con fuerza electromotriz y resistencia interna, voltímetro en paralelo con la pila, y en serie los reóstatos de 100 Ω y 10 Ω y el amperímetro">
 <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
 <rect x="8" y="10" width="106" height="166" stroke-dasharray="5 4" stroke-width="1"/>
@@ -100,9 +100,9 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 <p><i>I</i> se lee en el amperímetro, en el rango de 10 A, y <i>V</i> en el voltímetro, en el rango de 20 V. El error de cada lectura es una unidad de la última cifra de la pantalla: 0,01 A y 0,01 V.</p>
 <h2>Cómo se usa</h2>
 <p>Reóstatos: arrastra el cursor negro a lo largo de la ranura. Para afinar, acércate con la rueda del ratón y arrastra despacio el cursor del reóstato de 10 Ω. Cuanto más lejos queda el cursor del frontal de los bornes, mayor es la resistencia. La etiqueta del cursor indica cuál es el de 100 Ω y cuál el de 10 Ω.</p>
-<p>Polímetros: enciéndelos con POWER y gira el selector arrastrándolo, con la rueda del ratón o pinchando en una marca. V⎓ y A⎓ son tensión e intensidad continuas. El amperímetro está conectado a los bornes 10 A y COM, y el voltímetro a los bornes V·Ω y COM.</p>
+<p>Polímetros: al abrir están ya encendidos y midiendo; se apagan y se encienden con POWER. Gira el selector arrastrándolo, con la rueda del ratón o pinchando en una marca. V⎓ y A⎓ son tensión e intensidad continuas. El amperímetro está conectado a los bornes 10 A y COM, y el voltímetro a los bornes V·Ω y COM.</p>
 <p>Pila: con el selector de la cabecera se cambia la pila de petaca por la de 9 V. Los reóstatos y los polímetros se quedan como estaban.</p>
-<p>Ver corriente: el botón de arriba dibuja, sobre los cables, la corriente que sale del polo + de la pila, atraviesa los dos reóstatos y el amperímetro y vuelve al polo −. Avanza más deprisa cuanto mayor es la intensidad. Por los cables finos del voltímetro apenas circula corriente y no se dibuja. Es una ayuda visual: en el laboratorio no se ve.</p>
+<p>Ver corriente: el botón de arriba muestra u oculta, sobre los cables, la corriente que sale del polo + de la pila, atraviesa los dos reóstatos y el amperímetro y vuelve al polo −. Avanza más deprisa cuanto mayor es la intensidad. Por los cables finos del voltímetro apenas circula corriente y no se dibuja. Es una ayuda visual: en el laboratorio no se ve.</p>
 <p>Vista: arrastra para girar, usa la rueda (o dos dedos) para acercar donde está el puntero y arrastra con el botón derecho (o dos dedos) para desplazar. Con doble clic te acercas a un aparato y, con otro doble clic sobre él, vuelves a la vista anterior; «Vista inicial» vuelve al encuadre de partida.</p>
 <p class="note">Gemelo de la práctica: pila real con resistencia interna, reóstatos de cursor y polímetros digitales · CC BY-NC-SA 4.0</p>
 </aside></main>
@@ -654,7 +654,7 @@ function setFlow(on){FLOW.on=on;FLOW.t=0;const b=$('#flowBtn');b.classList.toggl
 /* ================= estado ================= */
 // Calibración de los polímetros y valores reales de los reóstatos (tolerancia de fabricación)
 const gA=1+(rnd()-.5)*.012,gV=1+(rnd()-.5)*.008,RREAL=[100*(.96+rnd()*.08),10*(.96+rnd()*.08)],RWIRE=.05+rnd()*.03;
-function initState(){return {bat:1,u:[.62,.5],m:[{on:false,dial:'DCA10'},{on:false,dial:'DCV20'}]}}
+function initState(){return {bat:1,u:[.10,.5],m:[{on:true,dial:'DCA10'},{on:true,dial:'DCV20'}]}}
 let S=initState();
 function applyState(){AMM.on=S.m[0].on;AMM.dial=S.m[0].dial;VOLT.on=S.m[1].on;VOLT.dial=S.m[1].dial;RA.set(S.u[0]);RB.set(S.u[1]);
  for(const k of[1,2])BAT[k].g.visible=k===S.bat;batteryCables();document.body.dataset.part=S.bat;
