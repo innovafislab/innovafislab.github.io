@@ -1328,7 +1328,7 @@ for(const x of [generatorBounds.min.x,generatorBounds.max.x])for(const y of [gen
  BB.push(V3(x,y,z).sub(GEN.root.position).divideScalar(GEN.root.scale.x).add(GEN.root.position));
 }
 function fitV0(){ // distancia mínima para que quepa todo el montaje con la orientación de partida
- const v=V0(),c=V3(-.04,.05,-.26);let lo=.5,hi=5;const ok=d=>{const p=V3(c.x+d*Math.cos(v.el)*Math.sin(v.az),c.y+d*Math.sin(v.el),c.z+d*Math.cos(v.el)*Math.cos(v.az));CAM.position.copy(p);CAM.lookAt(c);CAM.updateMatrixWorld();
+ const v=V0(),c=V3(-.04,.05,-.188);let lo=.5,hi=5;const ok=d=>{const p=V3(c.x+d*Math.cos(v.el)*Math.sin(v.az),c.y+d*Math.sin(v.el),c.z+d*Math.cos(v.el)*Math.cos(v.az));CAM.position.copy(p);CAM.lookAt(c);CAM.updateMatrixWorld();
   return BB.every(q=>{const n=q.clone().project(CAM);return Math.abs(n.x)<.97&&n.y<.82&&n.y>-.95})};
  for(let i=0;i<30;i++){const m=(lo+hi)/2;ok(m)?hi=m:lo=m}return {az:v.az,el:v.el,dist:PM()?hi:hi*.97,tg:c}}
 function camReset(){const v=fitV0();az=v.az;el=v.el;dist=v.dist;TG.copy(v.tg)}
