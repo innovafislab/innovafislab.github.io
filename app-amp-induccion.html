@@ -55,7 +55,7 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 .side .p2{display:none}body[data-part="2"] .side .p2{display:revert}body[data-part="2"] .side .p1{display:none}
 .side .note{font-size:.8em;color:var(--slate);margin-top:1.2em}
 @media (max-width:1300px) and (min-width:821px){header{gap:8px;padding:8px 10px}.tab{padding:4px 10px}.hbtn{padding:6px 10px}}
-@media (max-width:820px){header{flex-wrap:wrap;white-space:normal}body{display:block}main{grid-template-columns:minmax(0,1fr);height:auto;padding:10px}header{padding:8px 10px}.left .card{height:auto}.sim3{flex:none;height:auto;aspect-ratio:1.3}.side{max-height:none}.vbtn{width:26px;height:26px;font-size:15px}.fbtn{height:26px;font-size:11px;padding:0 8px}}
+@media (max-width:820px){header{flex-wrap:wrap;white-space:normal}body{display:block}main{grid-template-columns:minmax(0,1fr);height:auto;padding:10px}header{padding:8px 10px}.left .card{height:auto}.sim3{flex:none;height:auto;aspect-ratio:1.55}.side{max-height:none}.vbtn{width:26px;height:26px;font-size:15px}.fbtn{height:26px;font-size:11px;padding:0 8px}}
 </style></head><body data-part="1">
 <header><a class="back" href="laboratorios.html#ampliacion" aria-label="Volver al Laboratorio de Ampliación de Física">←</a><h1>Inducción electromagnética</h1>
 <div class="tabs" role="tablist" id="ptabs"><button class="tab on" data-p="1" type="button">Parte I: intensidad</button><button class="tab" data-p="2" type="button">Parte II: frecuencia</button></div>
@@ -1319,7 +1319,7 @@ function measure(force){const r=solve();
 
 /* ================= cámara ================= */
 const PM=()=>matchMedia('(max-width:820px)').matches;
-const V0=()=>({az:0,el:PM()?.95:.65});
+const V0=()=>({az:0,el:.65});
 let az,el,dist;const TG=V3();
 const BB=[];for(const x of[-.67,.6])for(const y of[0,.2])for(const z of[-.66,.22])BB.push(V3(x,y,z));
 const generatorBounds=new THREE.Box3().setFromObject(GEN.root);
