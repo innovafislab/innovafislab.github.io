@@ -345,7 +345,7 @@ function addLens(fr,L,W,H,wM,hM,rect){const [x,y,w,h]=rect,[a,b]=L(x+w/2,y+h/2);
 
 function makeDMM(id,role,x,z,yaw){
  const wM=.19,hM=wM*DH/DW,dM=.046,TH=55*Math.PI/180;
- const root=new THREE.Group();root.scale.setScalar(.90);root.position.set(x,0,z);root.rotation.y=yaw;SC.add(root);
+ const root=new THREE.Group();root.scale.setScalar(1.035);root.position.set(x,0,z);root.rotation.y=yaw;SC.add(root);
  const tilt=new THREE.Group();tilt.rotation.x=-TH;root.add(tilt);
  const body=meterBody(wM,hM,dM,bootBlue);body.position.set(0,hM/2,dM/2);tilt.add(shadow(body));
  const belt=meterBody(wM+.0011,hM+.0007,.0028,caseBlack);belt.position.set(0,hM/2,dM*.34);tilt.add(shadow(belt));
@@ -592,7 +592,7 @@ const CLIP={cp:makeClip('r'),vp:makeClip('r'),cn:makeClip('b'),vn:makeClip('k')}
 const CDIR={cp:V3(-.62,.16,-.78),cn:V3(.14,.16,-1),vp:V3(.10,.16,1),vn:V3(-.10,.16,1)};
 
 /* ================= polímetros y cables ================= */
-const VOLT=makeDMM(1,'VOLTÍMETRO',BX,-.44,0),AMM=makeDMM(0,'AMPERÍMETRO',.40,-.44,0);
+const VOLT=makeDMM(1,'VOLTÍMETRO',BX,-.47,0),AMM=makeDMM(0,'AMPERÍMETRO',.41,-.47,0);
 {const p=(m,j,c)=>{const[a,b]=m.L(JACK.find(q=>q[0]===j)[2],JY);plugAt(m.fr,a,b,c)};p(AMM,'10A','y');p(AMM,'COM','b');p(VOLT,'V','r');p(VOLT,'COM','k')}
 for(const inst of INST)collectHardware(inst.root,new Set([inst.kn,inst.face,inst.body]));
 BAT[1]=makePetaca();BAT[2]=make9V();
@@ -648,7 +648,7 @@ const PM=()=>matchMedia('(max-width:820px)').matches;
 const V0=()=>({az:0,el:PM()?.95:.65});
 let az,el,dist;const TG=V3();
 const BB=[];for(const x of[-.185,.185])for(const y of[0,.21])for(const z of[-.775,-.10])BB.push(V3(x,y,z));
-for(const x of[-.50,.50])for(const y of[0,.19])for(const z of[-.71,-.41])BB.push(V3(x,y,z));
+for(const x of[-.51,.52])for(const y of[0,.22])for(const z of[-.78,-.44])BB.push(V3(x,y,z));
 for(const x of[-.52,.47])BB.push(V3(x,0,.185),V3(x,.2,-.05));
 function fitV0(){ // distancia mínima para que quepa todo el montaje con la orientación de partida
  const v=V0(),c=V3(-.045,.06,-.31);let lo=.5,hi=5;const ok=d=>{const p=V3(c.x+d*Math.cos(v.el)*Math.sin(v.az),c.y+d*Math.sin(v.el),c.z+d*Math.cos(v.el)*Math.cos(v.az));CAM.position.copy(p);CAM.lookAt(c);CAM.updateMatrixWorld();
