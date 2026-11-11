@@ -70,7 +70,7 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 <p><i>I</i> es la intensidad que circula por las bobinas y <i>λ</i> = 2,393·10<sup>−7</sup> V·A<sup>−2</sup>·m<sup>−2</sup>·kg·C<sup>−1</sup> reúne sus datos (154 espiras, radio 0,2 m); se toma sin error.</p>
 <h2>Qué hay que medir</h2>
 <p>El montaje ya está hecho. La fuente de la derecha alimenta el tubo: calienta el cátodo, enfoca el haz y da la tensión de aceleración <i>V</i>, que mide el polímetro de la derecha. La fuente de la izquierda hace pasar la intensidad <i>I</i> por las dos bobinas, en serie con el polímetro de la izquierda.</p>
-<p>Enciende las dos fuentes y los dos polímetros. Con <i>V</i> = 100 V e <i>I</i> = 0 A se ve un haz azulado y recto. Al aumentar <i>I</i> se curva hasta cerrarse en una circunferencia.</p>
+<p>Enciende las dos fuentes y los dos polímetros: los mandos ya están preparados y se ve el haz, fino y anaranjado, que sale por la punta del emisor. Con <i>I</i> = 0 A el haz es recto; al aumentar <i>I</i> se curva hasta cerrarse en una circunferencia. El haz se ve a partir de unos 100 V.</p>
 <p>Elige un radio <i>R</i>: 2, 3, 4 o 5 cm. Para <i>V</i> de 120 a 190 V, de 10 en 10 V, ajusta <i>I</i> hasta que el haz incida en el centro del travesaño de ese radio y anota <i>V</i> e <i>I</i>.</p>
 <h2>Cómo se lee el radio</h2>
 <p>Dentro del bulbo hay una escalerilla horizontal con cuatro travesaños fluorescentes, a 4, 6, 8 y 10 cm del orificio del cañón, contados desde él. El haz sale hacia arriba, da media vuelta y cae sobre la escalerilla: si incide en un travesaño, este se ilumina y esa distancia es el diámetro de la órbita. Los travesaños marcan, por tanto, <i>R</i> = 2, 3, 4 y 5 cm.</p>
@@ -80,8 +80,8 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 <h2>Datos y errores</h2>
 <p><i>V</i> se lee en el polímetro «TENSIÓN DE ACELERACIÓN» e <i>I</i> en el polímetro «INTENSIDAD EN LAS BOBINAS»; el error de cada una es una unidad de la última cifra de su lectura. El radio <i>R</i> es el del travesaño elegido y se toma sin error, igual que <i>λ</i>.</p>
 <h2>Cómo se usa</h2>
-<p>Fuente del tubo (derecha): se enciende con su interruptor; el cátodo tarda un par de segundos en calentarse. El mando de 0…300 V fija <i>V</i>. El de 0…50 V es la tensión del cilindro de Wehnelt: enfoca el haz y regula su brillo, sin cambiar el radio. El de 0…12 V no se usa.</p>
-<p>Fuente de las bobinas (izquierda): deja el mando de tensión al máximo y regula <i>I</i> con el mando de 0…5 A.</p>
+<p>Fuente del tubo (derecha): se enciende con su interruptor; el cátodo tarda un par de segundos en calentarse. El mando de 0…300 V fija <i>V</i>. El de 0…50 V es la tensión del cilindro de Wehnelt, que enfoca el haz sin cambiar su radio: déjalo en 50 V, donde el haz es más fino. El de 0…12 V no se usa.</p>
+<p>Fuente de las bobinas (izquierda): deja el mando de tensión al máximo, como está, y regula <i>I</i> con el mando de 0…5 A.</p>
 <p>Mandos: gíralos arrastrando o pincha en su escala. Con la rueda del ratón sobre el mando, girándola seguido avanza deprisa y, muesca a muesca, afina.</p>
 <p>Tubo: con doble clic sobre el bulbo la vista se coloca de frente a él, para ver bien el haz y los travesaños; otro doble clic devuelve la vista anterior.</p>
 <p>Conexiones, como en el montaje real. Bobinas: del + de la fuente al borne de 10 A del polímetro, del COM a la bobina delantera, de esta a la trasera y de la trasera al − de la fuente (tres cables rojos y uno azul). Tubo: los dos bornes de caldeo a 6,3 V ~ (amarillos); el cátodo K al + de 0…50 V (amarillo); el cilindro de Wehnelt W al − de 0…50 V (azul); el ánodo A al + de 0…300 V (rojo); un puente corto une el + de 0…50 V con el − de 0…300 V. El voltímetro va entre el + y el − de 0…300 V.</p>
@@ -458,15 +458,17 @@ const IN=new THREE.Group();IN.position.set(0,YC,0);APP.add(IN);
 {const wireM=finish(0xb9bec2,.3,.9),gunM=finish(0xaeb4b8,.32,.85);
  // cañón: el haz sale hacia arriba por el orificio del ánodo
  const gun=new THREE.Group();gun.position.set(TUBE.XG,0,0);IN.add(gun);
- const an=new THREE.Mesh(roundBox(.014,.018,.014,.002,.0008),gunM);an.position.y=-.0092;gun.add(an);
- const lid=new THREE.Mesh(new THREE.RingGeometry(.0012,.0058,24),finish(0x8c9296,.4,.8));lid.rotation.x=-Math.PI/2;lid.position.y=.0002;gun.add(lid);
- const weh=new THREE.Mesh(new THREE.CylinderGeometry(.0055,.0055,.012,20),finish(0x7d8488,.4,.8));weh.position.y=-.024;gun.add(weh);
- const hot=new THREE.Mesh(new THREE.CircleGeometry(.0012,16),new THREE.MeshBasicMaterial({color:0xff8a2a,transparent:true,opacity:0,toneMapped:false}));hot.rotation.x=-Math.PI/2;hot.position.y=.0004;gun.add(hot);TUBE.hot=hot;
- const glow=new THREE.Mesh(new THREE.SphereGeometry(.0042,16,12),new THREE.MeshBasicMaterial({color:0xff7a1c,transparent:true,opacity:0,depthWrite:false,toneMapped:false}));glow.position.y=-.031;gun.add(glow);TUBE.glow=glow;
+ // emisor: cono achatado, como una bala con la punta hacia arriba; los electrones salen por el orificio de la punta
+ TUBE.CONE=[[.0011,0],[.0021,-.0011],[.0037,-.0036],[.0052,-.0070],[.0064,-.0110],[.0071,-.0150],[.0074,-.0190],[.0074,-.0238],[.0066,-.0252],[0,-.0252]];
+ const cone=turned(TUBE.CONE.slice().reverse(),finish(0xc3c8cb,.26,.9),48);gun.add(cone);
+ const lid=new THREE.Mesh(new THREE.CircleGeometry(.0011,20),finish(0x2a2c30,.6,.3));lid.rotation.x=-Math.PI/2;lid.position.y=.00005;gun.add(lid);
+ const tab=new THREE.Mesh(roundBox(.0058,.0052,.0012,.0008,.0003),finish(0xaeb4b8,.3,.85));tab.position.set(-.0092,-.0200,0);gun.add(tab); // pletina lateral de sujeción
+ const hot=new THREE.Mesh(new THREE.CircleGeometry(.0010,16),new THREE.MeshBasicMaterial({color:0xffa040,transparent:true,opacity:0,toneMapped:false}));hot.rotation.x=-Math.PI/2;hot.position.y=.0002;gun.add(hot);TUBE.hot=hot;
+ const glow=new THREE.Mesh(new THREE.SphereGeometry(.0030,16,12),new THREE.MeshBasicMaterial({color:0xff7a1c,transparent:true,opacity:0,depthWrite:false,toneMapped:false}));glow.position.y=-.0262;glow.scale.y=.6;gun.add(glow);TUBE.glow=glow;
  for(const dz of[-.004,.004]){const w=new THREE.Mesh(new THREE.CylinderGeometry(.0005,.0005,TUBE.RG-TUBE.XG+.004,8),wireM);w.rotation.z=Math.PI/2;w.position.set((TUBE.RG-TUBE.XG+.004)/2+.006,-.024,dz);gun.add(w)}
  const pinch=new THREE.Mesh(new THREE.CylinderGeometry(.006,.009,.016,16),new THREE.MeshStandardMaterial({color:0xdfe7ea,roughness:.1,transparent:true,opacity:.35}));pinch.rotation.z=-Math.PI/2;pinch.position.set(TUBE.RG-TUBE.XG-.004,-.024,0);gun.add(pinch);
  // escalerilla: dos largueros y un travesaño a 2R = 4, 6, 8 y 10 cm del orificio del cañón
- const x0=-(TUBE.RG-.004),x1=TUBE.XG-.0072,Lr=x1-x0;
+ const x0=-(TUBE.RG-.004),x1=TUBE.XG-.0030,Lr=x1-x0;
  for(const dz of[-.011,.011]){const r=new THREE.Mesh(new THREE.CylinderGeometry(.0007,.0007,Lr,8),wireM);r.rotation.z=Math.PI/2;r.position.set((x0+x1)/2,0,dz);IN.add(r)}
  TUBE.rungs=TUBE.RUNG.map(R=>{const m=new THREE.Mesh(new THREE.CylinderGeometry(.0013,.0013,.0234,12),std(new THREE.Color(0xf1f3ea).convertSRGBToLinear(),.55,.05,{emissive:new THREE.Color(0x35ff6a),emissiveIntensity:0}));m.rotation.x=Math.PI/2;m.position.set(TUBE.XG-2*R,0,0);IN.add(m);
   const hit=new THREE.Mesh(new THREE.SphereGeometry(.0032,16,12),new THREE.MeshBasicMaterial({color:0x8dffa6,transparent:true,opacity:0,depthWrite:false,toneMapped:false}));hit.position.copy(m.position);hit.scale.set(1,1,2.2);hit.renderOrder=4;IN.add(hit);return {R,m,hit}});
@@ -479,8 +481,8 @@ function beamGeo(pts,r0,r1,seg=10){const n=pts.length,pos=new Float32Array(n*seg
   for(let j=0;j<seg;j++){const t=j/seg*2*Math.PI,c=Math.cos(t)*r,s=Math.sin(t)*r,o=(i*seg+j)*3;pos[o]=p[0]-ty*c;pos[o+1]=p[1]+tx*c;pos[o+2]=s}}
  for(let i=0;i<n-1;i++)for(let j=0;j<seg;j++){const a=i*seg+j,b=i*seg+(j+1)%seg,c=a+seg,d=b+seg;idx.push(a,c,b,b,c,d)}
  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));g.setIndex(idx);return g}
-const BEAM={layers:[[1,0x1b33f5,1],[2.2,0x3f63ff,.40],[4.2,0x7f9cff,.15]].map(([k,c,o],i)=>{const m=new THREE.Mesh(new THREE.BufferGeometry(),new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:o,depthWrite:false,toneMapped:false}));m.renderOrder=3-i*.1;m.userData.k=k;m.userData.o=o;m.visible=false;IN.add(m);return m})};
-BEAM.spot=new THREE.Mesh(new THREE.SphereGeometry(.004,16,12),new THREE.MeshBasicMaterial({color:0x7f9cff,transparent:true,opacity:0,depthWrite:false,toneMapped:false}));BEAM.spot.renderOrder=3.5;IN.add(BEAM.spot);
+const BEAM={layers:[[1,0xff6410,1],[2.1,0xff8f3c,.34],[3.8,0xffb47a,.13]].map(([k,c,o],i)=>{const m=new THREE.Mesh(new THREE.BufferGeometry(),new THREE.MeshBasicMaterial({color:new THREE.Color(c).convertSRGBToLinear(),transparent:true,opacity:o,depthWrite:false,toneMapped:false}));m.renderOrder=3-i*.1;m.userData.k=k;m.userData.o=o;m.visible=false;IN.add(m);return m})};
+BEAM.spot=new THREE.Mesh(new THREE.SphereGeometry(.004,16,12),new THREE.MeshBasicMaterial({color:new THREE.Color(0xff8a3a).convertSRGBToLinear(),transparent:true,opacity:0,depthWrite:false,toneMapped:false}));BEAM.spot.renderOrder=3.5;IN.add(BEAM.spot);
 // bulbo de vidrio: casi transparente de frente, con borde y brillos
 const glassMat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,
  vertexShader:'varying vec3 vN;varying vec3 vV;void main(){vec4 mv=modelViewMatrix*vec4(position,1.);vN=normalize(normalMatrix*normal);vV=normalize(-mv.xyz);gl_Position=projectionMatrix*mv;}',
@@ -601,7 +603,7 @@ floorLabel(-.32,ZD+.265,'INTENSIDAD EN LAS BOBINAS','I, en amperios');floorLabel
 /* ================= estado ================= */
 const gA=1+(rnd()-.5)*.008,gV=1+(rnd()-.5)*.006,gB=1+(rnd()-.5)*.016; // calibración de los polímetros y del campo de las bobinas
 const MU0=4e-7*Math.PI,NESP=154,RBOB=.2,KB=Math.pow(.8,1.5)*MU0*NESP/RBOB,EM=1.75882e11,RCOIL=4.3; // T/A; C/kg; resistencia de las dos bobinas en serie
-function initState(){return {L:{on:false,u:[18,0]},R:{on:false,u:[0,12,0]},m:[{on:false,dial:'DCA10'},{on:false,dial:'DCV200'}]}}
+function initState(){return {L:{on:false,u:[18,1]},R:{on:false,u:[0,50,100]},m:[{on:false,dial:'DCA10'},{on:false,dial:'DCV200'}]}}
 let S=initState(),heat=0;
 function setKnob(m){const p=dpos(m.dial);m.kn.rotation.z=-p.an*Math.PI/180;R3.shadowMap.needsUpdate=true;invalidate()}
 function drawKnobs(){for(const P of[PL,PR]){const st=S[P.sid];P.kn.forEach((k,i)=>{k.rotation.z=-(st.u[i]/P.K[i].max*270-135)*Math.PI/180});P.rock.rotation.x=st.on?-.16:.16}
@@ -611,23 +613,25 @@ function applyState(){AMM.on=S.m[0].on;AMM.dial=S.m[0].dial;VOLT.on=S.m[1].on;VO
 /* ================= física ================= */
 function solve(){const I=S.L.on?Math.min(S.L.u[1],S.L.u[0]/RCOIL):0,V=S.R.on?S.R.u[2]:0,Uw=S.R.on?S.R.u[1]:0;
  const B=KB*I*gB,r=(V>1&&B>1e-7)?Math.sqrt(2*V/EM)/B:Infinity; // radio de la órbita, en metros
- const Uc=14+.13*V,amp=heat*Math.max(0,Math.min(1,(V-45)/70))*Math.pow(Math.max(0,1-Uw/Uc),.6),foc=1+2.2*Math.pow((Uw-.3*Uc)/Uc,2);
+ // el haz empieza a verse hacia los 80 V y es nítido desde 100 V; el cilindro de Wehnelt lo enfoca: a 50 V es un hilo fino y, al bajar la tensión, se ensancha
+ const amp=heat*Math.max(0,Math.min(1,(V-72)/30)),foc=1+2.2*Math.pow(1-Uw/50,1.5);
  return {I,V,Uw,B,r,amp,foc}}
 // Trayectoria: sale del cañón hacia arriba y gira hacia la escalerilla. Se corta al dar en un travesaño, en el vidrio o, tras la vuelta completa, en el propio cañón.
+const coneR=y=>{const C=TUBE.CONE;if(y>=0)return C[0][0];for(let i=1;i<C.length;i++)if(y>=C[i][1]){const a=C[i-1],b=C[i];return a[0]+(b[0]-a[0])*(a[1]-y)/Math.max(1e-9,a[1]-b[1])}return 0};
 function beamPath(r,foc){const XG=TUBE.XG,RG=TUBE.RG-.0012,pts=[[XG,.0004]];let end={t:'gun'};
  if(!isFinite(r)||r>4){const y=Math.sqrt(RG*RG-XG*XG);for(let i=1;i<=24;i++)pts.push([XG,.0004+(y-.0004)*i/24]);return {pts,end:{t:'glass',p:[XG,y]},len:y}}
  const tol=.0009+.0011*foc,xc=XG-2*r,d=.012/Math.max(r,.004),dphi=Math.min(.05,d);let len=0;
  for(let ph=dphi;ph<2*Math.PI+dphi;ph+=dphi){let f=Math.min(ph,2*Math.PI),x=XG-r+r*Math.cos(f),y=r*Math.sin(f);
   if(Math.hypot(x,y)>RG){const pf=ph-dphi;let lo=pf,hi=f;for(let k=0;k<14;k++){const m=(lo+hi)/2;Math.hypot(XG-r+r*Math.cos(m),r*Math.sin(m))>RG?hi=m:lo=m}x=XG-r+r*Math.cos(lo);y=r*Math.sin(lo);pts.push([x,y]);len=r*lo;end={t:'glass',p:[x,y]};break}
   if(ph-dphi<Math.PI&&f>=Math.PI){const k=TUBE.rungs.findIndex(q=>Math.abs(xc-(XG-2*q.R))<tol);if(k>=0&&xc>-(TUBE.RG-.004)){pts.push([xc,0]);len=r*Math.PI;end={t:'rung',k,dx:xc-(XG-2*TUBE.rungs[k].R),tol};break}}
-  if(f>Math.PI&&x>XG-.0068&&y>-.0182){pts.push([x,y]);len=r*f;end={t:'gun',p:[x,y]};break}
+  if(f>Math.PI&&y>-.0254&&Math.abs(x-XG)<coneR(y)){pts.push([x,y]);len=r*f;end={t:'gun',p:[x,y]};break}
   pts.push([x,y]);len=r*f;if(f>=2*Math.PI)break}
  return {pts,end,len}}
 function updateBeam(){const s=solve(),a=s.amp;TUBE.hot.material.opacity=heat;TUBE.glow.material.opacity=.75*heat;
  for(const q of TUBE.rungs){q.hit.material.opacity=0;q.m.material.emissiveIntensity=0}BEAM.spot.material.opacity=0;
  if(a<.02){BEAM.layers.forEach(m=>m.visible=false);BEAM.last=null;return}
- const P=beamPath(s.r,s.foc),r0=.00055*s.foc,r1=r0+Math.min(.0022,.0052*P.len)*s.foc;BEAM.last=P;
- BEAM.layers.forEach(m=>{m.geometry.dispose();m.geometry=beamGeo(P.pts,r0*m.userData.k,r1*m.userData.k);m.material.opacity=m.userData.o*Math.min(1,.5+.75*a);m.visible=true});
+ const P=beamPath(s.r,s.foc),r0=.00050*s.foc,r1=r0+Math.min(.00042,.0014*P.len)*s.foc;BEAM.last=P; // fino como un láser; se abre muy poco a lo largo de la vuelta
+ BEAM.layers.forEach(m=>{m.geometry.dispose();m.geometry=beamGeo(P.pts,r0*m.userData.k,r1*m.userData.k);m.material.opacity=m.userData.o*Math.min(1,.35+.9*a);m.visible=true});
  if(P.end.t==='rung'){const q=TUBE.rungs[P.end.k],g=Math.exp(-Math.pow(P.end.dx/(P.end.tol*.62),2));q.hit.material.opacity=Math.min(1,(.3+.7*a)*(.3+.7*g));q.m.material.emissiveIntensity=(.4+.6*a)*(.25+.75*g)*1.6;q.hit.position.x=TUBE.XG-2*q.R+P.end.dx*.6;q.hit.scale.setScalar(.8+.5*g);q.hit.scale.z*=1.8}
  else if(P.end.p){BEAM.spot.position.set(P.end.p[0],P.end.p[1],0);BEAM.spot.material.opacity=(P.end.t==='glass'?.55:.3)*a;BEAM.spot.scale.setScalar(P.end.t==='glass'?1:.6)}}
 const gauss=()=>{let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
