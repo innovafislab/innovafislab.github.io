@@ -70,7 +70,7 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 <div class="eq" data-tex="E=\dfrac{\Delta V}{d}" aria-label="Campo eléctrico entre las placas"><i>E</i> = Δ<i>V</i> / <i>d</i></div>
 <h2>Qué hay que medir</h2>
 <p>El montaje ya está hecho. La fuente da la tensión Δ<i>V</i>, que mide el polímetro de la izquierda. La placa móvil recibe esa tensión a través de la resistencia de protección de 10 MΩ, enchufada en ese polímetro. La placa fija va atornillada al medidor de campo y está a tierra; la salida del medidor se lee en el polímetro de la derecha.</p>
-<p>Las conexiones son las del montaje real. El borne + de la salida de 0…300 V va al borne V·Ω del polímetro «TENSIÓN ΔV»; sobre esa clavija se enchufa la resistencia de 10 MΩ, y de su otro extremo sale el cable hacia la placa móvil. El borne − va al borne COM de ese polímetro y, con una segunda clavija, al vástago del medidor de campo, que queda a tierra. La salida de 0…15 V alimenta la entrada de 14…18 V del medidor, + con + y − con −. La salida de ±10 V del medidor va al polímetro «SALIDA E»: + al borne V·Ω y ⊥ al COM.</p>
+<p>Las conexiones son las del montaje real, y cada circuito lleva sus colores. Rojo: del borne + de 0…300 V al borne V·Ω del polímetro «TENSIÓN ΔV»; sobre esa clavija se enchufa la resistencia de 10 MΩ, y de su otro extremo sale el cable hacia la placa móvil. Azul: del borne − de 0…300 V al COM de ese polímetro y, con una segunda clavija, al vástago del medidor de campo, que queda a tierra. Amarillo (+) y negro (−): de la salida de 0…15 V a la entrada de 14…18 V del medidor. Verde (+) y violeta (⊥): de la salida de ±10 V del medidor a los bornes V·Ω y COM del polímetro «SALIDA E».</p>
 <p>Enciende la fuente y los dos polímetros. Antes de cada serie, y cada vez que muevas la placa, ajusta el cero del medidor como se explica más abajo.</p>
 <p class="p1">Con <i>d</i> = 10 cm, mide <i>E</i> para Δ<i>V</i> de 0 a 150 V, de 15 en 15 V.</p>
 <p class="p2">Con Δ<i>V</i> = 150 V, mide <i>E</i> para <i>d</i> de 5 a 15 cm, de 1 en 1 cm.</p>
@@ -88,10 +88,10 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 <p><i>E</i> se obtiene de la lectura del polímetro «SALIDA E». Su error es una unidad de la última cifra de esa lectura, convertida a campo con la escala del medidor: depende de la escala que uses.</p>
 <h2>Cómo se usa</h2>
 <p>Fuente: se enciende con su interruptor. El mando de 0…300 V fija la tensión Δ<i>V</i> entre las placas: gíralo arrastrando o pincha en su escala, y afina con la rueda del ratón hasta leer en el polímetro el valor que buscas. El mando de 0…15 V alimenta el medidor de campo y debe quedarse en 15 V; si lo bajas, el medidor deja de funcionar y sus aspas se paran.</p>
-<p>Medidor de campo: sus mandos y sus bornes están en la cara trasera, la del extremo derecho. Con doble clic sobre el medidor la vista se coloca delante de ella. El pulsador «Escala» pasa a la escala siguiente cada vez que se pulsa (1, 10, 100 y de nuevo 1 kV/m). La ruedecilla «← 0 →» se gira arrastrando alrededor de ella o con la rueda del ratón. Los bornes de la izquierda son la alimentación de 15 V y los de la derecha la salida hacia el polímetro; el cable azul del vástago pone a tierra la carcasa y, con ella, la placa fija.</p>
+<p>Medidor de campo: sus mandos y sus bornes están en la cara trasera, la del extremo derecho. Con doble clic sobre el medidor la vista se coloca delante de ella. El pulsador «Escala» pasa a la escala siguiente cada vez que se pulsa (1, 10, 100 y de nuevo 1 kV/m). La ruedecilla «← 0 →» se gira arrastrando alrededor de ella o con la rueda del ratón. Los bornes de la izquierda son la alimentación de 15 V (cables amarillo y negro) y los de la derecha la salida hacia el polímetro (verde y violeta); el cable azul del vástago pone a tierra la carcasa y, con ella, la placa fija.</p>
 <p>Placa móvil: arrastra la placa de la izquierda, o su soporte, a lo largo del banco. Para leer <i>d</i>, haz doble clic sobre la placa: la vista se acerca a la regla, donde la línea roja del índice marca la distancia. Desde ahí puedes arrastrar el índice para ajustar la placa milímetro a milímetro, y acercarte aún más con la rueda.</p>
 <p>Polímetros: se encienden con POWER. Ya están en tensión continua (V⎓): 200 V el de la izquierda y 20 V el de la derecha. El selector se gira arrastrándolo, con la rueda o pinchando en una marca.</p>
-<p>Vista: arrastra para girar, usa la rueda (o dos dedos) para acercar donde está el puntero y arrastra con el botón derecho (o dos dedos) para desplazar. Con doble clic te acercas a un aparato; «Vista inicial» vuelve al encuadre de partida.</p>
+<p>Vista: arrastra para girar, usa la rueda (o dos dedos) para acercar donde está el puntero y arrastra con el botón derecho (o dos dedos) para desplazar. Con doble clic te acercas a un aparato y, con otro doble clic sobre él, vuelves a la vista anterior; «Vista inicial» vuelve al encuadre de partida.</p>
 <p class="note">Gemelo de la práctica: condensador de placas de 283 mm de lado, medidor de campo con tres escalas y polímetros digitales · CC BY-NC-SA 4.0</p>
 </aside></main>
 <div class="dlg" id="dlg" hidden><div class="dlgc" role="dialog" aria-modal="true"><p>¿Quieres volver a la configuración inicial?</p><div class="dlgb"><button class="hbtn" id="dlgNo" type="button">Cancelar</button><button class="hbtn pri" id="dlgYes" type="button">Sí, empezar de nuevo</button></div></div></div>
@@ -383,7 +383,7 @@ function collectHardware(root,keep){
 }
 
 /* ================= cables ================= */
-const cabMat={r:finish(0xbe3934,.44),b:finish(0x265fa7,.43),y:finish(0xd4ae1c,.46),k:finish(0x26282b,.5)};
+const cabMat={r:finish(0xbe3934,.44),b:finish(0x265fa7,.43),y:finish(0xd9b61f,.46),k:finish(0x26282b,.5),g:finish(0x2a8a43,.45),v:finish(0x7b4aa8,.45)};
 function cable(col){const m=new THREE.Mesh(new THREE.BufferGeometry(),cabMat[col]);m.castShadow=true;m.receiveShadow=true;SC.add(m);return m}
 function cableFloor(x,z,r){return r+.00018}
 function restOnBench(point,r){const floor=cableFloor(point.x,point.z,r),g=point.y-floor;
@@ -407,7 +407,7 @@ function setTube(m,pts,r=.0034){const path=new SupportedCord(pts,r);m.geometry.d
 
 /* ================= materiales y piezas comunes ================= */
 const sockRed=finish(0xb5302a,.42),sockBlue=finish(0x2a55a0,.42),sockYellow=finish(0xcdb824,.45),nickel=finish(0xc9cdcb,.3,.85),brassMat=finish(0xb89655,.34,.82);
-const plugMat={r:finish(0xc53d37,.39),b:finish(0x275da9,.38),y:finish(0xc9c12a,.42),k:finish(0x2a2c30,.45)};
+const plugMat={r:finish(0xc53d37,.39),b:finish(0x275da9,.38),y:finish(0xd9b61f,.42),k:finish(0x2a2c30,.45),g:finish(0x2f9148,.40),v:finish(0x8050ad,.40)};
 function plugAt(par,x,y,col,z=0){const g=new THREE.Group();const shell=new THREE.Mesh(plugShell,plugMat[col]);shell.rotation.x=Math.PI/2;shell.scale.x=1.13;shell.scale.z=.88;
  const neck=new THREE.Mesh(plugNeck,stainless);neck.rotation.x=Math.PI/2;g.add(neck,shell);g.position.set(x,y,z-.0034);par.add(shadow(g));return g}
 // clavija acodada apilable: cuerpo en escuadra, con la salida del cable por un costado y un borne encima
@@ -469,7 +469,7 @@ const MOV=slide(0,true);
 const XB0=XF+.002,XB1=XB0+.150,XS=XB0+.075;
 const FIX=slide(XS,false);
 const FM={kind:'fm',W:700,H:700,wM:.07,hM:.07,root:{scale:{x:GS}},BTN:{c:[112,150],r:46},ZERO:{c:[572,150],r:36},LED:[[262,95],[262,150],[262,205]],
- SKP:{pp:[150,400,'r'],pn:[150,572,'b'],op:[330,400,'r'],on:[330,572,'b']}};
+ SKP:{pp:[150,400,'r','y'],pn:[150,572,'b','k'],op:[330,400,'r','g'],on:[330,572,'b','v']}};
 {const g=new THREE.Group();BG.add(g);
  const rod=new THREE.Mesh(new THREE.CylinderGeometry(.005,.005,YC-.035-.10,20),stainless);rod.position.set(XS,(.10+YC-.035)/2,0);g.add(rod);
  const sh=new THREE.Shape();sh.moveTo(-PL/2,-PL/2);sh.lineTo(PL/2,-PL/2);sh.lineTo(PL/2,PL/2);sh.lineTo(-PL/2,PL/2);sh.closePath();const ho=new THREE.Path();ho.absarc(0,0,.0275,0,2*Math.PI,true);sh.holes.push(ho);
@@ -504,7 +504,7 @@ const FM={kind:'fm',W:700,H:700,wM:.07,hM:.07,root:{scale:{x:GS}},BTN:{c:[112,15
  const can=document.createElement('canvas');can.width=can.height=1400;FM.ctx=can.getContext('2d');FM.tex=new THREE.CanvasTexture(can);FM.tex.encoding=THREE.sRGBEncoding;FM.tex.anisotropy=ANI;
  const face=new THREE.Mesh(new THREE.PlaneGeometry(.0692,.0692),std(0xffffff,.55,.05,{map:FM.tex,envMapIntensity:.5}));face.receiveShadow=true;fr.add(face);FM.face=face;
  const hw=new THREE.Group();fr.add(hw);
- for(const k in FM.SKP){const [u,v,c]=FM.SKP[k],[a,b]=FM.L(u,v);socketMetal(hw,a,b,.6/GS,c==='r'?sockRed:(k==='on'?bezelBlack:sockBlue));plugAt(fr,a,b,c).scale.setScalar(1/GS)}
+ for(const k in FM.SKP){const [u,v,c,pc]=FM.SKP[k],[a,b]=FM.L(u,v);socketMetal(hw,a,b,.6/GS,c==='r'?sockRed:(k==='on'?bezelBlack:sockBlue));plugAt(fr,a,b,pc).scale.setScalar(1/GS)}
  {const [a,b]=FM.L(...FM.BTN.c),bt=turned([[0,0],[.0052,0],[.0052,.0032],[.0044,.0042],[0,.0042]],finish(0xf4f4ee,.4,.03),28);bt.rotation.x=Math.PI/2;bt.position.set(a,b,0);hw.add(bt);FM.btn=bt;
   const rg=turned([[.0052,0],[.0064,0],[.0064,.0014],[.0052,.0014]],bezelBlack,28);rg.rotation.x=Math.PI/2;rg.position.set(a,b,0);hw.add(rg)}
  {const [a,b]=FM.L(...FM.ZERO.c),k=new THREE.Group();k.position.set(a,b,0);fr.add(k);const kb=new THREE.Mesh(ribbedGrip(.0040),finish(0x2a2c30,.5,.04));kb.scale.z=.34;k.add(kb);
@@ -580,7 +580,7 @@ function drawSupply(){const x=SUP.ctx;x.setTransform(2,0,0,2,0,0);
 /* ================= instrumentos y cables ================= */
 makeSupply(0,.14,0);
 const DV=makeDMM(0,'TENSIÓN ΔV',-.37,.20,0),DE=makeDMM(1,'SALIDA E',.50,.20,0);
-{const p=(m,j,c)=>{const[a,b]=m.L(JACK.find(q=>q[0]===j)[2],JY);plugAt(m.fr,a,b,c)};p(DE,'V','r');p(DE,'COM','b');p(DV,'COM','b')}
+{const p=(m,j,c)=>{const[a,b]=m.L(JACK.find(q=>q[0]===j)[2],JY);plugAt(m.fr,a,b,c)};p(DE,'V','g');p(DE,'COM','v');p(DV,'COM','b')}
 // Borne V del voltímetro: clavija acodada del cable de la fuente; encima, la resistencia de protección de 10 MΩ; y sobre ella, la clavija del cable de la placa.
 const RES={uv:DV.L(JACK.find(q=>q[0]==='V')[2],JY),len:.100};
 {const [a,b]=RES.uv,z0=.0025+.021;RES.base=elbowPlug(DV.fr,a,b,.0025,'r',-Math.PI/4);
@@ -589,15 +589,17 @@ const RES={uv:DV.L(JACK.find(q=>q[0]==='V')[2],JY),len:.100};
  const body=new THREE.Mesh(new THREE.CylinderGeometry(.0105,.0105,RES.len-.012,28),std(0xffffff,.45,.03,{map:lab,envMapIntensity:.6}));body.rotation.x=Math.PI/2;body.position.z=RES.len/2;g.add(body);
  for(const [z,rx] of[[.006,-Math.PI/2],[RES.len-.006,Math.PI/2]]){const c=turned([[0,0],[.0105,0],[.0088,.004],[.0048,.006],[0,.006]],finish(0xa52c26,.45),24);c.rotation.x=rx;c.position.z=z;g.add(c)}
  shadow(g);RES.topPlug=elbowPlug(DV.fr,a,b,z0+RES.len,'r',Math.PI/9)}
-SUP.plug('p15','r');SUP.plug('n15','b');{const [a,b]=SUP.L(SUP.SK.nHV[0],SUP.SK.nHV[1]);SUP.el=elbowPlug(SUP.fr,a,b,.0025,'b',-Math.PI/4)} // clavija acodada del cable de tierra del medidor
+SUP.plug('p15','y');SUP.plug('n15','k');{const [a,b]=SUP.L(SUP.SK.nHV[0],SUP.SK.nHV[1]);SUP.el=elbowPlug(SUP.fr,a,b,.0025,'b',-Math.PI/4)} // clavija acodada del cable de tierra del medidor
 SUP.plug('nHV','b',true); // y, apilada sobre ella, la del voltímetro
 SUP.plug('pHV','r');
 for(const inst of INST)collectHardware(inst.root,new Set([inst.kn,inst.face,inst.body]));
-const CB={a:cable('r'),b:cable('b'),c:cable('r'),e1:cable('r'),e2:cable('b'),f1:cable('r'),f2:cable('b'),g:cable('b')};
+const CB={a:cable('r'),b:cable('b'),c:cable('r'),e1:cable('y'),e2:cable('k'),f1:cable('g'),f2:cable('v'),g:cable('b')} // un par de colores por circuito;
 // Tramo que cuelga de una clavija hasta la mesa: sale recto, se dobla por su peso y se posa en L=[x,z].
 function drop(e,L,c=.05,toL=false,ex=.8){const p0=e.p.clone().addScaledVector(e.n,-.006),a1=e.p.clone().addScaledVector(e.n,.024),a2=a1.clone().addScaledVector(e.n,.022);a2.y-=.005;
- const h=V3(e.n.x,0,e.n.z);if(toL||h.lengthSq()<.04)h.set(L[0]-a2.x,0,L[1]-a2.z);h.normalize();const C=a2.clone().addScaledVector(h,c),H=a2.y-.0035,out=[p0,a1,a2];
- for(const t of[.2,.4,.6,.8,1]){const u=1-t,w=Math.pow(t,ex),sm=w*w*(3-2*w);out.push(V3(u*u*a2.x+2*t*u*C.x+t*t*L[0],.0035+H*(1-sm),u*u*a2.z+2*t*u*C.z+t*t*L[1]))}return out}
+ const h=V3(e.n.x,0,e.n.z);if(toL||h.lengthSq()<.04)h.set(L[0]-a2.x,0,L[1]-a2.z);h.normalize();const out=[p0,a1];let s=a2;
+ if(e.n.y>.3){const b=a2.clone().addScaledVector(h,.008),a3=b.clone().addScaledVector(h,.026);a3.y+=.006;s=a3.clone().addScaledVector(h,.022);s.y=a3.y-.009;out.push(b,a3,s)}else out.push(a2); // borne que mira hacia arriba: el cable hace una joroba antes de caer
+ const C=s.clone().addScaledVector(h,c),H=s.y-.0035;
+ for(const t of[.2,.4,.6,.8,1]){const u=1-t,w=Math.pow(t,ex),sm=w*w*(3-2*w);out.push(V3(u*u*s.x+2*t*u*C.x+t*t*L[0],.0035+H*(1-sm),u*u*s.z+2*t*u*C.z+t*t*L[1]))}return out}
 function connect(mesh,A,B,vias,r=.0034){setTube(mesh,[...A,...vias.map(q=>V3(q[0],.0035,q[1])),...B.reverse()],r)}
 function fixedCables(){SC.updateMatrixWorld(true);
  // fuente → voltímetro: el positivo llega a la clavija acodada de la base de la resistencia; el negativo, al borne COM
@@ -683,7 +685,7 @@ function pan(dx,dy){const k=2*dist*Math.tan(CAM.fov*Math.PI/360)/box.clientHeigh
  TG.x+=k*(-dx*ca-dy*se*sa);TG.y+=k*dy*ce;TG.z+=k*(dx*sa-dy*se*ca);TG.x=Math.max(-1.4,Math.min(1.4,TG.x));TG.y=Math.max(-.2,Math.min(.8,TG.y));TG.z=Math.max(-1.3,Math.min(.9,TG.z));invalidate()}
 function zAt(cx,cy,f){const b=box.getBoundingClientRect();camSet();CAM.updateMatrixWorld();const v=TG.clone().project(CAM);const sx=cx-b.left-(v.x+1)/2*box.clientWidth,sy=cy-b.top-(1-v.y)/2*box.clientHeight;pan(-(1-f)*sx,-(1-f)*sy)}
 const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
-let fly=null;function flyTo(tg,d,a,e){touched=true;fly={t0:performance.now(),dur:650,a:{az,el,dist,tg:TG.clone()},b:{az:a===undefined?az:a,el:e===undefined?el:e,dist:d,tg:tg.clone()}};invalidate()}
+let fly=null;function flyTo(tg,d,a,e){touched=true;fly={t0:performance.now(),dur:650,a:{az,el,dist,tg:TG.clone()},b:{az:a===undefined?az:a,el:e===undefined?el:e,dist:d,tg:tg.clone()}};invalidate()}let zb=null;function zoomTo(key,tg,d,a,e){const cT=fly?fly.b.tg:TG,cD=fly?fly.b.dist:dist,en=zb&&cT.distanceTo(zb.tg)<Math.max(.05,zb.d*.5)&&cD<zb.d*1.7;if(en&&zb.key===key){const p=zb.prev;zb=null;flyTo(p.tg,p.dist,p.az,p.el);touched=p.touched;return}zb={key,tg:tg.clone(),d,prev:en?zb.prev:{az,el,dist,tg:TG.clone(),touched}};flyTo(tg,d,a,e)} // doble clic: acerca; otro doble clic sobre lo mismo devuelve la vista anterior
 
 /* ================= interacción ================= */
 const ray=new THREE.Raycaster(),ndc=new THREE.Vector2();
@@ -752,11 +754,11 @@ box.addEventListener('wheel',e=>{e.preventDefault();const h=e.ctrlKey?null:pick(
  const nd=Math.max(.03,Math.min(5,dist*Math.exp(e.deltaY*(e.ctrlKey?.01:.0012))));zAt(e.clientX,e.clientY,nd/dist);dist=nd;touched=true;invalidate()},{passive:false});
 const AZB=Math.atan2(-Math.sin(TH),Math.cos(TH)); // desde delante del banco
 box.addEventListener('dblclick',e=>{const h=pick(e);if(!h)return;
- if(h.object.userData.plate){flyTo(MOV.localToWorld(V3(HOLD+.006,.068,.04)),.15,AZB+.30,.66);return} // a la regla, bajo el índice
- if(h.object===FM.box||h.object.userData.inst===FM){if(h.object.userData.inst===FM&&hitCtl(FM,faceUV(FM)))return;flyTo(FM.fr.getWorldPosition(V3()),.30,Math.atan2(Math.cos(TH),Math.sin(TH)),.22);return} // a la cara trasera
+ if(h.object.userData.plate){zoomTo('plate',MOV.localToWorld(V3(HOLD+.006,.068,.04)),.15,AZB+.30,.66);return} // a la regla, bajo el índice
+ if(h.object===FM.box||h.object.userData.inst===FM){if(h.object.userData.inst===FM&&hitCtl(FM,faceUV(FM)))return;zoomTo(FM,FM.fr.getWorldPosition(V3()),.30,Math.atan2(Math.cos(TH),Math.sin(TH)),.22);return} // a la cara trasera
  if(h.object.userData.inst){const inst=h.object.userData.inst;if(hitCtl(inst,faceUV(inst)))return;const p=inst.fr.getWorldPosition(V3()),n=V3(0,0,1).applyQuaternion(inst.fr.getWorldQuaternion(new THREE.Quaternion()));
-  const t=Math.tan(CAM.fov*Math.PI/360),d=inst.root.scale.x*Math.max(inst.hM*1.12,inst.wM*1.12/CAM.aspect)/(2*t)+.02;flyTo(p,d,Math.atan2(n.x,n.z),Math.max(.15,Math.asin(Math.min(1,n.y))));return}
- flyTo(h.point,Math.max(.35,dist*.55))});
+  const t=Math.tan(CAM.fov*Math.PI/360),d=inst.root.scale.x*Math.max(inst.hM*1.12,inst.wM*1.12/CAM.aspect)/(2*t)+.02;zoomTo(inst,p,d,Math.atan2(n.x,n.z),Math.max(.15,Math.asin(Math.min(1,n.y))));return}
+ zoomTo('pt',h.point,Math.max(.35,dist*.55))});
 function hover(e){const h=pick(e);let ptr=false;
  if(h&&h.object.userData.inst){const inst=h.object.userData.inst;if(hitCtl(inst,faceUV(inst)))ptr=true}
  else if(h&&h.object.userData.plate)ptr=true;
@@ -778,7 +780,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeo
 function setPart(p){part=p;document.body.dataset.part=p;document.querySelectorAll('#ptabs .tab').forEach(q=>q.classList.toggle('on',+q.dataset.p===p))}
 document.querySelectorAll('#ptabs .tab').forEach(t=>t.onclick=()=>setPart(+t.dataset.p));
 $('#gbtn').onclick=()=>{const h=document.body.classList.toggle('noside');$('#gbtn').textContent=h?'Mostrar guía':'Ocultar guía'};
-$('#vwBtn').onclick=()=>{const v=fitV0();flyTo(v.tg,v.dist,v.az,v.el);touched=false};
+$('#vwBtn').onclick=()=>{const v=fitV0();zb=null;flyTo(v.tg,v.dist,v.az,v.el);touched=false};
 $('#rstBtn').onclick=()=>{$('#dlg').hidden=false};$('#dlgNo').onclick=()=>{$('#dlg').hidden=true};
 $('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg')$('#dlg').hidden=true});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#dlg').hidden=true});
@@ -786,7 +788,7 @@ $('#dlgYes').onclick=()=>{$('#dlg').hidden=true;S=initState();applyState()};
 try{document.querySelectorAll('.eq[data-tex]').forEach(e=>katex.render(e.dataset.tex,e,{displayMode:true,throwOnError:false}))}catch(e){}
 fixedCables();size();camReset();applyState();setPart(1);invalidate();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{drawSupply();measure(true);invalidate()});
-window.__ce={DIAL,CB,BG,scr:(inst,u,v)=>{const[lx,ly]=inst.L(u,v),w=inst.fr.localToWorld(V3(lx,ly,0)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},
+window.__ce={DIAL,CB,BG,RES,MOV,scr:(inst,u,v)=>{const[lx,ly]=inst.L(u,v),w=inst.fr.localToWorld(V3(lx,ly,0)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},
  plScr:()=>{const w=MOV.localToWorld(V3(HOLD-.001,YC-.08,.05)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},
  S:()=>S,solve,SUP,FM,DV,DE,setSup,setRng,setZero,setD,setDial,setPart,measure,camState:()=>({az,el,dist,TG}),flyTo,gE,PL};
 }

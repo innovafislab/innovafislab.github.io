@@ -84,7 +84,7 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 <h2>Cómo se usa</h2>
 <p>Generador: enciéndelo con POWER. Los botones <i>f</i> y <i>U</i> eligen qué se ajusta, la frecuencia o la amplitud, y ◄ ► mueven el cursor a la cifra que quieres cambiar (también puedes pinchar directamente en una cifra de la pantalla). Gira el mando arrastrando alrededor de su eje, o con la rueda del ratón, para subir o bajar esa cifra.</p>
 <p>Polímetros: enciéndelos con POWER y gira el selector arrastrándolo, con la rueda del ratón o pinchando en una marca. V~ y mA~ son tensión e intensidad alternas. El amperímetro está conectado a los bornes mA y COM: mientras su selector no esté en mA, no pasa corriente por el circuito.</p>
-<p>Vista: arrastra para girar, usa la rueda (o dos dedos) para acercar donde está el puntero y arrastra con el botón derecho (o dos dedos) para desplazar. Con doble clic te acercas a un aparato; «Vista inicial» vuelve al encuadre de partida.</p>
+<p>Vista: arrastra para girar, usa la rueda (o dos dedos) para acercar donde está el puntero y arrastra con el botón derecho (o dos dedos) para desplazar. Con doble clic te acercas a un aparato y, con otro doble clic sobre él, vuelves a la vista anterior; «Vista inicial» vuelve al encuadre de partida.</p>
 <p class="note">Gemelo de la práctica: bobinas con sus dimensiones reales, generador de funciones y polímetros con fusible · CC BY-NC-SA 4.0</p>
 </aside></main>
 <div class="dlg" id="dlg" hidden><div class="dlgc" role="dialog" aria-modal="true"><p>¿Quieres volver a la configuración inicial de esta parte?</p><div class="dlgb"><button class="hbtn" id="dlgNo" type="button">Cancelar</button><button class="hbtn pri" id="dlgYes" type="button">Sí, empezar de nuevo</button></div></div></div>
@@ -1341,7 +1341,7 @@ let touched=false;new ResizeObserver(()=>{size();if(!touched&&CAM.aspect)camRese
 function pan(dx,dy){const k=2*dist*Math.tan(CAM.fov*Math.PI/360)/box.clientHeight,ca=Math.cos(az),sa=Math.sin(az),ce=Math.cos(el),se=Math.sin(el);
  TG.x+=k*(-dx*ca-dy*se*sa);TG.y+=k*dy*ce;TG.z+=k*(dx*sa-dy*se*ca);TG.x=Math.max(-1.3,Math.min(1,TG.x));TG.y=Math.max(-.2,Math.min(.6,TG.y));TG.z=Math.max(-1,Math.min(.8,TG.z));invalidate()}
 function zAt(cx,cy,f){const b=box.getBoundingClientRect();camSet();CAM.updateMatrixWorld();const v=TG.clone().project(CAM);const sx=cx-b.left-(v.x+1)/2*box.clientWidth,sy=cy-b.top-(1-v.y)/2*box.clientHeight;pan(-(1-f)*sx,-(1-f)*sy)}
-let fly=null;function flyTo(tg,d,a,e){touched=true;fly={t0:performance.now(),dur:650,a:{az,el,dist,tg:TG.clone()},b:{az:a===undefined?az:a,el:e===undefined?el:e,dist:d,tg:tg.clone()}};invalidate()}
+let fly=null;function flyTo(tg,d,a,e){touched=true;fly={t0:performance.now(),dur:650,a:{az,el,dist,tg:TG.clone()},b:{az:a===undefined?az:a,el:e===undefined?el:e,dist:d,tg:tg.clone()}};invalidate()}let zb=null;function zoomTo(key,tg,d,a,e){const cT=fly?fly.b.tg:TG,cD=fly?fly.b.dist:dist,en=zb&&cT.distanceTo(zb.tg)<Math.max(.05,zb.d*.5)&&cD<zb.d*1.7;if(en&&zb.key===key){const p=zb.prev;zb=null;flyTo(p.tg,p.dist,p.az,p.el);touched=p.touched;return}zb={key,tg:tg.clone(),d,prev:en?zb.prev:{az,el,dist,tg:TG.clone(),touched}};flyTo(tg,d,a,e)} // doble clic: acerca; otro doble clic sobre lo mismo devuelve la vista anterior
 
 /* ================= interacción ================= */
 const ray=new THREE.Raycaster(),ndc=new THREE.Vector2();
@@ -1407,8 +1407,8 @@ box.addEventListener('wheel',e=>{e.preventDefault();const h=e.ctrlKey?null:pick(
    return}}
  const nd=Math.max(.056,Math.min(4,dist*Math.exp(e.deltaY*(e.ctrlKey?.01:.0012))));zAt(e.clientX,e.clientY,nd/dist);dist=nd;touched=true;invalidate()},{passive:false});
 box.addEventListener('dblclick',e=>{const h=pick(e);if(!h)return;if(h.object.userData.inst){const inst=h.object.userData.inst;if(hitCtl(inst,faceUV(inst)))return;const p=inst.fr.getWorldPosition(V3()),n=V3(0,0,1).applyQuaternion(inst.fr.getWorldQuaternion(new THREE.Quaternion()));
-  const t=Math.tan(CAM.fov*Math.PI/360),d=inst.root.scale.x*Math.max(inst.hM*1.12,inst.wM*1.12/CAM.aspect)/(2*t)+.02;flyTo(p,d,Math.atan2(n.x,n.z),Math.max(.15,Math.asin(Math.min(1,n.y))));return}
- flyTo(h.point,Math.max(.35,dist*.55))});
+  const t=Math.tan(CAM.fov*Math.PI/360),d=inst.root.scale.x*Math.max(inst.hM*1.12,inst.wM*1.12/CAM.aspect)/(2*t)+.02;zoomTo(inst,p,d,Math.atan2(n.x,n.z),Math.max(.15,Math.asin(Math.min(1,n.y))));return}
+ zoomTo('pt',h.point,Math.max(.35,dist*.55))});
 let hovC=-1;
 function hover(e){const h=pick(e);let ptr=false,hc=-1;
  if(h&&h.object.userData.inst){const inst=h.object.userData.inst;if(hitCtl(inst,faceUV(inst)))ptr=true}
@@ -1456,7 +1456,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeo
 function setPart(p){part=p;S=ST[p];document.body.dataset.part=p;document.querySelectorAll('#ptabs .tab').forEach(q=>q.classList.toggle('on',+q.dataset.p===p));anim=null;applyState()}
 document.querySelectorAll('#ptabs .tab').forEach(t=>t.onclick=()=>setPart(+t.dataset.p));
 $('#gbtn').onclick=()=>{const h=document.body.classList.toggle('noside');$('#gbtn').textContent=h?'Mostrar guía':'Ocultar guía'};
-$('#vwBtn').onclick=()=>{const v=fitV0();flyTo(v.tg,v.dist,v.az,v.el);touched=false};
+$('#vwBtn').onclick=()=>{const v=fitV0();zb=null;flyTo(v.tg,v.dist,v.az,v.el);touched=false};
 $('#fuseBtn').onclick=()=>{S.m[0].fuse=true;AMM.fuse=true;$('#fuseBtn').hidden=true;measure()};
 $('#rstBtn').onclick=()=>{$('#dlg').hidden=false};$('#dlgNo').onclick=()=>{$('#dlg').hidden=true};
 $('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg')$('#dlg').hidden=true});
