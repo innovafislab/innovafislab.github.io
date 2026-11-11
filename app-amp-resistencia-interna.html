@@ -617,7 +617,7 @@ const VOLT=makeDMM(1,'VOLTÍMETRO',BX,-.47,0),AMM=makeDMM(0,'AMPERÍMETRO',.41,-
 for(const inst of INST)collectHardware(inst.root,new Set([inst.kn,inst.face,inst.body]));
 BAT[1]=makePetaca();BAT[2]=make9V();
 function floorLabel(x,z,l1,l2,W=.36,H=.060){const t=canvasTex(1024,Math.round(1024*H/W),(c,w,h)=>{c.clearRect(0,0,w,h);c.fillStyle='#8a939d';const put=(tx,wt,px,y)=>{const P=tx.split('_'),f=s=>wt+Math.round(px*s)+'px Arial, sans-serif';let m=0;P.forEach((s,i)=>{c.font=f(i%2?.68:1);m+=c.measureText(s).width});c.save();c.translate(w/2,y);c.scale(Math.min(1,(w-16)/m),1);let q=-m/2;c.textAlign='left';P.forEach((s,i)=>{c.font=f(i%2?.68:1);c.fillText(s,q,i%2?px*.22:0);q+=c.measureText(s).width});c.restore()};put(l1,'bold ',h*.40,h*.42);put(l2,'',h*.33,h*.86)});const m=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false,toneMapped:false,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-8}));m.rotation.x=-Math.PI/2;m.position.set(x,.0007,z);m.renderOrder=2;SC.add(m);return m} // rótulo en la mesa, como grabado en ella; _x_ escribe x como subíndice
-floorLabel(-.525,-.39,'TENSIÓN ΔV','en bornes de la pila',.25,.068);floorLabel(.575,-.39,'INTENSIDAD I','del circuito',.25,.068);
+floorLabel(BX,-.392,'TENSIÓN ΔV','en bornes de la pila',.26,.070);floorLabel(.41,-.392,'INTENSIDAD I','del circuito',.26,.070); // bajo cada polímetro; los cables pasan por encima
 const CB={c1:cable('r'),c2:cable('y'),c3:cable('y'),c4:cable('b'),v1:cable('r'),v2:cable('k')};
 function lead(e,k=1,dx=0){ // bajada desde un borne o una pinza hasta la mesa; dx la desvía hacia un lado para que no caiga sobre otra clavija
  const P=e.p.clone().addScaledVector(e.n,.028),h=V3(e.n.x,0,e.n.z);if(h.lengthSq()<1e-6)h.set(0,0,1);h.normalize();
@@ -671,17 +671,13 @@ const V0=()=>({az:0,el:.83});
 let az,el,dist;const TG=V3();
 const BB=[];for(const x of[-.185,.185])for(const y of[0,.21])for(const z of[-.775,-.10])BB.push(V3(x,y,z));
 for(const x of[-.51,.52])for(const y of[0,.22])for(const z of[-.78,-.44])BB.push(V3(x,y,z));
-for(const x of[-.52,.47])BB.push(V3(x,0,.185),V3(x,.2,-.05));for(const x of[-.655,.705])BB.push(V3(x,0,-.39)); // rótulos de la mesa
+for(const x of[-.52,.47])BB.push(V3(x,0,.185),V3(x,.2,-.05));
 function fitV0(){ // encuadre de partida: el punto de mira y la distancia que más acercan el montaje sin recortarlo
  const v=V0(),top=PM()?.77:.875;let best=null; // en el móvil los botones ocupan más alto
  for(let cz=-.42;cz<=-.12;cz+=.01){const c=V3(-.03,.06,cz);let lo=.5,hi=5;
   const ok=d=>{const p=V3(c.x+d*Math.cos(v.el)*Math.sin(v.az),c.y+d*Math.sin(v.el),c.z+d*Math.cos(v.el)*Math.cos(v.az));CAM.position.copy(p);CAM.lookAt(c);CAM.updateMatrixWorld();
    return BB.every(q=>{const n=q.clone().project(CAM);return Math.abs(n.x)<.97&&n.y<top&&n.y>-.95})};
   for(let i=0;i<26;i++){const m=(lo+hi)/2;ok(m)?hi=m:lo=m}if(!best||hi<best.dist)best={az:v.az,el:v.el,dist:hi,tg:c}}
- // si lo que limita es el ancho (móvil), varias alturas valen igual: se elige la que deja el montaje centrado en vertical
- {const D=best.dist*1.004;let bal=1e9;for(let cz=-.42;cz<=-.12;cz+=.01){const c=V3(-.03,.06,cz),p=V3(c.x+D*Math.cos(v.el)*Math.sin(v.az),c.y+D*Math.sin(v.el),c.z+D*Math.cos(v.el)*Math.cos(v.az));CAM.position.copy(p);CAM.lookAt(c);CAM.updateMatrixWorld();
-   let a=1e9,z=-1e9,okx=true;for(const q of BB){const n=q.clone().project(CAM);a=Math.min(a,n.y);z=Math.max(z,n.y);if(Math.abs(n.x)>=.97)okx=false}
-   if(okx&&z<top&&a>-.95){const d=Math.abs((top-z)-(a+.95));if(d<bal){bal=d;best={az:v.az,el:v.el,dist:D,tg:c}}}}}
  return best}
 function camReset(){const v=fitV0();az=v.az;el=v.el;dist=v.dist;TG.copy(v.tg)}
 function camSet(){CAM.position.set(TG.x+dist*Math.cos(el)*Math.sin(az),TG.y+dist*Math.sin(el),TG.z+dist*Math.cos(el)*Math.cos(az));CAM.lookAt(TG)}
