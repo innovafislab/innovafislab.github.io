@@ -117,7 +117,7 @@ const TRAY={x:12,y:12,w:250,h:540.5};
 // [REPARTO] La escena mide 900 de alto y su ancho se adapta a la ventana (mínimo 1500). El ancho que sobra (p. ej. al ocultar la guía)
 // se reparte como separación entre la fuente y los polímetros, la placa y la bandeja, en lugar de dejar franjas vacías a los lados.
 // [DISTRIBUCIÓN] Izquierda: bandeja de piezas y amperímetro (azul) arriba, fuente debajo. Centro: placa. Derecha: esquema arriba
-// y voltímetro (VICTOR) debajo. Así los cables se cruzan lo menos posible.
+// y voltímetro (naranja) debajo. Así los cables se cruzan lo menos posible.
 const LAY={W:1500,m1x:1201,m2x:290,srcx:12};
 function computeLayout(W){const e=W-1500,mg=12+e*.08,trw=250+e*.10,gtm=28+e*.08,gcb=18+e*.26,gbt=14+e*.20,mW=MW*MS;
  const colW=Math.max(SRC.w*SS,trw+gtm+mW),bx=mg+colW+gcb,rx=bx+BW+gbt,rw=Math.max(mW,W-mg-rx);
@@ -263,7 +263,7 @@ function drawTrayItems(){[...L_tray.querySelectorAll('[data-tray]')].forEach(e=>
 }
 
 /* ---------- [ESQUEMA] esquema del montaje en la bandeja ---------- */
-// Muestra el circuito de la pestaña activa con el voltímetro (naranja, como el VICTOR) y el amperímetro (azul)
+// Muestra el circuito de la pestaña activa con el voltímetro (naranja) y el amperímetro (azul)
 // donde están conectados. En «Móntalo tú mismo» se elige ver el de la parte I o el de la parte II.
 const SCHREF={w:292,h:212};let SCHK='serie',FSUB={1:'asoc',2:'tot'},schB=null,schPos={},flashT=null;const L_sch=mk('g',null,L_tray);
 function flashR(key){if(!schB||!schPos[key])return;const old=schB.querySelector('.rfl');if(old)old.remove();clearTimeout(flashT);const P0=schPos[key],w=150,x=P0.side>0?P0.x-6:P0.x-w+6,y=P0.y+14;
@@ -326,8 +326,8 @@ function drawMeter(m){
  const g=mk('g',{'data-m':m.id,transform:`translate(${m.x} ${m.y}) scale(${MS})`},L_meters),x=0,y=0,V=m.kind==='victor';
  const body=mk('rect',{x,y,width:MW,height:MH,rx:26,fill:V?'#f07a1c':'#1f6fd1',filter:'url(#fSh)',class:'grab','data-mbody':m.id},g); // sin marcas comerciales; el marco azul, como el A del esquema
  mk('rect',{x:x+10,y:y+10,width:MW-20,height:MH-20,rx:18,fill:V?'#26292d':'#e7eaee',class:'grab','data-mbody':m.id},g);
- txt(g,x+22,y+34,V?'VICTOR 88C':'POLÍMETRO',{'font-size':V?14:14,'font-weight':800,fill:V?'#f07a1c':'#1f6fd1',class:'grab','data-mbody':m.id});
- txt(g,x+MW-22,y+34,V?'DIGITAL MULTIMETER':'DIGITAL',{'text-anchor':'end','font-size':9.5,'font-weight':700,fill:V?'#e8e8e8':'#3a4250',class:'grab','data-mbody':m.id});
+ txt(g,x+22,y+34,'POLÍMETRO',{'font-size':V?14:14,'font-weight':800,fill:V?'#f07a1c':'#1f6fd1',class:'grab','data-mbody':m.id});
+ txt(g,x+MW-22,y+34,'DIGITAL',{'text-anchor':'end','font-size':9.5,'font-weight':700,fill:V?'#e8e8e8':'#3a4250',class:'grab','data-mbody':m.id});
  mk('rect',{x:x+22,y:y+44,width:MW-44,height:84,rx:6,fill:V?'url(#gLcd)':'url(#gLcdP)',stroke:'#0f1114','stroke-width':3},g);
  mk('g',{class:'lcd','data-lcd':m.id},g);
  // botón de encendido
