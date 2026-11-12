@@ -729,8 +729,8 @@ let az,el,dist;const TG=V3();
 const BB=[];for(const x of[-.185,.185])for(const y of[0,.21])for(const z of[-.775,-.10])BB.push(V3(x,y,z));
 for(const x of[-.51,.52])for(const y of[0,.22])for(const z of[-.78,-.44])BB.push(V3(x,y,z));
 for(const x of[-.52,.47])BB.push(V3(x,0,.185),V3(x,.2,-.05));
-/* móvil: los botones tapan más parte de la escena; el límite superior sale de su altura real y el hueco que sobra se reparte entre los botones y el borde inferior */
-function topLim(base){if(!PM())return base;const r=box.getBoundingClientRect(),b=document.querySelector('.fbtn.tog').getBoundingClientRect();return r.height?Math.min(base,1-2*(b.bottom-r.top+9)/r.height):.77}
+/* los botones nunca tapan el montaje: el límite superior del encuadre sale de la altura real del botón de visualización, en cualquier pantalla; en el móvil, el hueco que sobra se reparte entre los botones y el borde inferior */
+function topLim(base){const r=box.getBoundingClientRect(),b=document.querySelector('.fbtn.tog').getBoundingClientRect();return r.height?Math.min(base,1-2*(b.bottom-r.top+9)/r.height):.77}
 function balance(best,v,top,pts){let bm=-9,bs=0;const c=V3(),d=best.dist,up=V3(-Math.sin(v.el)*Math.sin(v.az),Math.cos(v.el),-Math.sin(v.el)*Math.cos(v.az)); // la mira se desplaza en vertical sobre la pantalla, sin acercar ni alejar
  for(let k=-80;k<=80;k++){c.copy(best.tg).addScaledVector(up,k*.004);CAM.position.set(c.x+d*Math.cos(v.el)*Math.sin(v.az),c.y+d*Math.sin(v.el),c.z+d*Math.cos(v.el)*Math.cos(v.az));CAM.lookAt(c);CAM.updateMatrixWorld();
   let hi=-9,lo=9,wide=0;for(const q of pts){const n=q.clone().project(CAM);hi=Math.max(hi,n.y);lo=Math.min(lo,n.y);wide=Math.max(wide,Math.abs(n.x))}
