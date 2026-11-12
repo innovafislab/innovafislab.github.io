@@ -79,7 +79,7 @@ svg text{font-family:Inter,system-ui,sans-serif}
 <p class="pre">El circuito ya está montado y, al abrir, la fuente y los polímetros están encendidos y midiendo: ajusta la tensión, elige en cada polímetro el rango adecuado y mide. Con el selector de la cabecera cambias dónde está conectado el <span class="p1">voltímetro</span><span class="p2">amperímetro</span>; las resistencias no se mueven, solo cambian los cables. El esquema de la bandeja muestra en cada momento lo que está conectado.</p>
 <p>Las resistencias no llevan su valor: hay que determinarlo con las medidas. Su código de colores da el valor nominal, que también aparece un instante si pulsas su nombre en el esquema.</p>
 <p class="p1">Parte I: R<sub>1</sub> y R<sub>2</sub> en serie con la fuente y con un polímetro en serie como amperímetro (bornes COM y mA). Con el otro polímetro, como voltímetro (COM y V), mide en paralelo la tensión de la asociación, la de R<sub>1</sub> y la de R<sub>2</sub>. Repite para varios valores de la tensión de la fuente. No superes 120 mA.</p>
-<p class="p2">Parte II: R<sub>3</sub> y R<sub>4</sub> en paralelo. Mide con un polímetro la tensión V de la fuente. Primero mide con el amperímetro la intensidad total, en la rama común (figura a); después, para las mismas tensiones, la intensidad de cada rama (figura b). No superes 120 mA.</p>
+<p class="p2">Parte II: R<sub>3</sub> y R<sub>4</sub> en paralelo. Con un polímetro, como voltímetro, mide la tensión V entre los extremos de la asociación. Primero mide con el amperímetro la intensidad total, en la rama común (figura a); después, para las mismas tensiones, la intensidad de cada rama (figura b). No superes 120 mA.</p>
 <h2>Tabla de la ficha <small class="rw">(rellenar en Word)</small></h2>
 <table class="p1"><tr><th><i>I</i></th><th><i>V</i><sub>asoc</sub></th><th><i>V</i><sub>1</sub></th><th><i>V</i><sub>2</sub></th></tr><tr><td>&nbsp;</td><td></td><td></td><td></td></tr></table>
 <table class="p2"><tr><th><i>V</i></th><th><i>I</i><sub>asoc</sub></th><th><i>I</i><sub>R3</sub></th><th><i>I</i><sub>R4</sub></th></tr><tr><td>&nbsp;</td><td></td><td></td><td></td></tr></table>
@@ -295,15 +295,15 @@ function drawSchem(){L_sch.innerHTML='';const g=L_sch,X=SCH.x,Y=SCH.y;
  schB=b;
  const met=(cx,cy,kind)=>{const col=kind==='V'?'#e8711a':'#1f6fd1';mk('circle',{cx,cy,r:17,fill:'#fff',stroke:col,'stroke-width':2.6},b);txt(b,cx,cy+7,kind,Object.assign({'text-anchor':'middle','font-size':20,fill:col},it))};
  const src=(x,y)=>{mk('path',{d:`M${x-30} ${y} H${x+30}`,stroke:W,'stroke-width':2.4},b);mk('path',{d:`M${x-11} ${y+14} H${x+11}`,stroke:W,'stroke-width':6},b);txt(b,x-34,y+12,'V',Object.assign({'text-anchor':'end','font-size':22,fill:W},it))};
- if(part===1){const L=150,Rx=270,T=20,Bt=205;mk('rect',{x:L,y:T-2,width:1,height:Bt-T+4,opacity:0},b);
-  ln([[L,T],[L,38]]);met(L,55,'A');ln([[L,72],[L,118]]);ln([[L,132],[L,Bt],[Rx,Bt],[Rx,185]]);src(L,118);
-  ln([[L,T],[Rx,T],[Rx,35]]);ln([[Rx,95],[Rx,125]]);res(Rx,35,95,'R₁','R1',-1);res(Rx,125,185,'R₂','R2',-1);
+ if(part===1){const L=130,Rx=270,T=20,Bt=205;mk('rect',{x:L,y:T-20,width:1,height:Bt-T+24,opacity:0},b);
+  ln([[L,T],[L,118]]);ln([[L,132],[L,Bt],[Rx,Bt],[Rx,185]]);src(L,118);
+  ln([[L,T],[188,T]]);met(205,T,'A');ln([[222,T],[Rx,T],[Rx,35]]);ln([[Rx,95],[Rx,125]]);res(Rx,35,95,'R₁','R1',-1);res(Rx,125,185,'R₂','R2',-1);
   const VX=338,[na,nb]={asoc:[27,197],R1:[27,110],R2:[110,197]}[sub],vy=(na+nb)/2;
   ln([[Rx,na],[VX,na],[VX,vy-17]]);ln([[VX,vy+17],[VX,nb],[Rx,nb]]);met(VX,vy,'V');dot(Rx,na);dot(Rx,nb);
- }else{const L=74,T=20,Bt=205,X3=204,X4=264,VL=124;mk('rect',{x:L,y:T-20,width:1,height:Bt-T+24,opacity:0},b); // marco fijo: mismo tamaño con el amperímetro en cualquier sitio
+ }else{const L=74,T=20,Bt=205,X3=186,X4=246,VX=312,vm=(T+Bt)/2;mk('rect',{x:L,y:T-20,width:1,height:Bt-T+24,opacity:0},b); // marco fijo: mismo tamaño con el amperímetro en cualquier sitio
   ln([[L,T],[L,118]]);ln([[L,132],[L,Bt]]);src(L,118);
-  ln([[L,62],[VL,62],[VL,95]]);ln([[VL,129],[VL,168],[L,168]]);met(VL,112,'V');dot(L,62);dot(L,168);
-  if(sub==='tot'){ln([[L,T],[151,T]]);met(168,T,'A');ln([[185,T],[X4,T]])}else ln([[L,T],[X4,T]]);dot(X3,T);
+  ln([[X4,T],[VX,T],[VX,vm-17]]);ln([[VX,vm+17],[VX,Bt],[X4,Bt]]);met(VX,vm,'V');dot(X4,T);dot(X4,Bt); // el voltímetro, a la derecha de todo, entre los extremos de la asociación
+  if(sub==='tot'){ln([[L,T],[112,T]]);met(129,T,'A');ln([[146,T],[X4,T]])}else ln([[L,T],[X4,T]]);dot(X3,T);
   for(const [x,key,lab,sd] of [[X3,'R3','R₃',-1],[X4,'R4','R₄',1]]){
    if(sub===key){ln([[x,T],[x,38]]);met(x,55,'A');ln([[x,72],[x,95]])}else ln([[x,T],[x,95]]);
    res(x,95,155,lab,key,sd);ln([[x,155],[x,Bt]])}
@@ -731,7 +731,7 @@ function applyPreset(){const B=[],C=[],part=state.part,sub=SUB[part];
   if(sub!=='R3')W_('1_2',1);if(sub!=='R4')W_('4_2',1);
   if(sub==='tot'){cb('R','S:P','M:m2:mA');cb('B','M:m2:COM','p0_1')}
   else{cb('R','S:P','p0_1');const c=sub==='R3'?1:4;cb('B',`p${c}_2`,'M:m2:mA');cb('B','M:m2:COM',`p${c}_3`)}
-  cb('R','M:m1:V','S:P');C[C.length-1].h=[{x:BX+BW*.72,y:886},{x:BX+BW*.28,y:886}];cb('K','M:m1:COM','S:N');C[C.length-1].h=[{x:BX+BW*.72,y:893},{x:BX+BW*.28,y:893}]} // el voltímetro va a la fuente pasando bajo el borde de la placa
+  cb('R','M:m1:V','p5_1');cb('K','M:m1:COM','p5_7')} // el voltímetro, por la derecha, entre el nudo de arriba y el de abajo: mide la tensión de la asociación
  state.bricks=B;state.cables=C}
 function presetDials(){const v=state.meters.find(m=>m.id==='m1'),a=state.meters.find(m=>m.id==='m2');if(v){v.dial='DCV20';v.on=true}if(a){a.dial='DCA0.2';a.on=true}state.src.on=true;if(!state.src.v)state.src.v=6} // montaje ya hecho: se abre encendido y midiendo, con 6 V
 function updSub(){const el=$('#sub'),p=state.part;el.hidden=!p;if(!p)return;$('#sublab').textContent=p===1?'Voltímetro en':'Amperímetro en la rama';

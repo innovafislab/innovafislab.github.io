@@ -63,7 +63,7 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 <span class="sp"></span><button class="hbtn" id="gbtn" type="button"><span>Ocultar </span>guía</button></header>
 <main><section class="left"><div class="card">
 <div class="sim3" id="v3" aria-label="Montaje en 3D: bobina circular sobre una rejilla, sonda Hall en su soporte, teslámetro, fuente de alimentación y amperímetro"><canvas id="cv"></canvas></div>
-<div class="ctls"><div class="ctl"><button class="fbtn" id="vwBtn" type="button">Vista inicial</button><button class="fbtn" id="mD" type="button"><span>Medir 2<i>R</i></span></button></div><div class="ctl"><button class="vbtn" id="rstBtn" type="button" aria-label="Volver a la configuración inicial" title="Volver a la configuración inicial">↺</button></div></div>
+<div class="ctls"><div class="ctl"><button class="fbtn" id="vwBtn" type="button">Vista inicial</button><button class="fbtn" id="oBtn" type="button" aria-pressed="false"><svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.2 8a5.2 5.2 0 1 1-1.6-3.75" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M13.6 1.9v3.2h-3.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Girar la sonda</span></button><button class="fbtn" id="mD" type="button"><span>Medir 2<i>R</i></span></button></div><div class="ctl"><button class="vbtn" id="rstBtn" type="button" aria-label="Volver a la configuración inicial" title="Volver a la configuración inicial">↺</button></div></div>
 </div><div class="mctl" id="mctl"></div></section>
 <aside class="side card" id="side">
 <h2>Qué se observa</h2>
@@ -75,20 +75,20 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 <p>Diámetro: pulsa «Medir 2<i>R</i>» y lee en la regla el diámetro de la bobina, de una marca del centro del devanado a la otra.</p>
 <p>Cero del teslámetro: antes de medir, apaga la fuente y gira el mando de cero hasta que el visor marque 0,00. Vuelve a encender la fuente. Repítelo cada vez que cambies la orientación de la sonda.</p>
 <p>Corriente: ajusta la fuente hasta que el amperímetro marque <i>I</i> = 2 A. La bobina tiene <i>N</i> = 100 vueltas.</p>
-<p>Campo en el eje: con la sonda a lo largo del eje y <i>ρ</i> = 0, mide <i>B</i><sub>z</sub> centímetro a centímetro desde <i>z</i> = 0 hasta <i>z</i> = 20 cm.</p>
+<p>Campo en el eje: con la sonda a lo largo del eje y <i>ρ</i> = 0, mide <i>B</i><sub>z</sub> centímetro a centímetro desde <i>z</i> = 0 hasta <i>z</i> = 20 cm: son los puntos azules de la rejilla.</p>
 <p>Con esos datos, representa <i>B</i><sub>z</sub> frente a <i>t</i> = (<i>z</i>² + <i>R</i>²)<sup>−3/2</sup> y ajusta la recta <i>B</i><sub>z</sub> = <i>a t</i> + <i>b</i>. Da la pendiente, la ordenada en el origen y el coeficiente de correlación, y con ellos halla la permeabilidad del vacío <i>μ</i><sub>0</sub>.</p>
-<p>Forma del campo: en varios puntos de la rejilla mide <i>B</i><sub>z</sub> con la sonda a lo largo del eje y <i>B</i><sub>ρ</sub> con la sonda atravesada, y dibuja en cada punto el vector campo. Por simetría basta un lado de la bobina.</p>
+<p>Forma del campo: en los puntos de la rejilla marcados con un círculo, uno cada 5 cm, mide <i>B</i><sub>z</sub> con la sonda a lo largo del eje y <i>B</i><sub>ρ</sub> con la sonda atravesada, y dibuja en cada punto el vector campo. Por simetría basta un lado de la bobina.</p>
 <h2>Tabla de la ficha <small class="rw">(rellenar en Word)</small></h2>
 <table><tr><th><i>z</i></th><th><i>ε</i><sub>z</sub></th><th><i>B</i><sub>z</sub></th><th><i>ε</i><sub>Bz</sub></th><th><i>t</i></th><th><i>ε</i><sub>t</sub></th></tr><tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr></table>
 <h2>Datos y errores</h2>
 <p>El campo se lee en el teslámetro, en militeslas, y la intensidad en el amperímetro, en amperios; el error de cada lectura es una unidad de su última cifra.</p>
-<p><i>z</i> y <i>ρ</i> se leen en la rejilla de la mesa, que tiene una línea por centímetro. La marca roja señala el punto que queda bajo la punta de la sonda, que es donde se mide el campo.</p>
+<p><i>z</i> y <i>ρ</i> se leen en la rejilla de la mesa, que tiene una línea por centímetro. El aro rojo señala el punto que queda bajo la punta de la sonda, que es donde se mide el campo, y dos líneas rojas lo llevan hasta las escalas de <i>z</i> y de <i>ρ</i>.</p>
 <p>2<i>R</i> se lee en la regla; su error es la división más pequeña de la regla.</p>
 <p>El número de vueltas, <i>N</i> = 100, es un dato.</p>
 <h2>Cómo se usa</h2>
 <p>Sonda: arrastra el soporte o la varilla para llevar la punta a otro sitio; al soltar, se coloca en el punto de la rejilla más cercano. También puedes pinchar en un punto de la rejilla y la sonda va a él.</p>
-<p>Orientación: el selector de la cabecera pone la sonda a lo largo del eje, para medir <i>B</i><sub>z</sub>, o atravesada, para medir <i>B</i><sub>ρ</sub>, sin mover la punta. Atravesada no cabe a menos de 2 cm del plano de la bobina: si está más cerca, se retira a <i>z</i> = 2 cm.</p>
-<p>Teslámetro: mide la componente del campo que va a lo largo de la varilla, positiva cuando apunta de la punta hacia el mango. El selector elige el alcance (20, 200 o 2000 mT) y el conmutador debe estar en campo continuo. El mando de cero se gira arrastrándolo o con la rueda, y da varias vueltas.</p>
+<p>Orientación: el botón «Girar la sonda», o el selector de la cabecera, pone la sonda a lo largo del eje, para medir <i>B</i><sub>z</sub>, o atravesada, para medir <i>B</i><sub>ρ</sub>, sin mover la punta. Atravesada no cabe a menos de 2 cm del plano de la bobina: si está más cerca, se retira a <i>z</i> = 2 cm. En los puntos de <i>z</i> = 0 basta medir <i>B</i><sub>z</sub>.</p>
+<p>Teslámetro: mide la componente del campo que va a lo largo de la varilla, positiva cuando apunta de la punta hacia el mango. El selector de la izquierda elige el alcance (20, 200 o 2000 mT) y el conmutador debe estar en campo continuo. El mando de la derecha ajusta el cero: se gira arrastrándolo o con la rueda, y da varias vueltas.</p>
 <p>Fuente: se enciende con el interruptor de su frente. El mando de 0…18 V fija la tensión máxima y el de 0…5 A limita la intensidad: con este se ajusta la corriente de la bobina.</p>
 <p>Amperímetro: está en serie con la bobina, en el alcance de 10 A⎓ y con el cable en el borne de 10 A.</p>
 <p>Regla: «Medir 2<i>R</i>» abre la medida sobre el montaje. Con la rueda (o dos dedos) se amplía donde está el puntero, arrastrando se desplaza y con doble clic vuelve al tamaño inicial. «Cerrar» devuelve al montaje.</p>
@@ -607,54 +607,61 @@ const COIL=new THREE.Group();COIL.position.set(XC,0,ZC);SC.add(COIL);
  // abrazaderas negras, arriba a un lado y a otro
  for(const s of[-1,1]){const a=s*.72,b=new THREE.Mesh(roundBox(.036,.046,.046,.005,.002),blackPlastic);b.position.set(0,YC+RC*Math.cos(a),RC*Math.sin(a));b.rotation.x=a;COIL.add(b)}
  // pie: zócalo y columna que abraza el aro por abajo, con los dos bornes en su cara derecha
- const foot=new THREE.Mesh(roundBox(.105,.020,.215,.006,.002),blackPlastic);foot.position.y=.010;COIL.add(foot);
- const col=new THREE.Mesh(roundBox(.052,.066,.078,.006,.002),blackPlastic);col.position.y=.020+.033;COIL.add(col);
+ // de metacrilato ahumado, para que se vea la rejilla que queda debajo
+ const smoke=new THREE.MeshPhysicalMaterial({color:new THREE.Color(0x2a2e33).convertSRGBToLinear(),roughness:.25,metalness:0,transparent:true,opacity:.34,depthWrite:false,envMapIntensity:.6});
+ const foot=new THREE.Mesh(roundBox(.090,.014,.200,.006,.002),smoke);foot.position.y=.007;foot.renderOrder=3;COIL.add(foot);
+ const col=new THREE.Mesh(roundBox(.046,.070,.070,.006,.002),smoke);col.position.y=.014+.035;col.renderOrder=3;COIL.add(col);COIL.userData.clear=[foot,col];
  const sk=new THREE.Group();sk.position.set(.0262,.050,0);sk.rotation.y=Math.PI/2;COIL.add(sk);COIL.userData.sk=sk;
  socketMetal(sk,.021,0,1,sockRed);socketMetal(sk,-.021,0,1,sockBlue); // el rojo, detrás; el azul, delante
- shadow(COIL);COIL.traverse(q=>{if(q.isMesh)q.userData.coil=true})}
+ shadow(COIL);for(const q of COIL.userData.clear)q.castShadow=false;COIL.traverse(q=>{if(q.isMesh)q.userData.coil=true})}
 COIL.jack=k=>{const sk=COIL.userData.sk,a=k==='a'?.021:-.021;return {p:sk.localToWorld(V3(a,0,.040)),n:V3(0,0,1).applyQuaternion(sk.getWorldQuaternion(new THREE.Quaternion()))}};
 COIL.plug=(k,c)=>plugAt(COIL.userData.sk,k==='a'?.021:-.021,0,c);
 
 // Rejilla proyectada en la mesa, bajo el plano horizontal que pasa por el eje: una línea por centímetro
-const GRID=(()=>{const PX=64,M0=2.6,M1=1.6,MF=4.4,W=(ZMAX+M0+M1),H=(RMAX+M1+MF),cw=Math.round(W*PX),ch=Math.round(H*PX),U=z=>(ZMAX+M0-z)*PX,Vv=r=>(r+M1)*PX;
- const t=canvasTex(cw,ch,(c)=>{c.clearRect(0,0,cw,ch);const INK='#3d4854';c.strokeStyle=INK;c.fillStyle=INK;c.lineCap='butt';
-  for(let z=0;z<=ZMAX;z++){c.globalAlpha=z%5===0?.80:.46;c.lineWidth=z%5===0?3.4:1.8;c.beginPath();c.moveTo(U(z),Vv(0));c.lineTo(U(z),Vv(RMAX));c.stroke()}
-  for(let r=0;r<=RMAX;r++){c.globalAlpha=r===0?.95:r%5===0?.80:.46;c.lineWidth=r===0?5:r%5===0?3.4:1.8;c.beginPath();c.moveTo(U(ZMAX),Vv(r));c.lineTo(U(0),Vv(r));c.stroke()}
-  c.globalAlpha=.9;c.textAlign='center';c.font='bold 40px Arial, sans-serif';for(let z=0;z<=ZMAX;z+=2)c.fillText(String(z),U(z),Vv(RMAX)+58);
-  c.font='italic bold 44px Georgia, "Times New Roman", serif';c.fillText('z',U(ZMAX/2)-58,Vv(RMAX)+150);c.font='bold 38px Arial, sans-serif';c.fillText('(cm)',U(ZMAX/2)+22,Vv(RMAX)+150);
-  c.textAlign='right';c.font='bold 40px Arial, sans-serif';for(let r=0;r<=RMAX;r+=2)c.fillText(String(r),U(ZMAX)-22,Vv(r)+14);
-  c.save();c.translate(U(ZMAX)-112,Vv(RMAX/2));c.rotate(-Math.PI/2);c.textAlign='center';c.font='italic bold 44px Georgia, "Times New Roman", serif';c.fillText('ρ',-52,0);c.font='bold 38px Arial, sans-serif';c.fillText('(cm)',28,0);c.restore()});
+const GRID=(()=>{const PX=64,M0=3.4,M1=1.6,MF=5.6,W=(ZMAX+M0+M1),H=(RMAX+M1+MF),cw=Math.round(W*PX),ch=Math.round(H*PX),U=z=>(ZMAX+M0-z)*PX,Vv=r=>(r+M1)*PX;
+ const t=canvasTex(cw,ch,(c)=>{c.clearRect(0,0,cw,ch);const INK='#35404c';c.strokeStyle=INK;c.fillStyle=INK;c.lineCap='butt';
+  for(let z=0;z<=ZMAX;z++){c.globalAlpha=z%5===0?.85:.42;c.lineWidth=z%5===0?3.6:1.7;c.beginPath();c.moveTo(U(z),Vv(0));c.lineTo(U(z),Vv(RMAX));c.stroke()}
+  for(let r=0;r<=RMAX;r++){c.globalAlpha=r===0?1:r%5===0?.85:.42;c.lineWidth=r===0?5.5:r%5===0?3.6:1.7;c.beginPath();c.moveTo(U(ZMAX),Vv(r));c.lineTo(U(0),Vv(r));c.stroke()}
+  // puntos en los que pide medir la ficha: en el eje, cada centímetro; para dibujar el campo, uno cada 5 cm
+  c.globalAlpha=1;for(let z=0;z<=ZMAX;z++){c.fillStyle='#1d5fa8';c.beginPath();c.arc(U(z),Vv(0),z%5===0?13:9,0,7);c.fill()}
+  for(let z=0;z<=ZMAX;z+=5)for(let r=5;r<=RMAX;r+=5){if(r===20&&z===0)continue;c.fillStyle='#fff';c.strokeStyle='#1d5fa8';c.lineWidth=5;c.beginPath();c.arc(U(z),Vv(r),11,0,7);c.fill();c.stroke()}
+  c.fillStyle=INK;c.strokeStyle=INK;c.textAlign='center';c.font='bold 62px Arial, sans-serif';for(let z=0;z<=ZMAX;z+=5)c.fillText(String(z),U(z),Vv(RMAX)+82);
+  c.font='bold 40px Arial, sans-serif';c.globalAlpha=.8;for(let z=0;z<=ZMAX;z++)if(z%5)c.fillText(String(z),U(z),Vv(RMAX)+66);c.globalAlpha=1;
+  c.font='italic bold 76px Georgia, "Times New Roman", serif';c.fillText('z',U(ZMAX/2)-92,Vv(RMAX)+196);c.font='bold 62px Arial, sans-serif';c.fillText('(cm)',U(ZMAX/2)+34,Vv(RMAX)+196);
+  c.textAlign='right';c.font='bold 62px Arial, sans-serif';for(let r=0;r<=RMAX;r+=5)c.fillText(String(r),U(ZMAX)-30,Vv(r)+22);
+  c.font='bold 40px Arial, sans-serif';c.globalAlpha=.8;for(let r=0;r<=RMAX;r++)if(r%5)c.fillText(String(r),U(ZMAX)-34,Vv(r)+14);c.globalAlpha=1;
+  c.save();c.translate(U(ZMAX)-166,Vv(RMAX/2));c.rotate(-Math.PI/2);c.textAlign='center';c.font='italic bold 76px Georgia, "Times New Roman", serif';c.fillText('ρ',-84,0);c.font='bold 62px Arial, sans-serif';c.fillText('(cm)',44,0);c.restore()});
  const m=new THREE.Mesh(new THREE.PlaneGeometry(W/100,H/100),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false,toneMapped:false,polygonOffset:true,polygonOffsetFactor:-3,polygonOffsetUnits:-6}));
  m.rotation.x=-Math.PI/2;m.position.set(LZ((ZMAX+M0-W/2)/100),.0006,LR((H/2-M1)/100));m.renderOrder=1;SC.add(m);return m})();
 
 /* ================= teslámetro ================= */
 // Caja azul con el frente claro: visor rojo en mT, selector de alcance (20, 200 y 2000 mT), conmutador de campo alterno o continuo, mando de cero, toma de la sonda y salida analógica.
-const TM={kind:'tm',W:600,H:422,wM:.236,hM:.166,RK:[86,224],ZK:[424,216],SW:[224,188,28,56],PR:[86,368]};
-function makeTesla(x,z,yaw){const W=.270,H=.200,D=.250,blue=finish(0x23389a,.42,.06),grey=finish(0xb4c0bc,.6,.02);
+const TM={kind:'tm',W:600,H:422,wM:.300,hM:.211,RK:[96,268],ZK:[474,268],SW:[254,240,30,58],PR:[84,372],DS:[28,48,352,132],OUT:[[428,372],[512,372]]};
+function makeTesla(x,z,yaw){const W=.336,H=.246,D=.280,blue=finish(0x23389a,.42,.06),grey=finish(0xb4c0bc,.6,.02);
  const root=new THREE.Group();root.position.set(x,0,z);root.rotation.y=yaw;SC.add(root);TM.root=root;
- const body=new THREE.Mesh(roundBox(W,H,D,.010,.003),blue);body.position.set(0,H/2+.014,-D/2);root.add(body);TM.body=body;
+ const body=new THREE.Mesh(roundBox(W,H,D,.011,.003),blue);body.position.set(0,H/2+.014,-D/2);root.add(body);TM.body=body;
  const vents=canvasTex(512,256,(c,w,h)=>{c.fillStyle='#23389a';c.fillRect(0,0,w,h);c.fillStyle='#0d1440';for(let j=0;j<2;j++)for(let i=0;i<20;i++){rr(c,56+i*20,34+j*104,9,84,4);c.fill()}});
  const top=new THREE.Mesh(new THREE.PlaneGeometry(W-.04,D-.06),std(0xffffff,.5,.06,{map:vents,envMapIntensity:.4}));top.rotation.x=-Math.PI/2;top.position.set(0,H+.0142,-D/2);root.add(top);
  for(const sx of[-1,1]){const side=new THREE.Mesh(roundBox(.012,H*.56,D*.66,.004,.0015),grey);side.position.set(sx*(W/2+.004),H/2+.014,-D/2);root.add(side);
-  const f=new THREE.Mesh(roundBox(.04,.016,.18,.004,.0015),blackPlastic);f.position.set(sx*.095,.007,-D/2);root.add(f)}
+  const f=new THREE.Mesh(roundBox(.046,.016,.20,.004,.0015),blackPlastic);f.position.set(sx*.12,.007,-D/2);root.add(f)}
  const fr=new THREE.Group();fr.position.set(0,H/2+.014,.0012);root.add(fr);TM.fr=fr;TM.L=(u,v)=>[(u/TM.W-.5)*TM.wM,(.5-v/TM.H)*TM.hM];
  const can=document.createElement('canvas');can.width=TM.W*2;can.height=TM.H*2;const tex=new THREE.CanvasTexture(can);tex.encoding=THREE.sRGBEncoding;tex.anisotropy=ANI;TM.ctx=can.getContext('2d');TM.tex=tex;
  const face=new THREE.Mesh(new THREE.PlaneGeometry(TM.wM,TM.hM),std(0xffffff,.6,.03,{map:tex,envMapIntensity:.5}));face.receiveShadow=true;fr.add(face);TM.face=face;
  // visor: una capa que emite luz, para que los dígitos rojos se lean también en sombra
- const dc=document.createElement('canvas');dc.width=480;dc.height=176;TM.dctx=dc.getContext('2d');TM.dtex=new THREE.CanvasTexture(dc);TM.dtex.encoding=THREE.sRGBEncoding;TM.dtex.anisotropy=ANI;
- {const [a,b]=TM.L(36+118,48+43),d=new THREE.Mesh(new THREE.PlaneGeometry(236/TM.W*TM.wM,86/TM.H*TM.hM),new THREE.MeshBasicMaterial({map:TM.dtex,toneMapped:false}));d.position.set(a,b,.0006);fr.add(d);TM.disp=d}
- const knob=(u,v)=>{const k=new THREE.Group(),[a,b]=TM.L(u,v);k.position.set(a,b,0);fr.add(k);const R=.0118;
-  const sk=turned([[0,0],[R*1.12,0],[R*1.12,.0025],[R,.004],[R*.92,.016],[R*.80,.0175],[0,.0175]],finish(0x2c2e33,.5,.05),40);sk.rotation.x=Math.PI/2;k.add(sk);
-  const capc=new THREE.Mesh(new THREE.CircleGeometry(R*.74,36),finish(0x8f9aa0,.35,.6));capc.position.z=.0177;k.add(capc);
-  const mark=new THREE.Mesh(new THREE.BoxGeometry(R*.16,R*.86,.0008),new THREE.MeshBasicMaterial({color:0xf4f4ee,toneMapped:false}));mark.position.set(0,R*.50,.0182);k.add(mark);shadow(k);mark.castShadow=false;return k};
+ const [dx,dy,dw,dh]=TM.DS,dc=document.createElement('canvas');dc.width=704;dc.height=264;TM.dctx=dc.getContext('2d');TM.dtex=new THREE.CanvasTexture(dc);TM.dtex.encoding=THREE.sRGBEncoding;TM.dtex.anisotropy=ANI;
+ {const [a,b]=TM.L(dx+dw/2,dy+dh/2),d=new THREE.Mesh(new THREE.PlaneGeometry(dw/TM.W*TM.wM,dh/TM.H*TM.hM),new THREE.MeshBasicMaterial({map:TM.dtex,toneMapped:false}));d.position.set(a,b,.0006);fr.add(d);TM.disp=d}
+ const knob=(u,v)=>{const k=new THREE.Group(),[a,b]=TM.L(u,v);k.position.set(a,b,0);fr.add(k);const R=.0150;
+  const sk=turned([[0,0],[R*1.12,0],[R*1.12,.0028],[R,.0045],[R*.92,.019],[R*.80,.0205],[0,.0205]],finish(0x2c2e33,.5,.05),40);sk.rotation.x=Math.PI/2;k.add(sk);
+  const capc=new THREE.Mesh(new THREE.CircleGeometry(R*.74,36),finish(0x8f9aa0,.35,.6));capc.position.z=.0207;k.add(capc);
+  const mark=new THREE.Mesh(new THREE.BoxGeometry(R*.16,R*.86,.0008),new THREE.MeshBasicMaterial({color:0xf4f4ee,toneMapped:false}));mark.position.set(0,R*.50,.0212);k.add(mark);shadow(k);mark.castShadow=false;return k};
  TM.kn=[knob(...TM.RK),knob(...TM.ZK)];
- {const [a,b]=TM.L(TM.SW[0]+TM.SW[2]/2,TM.SW[1]+TM.SW[3]/2),g=new THREE.Group();g.position.set(a,b,.0008);fr.add(g);g.add(rimFrame(.0135,.025,.002,.002,.003,blackPlastic));
-  const r=new THREE.Mesh(roundBox(.0095,.021,.007,.002,.001),finish(0x15171a,.42,.03));r.position.z=.003;g.add(r);TM.rock=r;shadow(g)}
- const hw=new THREE.Group();fr.add(hw);{const [a,b]=TM.L(424,308);socketMetal(hw,a,b,.86,sockRed);const [c,d]=TM.L(424,350);socketMetal(hw,c,d,.86,sockBlue)}
+ {const [a,b]=TM.L(TM.SW[0]+TM.SW[2]/2,TM.SW[1]+TM.SW[3]/2),g=new THREE.Group();g.position.set(a,b,.0008);fr.add(g);g.add(rimFrame(.0175,.0315,.0024,.0024,.0034,blackPlastic));
+  const r=new THREE.Mesh(roundBox(.0125,.0265,.008,.0024,.001),finish(0x15171a,.42,.03));r.position.z=.0034;g.add(r);TM.rock=r;shadow(g)}
+ const hw=new THREE.Group();fr.add(hw);{const [a,b]=TM.L(...TM.OUT[0]);socketMetal(hw,a,b,.9,sockRed);const [c,d]=TM.L(...TM.OUT[1]);socketMetal(hw,c,d,.9,sockBlue)}
  // toma de la sonda, con su clavija puesta
- {const [a,b]=TM.L(...TM.PR),ring=turned([[.0085,0],[.0118,0],[.0118,.004],[.0085,.004],[.0085,0]],finish(0xb9bfc2,.3,.8),32);ring.rotation.x=Math.PI/2;ring.position.set(a,b,0);hw.add(ring);
-  const pl=turned([[0,0],[.0078,0],[.0078,.022],[.0064,.026],[.0048,.040],[0,.040]],finish(0xa9b4b1,.55,.02),28);pl.rotation.x=Math.PI/2;pl.position.set(a,b,.002);hw.add(pl)}
- TM.jack=()=>{const [a,b]=TM.L(...TM.PR);return {p:fr.localToWorld(V3(a,b,.044)),n:V3(0,0,1).applyQuaternion(fr.getWorldQuaternion(new THREE.Quaternion()))}};
+ {const [a,b]=TM.L(...TM.PR),ring=turned([[.0095,0],[.0132,0],[.0132,.004],[.0095,.004],[.0095,0]],finish(0xb9bfc2,.3,.8),32);ring.rotation.x=Math.PI/2;ring.position.set(a,b,0);hw.add(ring);
+  const pl=turned([[0,0],[.0086,0],[.0086,.024],[.0070,.028],[.0050,.043],[0,.043]],finish(0xa9b4b1,.55,.02),28);pl.rotation.x=Math.PI/2;pl.position.set(a,b,.002);hw.add(pl)}
+ TM.jack=()=>{const [a,b]=TM.L(...TM.PR);return {p:fr.localToWorld(V3(a,b,.047)),n:V3(0,0,1).applyQuaternion(fr.getWorldQuaternion(new THREE.Quaternion()))}};
  shadow(hw);shadow(root);face.castShadow=false;TM.disp.castShadow=false;root.traverse(q=>{if(q.isMesh)q.userData.inst=TM});
  TM.picks=[face,body,TM.disp,TM.rock,...TM.kn.flatMap(k=>k.children)];return TM}
 // dígito de siete segmentos del visor, de trazo inclinado
@@ -663,28 +670,26 @@ function led7(x,cx,cy,h,ch,on){const w=h*.50,t=h*.115,sk=-.09,S={a:[[-w/2+t*.6,-
  const M={'0':'abcdef','1':'bc','2':'abged','3':'abgcd','4':'fgbc','5':'afgcd','6':'afgedc','7':'abc','8':'abcdefg','9':'abcdfg','-':'g',' ':''}[ch]||'';
  x.save();x.translate(cx,cy);x.transform(1,0,sk,1,0,0);for(const k in S){x.fillStyle=M.includes(k)?on:'rgba(120,10,6,.20)';x.beginPath();S[k].forEach((p,i)=>i?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]));x.closePath();x.fill()}x.restore()}
 function drawTeslaFace(){const x=TM.ctx;x.setTransform(2,0,0,2,0,0);x.fillStyle='#23389a';x.fillRect(0,0,600,422);const g=x.createLinearGradient(0,0,0,422);g.addColorStop(0,'#eceeea');g.addColorStop(1,'#dfe2dd');x.fillStyle=g;rr(x,9,9,582,404,9);x.fill();
- const INK='#1c2530';x.fillStyle=INK;x.strokeStyle=INK;x.textAlign='left';x.font='bold 17px Arial, sans-serif';x.fillText('Teslámetro',36,36);
- x.fillStyle='#5a7fb8';rr(x,31,43,246,96,4);x.fill();x.fillStyle='#1a0504';x.fillRect(36,48,236,86);
- x.fillStyle=INK;x.font='bold 50px Arial, sans-serif';x.fillText('mT',290,122);
+ const INK='#1c2530',MINT='rgba(120,200,190,.30)';x.fillStyle=INK;x.strokeStyle=INK;x.textAlign='left';x.font='bold 19px Arial, sans-serif';x.fillText('Teslámetro',30,36);
+ const [dx,dy,dw,dh]=TM.DS;x.fillStyle='#5a7fb8';rr(x,dx-5,dy-5,dw+10,dh+10,5);x.fill();x.fillStyle='#1a0504';x.fillRect(dx,dy,dw,dh);
+ x.fillStyle=INK;x.font='bold 74px Arial, sans-serif';x.fillText('mT',dx+dw+22,dy+dh-22);
  // selector de alcance
- {const [cx,cy]=TM.RK;x.lineWidth=1.3;x.beginPath();x.arc(cx,cy,27,(-90-48)*Math.PI/180,(-90+48)*Math.PI/180);x.stroke();x.textAlign='center';x.font='bold 11.5px Arial, sans-serif';
-  [['20',-44],['200',0],['2000',44]].forEach(([t,a])=>{const r=a*Math.PI/180;x.beginPath();x.moveTo(cx+27*Math.sin(r),cy-27*Math.cos(r));x.lineTo(cx+32*Math.sin(r),cy-32*Math.cos(r));x.stroke();x.fillText(t,cx+43*Math.sin(r),cy-41*Math.cos(r)+4)});
-  x.fillStyle='rgba(120,200,190,.30)';x.beginPath();x.arc(cx,cy,23,0,7);x.fill();x.fillStyle=INK}
+ {const [cx,cy]=TM.RK;x.textAlign='center';x.font='bold 14px Arial, sans-serif';x.fillText('Alcance (mT)',cx+4,cy-64);x.lineWidth=1.5;x.beginPath();x.arc(cx,cy,31,(-90-56)*Math.PI/180,(-90+56)*Math.PI/180);x.stroke();x.font='bold 14.5px Arial, sans-serif';
+  [['20',-52,-16],['200',0,0],['2000',52,20]].forEach(([t,a,ox])=>{const r=a*Math.PI/180;x.beginPath();x.moveTo(cx+31*Math.sin(r),cy-31*Math.cos(r));x.lineTo(cx+37*Math.sin(r),cy-37*Math.cos(r));x.stroke();x.fillText(t,cx+47*Math.sin(r)+ox*.45,cy-46*Math.cos(r)+5)});
+  x.fillStyle=MINT;x.beginPath();x.arc(cx,cy,27,0,7);x.fill();x.fillStyle=INK}
  // conmutador
- {const [sx,sy,sw,sh]=TM.SW;x.textAlign='left';x.font='bold 15px Arial, sans-serif';x.fillText('~',sx+2,sy-9);x.font='bold 10.5px Arial, sans-serif';x.fillText('Campo alterno',sx+sw+8,sy+3);x.fillText('Campo continuo',sx+sw+8,sy+sh+3);x.fillRect(sx+3,sy+sh+11,13,2)}
+ {const [sx,sy,sw,sh]=TM.SW;x.textAlign='left';x.font='bold 13.5px Arial, sans-serif';x.fillText('∼  Campo alterno',sx+sw+12,sy+10);x.fillText('⎓  Campo continuo',sx+sw+12,sy+sh-2)}
  // cero
- {const [cx,cy]=TM.ZK;x.lineWidth=1.3;x.beginPath();x.arc(cx,cy,27,(-90-40)*Math.PI/180,(-90-12)*Math.PI/180);x.stroke();x.beginPath();x.arc(cx,cy,27,(-90+12)*Math.PI/180,(-90+40)*Math.PI/180);x.stroke();x.textAlign='center';x.font='bold 13px Arial, sans-serif';x.fillText('0',cx,cy-23);
-  x.fillStyle='rgba(120,200,190,.30)';x.beginPath();x.arc(cx,cy,23,0,7);x.fill();x.fillStyle=INK}
- // ajuste fino, salida y toma de la sonda
- x.setLineDash([3,2.4]);x.lineWidth=1.1;x.strokeRect(72,262,28,22);x.setLineDash([]);x.fillStyle='#c2428a';x.beginPath();x.arc(86,273,5.4,0,7);x.fill();x.fillStyle='#7b1f55';x.beginPath();x.arc(86,273,2,0,7);x.fill();x.fillStyle=INK;
- x.lineWidth=1.2;x.strokeRect(413,262,22,22);x.beginPath();x.moveTo(418,278);x.bezierCurveTo(420,262,426,284,430,268);x.stroke();
- x.fillStyle='rgba(120,200,190,.30)';rr(x,406,290,36,78,6);x.fill();x.fillStyle=INK;x.textAlign='left';x.font='bold 15px Arial, sans-serif';x.fillText('⏚',450,356);
- x.font='bold 11.5px Arial, sans-serif';x.fillText('Sonda',70,340);
- FIN.wear(x,600,422,431,{n:14,w:.7,socks:[[424,308,20],[424,350,20],[86,368,22]]});TM.tex.needsUpdate=true}
+ {const [cx,cy]=TM.ZK;x.textAlign='center';x.font='bold 14px Arial, sans-serif';x.fillText('Ajuste de cero',cx,cy-64);x.lineWidth=1.5;x.beginPath();x.arc(cx,cy,31,(-90-46)*Math.PI/180,(-90-13)*Math.PI/180);x.stroke();x.beginPath();x.arc(cx,cy,31,(-90+13)*Math.PI/180,(-90+46)*Math.PI/180);x.stroke();x.font='bold 15px Arial, sans-serif';x.fillText('0',cx,cy-26);
+  x.font='bold 15px Arial, sans-serif';x.fillText('−',cx-38,cy-18);x.fillText('+',cx+38,cy-18);x.fillStyle=MINT;x.beginPath();x.arc(cx,cy,27,0,7);x.fill();x.fillStyle=INK}
+ // toma de la sonda y salida analógica
+ x.textAlign='left';x.font='bold 14px Arial, sans-serif';x.fillText('Sonda',TM.PR[0]+34,TM.PR[1]+5);
+ {const [a,b]=TM.OUT;x.fillStyle=MINT;rr(x,a[0]-30,a[1]-28,b[0]-a[0]+60,56,8);x.fill();x.fillStyle=INK;x.textAlign='center';x.font='bold 13px Arial, sans-serif';x.fillText('Salida analógica',(a[0]+b[0])/2,a[1]-38);x.font='bold 15px Arial, sans-serif';x.fillText('⏚',b[0]+38,b[1]+6)}
+ FIN.wear(x,600,422,431,{n:14,w:.7,socks:[[TM.OUT[0][0],TM.OUT[0][1],22],[TM.OUT[1][0],TM.OUT[1][1],22],[TM.PR[0],TM.PR[1],24]]});TM.tex.needsUpdate=true}
 // lo que marca el visor: cuatro posiciones, signo y punto decimal según el alcance
-function drawTeslaDisp(txt,dp){if(TM.shown===txt+dp)return false;TM.shown=txt+dp;const x=TM.dctx;x.setTransform(1,0,0,1,0,0);x.fillStyle='#1a0504';x.fillRect(0,0,480,176);const ON='#ff3a22';
- x.shadowColor='rgba(255,60,30,.55)';x.shadowBlur=9;const X0=120,DX=92;
- led7(x,44,88,104,txt[0]==='-'?'-':' ',ON);for(let i=0;i<4;i++){led7(x,X0+i*DX,88,116,txt[i+1],ON);if(i===dp){x.fillStyle=ON;x.beginPath();x.arc(X0+i*DX+43,88+52,7,0,7);x.fill()}}
+function drawTeslaDisp(txt,dp){if(TM.shown===txt+dp)return false;TM.shown=txt+dp;const x=TM.dctx;x.setTransform(1,0,0,1,0,0);x.fillStyle='#1a0504';x.fillRect(0,0,704,264);const ON='#ff3a22';
+ x.shadowColor='rgba(255,60,30,.55)';x.shadowBlur=12;const X0=186,DX=134;
+ led7(x,64,132,150,txt[0]==='-'?'-':' ',ON);for(let i=0;i<4;i++){led7(x,X0+i*DX,132,176,txt[i+1],ON);if(i===dp){x.fillStyle=ON;x.beginPath();x.arc(X0+i*DX+64,132+80,10,0,7);x.fill()}}
  x.shadowBlur=0;TM.dtex.needsUpdate=true;return true}
 
 /* ================= sonda Hall axial en su soporte ================= */
@@ -704,13 +709,18 @@ const PROBE=new THREE.Group();PROBE.position.y=YC;SC.add(PROBE);const LROD=.300,
  const base=turned([[0,0],[.058,0],[.060,.004],[.058,.014],[.030,.030],[.017,.044],[.017,.052],[0,.052]],iron,44);base.position.set(XH,-YC,ZS);PROBE.add(base);
  shadow(PROBE);PROBE.traverse(q=>{if(q.isMesh)q.userData.probe=true});PROBE.userData.base=V3(XH,-YC,ZS)}
 PROBE.jack=()=>({p:PROBE.localToWorld(V3(XE+.020,0,0)),n:V3(1,0,0).applyQuaternion(PROBE.getWorldQuaternion(new THREE.Quaternion()))});
-// marca en la rejilla del punto en el que está la punta, que es donde se mide
-const MARK=new THREE.Group();SC.add(MARK);{const mm=new THREE.MeshBasicMaterial({color:0xc0392b,transparent:true,opacity:.85,depthWrite:false,toneMapped:false}),ring=new THREE.Mesh(new THREE.RingGeometry(.0030,.0046,28),mm);ring.rotation.x=-Math.PI/2;ring.position.y=.0012;ring.renderOrder=2;MARK.add(ring);
- const dot=new THREE.Mesh(new THREE.CircleGeometry(.0011,14),mm);dot.rotation.x=-Math.PI/2;dot.position.y=.0012;dot.renderOrder=2;MARK.add(dot);
- const pl=new THREE.Mesh(new THREE.CylinderGeometry(.00045,.00045,YC-.004,6),new THREE.MeshBasicMaterial({color:0xc0392b,transparent:true,opacity:.42,depthWrite:false,toneMapped:false}));pl.position.y=YC/2;MARK.add(pl)}
+// Punto en el que se mide: bajo la punta, un aro rojo en la rejilla y dos líneas hasta los ejes, para leer z y ρ. Se ven siempre, aunque haya algo delante.
+const MARK=new THREE.Group();SC.add(MARK);const MKL={};{const mm=new THREE.MeshBasicMaterial({color:0xd0321f,transparent:true,opacity:.95,depthWrite:false,depthTest:false,toneMapped:false}),ml=new THREE.MeshBasicMaterial({color:0xd0321f,transparent:true,opacity:.55,depthWrite:false,depthTest:false,toneMapped:false});
+ const ring=new THREE.Mesh(new THREE.RingGeometry(.0042,.0064,32),mm);ring.rotation.x=-Math.PI/2;ring.position.y=.0014;ring.renderOrder=7;MARK.add(ring);
+ const dot=new THREE.Mesh(new THREE.CircleGeometry(.0016,16),mm);dot.rotation.x=-Math.PI/2;dot.position.y=.0014;dot.renderOrder=7;MARK.add(dot);
+ const pl=new THREE.Mesh(new THREE.CylinderGeometry(.0006,.0006,YC-.004,6),ml);pl.position.y=YC/2;pl.renderOrder=7;MARK.add(pl);
+ // líneas a los ejes: una a lo largo de ρ, hasta la escala de z (delante), y otra a lo largo de z, hasta la escala de ρ (a la izquierda)
+ for(const k of['r','z']){const m=new THREE.Mesh(new THREE.PlaneGeometry(1,.0018),ml);m.rotation.x=-Math.PI/2;m.position.y=.0013;m.renderOrder=6;SC.add(m);MKL[k]=m}}
+function markAt(z,r){const x=LZ(z/100),w=LR(r/100);MARK.position.set(x,0,w);const zf=LR((RMAX+.9)/100),xl=LZ((ZMAX+.9)/100);
+ MKL.r.rotation.z=Math.PI/2;MKL.r.scale.x=Math.max(1e-4,zf-w);MKL.r.position.set(x,.0013,(zf+w)/2);MKL.z.scale.x=Math.max(1e-4,x-xl);MKL.z.position.set((x+xl)/2,.0013,w)}
 /* ================= aparatos ================= */
-const AX=.50,AZ=.16,AY=-.45,TX=-.47,TZ=-.40,TY=-.10; // amperímetro y teslámetro: sitio y giro, de cara a quien mira
-const PL=makePSU1({sid:'L',x:.68,z:-.40,title:'FUENTE DE ALIMENTACIÓN',sgx:-38,sgy:7,
+const AX=.55,AZ=.24,AY=-.42,TX=-.44,TZ=-.34,TY=-.20; // amperímetro y teslámetro: sitio y giro, de cara a quien mira
+const PL=makePSU1({sid:'L',x:.60,z:-.32,title:'FUENTE DE ALIMENTACIÓN',sgx:-38,sgy:7,
  K:[{c:[106,146],max:18,st:3,cap:'0…18 V ⎓',r:36,dy:104},{c:[290,146],max:5,st:1,cap:'0…5 A',r:36,dy:104}],
  SK:{p:[196,298,'r'],n:[196,352,'b']},deco:[[330,325,'y'],[470,298,'k'],[470,352,'k']],PW:[566,84,44,70],
  art:x=>{x.fillStyle='#c3e3f1';rr(x,146,264,82,118,8);x.fill();rr(x,420,264,82,118,8);x.fill();
@@ -744,13 +754,13 @@ function floorLabel(x,z,l1,l2,W=.36,H=.060){const t=canvasTex(1024,Math.round(10
 function wirePower(){SC.updateMatrixWorld(true);const c=Math.cos(AY),s=Math.sin(AY),DL=(x,z)=>[AX+x*c+z*s,AZ-x*s+z*c],dA=(x,z)=>[x*c+z*s,-x*s+z*c],jp=PL.jack('p'),jn=PL.jack('n'),ja=COIL.jack('a'),jb=COIL.jack('b'),nx=jp.n.x,nz=jp.n.z,rx=nz,rz=-nx; // n: hacia donde mira la fuente; r: su derecha
  const P0=[jp.p.x+nx*.085-rx*.012,jp.p.z+nz*.085-rz*.012],Pe=[ja.p.x+.045,ja.p.z];
  route(CB.P,jp,ja,[P0,[P0[0]+(Pe[0]-P0[0])*.5,P0[1]+(Pe[1]-P0[1])*.5+.03],[Pe[0]+.07,Pe[1]+.004],Pe],{d0:[nx-rx*.3,nz-rz*.3],a2:.03,d1:[-1,0],b1:.045,b2:.04});
- route(CB.M,jb,AMM.jack('10A'),[[jb.p.x+.05,jb.p.z],[.30,.03],[.315,.19],DL(-.0924,.172),DL(-.0524,.115)],{d0:[1,0],a1:.045,a2:.04,d1:dA(.35,-1),b1:.05,b2:.045});
+ route(CB.M,jb,AMM.jack('10A'),[[jb.p.x+.05,jb.p.z],[.31,.03],[.36,.20],DL(-.0924,.172),DL(-.0524,.115)],{d0:[1,0],a1:.045,a2:.04,d1:dA(.35,-1),b1:.05,b2:.045});
  const Pn=[jn.p.x+nx*.10+rx*.035,jn.p.z+nz*.10+rz*.035];
  route(CB.N,AMM.jack('COM'),jn,[DL(.0174,.115),DL(.0674,.165),DL(.165,.11),[Pn[0]+rx*.16+nx*.10,Pn[1]+rz*.16+nz*.10],Pn],{d0:dA(0,1),a1:.055,a2:.04,d1:[-nx-rx*.25,-nz-rz*.25],b1:.05,b2:.04})}
 function wireProbe(){PROBE.updateMatrixWorld(true);const a=PROBE.jack(),b=TM.jack(),L0=[a.p.x+a.n.x*.115,a.p.z+a.n.z*.115],P1=[b.p.x+b.n.x*.115,b.p.z+b.n.z*.115],dx=P1[0]-L0[0],dz=P1[1]-L0[1],l=Math.hypot(dx,dz)||1,k=Math.min(.09,.25*l);
  route(CB.S,a,b,[L0,[L0[0]+dx*.5-dz/l*k,L0[1]+dz*.5+dx/l*k],P1],{d0:[a.n.x,a.n.z],a1:.07,a2:.05,d1:[-b.n.x,-b.n.z],b1:.06,b2:.05,r:.0030})}
 const LBL={A:floorLabel(AX+.248*Math.sin(AY),AZ+.248*Math.cos(AY),'INTENSIDAD','I, en amperios',.215,.041),
- T0:floorLabel(TX+.135*Math.sin(TY),TZ+.135*Math.cos(TY),'CAMPO A LO LARGO DEL EJE','B_z_, en militeslas',.27,.045),T1:floorLabel(TX+.135*Math.sin(TY),TZ+.135*Math.cos(TY),'CAMPO PERPENDICULAR AL EJE','B_ρ_, en militeslas',.27,.045)};
+ T0:floorLabel(TX+.145*Math.sin(TY),TZ+.145*Math.cos(TY),'CAMPO A LO LARGO DEL EJE','B_z_, en militeslas',.27,.045),T1:floorLabel(TX+.145*Math.sin(TY),TZ+.145*Math.cos(TY),'CAMPO PERPENDICULAR AL EJE','B_ρ_, en militeslas',.27,.045)};
 LBL.A.rotation.z=AY;LBL.T0.rotation.z=LBL.T1.rotation.z=TY;
 
 /* ================= estado ================= */
@@ -761,7 +771,7 @@ function initState(){return {ori:0,p:{z:0,r:0},L:{on:true,u:[12,2]},m:[{on:true,
 let S=initState();const VIS={z:0,r:0,th:Math.PI};let moved=true;
 function setKnob(m){const p=dpos(m.dial);m.kn.rotation.z=-p.an*Math.PI/180;R3.shadowMap.needsUpdate=true;invalidate()}
 function drawKnobs(){const st=S.L;PL.kn.forEach((k,i)=>{k.rotation.z=-(st.u[i]/PL.K[i].max*270-135)*Math.PI/180});if(PL.rock)PL.rock.rotation.x=st.on?-.16:.16;
- TM.kn[0].rotation.z=-[-44,0,44][S.tm.rng]*Math.PI/180;TM.kn[1].rotation.z=-S.tm.zero/ZSTEP*Math.PI/180;TM.rock.rotation.x=S.tm.ac?-.17:.17;R3.shadowMap.needsUpdate=true;invalidate()}
+ TM.kn[0].rotation.z=-[-52,0,52][S.tm.rng]*Math.PI/180;TM.kn[1].rotation.z=-S.tm.zero/ZSTEP*Math.PI/180;TM.rock.rotation.x=S.tm.ac?-.17:.17;R3.shadowMap.needsUpdate=true;invalidate()}
 const ZSTEP=.0012; // mT por grado del mando de cero, que da varias vueltas
 function applyState(){AMM.on=S.m[0].on;AMM.dial=S.m[0].dial;drawPSU(PL);drawKnobs();setKnob(AMM);tabs();measure(true);invalidate()}
 
@@ -796,11 +806,11 @@ function refresh(){measure()}
 const zmin=(r,ori)=>ori?(r<21.5?2:0):(Math.abs(r-20)<1.5?2:0),clampP=(z,r,ori)=>{r=Math.max(0,Math.min(RMAX,r));return {z:Math.max(zmin(r,ori),Math.min(ZMAX,z)),r}},snapP=(z,r,ori)=>clampP(Math.round(z),Math.round(r),ori);
 function setP(z,r,snap){S.p=snap?snapP(z,r,S.ori):clampP(z,r,S.ori);invalidate()}
 function setOri(o){S.ori=o;S.p=snapP(S.p.z,S.p.r,o);tabs();invalidate()}
-function placeProbe(){PROBE.position.set(LZ(VIS.z/100),YC,LR(VIS.r/100));PROBE.rotation.y=VIS.th;MARK.position.set(PROBE.position.x,0,PROBE.position.z);PROBE.updateMatrixWorld(true);wireProbe();R3.shadowMap.needsUpdate=true}
+function placeProbe(){PROBE.position.set(LZ(VIS.z/100),YC,LR(VIS.r/100));PROBE.rotation.y=VIS.th;markAt(VIS.z,VIS.r);PROBE.updateMatrixWorld(true);wireProbe();R3.shadowMap.needsUpdate=true}
 
 /* ================= cámara ================= */
 const PM=()=>matchMedia('(max-width:820px),(max-height:520px)').matches;
-const V0=()=>({az:-.42,el:PM()&&box.clientHeight>box.clientWidth?.74:.60});
+const V0=()=>({az:-.42,el:PM()&&box.clientHeight>box.clientWidth?.80:.72});
 let az,el,dist;const TG=V3();
 // Lo que tiene que caber en el encuadre de partida: los aparatos, la rejilla y el soporte de la sonda en sus posiciones extremas a lo largo del eje y en una atravesada
 const BB=[];function bbAdd(o){o.updateMatrixWorld(true);const b=new THREE.Box3().setFromObject(o);for(const x of[b.min.x,b.max.x])for(const y of[Math.max(0,b.min.y),b.max.y])for(const z of[b.min.z,b.max.z])BB.push(V3(x,y,z))}
@@ -838,7 +848,7 @@ function faceUV(inst){const n=V3(0,0,1).applyQuaternion(inst.fr.getWorldQuaterni
 function inR(u,v,[x,y,w,h],pad=4){return u>=x-pad&&u<=x+w+pad&&v>=y-pad&&v<=y+h+pad}
 function hitCtl(inst,uv){if(!uv)return null;const{u,v}=uv;
  if(inst.kind==='dmm'){if(inR(u,v,[22,138,90,24]))return {t:'pwr'};const d=Math.hypot(u-DCX,v-DCY);if(d<=KR+2)return {t:'knob'};if(d<=DR+2)return {t:'ring'};return null}
- if(inst.kind==='tm'){if(Math.hypot(u-TM.RK[0],v-TM.RK[1])<=46)return {t:'trk'};if(Math.hypot(u-TM.ZK[0],v-TM.ZK[1])<=40)return {t:'tzk'};if(inR(u,v,TM.SW,8))return {t:'tsw'};return null}
+ if(inst.kind==='tm'){if(Math.hypot(u-TM.RK[0],v-TM.RK[1])<=58)return {t:'trk'};if(Math.hypot(u-TM.ZK[0],v-TM.ZK[1])<=50)return {t:'tzk'};if(inR(u,v,TM.SW,10))return {t:'tsw'};return null}
  if(inR(u,v,inst.PW,6))return {t:'spw'};for(let i=0;i<inst.K.length;i++){const K=inst.K[i];if(Math.hypot(u-K.c[0],v-K.c[1])<=inst.hitR)return {t:'sk',i}}return null}
 const angOf=(uv,cx,cy)=>Math.atan2(uv.u-cx,-(uv.v-cy))*180/Math.PI;
 function nearestPos(a){let best=null,bd=1e9;for(const p of DIAL.pos){const d=Math.abs(((a-p.an)%360+540)%360-180);if(d<bd){bd=d;best=p}}return best}
@@ -847,18 +857,18 @@ function setSup(P,i,v){const K=P.K[i];S[P.sid].u[i]=Math.max(0,Math.min(K.max,v)
 function supFromAngle(P,i,uv){const K=P.K[i];if(Math.hypot(uv.u-K.c[0],uv.v-K.c[1])<8)return;const a=Math.max(-135,Math.min(135,angOf(uv,K.c[0],K.c[1])));setSup(P,i,(a+135)/270*K.max)}
 function setRange(i){i=Math.max(0,Math.min(2,i));if(i===S.tm.rng)return;S.tm.rng=i;drawKnobs();measure(true)}
 function setZero(v){S.tm.zero=Math.max(-1.5,Math.min(1.5,v));drawKnobs();measure()}
-const rngFromAngle=uv=>{const a=angOf(uv,TM.RK[0],TM.RK[1]);return a<-22?0:a>22?2:1};
+const rngFromAngle=uv=>{const a=angOf(uv,TM.RK[0],TM.RK[1]);return a<-26?0:a>26?2:1};
 function ctlDown(inst,c,uv){
  if(inst.kind==='dmm'){const st=S.m[inst.id];if(c.t==='pwr'){st.on=!st.on;inst.on=st.on;measure();return null}
   if(c.t==='ring'){const p=nearestPos(angOf(uv,DCX,DCY));setDial(inst,p.id)}return {inst,t:'dial'}}
  if(c.t==='tsw'){S.tm.ac=!S.tm.ac;drawKnobs();measure(true);return null}
- if(c.t==='trk'){if(Math.hypot(uv.u-TM.RK[0],uv.v-TM.RK[1])>13)setRange(rngFromAngle(uv));return {inst,t:'trk'}}
+ if(c.t==='trk'){if(Math.hypot(uv.u-TM.RK[0],uv.v-TM.RK[1])>16)setRange(rngFromAngle(uv));return {inst,t:'trk'}}
  if(c.t==='tzk')return {inst,t:'tzk',a0:angOf(uv,TM.ZK[0],TM.ZK[1])};
  if(c.t==='spw'){const st=S[inst.sid];st.on=!st.on;drawPSU(inst);drawKnobs();refresh();return null}
  if(c.t==='sk'){supFromAngle(inst,c.i,uv);return {inst,t:'sk',i:c.i}}return null}
 function ctlMove(D){const uv=faceUV(D.inst);if(!uv)return;
  if(D.t==='dial'){setDial(D.inst,nearestPos(angOf(uv,DCX,DCY)).id);return}
- if(D.t==='trk'){if(Math.hypot(uv.u-TM.RK[0],uv.v-TM.RK[1])>13)setRange(rngFromAngle(uv));return}
+ if(D.t==='trk'){if(Math.hypot(uv.u-TM.RK[0],uv.v-TM.RK[1])>16)setRange(rngFromAngle(uv));return}
  if(D.t==='tzk'){if(Math.hypot(uv.u-TM.ZK[0],uv.v-TM.ZK[1])<7)return;const a=angOf(uv,TM.ZK[0],TM.ZK[1]),da=((a-D.a0)%360+540)%360-180;D.a0=a;setZero(S.tm.zero+da*ZSTEP);return}
  if(D.t==='sk')supFromAngle(D.inst,D.i,uv)}
 // la sonda se arrastra sobre el plano horizontal en el que está, a la altura del eje
@@ -938,33 +948,32 @@ function zoomable(el,apply){if(el._zb)return;el._zb=1;el._z=1;el._px=0;el._py=0;
   else if(el._z>1){el._px-=(e.clientX-o[0])/el.clientWidth/el._z;el._py-=(e.clientY-o[1])/el.clientHeight/el._z}cl()});
  const up=e=>{P.delete(e.pointerId);d0=0};el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);el.addEventListener('dblclick',()=>{el._z=1;el._px=el._py=0;apply()})}
 function svgI(el,vb,h){el._vb=vb;el.setAttribute('preserveAspectRatio','xMidYMid meet');el.innerHTML=h;const ap=()=>{const v=el._vb.split(/[ ,]+/).map(Number),Z=el._z||1,w=v[2]/Z,hh=v[3]/Z,cx=v[0]+v[2]*(0.5+(el._px||0)),cy=v[1]+v[3]*(0.5+(el._py||0));el.setAttribute('viewBox',(cx-w/2)+' '+(cy-hh/2)+' '+w+' '+hh)};zoomable(el,ap);ap()}
-// Regla de 50 cm junto a la bobina vista desde arriba, con el cero en la marca del centro del devanado, y el detalle de los dos extremos.
-function RULERD(D,stack){const INK='#1b2430',SLATE='#5b6676',RED='#c0392b',WOOD2='#8f7332',COP='#c8512f',COP2='#8e2f18',BLK='#1c1d20',K=1.42,x0=64,X=mm=>x0+mm*K,yS=44,yR=92,ZW=24,E0=-9,E1=D+9;
- let h='<defs><linearGradient id="gRw" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#f6e8bd"/><stop offset="1" stop-color="#e6cf8f"/></linearGradient><linearGradient id="gCu" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#e06a43"/><stop offset=".5" stop-color="'+COP+'"/><stop offset="1" stop-color="'+COP2+'"/></linearGradient></defs>';
- h+='<text x="'+X(D/2)+'" y="'+(yS-12)+'" text-anchor="middle" font-size="14" font-weight="600" font-family="Inter,Arial,sans-serif" fill="'+SLATE+'">bobina, vista desde arriba</text>';
- h+='<rect x="'+X(E0)+'" y="'+yS+'" width="'+((E1-E0)*K)+'" height="'+(yR-yS)+'" fill="'+BLK+'"/><rect x="'+X(E0)+'" y="'+(yS+5)+'" width="'+((E1-E0)*K)+'" height="'+(yR-yS-10)+'" fill="url(#gCu)"/>';
- for(const m of[0,D])h+='<path d="M'+X(m)+' '+(yS+5)+' V'+(yR-5)+'" stroke="#fff" stroke-width="1.4"/>';
- h+='<rect x="'+X(-8)+'" y="'+yR+'" width="'+(516*K)+'" height="36" rx="2" fill="url(#gRw)" stroke="'+WOOD2+'" stroke-width="1"/>';
- for(let mm=0;mm<=500;mm+=5){const len=mm%10===0?11:6;h+='<path d="M'+X(mm).toFixed(2)+' '+yR+' v'+len+'" stroke="'+INK+'" stroke-width="'+(mm%50===0?.9:.5)+'"/>';if(mm%50===0)h+='<text x="'+X(mm)+'" y="'+(yR+26)+'" text-anchor="middle" font-size="11.5" font-family="Inter,Arial,sans-serif" fill="'+INK+'">'+(mm/10)+'</text>'}
- h+='<text x="'+(X(508)+8)+'" y="'+(yR+26)+'" font-size="11" font-weight="600" font-family="Inter,Arial,sans-serif" fill="'+SLATE+'">cm</text>';
- const A=[-8,Math.floor(D)-12];A.forEach(a=>{h+='<rect x="'+X(a)+'" y="'+(yS-6)+'" width="'+(ZW*K)+'" height="'+(yR-yS+44)+'" rx="4" fill="none" stroke="'+RED+'" stroke-width="1"/>'});
- const det=a=>{const Z=34,W=ZW*Z,H=250,b=104,Xz=mm=>(mm-a)*Z;let s='<rect x="0" y="0" width="'+W+'" height="'+H+'" fill="#e8edf2"/>';const s0=Math.max(a,E0),s1=Math.min(a+ZW,E1);
-  s+='<rect x="'+Xz(s0)+'" y="0" width="'+(Xz(s1)-Xz(s0))+'" height="'+b+'" fill="'+BLK+'"/><rect x="'+Xz(s0)+'" y="14" width="'+(Xz(s1)-Xz(s0))+'" height="'+(b-28)+'" fill="url(#gCu)"/>';
-  const m=a<0?0:D;s+='<path d="M'+Xz(m)+' 14 V'+(b-14)+'" stroke="#fff" stroke-width="3"/><text x="'+(Xz(m)+(a<0?16:-16))+'" y="62" text-anchor="'+(a<0?'start':'end')+'" font-size="25" font-weight="600" font-family="Inter,Arial,sans-serif" fill="#fff">centro del devanado</text>';
-  s+='<rect x="0" y="'+b+'" width="'+W+'" height="'+(H-b)+'" fill="url(#gRw)"/><path d="M0 '+b+' H'+W+'" stroke="'+WOOD2+'" stroke-width="1.6"/>';
-  for(let mm=Math.max(0,Math.ceil(a));mm<=Math.min(500,a+ZW);mm++){const x=Xz(mm),len=mm%10===0?46:mm%5===0?34:22;s+='<path d="M'+x+' '+b+' v'+len+'" stroke="'+INK+'" stroke-width="'+(mm%10===0?2:1.4)+'"/>';if(mm%10===0)s+='<text x="'+x+'" y="'+(b+88)+'" text-anchor="middle" font-size="36" font-family="STIX Two Text,Times New Roman,serif" fill="'+INK+'">'+(mm/10)+'</text>'}
-  s+='<text x="'+(W-14)+'" y="'+(H-14)+'" text-anchor="end" font-size="24" font-weight="600" font-family="Inter,Arial,sans-serif" fill="'+SLATE+'">cm</text>';return {svg:s,W,H}};
- const put=(a,t,zx,zy,zw)=>{const z=det(a),zh=zw*z.H/z.W;h+='<text x="'+zx+'" y="'+(zy-7)+'" font-size="'+(stack?17:12)+'" font-weight="600" font-family="Inter,Arial,sans-serif" fill="'+SLATE+'">'+t+'</text><svg x="'+zx+'" y="'+zy+'" width="'+zw+'" height="'+zh+'" viewBox="0 0 '+z.W+' '+z.H+'">'+z.svg+'</svg><rect x="'+zx+'" y="'+zy+'" width="'+zw+'" height="'+zh+'" rx="4" fill="none" stroke="'+RED+'" stroke-width="1"/>';return zh};
- if(stack){const zh=put(A[0],'Detalle del extremo izquierdo',40,186,720);put(A[1],'Detalle del extremo derecho',40,186+zh+34,720);return {vb:'24 14 790 '+(186+2*zh+34),svg:h}}
- const zh=put(A[0],'Detalle del extremo izquierdo',40,176,352);put(A[1],'Detalle del extremo derecho',408,176,352);return {vb:'24 14 790 '+(176+zh),svg:h}}
-const MEAS=(()=>{const card=$('.left .card'),o=document.createElement('div');o.className='calov';o.innerHTML='<div class="ch"><h3>Diámetro 2<i>R</i> de la bobina, con la regla</h3><button class="x" type="button">Cerrar</button></div><svg class="cs" role="img" aria-label="Regla junto a la bobina vista desde arriba, con el detalle de sus dos extremos"></svg>';card.appendChild(o);
- const sv=o.querySelector('.cs');let on=false;function draw(){if(!on)return;const r=RULERD(2*RC*1e3,sv.clientWidth/Math.max(1,sv.clientHeight)<1.5);svgI(sv,r.vb,r.svg)}
+// La bobina vista de frente, con una regla de 50 cm apoyada en su diámetro horizontal: el cero, en la marca del centro del devanado de la izquierda.
+function RULERD(D){const INK='#1b2430',SLATE='#5b6676',WOOD2='#8f7332',BLK='#1c1d20',K=1.42,cx=372,cy=318,R=D/2*K,wr=9*K,X=mm=>cx-R+mm*K;
+ let h='<defs><linearGradient id="gRw" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#f6e8bd"/><stop offset="1" stop-color="#e6cf8f"/></linearGradient></defs>';
+ // pie y columna
+ h+='<rect x="'+(cx-142)+'" y="'+(cy+R+wr+38)+'" width="284" height="20" rx="5" fill="'+BLK+'"/><rect x="'+(cx-50)+'" y="'+(cy+R-wr-44)+'" width="100" height="'+(2*wr+84)+'" rx="7" fill="#2a2c30"/>';
+ // carrete y devanado: las espiras, una junto a otra
+ h+='<circle cx="'+cx+'" cy="'+cy+'" r="'+R+'" fill="none" stroke="'+BLK+'" stroke-width="'+(2*wr+8)+'"/>';
+ const NT=11;for(let i=0;i<NT;i++){const r=R-wr+(i+.5)*2*wr/NT;h+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r.toFixed(2)+'" fill="none" stroke="'+(i%2?'#c9502d':'#e2703f')+'" stroke-width="'+(2*wr/NT+.25).toFixed(2)+'"/><circle cx="'+cx+'" cy="'+cy+'" r="'+(r+wr/NT).toFixed(2)+'" fill="none" stroke="#7e2a14" stroke-width=".45" opacity=".7"/>'}
+ // abrazaderas
+ for(const a of[-41,41])h+='<rect x="'+(cx-26)+'" y="'+(cy-R-wr-12)+'" width="52" height="'+(2*wr+24)+'" rx="6" fill="'+BLK+'" transform="rotate('+a+' '+cx+' '+cy+')"/>';
+ // marcas del centro del devanado, en los dos extremos del diámetro
+ for(const s of[-1,1]){const x=cx+s*R;h+='<path d="M'+x+' '+(cy-26)+' V'+cy+'" stroke="#fff" stroke-width="1.5"/><text x="'+(x-s*(wr+12))+'" y="'+(cy-12)+'" text-anchor="'+(s<0?'start':'end')+'" font-size="11.5" font-weight="600" font-family="Inter,Arial,sans-serif" fill="'+SLATE+'">centro del devanado</text>'}
+ // regla, con el canto graduado sobre el diámetro
+ h+='<rect x="'+X(-10)+'" y="'+cy+'" width="'+(520*K)+'" height="46" rx="2" fill="url(#gRw)" stroke="'+WOOD2+'" stroke-width="1"/>';
+ for(let mm=0;mm<=500;mm++){const len=mm%10===0?13:mm%5===0?9:5.5;h+='<path d="M'+X(mm).toFixed(2)+' '+cy+' v'+len+'" stroke="'+INK+'" stroke-width="'+(mm%10===0?.7:.4)+'"/>';if(mm%10===0)h+='<text x="'+X(mm).toFixed(2)+'" y="'+(cy+(mm%50===0?30:25))+'" text-anchor="middle" font-size="'+(mm%50===0?11.5:7.6)+'" font-weight="'+(mm%50===0?700:400)+'" font-family="Inter,Arial,sans-serif" fill="'+INK+'">'+(mm/10)+'</text>'}
+ h+='<text x="'+(X(510)+8)+'" y="'+(cy+29)+'" font-size="12" font-weight="600" font-family="Inter,Arial,sans-serif" fill="'+SLATE+'">cm</text>';
+ return {vb:'0 0 800 690',svg:h}}
+const MEAS=(()=>{const card=$('.left .card'),o=document.createElement('div');o.className='calov';o.innerHTML='<div class="ch"><h3>Diámetro 2<i>R</i> de la bobina, con la regla</h3><button class="x" type="button">Cerrar</button></div><svg class="cs" role="img" aria-label="La bobina vista de frente, con una regla apoyada en su diámetro"></svg>';card.appendChild(o);
+ const sv=o.querySelector('.cs');let on=false;function draw(){if(!on)return;const r=RULERD(2*RC*1e3);svgI(sv,r.vb,r.svg)}
  function show(){on=true;sv._z=1;sv._px=sv._py=0;o.classList.add('on');draw()}function hide(){on=false;o.classList.remove('on')}
  $('#mD').onclick=show;o.querySelector('.x').onclick=hide;document.addEventListener('keydown',e=>{if(e.key==='Escape')hide()});new ResizeObserver(()=>{if(on)draw()}).observe(sv);return {show,hide,el:o}})();
 
 /* ================= interfaz ================= */
-function tabs(){document.querySelectorAll('#otabs .tab').forEach(b=>b.classList.toggle('on',+b.dataset.o===S.ori));LBL.T0.visible=!S.ori;LBL.T1.visible=!!S.ori}
+function tabs(){document.querySelectorAll('#otabs .tab').forEach(b=>b.classList.toggle('on',+b.dataset.o===S.ori));$('#oBtn').setAttribute('aria-pressed',!!S.ori);LBL.T0.visible=!S.ori;LBL.T1.visible=!!S.ori}
 document.querySelectorAll('#otabs .tab').forEach(b=>b.onclick=()=>setOri(+b.dataset.o));
+$('#oBtn').onclick=()=>setOri(S.ori?0:1);
 $('#vwBtn').onclick=()=>{const v=fitV0();zb=null;flyTo(v.tg,v.dist,v.az,v.el);touched=false};
 $('#rstBtn').onclick=()=>{$('#dlg').hidden=false};$('#dlgNo').onclick=()=>{$('#dlg').hidden=true};
 $('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg')$('#dlg').hidden=true});
@@ -973,7 +982,7 @@ $('#dlgYes').onclick=()=>{$('#dlg').hidden=true;S=initState();applyState()};
 try{document.querySelectorAll('.eq[data-tex]').forEach(e=>katex.render(e.dataset.tex,e,{displayMode:true,throwOnError:false}))}catch(e){}
 // acabados: pintura con relieve, metal cepillado, grano del plástico y roces
 FIN.panel(PL.face.material,{w:640,ratio:PL.H/PL.W,seed:95,socks:Object.values(PL.SK).map(q=>[q[0]/PL.W,q[1]/PL.H,.04])});
-FIN.panel(TM.face.material,{w:600,ratio:TM.H/TM.W,seed:77,socks:[[424/600,308/422,.04],[424/600,350/422,.04],[86/600,368/422,.05]]});
+FIN.panel(TM.face.material,{w:600,ratio:TM.H/TM.W,seed:77,socks:[...TM.OUT,TM.PR].map(q=>[q[0]/600,q[1]/422,.045])});
 FIN.apply([PL.root,TM.root,COIL,PROBE],{exclude:[TM.disp],foreign:[AMM.root],skip:[...Object.values(plugMat),...Object.values(cabMat)]});
 /* ================= móvil: mandos compactos bajo la escena ================= */
 /* En el móvil cuesta arrastrar la sonda y girar los mandos con el dedo: bajo la escena hay un deslizador por coordenada y por mando. No muestran valores, que se leen en la rejilla y en los aparatos. */
