@@ -714,6 +714,7 @@ SV.addEventListener('wheel',e=>{e.preventDefault();const t=e.target,act=t.closes
 // Polímetro naranja = voltímetro (V y COM), gris = amperímetro (mA y COM). El selector de la cabecera mueve el voltímetro (parte I) o el amperímetro (parte II).
 const SUB={1:'asoc',2:'tot'};let freeSave={bricks:[],cables:[]};
 const clone=o=>JSON.parse(JSON.stringify(o));
+{const q=(new URLSearchParams(location.search).get('lab')||'').toLowerCase(),N={circuitos:'Circuitos Eléctricos',electromagnetismo:'Electromagnetismo'};if(N[q]){document.body.dataset.lab=q;const b=document.querySelector('header a.back');if(b){b.href='laboratorios.html#'+q;b.setAttribute('aria-label','Volver al Laboratorio de '+N[q])}}}
 function applyPreset(){const B=[],C=[],part=state.part,sub=SUB[part];
  const br=(key,cell,rot)=>B.push({id:'b'+(state.nid++),type:'R',key,rot:rot||0,cell});
  const cb=(color,a,b)=>C.push({id:state.nid++,color,ends:[{at:a},{at:b}]});
