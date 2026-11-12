@@ -452,8 +452,8 @@ function openOrbit(T,createApparatus){
  let camera=profileCamera;
  const updateModel=createApparatus(T,scene,dialMarks,dialInkColor);
  const point=new T.Vector3(),target=new T.Vector3(225,125,0);
- // [VISTA] Vista inicial en perspectiva: un poco desde la izquierda y desde arriba. El desplazamiento se da en unidades de la escena y se pasa a píxeles al medir.
- const HOME=matchMedia('(max-width:820px) and (orientation:portrait)').matches?{az:-.52,el:.2,zoom:1,px:0,py:0}:{az:-.52,el:.2,zoom:.81,px:22.7,py:-14.9};let homePan=true;
+ // [VISTA] Vista inicial de perfil. Mientras no se toque la cámara, el montaje se acerca todo lo que cabe (hasta ZMAX) sin salirse del recuadro ni meterse bajo las ventanas, sea cual sea el ángulo.
+ const HOME={az:0,el:0,zoom:1,px:0,py:0},ZMAX=1.06;let homePan=true,auto=true;
  let az=HOME.az,el=HOME.el,zoom=HOME.zoom,panX=0,panY=0,frame=0,layoutDirty=true,needsModel=true,lowRes=false,settle=0;
  let w=1,h=1,k=1,tx=0,ty=0,scissor=null,drawW=0,drawH=0,density=0;
  const clamp=(v,min,max)=>Math.min(max,Math.max(min,v));
@@ -485,7 +485,22 @@ function openOrbit(T,createApparatus){
   dockInsets(b);
   layoutDirty=false;return true;
  }
+ function fitZoom(){
+  const s=sceneState,ca=Math.cos(s.a),sa=Math.sin(s.a),L=(x,y)=>[x*ca-y*sa,x*sa+y*ca],b=canvas.getBoundingClientRect(),YB=-26;
+  const pts=[L(LP+4,50),L(LP+4,0),L(376,58),L(432,58),[-40,YB],[508,YB]]; // extremo alto del plano con su dinamómetro y su rótulo; base
+  if(s.part===2){const y=139+s.normalExtension;pts.push(L(s.cartX-14,y+92),L(s.cartX+12,y+92),L(s.cartX+31,y+52),L(s.cartX+31,y-52));} // dinamómetro de 5 N y su rótulo
+  const cx=tx+k*(P0.x+target.x),y0=ty+k*(P0.y-YB),rect=e=>{if(!e)return null;const r=e.getBoundingClientRect();return r.width>1&&r.height>1?{l:r.left-b.left-7,r:r.right-b.left+7,t:r.top-b.top-7,b:r.bottom-b.top+7}:null};
+  const side=rect(_SC.querySelector('[data-reading="vertical"]')),box=rect(protractor.querySelector('rect')),xr=side&&side.l>w*.5?side.l:w-6;
+  // el pie de la base no se mueve: al acercar, el montaje crece hacia arriba y hacia los lados
+  let z=ZMAX;
+  for(const [X,Y] of pts){const dx=X-target.x;
+   if(dx<0)z=Math.min(z,(cx-6)/(-k*dx));else if(dx>0)z=Math.min(z,(xr-cx)/(k*dx));
+   if(Y>YB)z=Math.min(z,(y0-6)/(k*(Y-YB)));}
+  if(box)for(let i=0;i<60;i++){if(!pts.some(([X,Y])=>{const x=cx+k*z*(X-target.x),y=y0-k*z*(Y-YB);return x>box.l&&x<box.r&&y>box.t&&y<box.b}))break;z*=.985;}
+  z=clamp(z,.48,ZMAX);return {z,py:k*(target.y-YB)*(1-z)};
+ }
  function configure(){
+  if(auto&&sceneState&&!az&&!el){const f=fitZoom();zoom=f.z;panX=0;panY=f.py;}
   const ce=Math.cos(el),tilt=clamp(Math.hypot(Math.sin(az),Math.sin(el)),0,1);
   const perspective=tilt>.01,radius=perspective?960/tilt:1050;
   camera=perspective?eyeCamera:profileCamera;
@@ -530,10 +545,10 @@ function openOrbit(T,createApparatus){
  function active(){
   lowRes=true;clearTimeout(settle);
   settle=setTimeout(()=>{lowRes=false;request();},140);
-  stage.classList.add('camera-used');request();
+  stage.classList.add('camera-used');auto=false;request();
  }
  function reset(){
-  az=HOME.az;el=HOME.el;zoom=HOME.zoom;panX=HOME.px*k;panY=HOME.py*k;resetMeterView();active();
+  az=HOME.az;el=HOME.el;zoom=HOME.zoom;panX=HOME.px*k;panY=HOME.py*k;resetMeterView();active();auto=true;
  }
  function magnify(factor,anchor){
   const newZoom=clamp(zoom*factor,.48,6);
@@ -1038,7 +1053,7 @@ function drawProjection(state,project){
  }
  place(meterTitle,local(394,39,4),local(414,39,4));
  normalTitle.setAttribute('visibility',part===2?'visible':'hidden');
- if(part===2){const y=139+normalExtension;place(normalTitle,local(cartX-13,y,2),local(cartX-13,y+20,2));}
+ if(part===2){const y=139+normalExtension;place(normalTitle,local(cartX+17,y,2),local(cartX+17,y+20,2));}
  let arc='';
  for(let i=0;i<=18;i++){const t=a*i/18,p=project(60*Math.cos(t),60*Math.sin(t),18.2);arc+=(i?'L':'M')+p.x+' '+p.y;}
  thetaArc.setAttribute('d',arc);
