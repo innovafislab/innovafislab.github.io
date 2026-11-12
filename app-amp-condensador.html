@@ -540,7 +540,7 @@ const FIX=slide(XF+HOLD,false);plateHolder(FIX);FIX.scale.x=-1; // la fija, vuel
 // Siete planchas blancas cuadradas, algo mayores que las placas. Las que no se usan esperan apiladas sobre la mesa; las que se usan van de pie entre las placas, que las aprietan.
 // Grosor de cada una (m), medido con el calibre: nominalmente iguales, con su variación real. Valores fijos, para que los datos se puedan repetir.
 const SHT=[.00300,.00295,.00305,.00300,.00310,.00295,.00305],SHL=PL,SHEETS=[]; // grosores legibles en el nonio (1/20 mm); las planchas tienen el lado de las placas
-const PILE={x:-.40,z:.48}; // sitio de la pila, en coordenadas del banco
+const PILE={x:.045,z:.72}; // sitio de la pila, en coordenadas del banco
 {const edge=finish(0xf1f0ea,.5,.02);
  SHT.forEach((t,i)=>{const tx=canvasTex(512,512,(c,w,h)=>{c.fillStyle='#f4f3ee';c.fillRect(0,0,w,h);c.fillStyle='#8d9299';c.font='bold 44px Arial, sans-serif';c.textAlign='right';c.fillText(String(i+1),w-22,56)}),face=std(0xffffff,.48,.02,{map:tx,envMapIntensity:.5});
   const m=new THREE.Mesh(new THREE.BoxGeometry(t,SHL,SHL),[face,face,edge,edge,edge,edge]);m.castShadow=true;m.receiveShadow=true;m.userData.sheet=i;BG.add(m);SHEETS.push(m)})}
@@ -578,7 +578,7 @@ function makeBench(x,z,yaw){const K=BM.K,W=.251*K,H=.091*K,D=.291*K,cream=finish
  const lens=new THREE.Mesh(new THREE.PlaneGeometry(600/BM.W*wM,128/BM.H*hM),lcdGlass);{const [a,b]=BM.L(340,92);lens.position.set(a,b,.0012);lens.renderOrder=8;fr.add(lens)}
  shadow(hw);shadow(tilt);face.castShadow=false;topv.castShadow=false;
  // asa abatible: gira en los costados de la caja y, plegada hacia delante y hacia abajo, hace de pie
- root.updateMatrixWorld(true);const pv=tilt.localToWorld(V3(0,H*.52,D*.80)),pl=root.worldToLocal(pv.clone()),zb=pl.z+.262,yb=.014,xs=W/2+.016;BM.bar={z:zb,y:yb};
+ root.updateMatrixWorld(true);const pv=tilt.localToWorld(V3(0,H*.52,D*.80)),pl=root.worldToLocal(pv.clone()),zb=pl.z+.262,yb=.014,xs=W/2+.016;BM.bar={z:zb,y:yb};BM.hub={y:pl.y,z:pl.z,xs,W,H,D};
  for(const sx of[-1,1]){const a=V3(sx*xs,pl.y,pl.z),b=V3(sx*xs,yb,zb),L=a.distanceTo(b),arm=new THREE.Mesh(roundBox(.016,.030,L+.024,.005,.002),cream);arm.position.copy(a).lerp(b,.5);root.add(arm);arm.rotation.set(Math.atan2(a.y-b.y,b.z-a.z),0,0);
   const hub=new THREE.Mesh(new THREE.CylinderGeometry(.021,.021,.014,28),creamD);hub.rotation.z=Math.PI/2;hub.position.set(sx*(W/2+.007),pl.y,pl.z);root.add(hub)}
  const bar=new THREE.Mesh(roundBox(2*xs+.016,.028,.032,.008,.003),cream);bar.position.set(0,yb,zb);root.add(bar);
@@ -640,11 +640,12 @@ function route(mesh,eA,eB,W,o={}){const n=W.length,d0=o.d0||unit(W[0],W[1]),d1=o
  setTube(mesh,P,o.r)}
 // De cada placa cuelga su cable hasta la mesa, por delante del banco, y de ahí va al polímetro: la placa móvil al borne V Ω ⊣⊢ y la fija al COM.
 function plateCables(){SC.updateMatrixWorld(true);const w=(g,x,z)=>{const p=BG.localToWorld(V3(x,0,z));return [p.x,p.z]},top=g=>({p:g.localToWorld(g.userData.top.clone()),n:V3(0,1,0)});
- const xm=MOV.position.x+HOLD-.012,xf=XF+.012,zb=BM.root.position.z+BM.bar.z,bx=BM.root.position.x; // zb: barra del asa, que los cables salvan por encima
- const lift={lift:[zb-.012,zb+.012,.034],a1:.10,a2:.06,d1:[0,-1],b1:.085,b2:.06};
- const jv=BM.jack('V').p,jc=BM.jack('COM').p,lm=w(MOV,xm-.01,.21),lf=w(FIX,xf+.03,.21);
- route(CB.m,top(MOV),BM.jack('V'),[lm,[lm[0]+.30*(jv.x-.14-lm[0]),lm[1]+.62*(zb+.17-lm[1])],[jv.x-.14,zb+.17],[jv.x-.014,zb+.14],[jv.x,zb+.055]],lift);
- route(CB.f,top(FIX),BM.jack('COM'),[lf,[lf[0]+.35*(jc.x-.12-lf[0]),lf[1]+.62*(zb+.105-lf[1])],[jc.x-.12,zb+.105],[jc.x-.03,zb+.098],[jc.x,zb+.04]],lift)}
+ // Los cables llegan al polímetro por su izquierda: pasan por debajo del brazo del asa, donde este va alto, corren por la mesa por dentro del asa y suben a los bornes. Así no tocan ni los brazos ni la barra.
+ const th=BM.root.rotation.y,c=Math.cos(th),s=Math.sin(th),ML=(x,z)=>[BM.root.position.x+x*c+z*s,BM.root.position.z-x*s+z*c],dir=(x,z)=>[x*c+z*s,-x*s+z*c];
+ const xm=MOV.position.x+HOLD-.012,xf=XF+.012,lm=w(MOV,xm-.01,.21),lf=w(FIX,xf+.03,.21),mid=(a,b,t,k)=>[a[0]+(b[0]-a[0])*t-k*(b[1]-a[1]),a[1]+(b[1]-a[1])*t+k*(b[0]-a[0])];
+ const zv=.108,zc=.080,ev=ML(-.31,zv+.004),ec=ML(-.30,zc+.002);
+ route(CB.m,top(MOV),BM.jack('V'),[lm,mid(lm,ev,.5,.05),ev,ML(-.18,zv),ML(0,zv),ML(.095,zv)],{a1:.10,a2:.06,d1:dir(.9,-.2),b1:.075,b2:.04});
+ route(CB.f,top(FIX),BM.jack('COM'),[lf,mid(lf,ec,.5,.04),ec,ML(-.18,zc),ML(-.02,zc),ML(.07,zc)],{a1:.10,a2:.06,d1:dir(.95,-.1),b1:.06,b2:.035})}
 function floorLabel(x,z,l1,l2,W=.36,H=.060){const t=canvasTex(1024,Math.round(1024*H/W),(c,w,h)=>{c.clearRect(0,0,w,h);c.fillStyle='#8a939d';const put=(tx,wt,px,y)=>{const P=tx.split('_'),f=s=>wt+Math.round(px*s)+'px Arial, sans-serif';let m=0;P.forEach((s,i)=>{c.font=f(i%2?.68:1);m+=c.measureText(s).width});c.save();c.translate(w/2,y);c.scale(Math.min(1,(w-16)/m),1);let q=-m/2;c.textAlign='left';P.forEach((s,i)=>{c.font=f(i%2?.68:1);c.fillText(s,q,i%2?px*.22:0);q+=c.measureText(s).width});c.restore()};put(l1,'bold ',h*.40,h*.42);put(l2,'',h*.33,h*.86)});const m=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false,toneMapped:false,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-8}));m.rotation.x=-Math.PI/2;m.position.set(x,.0007,z);m.renderOrder=2;SC.add(m);return m} // rótulo en la mesa, como grabado en ella; _x_ escribe x como subíndice
 floorLabel(BM.root.position.x-.03,BM.root.position.z+BM.bar.z+.235,'CAPACIDAD','C_m_, en nanofaradios',.30,.052);
 
@@ -680,7 +681,7 @@ const V0=()=>({az:0,el:PM()&&box.clientHeight>box.clientWidth?.62:.50});
 let az,el,dist;const TG=V3();
 const BB=[];{const w=(x,y,z)=>BG.localToWorld(V3(x,y,z));BG.updateMatrixWorld(true);
  for(const x of[-.47,.31])BB.push(w(x,0,-.1),w(x,0,.1),w(x,.08,0));for(const x of[XF-.36,XF+.01])for(const z of[-PL/2,PL/2])BB.push(w(x,YC+PL/2,z),w(x,YC-PL/2,z));BB.push(w(XF+.17,YC,0),w(-.50,YC,0));
- for(const [x,z] of[[-.50,-.2],[-.56,.34],[-.56,.64],[-.24,.64]])BB.push(w(x,0,z));const bx=BM.root.position.x,bz=BM.root.position.z;BB.push(V3(bx+.24,0,bz-.42),V3(bx+.24,.20,bz-.3),V3(bx+.25,0,bz+.30),V3(bx-.20,0,bz+.535),V3(bx+.14,0,bz+.535))}
+ BB.push(w(-.50,0,-.2));for(const [x,z] of[[-.17,-.17],[-.17,.17],[.17,.17]])BB.push(w(PILE.x+x,0,PILE.z+z));const bx=BM.root.position.x,bz=BM.root.position.z;BB.push(V3(bx+.24,0,bz-.42),V3(bx+.24,.20,bz-.3),V3(bx+.25,0,bz+.30),V3(bx-.20,0,bz+.535),V3(bx+.14,0,bz+.535))}
 /* los botones nunca tapan el montaje: el límite superior del encuadre sale de la altura real del botón de visualización, en cualquier pantalla; en el móvil, el hueco que sobra se reparte entre los botones y el borde inferior */
 function topLim(base){const r=box.getBoundingClientRect(),bt=Math.max(...[...document.querySelectorAll('.ctls .fbtn')].map(e=>e.getBoundingClientRect().bottom));return r.height?Math.min(base,1-2*(bt-r.top+9)/r.height):.77}
 function balance(best,v,top,pts){let bm=-9,bs=0;const c=V3(),d=best.dist,up=V3(-Math.sin(v.el)*Math.sin(v.az),Math.cos(v.el),-Math.sin(v.el)*Math.cos(v.az)); // la mira se desplaza en vertical sobre la pantalla, sin acercar ni alejar
