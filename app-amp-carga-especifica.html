@@ -87,7 +87,7 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 <p>Tubo: con doble clic sobre el bulbo la vista se coloca de frente a él, para ver bien el haz y los travesaños; otro doble clic devuelve la vista anterior.</p>
 <p>Conexiones, como en el montaje real. Bobinas: del + de la fuente al borne de 10 A del polímetro (rojo); del COM a la bobina delantera (rojo); de esta a la trasera (azul) y de la trasera al − de la fuente (azul).</p>
 <p>Tubo, con los rótulos de su capuchón: «+250 V», el ánodo, al + de 0…300 V (rojo); «−50 V», el cilindro de Wehnelt, al − de 0…50 V (azul); «0», el cátodo, al borne de tierra (negro); los dos bornes «6,3 V ~», el caldeo, a la salida de 6,3 V ~ (amarillos). Dos puentes cortos negros unen el + de 0…50 V con el − de 0…300 V, y este con el borne de tierra: ese punto común es el cero del tubo. El voltímetro va entre el + y el − de 0…300 V, enchufado encima de las otras clavijas. Las salidas de 0…12 V y de 300 V fija quedan libres.</p>
-<p>Corriente y campo B: el botón de arriba muestra u oculta, sobre el montaje, el sentido de la corriente en las bobinas (flechas finas de color claro) y las líneas del campo magnético que crean (en azul verdoso), casi paralelas y uniformes en la zona del bulbo. Es una ayuda visual: en el laboratorio no se ve.</p>
+<p>Corriente y campo B: el botón de arriba muestra u oculta, sobre el montaje, la corriente que recorre los cables y las bobinas (pulsos claros, más rápidos cuanto mayor es la intensidad) y las líneas del campo magnético que crean (en azul verdoso), casi paralelas y uniformes en la zona del bulbo. Es una ayuda visual: en el laboratorio no se ve.</p>
 <p>Polímetros: se encienden con POWER. Ya están en 10 A⎓ el de la izquierda y en 200 V⎓ el de la derecha. El selector se gira arrastrándolo, con la rueda o pinchando en una marca.</p>
 <p>Vista: arrastra para girar, usa la rueda (o dos dedos) para acercar donde está el puntero y arrastra con el botón derecho (o dos dedos) para desplazar. Con doble clic te acercas a un aparato y, con otro doble clic sobre él, vuelves a la vista anterior; «Vista inicial» vuelve al encuadre de partida.</p>
 <p class="note">Gemelo de la práctica: tubo de haz filiforme, bobinas de Helmholtz de 154 espiras y 0,2 m de radio, fuentes y polímetros digitales · CC BY-NC-SA 4.0</p>
@@ -719,6 +719,15 @@ for(const inst of INST)collectHardware(inst.root,new Set([inst.kn,inst.face,inst
 // Rojo: positivo (ánodo, + de las bobinas). Azul: negativo (Wehnelt, retorno de las bobinas). Negro: punto cero (cátodo, tierra, puentes). Amarillo: caldeo.
 const CB={c1:cable('r'),c2:cable('r'),c3:cable('b'),c4:cable('b'),h1:cable('y'),h2:cable('y'),k:cable('k'),w:cable('b'),a:cable('r'),j:cable('k'),l:cable('k'),vr:cable('r'),vb:cable('b')};
 const FY=.0036;
+// Corriente (vista añadida): pulsos claros que recorren los cables de las bobinas en el sentido de la corriente, + de la fuente → amperímetro → bobinas → − de la fuente, más deprisa cuanto mayor es la intensidad.
+const FLOW={per:.055,list:[]};
+FLOW.tex=canvasTex(256,8,(x,w,h)=>{x.clearRect(0,0,w,h);for(let i=0;i<w;i++){const t=i/w,a=t<.30?0:t<.82?Math.pow((t-.30)/.52,1.7):t<.93?1-(t-.82)/.11:0;x.fillStyle='rgba(255,255,255,'+a.toFixed(3)+')';x.fillRect(i,0,1,h)}});FLOW.tex.wrapS=THREE.RepeatWrapping;
+FLOW.mat=new THREE.MeshBasicMaterial({map:FLOW.tex,color:0xffffff,transparent:true,depthWrite:false,toneMapped:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-6});
+for(const k of['c1','c2','c3','c4']){const m=new THREE.Mesh(CB[k].geometry,FLOW.mat);m.renderOrder=3;m.visible=false;SC.add(m);FLOW.list.push([k,m])}
+function syncFlow(on){if(on!==undefined)FLOW.on=on;for(const [k,m] of FLOW.list){const g=CB[k].geometry;
+  if(!g.userData.flow&&g.attributes.position){const P=g.attributes.position,uv=g.attributes.uv,ring=11,n=P.count/ring,c=V3(),q=V3(),v=V3();let L=0; // la coordenada de textura sigue la longitud real del cable
+   for(let i=0;i<n;i++){c.set(0,0,0);for(let j=0;j<ring;j++)c.add(v.fromBufferAttribute(P,i*ring+j));c.multiplyScalar(1/ring);if(i)L+=c.distanceTo(q);q.copy(c);for(let j=0;j<ring;j++)uv.setX(i*ring+j,L/FLOW.per)}uv.needsUpdate=true;g.userData.flow=true}
+  m.geometry=g;m.visible=!!FLOW.on}}
 const B3=(a,b,c,d,n=14)=>{const o=[];for(let i=1;i<=n;i++){const t=i/n,u=1-t,w0=u*u*u,w1=3*u*u*t,w2=3*u*t*t,w3=t*t*t;o.push(V3(w0*a.x+w1*b.x+w2*c.x+w3*d.x,w0*a.y+w1*b.y+w2*c.y+w3*d.y,w0*a.z+w1*b.z+w2*c.z+w3*d.z))}return o};
 // De una clavija a la mesa: el cable sale en la dirección de la clavija, cae por su peso y se posa en L con rumbo d, en una sola curva.
 function fall(e,L,d,k1,k2=.05){const a=e.p.clone().addScaledVector(e.n,-.004),p=e.p.clone(),Lp=V3(L[0],FY,L[1]),D=V3(d[0],0,d[1]).normalize();
@@ -783,7 +792,7 @@ function fixedCables(){SC.updateMatrixWorld(true);
  route(CB.vb,EJ.Vb.out(),VOLT.jack('COM'),[[.672,-.005],[.60,.11],[.515,.27],[.498,.36],[.41,.428],[.335,.40],[.2995,.345]],{lift:[-.150,-.088,.0080],a2:.05,d1:[0,-1],b1:.07,b2:.075});
  }
  // Puentes: + de 0…50 V con − de 0…300 V, y − de 0…300 V con tierra. Ese punto común es el cero del tubo (cátodo).
- jumper(CB.j,EJ.Ja.out(),EJ.Jb.out());jumper(CB.l,EJ.La.out(),EJ.Lb.out());
+ jumper(CB.j,EJ.Ja.out(),EJ.Jb.out());jumper(CB.l,EJ.La.out(),EJ.Lb.out());syncFlow();
 }
 function floorLabel(x,z,l1,l2,W=.36,H=.060){const t=canvasTex(1024,Math.round(1024*H/W),(c,w,h)=>{c.clearRect(0,0,w,h);c.fillStyle='#8a939d';const put=(tx,wt,px,y)=>{const P=tx.split('_'),f=s=>wt+Math.round(px*s)+'px Arial, sans-serif';let m=0;P.forEach((s,i)=>{c.font=f(i%2?.68:1);m+=c.measureText(s).width});c.save();c.translate(w/2,y);c.scale(Math.min(1,(w-16)/m),1);let q=-m/2;c.textAlign='left';P.forEach((s,i)=>{c.font=f(i%2?.68:1);c.fillText(s,q,i%2?px*.22:0);q+=c.measureText(s).width});c.restore()};put(l1,'bold ',h*.40,h*.42);put(l2,'',h*.33,h*.86)});const m=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false,toneMapped:false,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-8}));m.rotation.x=-Math.PI/2;m.position.set(x,.0007,z);m.renderOrder=2;SC.add(m);return m} // rótulo en la mesa, como grabado en ella; _x_ escribe x como subíndice
 floorLabel(-.32,ZD+.265,'INTENSIDAD EN LAS BOBINAS','I, en amperios');floorLabel(.32,ZD+.265,'TENSIÓN DE ACELERACIÓN','V, en voltios');
@@ -801,17 +810,17 @@ function buildFld(){if(FM.ok)return;FM.ok=true;const R=RB,seg=72,TEAL=new THREE.
   for(const az of azs){const f=az*Math.PI/180,P=L.map(([r,z])=>V3(r*Math.cos(f),r*Math.sin(f),z)),cv=new THREE.CatmullRomCurve3(P),g=new THREE.TubeGeometry(cv,P.length*2,.0013,6,false);
    const m=new THREE.Mesh(g,FM.lineM);m.renderOrder=2.5;FLD.add(m);
    for(const u of[.24,.74,1]){const t=cv.getTangentAt(u),c=new THREE.Mesh(cone,FM.headM);c.position.copy(cv.getPointAt(u));if(u===1)c.position.addScaledVector(t,.006);c.quaternion.setFromUnitVectors(V3(0,1,0),t);c.renderOrder=2.5;FLD.add(c)}}}
- // corriente: flechas finas y quietas, repartidas a lo largo del devanado en sus cuatro caras (canto exterior, canto interior, cara delantera y cara trasera)
- FM.flow=canvasTex(384,64,(x,w,h)=>{x.clearRect(0,0,w,h);x.strokeStyle=x.fillStyle='#fff';x.lineCap='round';x.lineWidth=5;x.beginPath();x.moveTo(.20*w,h/2);x.lineTo(.64*w,h/2);x.stroke();x.beginPath();x.moveTo(.61*w,h/2-15);x.lineTo(.80*w,h/2);x.lineTo(.61*w,h/2+15);x.quadraticCurveTo(.655*w,h/2,.61*w,h/2-15);x.fill()});FM.flow.wrapS=THREE.RepeatWrapping;
- FM.flowM=new THREE.MeshBasicMaterial({map:FM.flow,color:new THREE.Color(0xffe9a6).convertSRGBToLinear(),transparent:true,depthWrite:false,toneMapped:false,side:THREE.DoubleSide});
- const NFL=12,band=(r0,z0,r1,z1)=>{const n=160,pos=[],uvs=[],idx=[];for(let i=0;i<=n;i++){const t=i/n*2*Math.PI,c=Math.cos(t),sn=Math.sin(t);pos.push(r0*c,r0*sn,z0,r1*c,r1*sn,z1);uvs.push(i/n*NFL,0,i/n*NFL,1);if(i<n){const k=i*2;idx.push(k,k+1,k+2,k+1,k+3,k+2)}}
+ // corriente en el devanado: los mismos pulsos claros de los cables, más tenues para no restar protagonismo al campo, en sus cuatro caras (canto exterior, canto interior, cara delantera y cara trasera)
+ FM.flow=canvasTex(256,32,(x,w,h)=>{x.clearRect(0,0,w,h);const I=x.createImageData(w,h);for(let j=0;j<h;j++){const e=Math.sin(Math.PI*(j+.5)/h),ev=Math.pow(e,.7);for(let i=0;i<w;i++){const t=i/w,a=t<.22?0:t<.80?Math.pow((t-.22)/.58,1.6):t<.94?1-(t-.80)/.14:0,k=(j*w+i)*4;I.data[k]=I.data[k+1]=I.data[k+2]=255;I.data[k+3]=255*a*ev}}x.putImageData(I,0,0)});FM.flow.wrapS=THREE.RepeatWrapping;
+ FM.flowM=new THREE.MeshBasicMaterial({map:FM.flow,color:0xffffff,transparent:true,depthWrite:false,toneMapped:false,side:THREE.DoubleSide});
+ const NFL=FM.nfl=16,band=(r0,z0,r1,z1)=>{const n=160,pos=[],uvs=[],idx=[];for(let i=0;i<=n;i++){const t=i/n*2*Math.PI,c=Math.cos(t),sn=Math.sin(t);pos.push(r0*c,r0*sn,z0,r1*c,r1*sn,z1);uvs.push(i/n*NFL,0,i/n*NFL,1);if(i<n){const k=i*2;idx.push(k,k+1,k+2,k+1,k+3,k+2)}}
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2));g.setIndex(idx);const m=new THREE.Mesh(g,FM.flowM);m.renderOrder=2.4;FLD.add(m)};
  const hs=COILA+.0009,fl=COILB*.9;for(const zc of[-R/2,R/2]){band(R+hs,zc-fl,R+hs,zc+fl);band(R-hs,zc-fl,R-hs,zc+fl);band(R-fl,zc+hs,R+fl,zc+hs);band(R-fl,zc-hs,R+fl,zc-hs)}
  // rótulos
  const tag=(t,col,x,y,z)=>{const tx=canvasTex(128,128,(c,w,h)=>{c.clearRect(0,0,w,h);c.fillStyle=col;c.font='italic bold 96px Georgia, "Times New Roman", serif';c.textAlign='center';c.fillText(t,w/2,96)}),s=new THREE.Sprite(new THREE.SpriteMaterial({map:tx,transparent:true,depthWrite:false,toneMapped:false}));s.scale.set(.05,.05,1);s.position.set(x,y,z);s.renderOrder=7;FLD.add(s)};
  tag('B','#078a99',.026,.026,.272);tag('I','#c98a00',R*.80,R*.80,R/2+.03)}
 function syncFld(){const I=solve().I,show=fldOn&&I>.02;if(show)buildFld();FLD.visible=show;
- if(show){const o=.40+.60*Math.min(1,I/2.5);FM.lineM.opacity=o*.62;FM.headM.opacity=o;FM.flowM.opacity=.62+.25*Math.min(1,I/2.5)}}
+ if(show){const o=.40+.60*Math.min(1,I/2.5);FM.lineM.opacity=o*.62;FM.headM.opacity=o;FM.flowM.opacity=.44+.14*Math.min(1,I/2.5)}syncFlow(show)}
 function setFld(on){fldOn=on;const b=$('#fldBtn');b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);syncFld();invalidate()}
 
 /* ================= estado ================= */
@@ -965,8 +974,9 @@ function loop(now){frame=0;if(document.hidden)return;const dt=Math.min(.3,(now-(
  // el cátodo tarda un par de segundos en calentarse y en enfriarse
  const hT=S.R.on?1:0,warming=heat!==hT;if(warming){heat=hT>heat?Math.min(1,heat+dt/2.2):Math.max(0,heat-dt/1.2);updateBeam();invalidate()}
  if((AMM.on||VOLT.on)&&now-lastMeas>650)measure();
+ const flowing=FLD.visible;if(flowing){const v=.045+.10*Math.min(3,solve().I);FLOW.tex.offset.x-=dt*v/FLOW.per;FM.flow.offset.x-=dt*v/(2*Math.PI*RB/FM.nfl);dirty=true} // los pulsos van igual de deprisa por los cables y por el devanado
  if(dirty){camSet();CAM.updateMatrixWorld();R3.render(SC,CAM);dirty=false}
- if(fly||warming){if(!frame)frame=requestAnimationFrame(loop)}
+ if(fly||warming||flowing){if(!frame)frame=requestAnimationFrame(loop)}
  else{tPrev=0;if((AMM.on||VOLT.on)&&!poll){poll=setTimeout(()=>{poll=0;if(!document.hidden&&!frame)frame=requestAnimationFrame(loop)},Math.max(12,651-(performance.now()-lastMeas)))}}
 }
 document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(poll);poll=0;if(frame)cancelAnimationFrame(frame);frame=0;tPrev=0}else invalidate()});
