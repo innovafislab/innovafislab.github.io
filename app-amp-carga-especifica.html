@@ -55,15 +55,15 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 .side .p2{display:none}body[data-part="2"] .side .p2{display:revert}body[data-part="2"] .side .p1{display:none}
 .side .note{font-size:.8em;color:var(--slate);margin-top:1.2em}
 @media (max-width:1300px) and (min-width:821px){header{gap:8px;padding:8px 10px}.tab{padding:4px 10px}.hbtn{padding:6px 10px}}
-@media (max-width:820px){header{flex-wrap:wrap;white-space:normal}body{display:block}main{grid-template-columns:minmax(0,1fr);height:auto;padding:10px}header{padding:8px 10px}.left .card{height:auto}.sim3{flex:none;height:auto;aspect-ratio:1.2}.side{max-height:none}.vbtn{width:26px;height:26px;font-size:15px}.fbtn{height:26px;font-size:11px;padding:0 8px}}
+.mctl{display:none}@media (max-width:820px),(max-height:520px){html,body{overflow:hidden}body{height:100dvh}header{flex-wrap:wrap;white-space:normal;padding:6px 10px;gap:6px 8px}header .back{width:30px;height:34px}header h1{flex:1 1 0;min-width:60%;font-size:clamp(15px,4.1vw,19px);line-height:1.15}header .sp{display:none}header .tabs{order:3}#gbtn{display:inline-flex;align-items:center;gap:.4em;flex:none;padding:5px 10px;font-size:14px;color:var(--navy);border-color:#9fb0c2;text-transform:capitalize}#gbtn span{display:none}#gbtn::before{content:'i';display:inline-grid;place-items:center;width:1.15em;height:1.15em;border-radius:50%;border:1.5px solid currentColor;font-size:.8em;font-weight:800;font-style:italic;font-family:Georgia,serif;text-transform:none}body.guide #gbtn{background:#17324d;color:#fff;border-color:#17324d}body.guide #gbtn::before{content:'\2715';border:0;font-style:normal;font-family:inherit}main{display:flex;flex-direction:column;padding:8px 8px 6px}.left{flex:1;min-height:0}.side{display:none}body.guide .side{display:block;position:fixed;left:0;right:0;bottom:0;top:var(--gtop,46px);z-index:30;overflow-y:auto;-webkit-overflow-scrolling:touch;border:0;border-top:1px solid var(--line);border-radius:0;padding:14px 16px 48px;font-size:16px}.mctl{display:block;flex:none;padding:4px 2px 0}.mrow{display:flex;gap:10px;align-items:center;min-height:34px}.msl,.msel{flex:1;min-width:0;display:flex;align-items:center;gap:7px;font:600 13.5px/1.1 Inter,system-ui,sans-serif;color:var(--ink)}.msl span,.msel span{flex:none;white-space:nowrap}.msl span{min-width:6.4em}.msl input{flex:1;min-width:0;height:28px;margin:0;accent-color:#1d5fa8}.mst{flex:none;width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:600 17px/1 Inter,system-ui,sans-serif;padding:0;touch-action:manipulation}.msel select{flex:1;min-width:0;height:30px;font:inherit;padding:0 4px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}.vbtn{width:26px;height:26px;font-size:15px}.fbtn{height:26px;font-size:11px;padding:0 8px}}@media (max-height:520px) and (orientation:landscape){header{flex-wrap:nowrap;padding:3px 10px}header h1{flex:0 1 auto;min-width:0;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}header .tabs{order:0;flex:none}header .sp{display:block}.tab{padding:3px 10px;font-size:13px}#gbtn{padding:3px 10px}main{padding:6px 8px}.left{flex-direction:row;gap:10px}.left .card{flex:1;min-width:0}.mctl{width:236px;padding:0;overflow-y:auto;align-self:stretch}.mrow{flex-wrap:wrap;gap:6px;min-height:0;margin-bottom:10px}.msl{flex-wrap:wrap;gap:3px 6px}.msl span{flex:1 0 100%}.msel{flex:1 0 100%}}
 </style></head><body data-part="1">
 <style>.fbtn.tog{background:#fff4e8;border-color:#f5821f;color:#7a3d06}.fbtn.tog:hover{background:#ffe9d2}.fbtn.tog svg{flex:none}.fbtn.tog circle{fill:#f5821f}.fbtn.tog.on{background:#f5821f;border-color:#f5821f;color:#fff}.fbtn.tog.on:hover{background:#ec7612}.fbtn.tog.on circle{fill:#fff}html.dk .fbtn.tog{background:#3a2412;border-color:#f5821f;color:#ffd9b5}html.dk .fbtn.tog.on{background:#f5821f;color:#fff}.fnote{align-self:center;font:500 12px/1.2 Inter,system-ui,sans-serif;color:var(--slate);background:rgba(255,255,255,.9);border-radius:10px;padding:4px 9px}.fnote[hidden]{display:none}html.dk .fnote{background:rgba(20,26,33,.9)}</style>
 <header><a class="back" href="laboratorios.html#ampliacion" aria-label="Volver al Laboratorio de Ampliación de Física">←</a><h1>Carga específica del electrón</h1>
-<span class="sp"></span><button class="hbtn" id="gbtn" type="button">Ocultar guía</button></header>
+<span class="sp"></span><button class="hbtn" id="gbtn" type="button"><span>Ocultar </span>guía</button></header>
 <main><section class="left"><div class="card">
 <div class="sim3" id="v3" aria-label="Montaje en 3D: tubo de haz filiforme entre dos bobinas de Helmholtz, con su escalerilla de travesaños y el haz de electrones, dos fuentes de alimentación y dos polímetros digitales"><canvas id="cv"></canvas></div>
-<div class="ctls"><div class="ctl"><button class="fbtn" id="vwBtn" type="button">Vista inicial</button><button class="fbtn tog" id="fldBtn" type="button" aria-pressed="false"><svg width="24" height="10" viewBox="0 0 24 10" aria-hidden="true"><circle cx="2.5" cy="5" r="2" opacity=".35"/><circle cx="8.5" cy="5" r="2.3" opacity=".65"/><circle cx="15" cy="5" r="2.6"/><path d="M19.5 1.5 L22.5 5 L19.5 8.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Visualizar corriente y campo B</button><span class="fnote" id="fldNote" hidden>Enciende la fuente de las bobinas y sube la intensidad</span></div><div class="ctl"><button class="vbtn" id="rstBtn" type="button" aria-label="Volver a la configuración inicial" title="Volver a la configuración inicial">↺</button></div></div>
-</div></section>
+<div class="ctls"><div class="ctl"><button class="fbtn" id="vwBtn" type="button">Vista inicial</button><button class="fbtn tog" id="fldBtn" type="button" aria-pressed="false"><svg width="24" height="10" viewBox="0 0 24 10" aria-hidden="true"><circle cx="2.5" cy="5" r="2" opacity=".35"/><circle cx="8.5" cy="5" r="2.3" opacity=".65"/><circle cx="15" cy="5" r="2.6"/><path d="M19.5 1.5 L22.5 5 L19.5 8.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Visualizar corriente y campo B</button></div><div class="ctl"><button class="vbtn" id="rstBtn" type="button" aria-label="Volver a la configuración inicial" title="Volver a la configuración inicial">↺</button></div></div>
+</div><div class="mctl" id="mctl"></div></section>
 <aside class="side card" id="side">
 <h2>Qué se observa</h2>
 <p>Los electrones salen del cañón del tubo acelerados por una diferencia de potencial <i>V</i> y entran en el campo magnético uniforme de las bobinas de Helmholtz, perpendicular a su velocidad. Describen una circunferencia de radio <i>R</i> que cumple:</p>
@@ -402,6 +402,78 @@ function cordContact(path,r){const n=86,xyz=[],colors=[],indices=[],p=V3(),t=V3(
 }
 function setTube(m,pts,r=.0034){const path=new SupportedCord(pts,r);m.geometry.dispose();m.geometry=new THREE.TubeGeometry(path,Math.max(90,Math.min(460,pts.length*5)),r,10,false);
  if(m.userData.rib){SC.remove(m.userData.rib);m.userData.rib.geometry.dispose();m.userData.rib.material.dispose()}m.userData.rib=cordContact(path,r)}
+/* ================= acabados: relieve fino, brillo desigual y marcas de uso ================= */
+/* Los objetos reales no son perfectos: la pintura tiene piel de naranja, el metal está cepillado y rayado, el plástico tiene grano y todo acumula roces. */
+const FIN=(()=>{
+ const rng=s=>()=>(s=(Math.imul(s,1664525)+1013904223)>>>0)/4294967296;
+ function vnoise(cx,cy,seed){const r=rng(seed),g=new Float32Array(cx*cy);for(let i=0;i<g.length;i++)g[i]=r();const sm=t=>t*t*(3-2*t);
+  return (u,v)=>{const x=u*cx,y=v*cy,x0=Math.floor(x),y0=Math.floor(y),fx=sm(x-x0),fy=sm(y-y0),a=(i,j)=>g[(((j%cy)+cy)%cy)*cx+((i%cx)+cx)%cx];
+   return (a(x0,y0)*(1-fx)+a(x0+1,y0)*fx)*(1-fy)+(a(x0,y0+1)*(1-fx)+a(x0+1,y0+1)*fx)*fy}}
+ function grayCanvas(w,h,fn){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d'),im=x.createImageData(w,h),d=im.data;
+  for(let j=0,o=0;j<h;j++)for(let i=0;i<w;i++,o+=4){const k=Math.max(0,Math.min(255,Math.round(255*fn(i/w,j/h))));d[o]=d[o+1]=d[o+2]=k;d[o+3]=255}
+  x.putImageData(im,0,0);return c}
+ function tex(c,rep){const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=ANI;if(rep)t.repeat.set(rep,rep);return t}
+ /* las marcas se repiten en las ocho baldosas vecinas para que la textura no tenga costuras */
+ function tiled(x,w,h,tile,f){if(!tile){f();return}for(const dx of[-w,0,w])for(const dy of[-h,0,h]){x.save();x.translate(dx,dy);f();x.restore()}}
+ function scratches(x,w,h,n,seed,len,o){const r=rng(seed);x.lineCap='round';for(let i=0;i<n;i++){const px=r()*w,py=r()*h,a=o.along?(r()-.5)*.6:r()*Math.PI*2,L=len*(.25+r()),k1=(r()-.5)*L*.12,k2=(r()-.5)*L*.12,col=o.col(r()),lw=o.w*(.6+r()*.8);
+   tiled(x,w,h,o.tile,()=>{x.strokeStyle=col;x.lineWidth=lw;x.beginPath();x.moveTo(px,py);x.quadraticCurveTo(px+Math.cos(a)*L*.5+k1,py+Math.sin(a)*L*.5+k2,px+Math.cos(a)*L,py+Math.sin(a)*L);x.stroke()})}}
+ function smudges(x,w,h,n,seed,R,col,tile){const r=rng(seed),c0=col.replace(/[\d.]+\)$/,'0)');for(let i=0;i<n;i++){const px=r()*w,py=r()*h,q=R*(.5+r());
+   tiled(x,w,h,tile,()=>{const g=x.createRadialGradient(px,py,0,px,py,q);g.addColorStop(0,col);g.addColorStop(1,c0);x.fillStyle=g;x.fillRect(px-q,py-q,2*q,2*q)})}}
+ const memo=f=>{let v;return()=>v||(v=f())};
+ /* pintura: relieve de piel de naranja; una baldosa mide 25 cm */
+ const PEEL=memo(()=>{const a=vnoise(128,128,21),b=vnoise(32,32,22),c=grayCanvas(1024,1024,(u,v)=>.5+.30*(a(u,v)-.5)+.16*(b(u,v)-.5));
+  scratches(c.getContext('2d'),1024,1024,12,33,300,{along:true,w:1.6,tile:true,col:()=>'rgba(20,20,20,.4)'});return tex(c,4)});
+ /* brillo desigual, zonas pulidas por el roce y rayas finas */
+ const glossTex=(k,S,sd)=>memo(()=>{const a=vnoise(12,12,sd),b=vnoise(84,84,sd+1),c=grayCanvas(S,S,(u,v)=>.505+k*(.13*(a(u,v)-.5)+.06*(b(u,v)-.5))),x=c.getContext('2d'),q=S/1024;
+  smudges(x,S,S,7,sd+66,100*q,'rgba(70,70,70,'+(.32*k).toFixed(3)+')',true);scratches(x,S,S,26,sd+20,330*q,{along:true,w:1.5*Math.sqrt(q),tile:true,col:t=>'rgba(235,235,235,'+(k*(.22+.4*t)).toFixed(3)+')'});return tex(c,4)});
+ const GLOSS=glossTex(1,1024,11),GLOSS_D=glossTex(.4,512,15); /* en los colores oscuros cualquier cambio de brillo se nota mucho más: van más tenues */
+ /* metal cepillado: vetas a lo largo de u con algunas rayas cruzadas; una baldosa mide 8 cm */
+ const brushTex=(k,sd)=>memo(()=>{const a=vnoise(5,240,sd),b=vnoise(28,28,sd+1),c=grayCanvas(256,256,(u,v)=>.42+k*(.15*(a(u,v)-.5)+.07*(b(u,v)-.5)));
+  scratches(c.getContext('2d'),256,256,14,sd+2,70,{along:false,w:.8,tile:true,col:t=>'rgba(200,200,200,'+k*(.14+.26*t)+')'});return tex(c,12.5)});
+ const BRUSH=brushTex(1,41),BRUSH_D=brushTex(.5,45); /* el metal oscuro (anodizado negro) lleva la veta más tenue */
+ /* grano del plástico inyectado; una baldosa mide 12,5 cm */
+ const GRAIN=memo(()=>{const S=512,by=new Uint8Array(S*S*4),r=rng(814);for(let i=0;i<by.length;i+=4){by[i]=128+35*(r()-.5);by[i+1]=128+35*(r()-.5);by[i+2]=253;by[i+3]=255}
+  const t=new THREE.DataTexture(by,S,S,THREE.RGBAFormat);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.magFilter=THREE.LinearFilter;t.minFilter=THREE.LinearMipMapLinearFilter;t.generateMipmaps=true;t.repeat.set(8,8);t.needsUpdate=true;return t});
+ const BASE=memo(()=>{const a=vnoise(18,18,61),b=vnoise(150,150,62);return grayCanvas(256,256,(u,v)=>.40+.28*a(u,v)+.12*b(u,v))});
+ /* frontales y rótulos (coordenadas de 0 a 1): brillo desigual, rayas y los roces circulares que dejan las clavijas alrededor de cada borne */
+ function panel(mat,o={}){if(!mat||mat.roughnessMap)return;const W=o.w||512,H=o.h||Math.max(64,Math.round(W*(o.ratio||1))),c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d'),sd=o.seed||60,k=W/512;
+  x.drawImage(BASE(),0,0,W,H);smudges(x,W,H,9,sd+7,76*k,'rgba(40,40,40,.55)');scratches(x,W,H,o.n||46,sd+3,120*k,{along:false,w:1.3*k,col:t=>'rgba(240,240,240,'+(.3+.45*t)+')'});
+  if(o.socks){x.lineCap='round';for(const [u,v,rad] of o.socks){const sx=u*W,sy=v*H,r=rng(600+Math.round(sx*7+sy)),R=(rad||.04)*W;for(let i=0;i<8;i++){const a0=r()*6.28;x.strokeStyle='rgba(245,245,245,'+(.25+.4*r())+')';x.lineWidth=(1+r())*k;x.beginPath();x.arc(sx+(r()-.5)*R*.2,sy+(r()-.5)*R*.2,R*(1+r()*.5),a0,a0+.5+r()*1.2);x.stroke()}}}
+  const t=new THREE.CanvasTexture(c);t.anisotropy=ANI;mat.roughnessMap=t;mat.roughness=Math.min(1,mat.roughness/.52);mat.needsUpdate=true}
+ /* roces y rayas sobre un dibujo de color (frontales que se redibujan): siempre los mismos, porque la semilla es fija */
+ function wear(x,w,h,seed,o={}){const R=Math.max(w,h);smudges(x,w,h,o.tone||6,seed+1,R*.12,'rgba(0,0,0,.05)');smudges(x,w,h,o.tone||6,seed+2,R*.10,'rgba(255,255,255,.05)');
+  scratches(x,w,h,o.n||18,seed+3,o.len||R*.09,{along:false,w:o.w||1,col:t=>t<.5?'rgba(40,40,36,'+(.08+.16*t)+')':'rgba(255,255,255,'+(.08+.18*(t-.5))+')'});
+  if(o.socks){const r=rng(seed+9);x.lineCap='round';for(const [sx,sy,rad] of o.socks)for(let i=0;i<7;i++){const a0=r()*6.28;x.strokeStyle=(o.dark?'rgba(255,255,255,':'rgba(60,60,56,')+(.07+.11*r())+')';x.lineWidth=(o.w||1)*(.8+r());x.beginPath();x.arc(sx+(r()-.5)*rad*.2,sy+(r()-.5)*rad*.2,rad*(1+r()*.5),a0,a0+.5+r()*1.2);x.stroke()}}}
+ /* coordenadas de textura en metros: cada cara se proyecta sobre el plano que mira y la veta va a lo largo del eje más largo de la pieza */
+ const cache=new Map();
+ function metric(g,sc){const key=g.uuid+'/'+sc.x.toFixed(3)+'/'+sc.y.toFixed(3)+'/'+sc.z.toFixed(3);let n=cache.get(key);if(n)return n;
+  n=g.index?g.toNonIndexed():g.clone();const P=n.attributes.position,N=P.count,uv=new Float32Array(N*2),s=[sc.x,sc.y,sc.z];n.computeBoundingBox();
+  const bb=n.boundingBox,d=[(bb.max.x-bb.min.x)*Math.abs(s[0]),(bb.max.y-bb.min.y)*Math.abs(s[1]),(bb.max.z-bb.min.z)*Math.abs(s[2])],long=d.indexOf(Math.max(d[0],d[1],d[2])),p=[[0,0,0],[0,0,0],[0,0,0]];
+  for(let i=0;i+2<N;i+=3){for(let k=0;k<3;k++){p[k][0]=P.getX(i+k)*s[0];p[k][1]=P.getY(i+k)*s[1];p[k][2]=P.getZ(i+k)*s[2]}
+   const ax=p[1][0]-p[0][0],ay=p[1][1]-p[0][1],az=p[1][2]-p[0][2],bx=p[2][0]-p[0][0],by=p[2][1]-p[0][1],bz=p[2][2]-p[0][2],nn=[Math.abs(ay*bz-az*by),Math.abs(az*bx-ax*bz),Math.abs(ax*by-ay*bx)],k=nn.indexOf(Math.max(nn[0],nn[1],nn[2])),o=[0,1,2].filter(q=>q!==k),a=o.includes(long)?long:o[0],b=o[0]===a?o[1]:o[0];
+   for(let q=0;q<3;q++){uv[2*(i+q)]=p[q][a];uv[2*(i+q)+1]=p[q][b]}}
+  n.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));n.userData=g.userData;cache.set(key,n);cache.set(n.uuid+key.slice(g.uuid.length),n);return n}
+ function dress(m,kind,o){const sc=v=>Math.min(1,v/.5),c=m.color,dark=.2126*c.r+.7152*c.g+.0722*c.b<.045,G=dark?GLOSS_D:GLOSS;
+  if(kind==='brush'){m.roughnessMap=(dark?BRUSH_D:BRUSH)();m.roughness=Math.min(1,m.roughness/.42)}
+  else if(kind==='gloss'){m.roughnessMap=G();m.roughness=sc(m.roughness)}
+  else if(kind==='paint'){m.bumpMap=PEEL();m.bumpScale=.0006*(o.peel||1)*(m.metalness>.3?.4:1);m.roughnessMap=G();m.roughness=sc(m.roughness)}
+  else if(kind==='grain'){m.normalMap=GRAIN();m.normalScale=new THREE.Vector2(o.grain||.5,o.grain||.5);m.roughnessMap=G();m.roughness=sc(m.roughness)}
+  m.userData.fin=kind;m.needsUpdate=true;return m}
+ const plain=THREE.Material.prototype.onBeforeCompile;
+ /* recorre las piezas de los aparatos y da a cada material el acabado que le corresponde */
+ function apply(roots,o={}){const ex=new Set(o.exclude||[]),skip=new Set(o.skip||[]),kinds=o.kinds||new Map(),foreign=new Set(),list=[],byMat=new Map();
+  for(const r of o.foreign||[])r.traverse(q=>{if(q.isMesh&&q.material&&!Array.isArray(q.material))foreign.add(q.material)});
+  const walk=n=>{if(ex.has(n))return;if(n.isMesh&&!n.isInstancedMesh)list.push(n);for(const c of n.children)walk(c)};roots.forEach(walk);
+  for(const q of list){const m=q.material;if(!m||Array.isArray(m)||!m.isMeshStandardMaterial||m.transparent||m.alphaTest>0||m.stencilWrite||m.onBeforeCompile!==plain||skip.has(m)||m.userData.fin)continue;
+   if(m.map){if(o.panels!==false&&!m.roughnessMap&&!m.normalMap&&!m.bumpMap&&!foreign.has(m)&&q.geometry.type==='PlaneGeometry'){const P=q.geometry.parameters;panel(m,{w:256,ratio:P.height/P.width,seed:60+Math.round(P.width*9000+P.height*4000)%50,n:22})}continue}
+   if(m.normalMap||m.bumpMap||m.roughnessMap||m.emissiveMap||m.alphaMap||(m.emissive&&m.emissive.getHex()))continue;
+   if(!q.geometry.boundingBox)q.geometry.computeBoundingBox();const bb=q.geometry.boundingBox,dg=Math.hypot((bb.max.x-bb.min.x)*q.scale.x,(bb.max.y-bb.min.y)*q.scale.y,(bb.max.z-bb.min.z)*q.scale.z);
+   let e=byMat.get(m);if(!e){e={max:0,ms:[]};byMat.set(m,e)}e.max=Math.max(e.max,dg);e.ms.push(q)}
+  for(const [m,e] of byMat){if(e.max<(o.min||.022))continue;const c=m.color,lum=.2126*c.r+.7152*c.g+.0722*c.b;
+   const kind=kinds.get(m)||(m.metalness>=.5?'brush':m.roughness<.35?'gloss':lum<.045?'grain':'paint');if(kind==='none')continue;
+   const t=dress(foreign.has(m)?m.clone():m,kind,o);for(const q of e.ms){q.material=t;q.geometry=metric(q.geometry,q.scale)}}}
+ return {rng,vnoise,scratches,smudges,panel,wear,metric,apply,dress};
+})();
 /* ================= materiales y piezas comunes ================= */
 const COILA=.012,COILB=.0095; // semiancho radial y axial del devanado
 const sockRed=finish(0xb5302a,.42),sockBlue=finish(0x2a55a0,.42),sockYellow=finish(0xd9b61f,.45),sockPE=finish(0xa9c22a,.45),sockWhite=finish(0xeeeeea,.45),nickel=finish(0xc9cdcb,.3,.85);
@@ -418,7 +490,7 @@ function sPlug(par,x,y,z0,col,ang,k){const g=new THREE.Group();g.position.set(x,
  const blk=new THREE.Mesh(sBlock,m);blk.position.z=.0305;blk.rotation.z=a;g.add(blk);
  const o=V3(rx*.0070,ry*.0070,.0335),boot=new THREE.Mesh(sBoot,m);boot.position.copy(o).addScaledVector(d,.0045);boot.quaternion.setFromUnitVectors(V3(0,1,0),d);g.add(boot);
  const hole=new THREE.Mesh(sHole,holeMat);hole.position.z=.0382;g.add(hole);shadow(g);hole.castShadow=false;
- return {g,back:z0+SPL*k,out:()=>({p:g.localToWorld(o.clone().addScaledVector(d,.0095)),n:d.clone().transformDirection(g.matrixWorld)})}}
+ return {g,ang,back:z0+SPL*k,out:()=>({p:g.localToWorld(o.clone().addScaledVector(d,.0095)),n:d.clone().transformDirection(g.matrixWorld)})}}
 const blackAno=finish(0x1d1f23,.45,.55),blackPlastic=finish(0x1c1d20,.5,.03),alu=finish(0xc7cbcd,.36,.88),tubeBlue=finish(0x18246e,.3,.05),caseDark=finish(0x20222f,.5,.08);
 
 /* ================= bobinas de Helmholtz y tubo de haz filiforme ================= */
@@ -552,6 +624,7 @@ function drawPSU2(P){const x=P.ctx,st=S?S[P.sid]:null;x.setTransform(2,0,0,2,0,0
  const [px,py]=P.pilot,on=st&&st.on;x.fillStyle=INK;x.textAlign='center';x.font='13px Arial, sans-serif';x.fillText('Power',px,py-14);
  if(P.rocker){const [u,v,w,h]=P.PW;x.font='bold 14px Arial, sans-serif';x.fillText('I',u+w+9,v+24);x.fillText('O',u+w+10,v+h-12)}
  if(on){x.fillStyle='rgba(88,200,80,.30)';x.beginPath();x.arc(px,py,12,0,7);x.fill()}const lamp=x.createRadialGradient(px-1,py-1,0,px,py,6);lamp.addColorStop(0,on?'#e2ffd0':'#aab3aa');lamp.addColorStop(.5,on?'#4fcf45':'#7c867e');lamp.addColorStop(1,on?'#23802b':'#58615a');x.fillStyle=lamp;x.beginPath();x.arc(px,py,5.5,0,7);x.fill();
+ FIN.wear(x,700,489,950,{n:20,w:.8,socks:Object.values(P.SK).map(q=>[q[0],q[1],20])});
  P.tex.needsUpdate=true}
 // Fuente de las bobinas (modelo de la primera versión): caja con asa, mandos estriados e interruptor basculante en el frente
 function makePSU1(cfg){const P=Object.assign({kind:'psu',v1:true,hitR:86,W:640,H:400,wM:.33,hM:.206},cfg);
@@ -599,6 +672,7 @@ function drawPSU1(P){const x=P.ctx,st=S?S[P.sid]:null;x.setTransform(2,0,0,2,0,0
  for(const k in P.SK){const [u,v,c,,sg]=P.SK[k];x.fillStyle=c==='r'?'#b3261e':c==='b'?'#1f4f9c':'#7a6a00';x.fillText(sg||(c==='r'?'+':c==='b'?'−':'~'),u+(P.sgx||0),v+(P.sgy===undefined?-22:P.sgy))}
  const [px,py,pw,ph]=P.PW;x.fillStyle='#1d2327';x.textAlign='center';x.font='bold 15px Arial, sans-serif';x.fillText('RED',px+pw/2,py+ph+24);x.fillText('I',px+pw+10,py+24);x.fillText('O',px+pw+11,py+ph-12);
  const on=st&&st.on,lamp=x.createRadialGradient(px+pw/2,py-18,0,px+pw/2,py-18,9);lamp.addColorStop(0,on?'#d6ffc0':'#9aa39a');lamp.addColorStop(.5,on?'#58c14a':'#6d776f');lamp.addColorStop(1,on?'#2c7d32':'#49524c');x.fillStyle=lamp;x.beginPath();x.arc(px+pw/2,py-18,8,0,7);x.fill();
+ FIN.wear(x,640,400,970,{n:20,w:.8,socks:Object.values(P.SK).map(q=>[q[0],q[1],24])});
  P.tex.needsUpdate=true}
 function drawPSU(P){return P.v1?drawPSU1(P):drawPSU2(P)}
 
@@ -662,12 +736,38 @@ function route(mesh,eA,eB,W,o={}){const n=W.length,d0=o.d0||unit(W[0],W[1]),d1=o
 // Puente corto entre dos clavijas vecinas: un lazo que cuelga hacia delante y se apoya en la mesa.
 function jumper(mesh,eA,eB,L=.07,w=.014){const a=eA.p,b=eB.p,s=V3(b.x-a.x,0,b.z-a.z).normalize();
  setTube(mesh,[a.clone().addScaledVector(eA.n,-.004),a.clone(),...B3(a,a.clone().addScaledVector(eA.n,L).addScaledVector(s,-w),b.clone().addScaledVector(eB.n,L).addScaledVector(s,w),b,16),b.clone().addScaledVector(eB.n,-.004)])}
+// En el móvil en vertical el montaje se coloca en columna: las dos fuentes van detrás, más juntas, y todo se ve mayor.
+// La fuente del tubo queda detrás y a la derecha del capuchón, para que sus cables le lleguen por la izquierda, igual que en la disposición ancha.
+const COLM=()=>matchMedia('(max-width:820px) and (orientation:portrait)').matches;let COL=null;
+const CP={L:[-.40,-1.02],R:[.60,-1.02]},TBA={W:5,K:20,H1:35,H2:25,A:45}; // sitio de las fuentes y giro de las clavijas del capuchón, que ahora miran hacia atrás
+function arrange(){const c=COLM();if(c===COL)return false;COL=c;PL.root.position.set(c?CP.L[0]:-.72,0,c?CP.L[1]:-.30);PR.root.position.set(c?CP.R[0]:.70,0,c?CP.R[1]:-.30);
+ for(const k in TUBE.pl)TUBE.pl[k].g.rotation.z=c&&TBA[k]!==undefined?(TBA[k]-TUBE.pl[k].ang)*Math.PI/180:0;
+ fixedCables();R3.shadowMap.needsUpdate=true;return true}
+function columnCables(){const [lx,lz]=CP.L,[px,pz]=CP.R;
+ // Bobinas: el cable del + baja por la izquierda hasta el amperímetro y el de retorno llega a la fuente desde la bobina trasera.
+ route(CB.c1,PL.jack('p'),AMM.jack('10A'),[[lx-.08,lz+.14],[lx-.115,lz+.30],[lx-.125,lz+.60],[-.515,-.02],[-.49,.25],[-.468,.325],[-.428,.388],[-.3816,.34]],{d1:[0,-1],b1:.07,b2:.075});
+ route(CB.c4,COIL.B.jack(-1),PL.jack('n'),[[-.118,-.615],[-.20,-.65],[lx+.07,lz+.16],[lx-.035,lz+.11]],{d0:[0,-1],a1:.035,a2:.03,d1:[-.8,-.6],b1:.04,b2:.045});
+ // Tubo → fuente: cada cable cuelga del capuchón, corre hacia atrás, dobla hacia la derecha por delante de la fuente y llega a su clavija por un carril propio.
+ // Los cinco doblan en arcos concéntricos (centro CX, CZ), separados 18 mm, sin cruzarse.
+ const CX=px-.11,CZ=pz+.257,T=(k,e,r,xd,zt,L,d1,o)=>{const W=[[xd,zt],[xd,-.54],[CX-r+.006,CZ+.05]];for(const a of[0,22.5,45,67.5,90]){const f=a*Math.PI/180;W.push([CX-r*Math.cos(f),CZ-r*Math.sin(f)])}W.push([px+L[0],pz+L[1]]);
+  route(CB[k],TUBE.jack(e),EJ[e].out(),W,Object.assign({d0:[0,-1],a1:.05,a2:.07,d1,b2:.05},o))};
+ T('w','W',.127,.462,-.400,[-.088,.127],[1,-.2],{b2:.03});
+ T('a','A',.109,.480,-.490,[-.066,.149],[1,0]);
+ T('k','K',.091,.498,-.450,[-.005,.166],[1,0],{b2:.04});
+ T('h2','H2',.073,.516,-.470,[.055,.184],[1,0]);
+ T('h1','H1',.055,.534,-.430,[.068,.202],[1,0]);
+ // Voltímetro: sus cables pasan por encima de los del cátodo y del caldeo y bajan por la derecha hasta el polímetro.
+ const o={lift:[pz+.150,pz+.212,.0080],a2:.05,d1:[0,-1],b1:.07,b2:.075};
+ route(CB.vr,EJ.Vr.out(),VOLT.jack('V'),[[px-.005,pz+.27],[px-.002,pz+.50],[px-.01,pz+.75],[.535,.10],[.478,.24],[.468,.315],[.428,.385],[.3816,.34]],o);
+ route(CB.vb,EJ.Vb.out(),VOLT.jack('COM'),[[px+.025,pz+.295],[px+.03,pz+.52],[px+.025,pz+.78],[.585,.11],[.515,.27],[.498,.36],[.41,.428],[.335,.40],[.2995,.345]],o);
+}
 function fixedCables(){SC.updateMatrixWorld(true);
  // Bobinas, en serie con el amperímetro: + de la fuente → amperímetro → bobina delantera → (puente) → bobina trasera → − de la fuente.
  // En los polímetros la clavija apunta hacia delante: el cable baja a la mesa por delante del aparato y allí da la vuelta.
- route(CB.c1,PL.jack('p'),AMM.jack('10A'),[[-.80,-.16],[-.755,-.03],[-.60,.12],[-.49,.25],[-.468,.325],[-.428,.388],[-.3816,.34]],{d1:[0,-1],b1:.07,b2:.075});
  route(CB.c2,AMM.jack('COM'),COIL.F.jack(-1),[[-.2995,.34],[-.248,.388],[-.20,.325],[-.186,.16],[-.16,.0],[-.118,-.085]],{d0:[0,1],a1:.07,a2:.075,d1:[0,-1],b1:.035,b2:.03});
  route(CB.c3,COIL.F.jack(1),COIL.B.jack(1),[[.118,-.085],[.20,-.065],[.262,-.16],[.276,-.35],[.262,-.54],[.20,-.635],[.118,-.615]],{d0:[0,1],a1:.035,a2:.03,d1:[0,1],b1:.035,b2:.03});
+ if(COL)columnCables();else{
+ route(CB.c1,PL.jack('p'),AMM.jack('10A'),[[-.80,-.16],[-.755,-.03],[-.60,.12],[-.49,.25],[-.468,.325],[-.428,.388],[-.3816,.34]],{d1:[0,-1],b1:.07,b2:.075});
  route(CB.c4,COIL.B.jack(-1),PL.jack('n'),[[-.118,-.615],[-.20,-.645],[-.32,-.61],[-.41,-.47],[-.47,-.30],[-.545,-.205],[-.67,-.175],[-.755,-.19]],{d0:[0,-1],a1:.035,a2:.03,d1:[-.8,-.6],b1:.04,b2:.045});
  // Tubo → fuente. Cada cable cuelga del capuchón, corre por la mesa junto a la fuente, dobla su esquina y llega a su clavija por un carril propio, en paralelo con los demás.
  // Los cinco doblan la esquina de la fuente en arcos concéntricos (centro CX, CZ), separados 18 mm.
@@ -681,6 +781,7 @@ function fixedCables(){SC.updateMatrixWorld(true);
  // Voltímetro: entre el + y el − de 0…300 V, con sus clavijas encima de las otras. Sus cables pasan por encima de los del cátodo y del caldeo.
  route(CB.vr,EJ.Vr.out(),VOLT.jack('V'),[[.615,-.03],[.535,.10],[.478,.24],[.468,.315],[.428,.385],[.3816,.34]],{lift:[-.150,-.088,.0080],a2:.05,d1:[0,-1],b1:.07,b2:.075});
  route(CB.vb,EJ.Vb.out(),VOLT.jack('COM'),[[.672,-.005],[.60,.11],[.515,.27],[.498,.36],[.41,.428],[.335,.40],[.2995,.345]],{lift:[-.150,-.088,.0080],a2:.05,d1:[0,-1],b1:.07,b2:.075});
+ }
  // Puentes: + de 0…50 V con − de 0…300 V, y − de 0…300 V con tierra. Ese punto común es el cero del tubo (cátodo).
  jumper(CB.j,EJ.Ja.out(),EJ.Jb.out());jumper(CB.l,EJ.La.out(),EJ.Lb.out());
 }
@@ -693,13 +794,13 @@ function buildFld(){if(FM.ok)return;FM.ok=true;const R=RB,seg=72,TEAL=new THREE.
  // campo de las dos espiras (Biot y Savart, sumando tramos); corriente en sentido antihorario vista desde delante → B hacia delante
  const Bf=(rho,z)=>{let br=0,bz=0;for(const z0 of[-R/2,R/2])for(let i=0;i<seg;i++){const f=(i+.5)/seg*2*Math.PI,c=Math.cos(f),s=Math.sin(f),dx=rho-R*c,dy=R*s,dz=z-z0,r3=Math.pow(dx*dx+dy*dy+dz*dz,1.5);br+=R*c*dz/r3;bz+=(R*R-R*rho*c)/r3}return [br,bz]};
  const line=rho0=>{const half=dir=>{const P=[];let r=rho0,z=0;for(let i=0;i<300;i++){const h=.006*dir,[a,b]=Bf(r,z),m=Math.hypot(a,b)||1,[a2,b2]=Bf(r+a/m*h/2,z+b/m*h/2),m2=Math.hypot(a2,b2)||1;r+=a2/m2*h;z+=b2/m2*h;if(Math.abs(z)>.262||r>.30||r<0)break;P.push([r,z])}return P};return [...half(-1).reverse(),[rho0,0],...half(1)]};
- FM.dash=canvasTex(256,8,(x,w,h)=>{x.clearRect(0,0,w,h);for(let i=0;i<w;i++){const t=i/w,a=t<.86?.20+.80*Math.pow(t/.86,2.2):.20+.80*(1-(t-.86)/.14);x.fillStyle='rgba(255,255,255,'+a.toFixed(3)+')';x.fillRect(i,0,1,h)}});FM.dash.wrapS=THREE.RepeatWrapping;
- FM.lineM=new THREE.MeshBasicMaterial({map:FM.dash,color:TEAL,transparent:true,depthWrite:false,toneMapped:false});FM.headM=new THREE.MeshBasicMaterial({color:TEAL,transparent:true,depthWrite:false,toneMapped:false});
+ // líneas continuas y quietas: el campo es estático y por sus líneas no circula nada; las puntas, fijas, solo marcan el sentido
+ FM.lineM=new THREE.MeshBasicMaterial({color:TEAL,transparent:true,depthWrite:false,toneMapped:false});FM.headM=new THREE.MeshBasicMaterial({color:TEAL,transparent:true,depthWrite:false,toneMapped:false});
  const cone=new THREE.ConeGeometry(.0038,.013,14);
  for(const [rho,azs] of[[0,[0]],[.055,[30,90,150,210,270,330]],[.11,[22.5,67.5,112.5,157.5,202.5,247.5,292.5,337.5]]]){const L=line(rho);
-  for(const az of azs){const f=az*Math.PI/180,P=L.map(([r,z])=>V3(r*Math.cos(f),r*Math.sin(f),z)),cv=new THREE.CatmullRomCurve3(P),g=new THREE.TubeGeometry(cv,P.length*2,.0013,6,false),uv=g.attributes.uv,k=cv.getLength()/.075;for(let i=0;i<uv.count;i++)uv.setX(i,uv.getX(i)*k);
+  for(const az of azs){const f=az*Math.PI/180,P=L.map(([r,z])=>V3(r*Math.cos(f),r*Math.sin(f),z)),cv=new THREE.CatmullRomCurve3(P),g=new THREE.TubeGeometry(cv,P.length*2,.0013,6,false);
    const m=new THREE.Mesh(g,FM.lineM);m.renderOrder=2.5;FLD.add(m);
-   const t=cv.getTangent(1),c=new THREE.Mesh(cone,FM.headM);c.position.copy(P[P.length-1]).addScaledVector(t,.006);c.quaternion.setFromUnitVectors(V3(0,1,0),t);c.renderOrder=2.5;FLD.add(c)}}
+   for(const u of[.24,.74,1]){const t=cv.getTangentAt(u),c=new THREE.Mesh(cone,FM.headM);c.position.copy(cv.getPointAt(u));if(u===1)c.position.addScaledVector(t,.006);c.quaternion.setFromUnitVectors(V3(0,1,0),t);c.renderOrder=2.5;FLD.add(c)}}}
  // corriente: flechas finas y quietas, repartidas a lo largo del devanado en sus cuatro caras (canto exterior, canto interior, cara delantera y cara trasera)
  FM.flow=canvasTex(384,64,(x,w,h)=>{x.clearRect(0,0,w,h);x.strokeStyle=x.fillStyle='#fff';x.lineCap='round';x.lineWidth=5;x.beginPath();x.moveTo(.20*w,h/2);x.lineTo(.64*w,h/2);x.stroke();x.beginPath();x.moveTo(.61*w,h/2-15);x.lineTo(.80*w,h/2);x.lineTo(.61*w,h/2+15);x.quadraticCurveTo(.655*w,h/2,.61*w,h/2-15);x.fill()});FM.flow.wrapS=THREE.RepeatWrapping;
  FM.flowM=new THREE.MeshBasicMaterial({map:FM.flow,color:new THREE.Color(0xffe9a6).convertSRGBToLinear(),transparent:true,depthWrite:false,toneMapped:false,side:THREE.DoubleSide});
@@ -709,8 +810,8 @@ function buildFld(){if(FM.ok)return;FM.ok=true;const R=RB,seg=72,TEAL=new THREE.
  // rótulos
  const tag=(t,col,x,y,z)=>{const tx=canvasTex(128,128,(c,w,h)=>{c.clearRect(0,0,w,h);c.fillStyle=col;c.font='italic bold 96px Georgia, "Times New Roman", serif';c.textAlign='center';c.fillText(t,w/2,96)}),s=new THREE.Sprite(new THREE.SpriteMaterial({map:tx,transparent:true,depthWrite:false,toneMapped:false}));s.scale.set(.05,.05,1);s.position.set(x,y,z);s.renderOrder=7;FLD.add(s)};
  tag('B','#078a99',.026,.026,.272);tag('I','#c98a00',R*.80,R*.80,R/2+.03)}
-function syncFld(){const I=solve().I,show=fldOn&&I>.02;if(show)buildFld();FLD.visible=show;$('#fldNote').hidden=!(fldOn&&!show);
- if(show){const o=.40+.60*Math.min(1,I/2.5);FM.lineM.opacity=o*.9;FM.headM.opacity=o;FM.flowM.opacity=.62+.25*Math.min(1,I/2.5)}}
+function syncFld(){const I=solve().I,show=fldOn&&I>.02;if(show)buildFld();FLD.visible=show;
+ if(show){const o=.40+.60*Math.min(1,I/2.5);FM.lineM.opacity=o*.62;FM.headM.opacity=o;FM.flowM.opacity=.62+.25*Math.min(1,I/2.5)}}
 function setFld(on){fldOn=on;const b=$('#fldBtn');b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);syncFld();invalidate()}
 
 /* ================= estado ================= */
@@ -762,21 +863,30 @@ function measure(force){const r=solve();
  const a=drawDMM(AMM,force),b=drawDMM(VOLT,force);if(a||b||force)invalidate();lastMeas=performance.now()}
 
 /* ================= cámara ================= */
-const PM=()=>matchMedia('(max-width:820px)').matches;
-const V0=()=>({az:0,el:.47});
+const PM=()=>matchMedia('(max-width:820px),(max-height:520px)').matches;
+const V0=()=>({az:0,el:COL?.6:.47});
 let az,el,dist;const TG=V3();
 const BB=[];for(const sx of[-1,1]){BB.push(V3(sx*.275,.575,-.225),V3(sx*.28,.03,-.20),V3(sx*.905,0,-.58),V3(sx*.905,.31,-.45),V3(sx*.905,0,-.16),V3(sx*.50,0,ZD+.25),V3(sx*.51,0,ZD+.30))}BB.push(V3(0,.575,-.225));
+/* móvil: los botones tapan más parte de la escena; el límite superior sale de su altura real y el hueco que sobra se reparte entre los botones y el borde inferior */
+function topLim(base){if(!PM())return base;const r=box.getBoundingClientRect(),b=document.querySelector('.fbtn.tog').getBoundingClientRect();return r.height?Math.min(base,1-2*(b.bottom-r.top+9)/r.height):.77}
+function balance(best,v,top,pts){let bm=-9,bs=0;const c=V3(),d=best.dist,up=V3(-Math.sin(v.el)*Math.sin(v.az),Math.cos(v.el),-Math.sin(v.el)*Math.cos(v.az)); // la mira se desplaza en vertical sobre la pantalla, sin acercar ni alejar
+ for(let k=-80;k<=80;k++){c.copy(best.tg).addScaledVector(up,k*.004);CAM.position.set(c.x+d*Math.cos(v.el)*Math.sin(v.az),c.y+d*Math.sin(v.el),c.z+d*Math.cos(v.el)*Math.cos(v.az));CAM.lookAt(c);CAM.updateMatrixWorld();
+  let hi=-9,lo=9,wide=0;for(const q of pts){const n=q.clone().project(CAM);hi=Math.max(hi,n.y);lo=Math.min(lo,n.y);wide=Math.max(wide,Math.abs(n.x))}
+  const m=Math.min(top-hi,lo+.95);if(wide<.985&&m>bm){bm=m;bs=k*.004}}
+ best.tg=best.tg.clone().addScaledVector(up,bs);return best}
+const BBM=[];{const b=new THREE.Box3().setFromObject(APP),zb=ZC-GS*RB/2;BBM.push(V3(0,b.max.y+.005,zb),V3(-.14,b.max.y-.035,zb),V3(.14,b.max.y-.035,zb))} // en el móvil cuenta también el borde de la bobina trasera, que queda más alto en pantalla
+const BBC=[];for(const sx of[-1,1]){BBC.push(V3(sx*.275,.575,-.225),V3(sx*.28,.03,-.20),V3(sx*.47,.36,-.35),V3(sx*.50,0,ZD+.25),V3(sx*.51,0,ZD+.30))}BBC.push(V3(0,.58,-.475),V3(-.60,0,-1.32),V3(-.60,.33,-1.28),V3(.76,0,-1.32),V3(.76,.31,-1.28),V3(-.60,0,-.3),V3(.76,0,-.8),V3(.68,0,-.2));
 function fitV0(){ // encuadre de partida: el punto de mira y la distancia que más acercan el montaje sin recortarlo
- const v=V0(),top=PM()?.77:.875;let best=null;
- for(let cz=-.45;cz<=.10;cz+=.015){const c=V3(0,.16,cz);let lo=.5,hi=7;
+ const v=V0(),top=topLim(.875),PTS=COL?BBC:(PM()?BB.concat(BBM):BB);let best=null;
+ for(let cz=-.45;cz<=.10;cz+=.015){const c=V3(COL?.08:0,.16,cz);let lo=.5,hi=7;
   const ok=d=>{const p=V3(c.x+d*Math.cos(v.el)*Math.sin(v.az),c.y+d*Math.sin(v.el),c.z+d*Math.cos(v.el)*Math.cos(v.az));CAM.position.copy(p);CAM.lookAt(c);CAM.updateMatrixWorld();
-   return BB.every(q=>{const n=q.clone().project(CAM);return Math.abs(n.x)<.97&&n.y<top&&n.y>-.95})};
+   return PTS.every(q=>{const n=q.clone().project(CAM);return Math.abs(n.x)<.97&&n.y<top&&n.y>-.95})};
   for(let i=0;i<26;i++){const m=(lo+hi)/2;ok(m)?hi=m:lo=m}if(!best||hi<best.dist)best={az:v.az,el:v.el,dist:hi,tg:c}}
- return best}
+ return PM()?balance(best,v,top,PTS):best}
 function camReset(){const v=fitV0();az=v.az;el=v.el;dist=v.dist;TG.copy(v.tg)}
 function camSet(){CAM.position.set(TG.x+dist*Math.cos(el)*Math.sin(az),TG.y+dist*Math.sin(el),TG.z+dist*Math.cos(el)*Math.cos(az));CAM.lookAt(TG)}
 function size(){const w=box.clientWidth,h=box.clientHeight;if(!w||!h)return;const ratio=Math.min(window.devicePixelRatio||1,2,Math.sqrt(1750000/(w*h)));if(R3.getPixelRatio()!==ratio)R3.setPixelRatio(ratio);R3.setSize(w,h,false);CAM.aspect=w/h;CAM.updateProjectionMatrix();invalidate()}
-let touched=false;new ResizeObserver(()=>{size();if(!touched&&CAM.aspect)camReset()}).observe(box);
+let touched=false;new ResizeObserver(()=>{size();if(arrange())touched=false;if(!touched&&CAM.aspect)camReset()}).observe(box);
 function pan(dx,dy){const k=2*dist*Math.tan(CAM.fov*Math.PI/360)/box.clientHeight,ca=Math.cos(az),sa=Math.sin(az),ce=Math.cos(el),se=Math.sin(el);
  TG.x+=k*(-dx*ca-dy*se*sa);TG.y+=k*dy*ce;TG.z+=k*(dx*sa-dy*se*ca);TG.x=Math.max(-1.4,Math.min(1.4,TG.x));TG.y=Math.max(-.2,Math.min(.8,TG.y));TG.z=Math.max(-1.3,Math.min(.9,TG.z));invalidate()}
 function zAt(cx,cy,f){const b=box.getBoundingClientRect();camSet();CAM.updateMatrixWorld();const v=TG.clone().project(CAM);const sx=cx-b.left-(v.x+1)/2*box.clientWidth,sy=cy-b.top-(1-v.y)/2*box.clientHeight;pan(-(1-f)*sx,-(1-f)*sy)}
@@ -854,16 +964,14 @@ function loop(now){frame=0;if(document.hidden)return;const dt=Math.min(.3,(now-(
  if(fly){const u=ease(Math.min(1,(now-fly.t0)/fly.dur));az=fly.a.az+(((fly.b.az-fly.a.az)%(2*Math.PI)+3*Math.PI)%(2*Math.PI)-Math.PI)*u;el=fly.a.el+(fly.b.el-fly.a.el)*u;dist=fly.a.dist+(fly.b.dist-fly.a.dist)*u;TG.copy(fly.a.tg).lerp(fly.b.tg,u);if(u>=1)fly=null;invalidate()}
  // el cátodo tarda un par de segundos en calentarse y en enfriarse
  const hT=S.R.on?1:0,warming=heat!==hT;if(warming){heat=hT>heat?Math.min(1,heat+dt/2.2):Math.max(0,heat-dt/1.2);updateBeam();invalidate()}
- const flow=fldOn&&FLD.visible;if(flow){const I=solve().I,v=.35+.5*Math.min(1,I/2.5);FM.dash.offset.x-=dt*v*1.6;invalidate()} // las líneas de campo «fluyen» en su sentido; las flechas de corriente están quietas
  if((AMM.on||VOLT.on)&&now-lastMeas>650)measure();
  if(dirty){camSet();CAM.updateMatrixWorld();R3.render(SC,CAM);dirty=false}
- if(fly||warming||flow){if(!frame)frame=requestAnimationFrame(loop)}
+ if(fly||warming){if(!frame)frame=requestAnimationFrame(loop)}
  else{tPrev=0;if((AMM.on||VOLT.on)&&!poll){poll=setTimeout(()=>{poll=0;if(!document.hidden&&!frame)frame=requestAnimationFrame(loop)},Math.max(12,651-(performance.now()-lastMeas)))}}
 }
 document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(poll);poll=0;if(frame)cancelAnimationFrame(frame);frame=0;tPrev=0}else invalidate()});
 
 /* ================= interfaz ================= */
-$('#gbtn').onclick=()=>{const h=document.body.classList.toggle('noside');$('#gbtn').textContent=h?'Mostrar guía':'Ocultar guía'};
 $('#fldBtn').onclick=()=>setFld(!fldOn);
 $('#vwBtn').onclick=()=>{const v=fitV0();zb=null;flyTo(v.tg,v.dist,v.az,v.el);touched=false};
 $('#rstBtn').onclick=()=>{$('#dlg').hidden=false};$('#dlgNo').onclick=()=>{$('#dlg').hidden=true};
@@ -871,7 +979,24 @@ $('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg')$('#dlg').hidden=t
 document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#dlg').hidden=true});
 $('#dlgYes').onclick=()=>{$('#dlg').hidden=true;S=initState();heat=1;applyState();setFld(false)};
 try{document.querySelectorAll('.eq[data-tex]').forEach(e=>katex.render(e.dataset.tex,e,{displayMode:true,throwOnError:false}))}catch(e){}
-fixedCables();size();camReset();applyState();invalidate();
+// acabados: pintura con relieve, metal cepillado, grano del plástico y roces (los polímetros ya tienen los suyos)
+for(const P of[PL,PR])FIN.panel(P.face.material,{w:640,ratio:P.H/P.W,seed:P===PL?95:97,socks:Object.values(P.SK).map(q=>[q[0]/P.W,q[1]/P.H,.04])});
+FIN.apply([APP,PL.root,PR.root],{exclude:[IN,FLD],foreign:[AMM.root,VOLT.root],skip:[...Object.values(plugMat),...Object.values(cabMat)]});
+/* ================= móvil: mandos compactos bajo la escena ================= */
+/* En el móvil cuesta girar los mandos con el dedo: bajo la escena hay un deslizador por mando y un desplegable por selector de polímetro. No muestran valores, que se leen en los aparatos. */
+const MC=[],mcBox=$('#mctl');
+function mcRow(){const r=document.createElement('div');r.className='mrow';mcBox.appendChild(r);return r}
+function mcSlider(label,min,max,step,fine,get,set){const l=document.createElement('div'),s=document.createElement('span'),i=document.createElement('input'),bt=(t,k)=>{const b=document.createElement('button');b.type='button';b.className='mst';b.textContent=t;b.setAttribute('aria-label',(k<0?'Bajar ':'Subir ')+label.replace(/<[^>]*>/g,''));b.onclick=()=>set(Math.max(min,Math.min(max,get()+k*fine)));return b};
+ l.className='msl';s.innerHTML=label;i.type='range';i.min=min;i.max=max;i.step=step;i.setAttribute('aria-label',label.replace(/<[^>]*>/g,''));l.append(s,bt('−',-1),i,bt('+',1));mcRow().appendChild(l);
+ i.oninput=()=>set(+i.value);MC.push(()=>{const v=get();if(Math.abs(+i.value-v)>step*.51)i.value=v})}
+function mcDials(list){const row=mcRow();for(const [label,m] of list){const l=document.createElement('label'),s=document.createElement('span'),e=document.createElement('select');l.className='msel';s.textContent=label;
+  for(const p of DIAL.pos){const o=document.createElement('option');o.value=p.id;o.textContent=p.sym+(p.fn[0]==='D'?' ⎓ ':' ')+p.lab;e.appendChild(o)}
+  l.append(s,e);row.appendChild(l);e.onchange=()=>setDial(m,e.value);MC.push(()=>{if(e.value!==m.dial)e.value=m.dial})}}
+function mcSync(){for(const f of MC)f()}
+{const m0=measure;measure=function(f){m0(f);mcSync()}}
+$('#gbtn').onclick=()=>{if(PM()){document.documentElement.style.setProperty('--gtop',$('header').getBoundingClientRect().bottom+'px');document.body.classList.toggle('guide');return}const h=document.body.classList.toggle('noside');$('#gbtn').innerHTML='<span>'+(h?'Mostrar':'Ocultar')+' </span>guía'};
+mcSlider('<i>I</i> bobinas',0,PL.K[1].max,.01,.01,()=>S.L.u[1],v=>setSup(PL,1,v));mcSlider('<i>V</i> aceleración',0,PR.K[2].max,.5,.5,()=>S.R.u[2],v=>setSup(PR,2,v));mcDials([['Amperímetro',AMM],['Voltímetro',VOLT]]);
+arrange();size();camReset();applyState();invalidate();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{drawPSU(PL);drawPSU(PR);measure(true);invalidate()});
 window.__em={DIAL,CB,SC,APP,IN,TUBE,BEAM,COIL,scr:(inst,u,v)=>{const[lx,ly]=inst.L(u,v),w=inst.fr.localToWorld(V3(lx,ly,0)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},
  S:()=>S,solve,PL,PR,AMM,VOLT,setSup,setDial,measure,camState:()=>({az,el,dist,TG}),flyTo,gB,gA,gV,beamPath,setHeat:h=>{heat=h;updateBeam();invalidate()},EJ,FLD:()=>FLD,setFld};
