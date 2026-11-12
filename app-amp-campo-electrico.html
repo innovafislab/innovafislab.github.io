@@ -475,7 +475,9 @@ const FIN=(()=>{
    let e=byMat.get(m);if(!e){e={max:0,ms:[]};byMat.set(m,e)}e.max=Math.max(e.max,dg);e.ms.push(q)}
   for(const [m,e] of byMat){if(e.max<(o.min||.022))continue;const c=m.color,lum=.2126*c.r+.7152*c.g+.0722*c.b;
    const kind=kinds.get(m)||(m.metalness>=.5?'brush':m.roughness<.35?'gloss':lum<.045?'grain':'paint');if(kind==='none')continue;
-   const t=dress(foreign.has(m)?m.clone():m,kind,o);for(const q of e.ms){q.material=t;q.geometry=metric(q.geometry,q.scale)}}}
+   const t=dress(foreign.has(m)?m.clone():m,kind,o);for(const q of e.ms){q.material=t;q.geometry=metric(q.geometry,q.scale)}}
+  /* vistos casi de canto, la pintura y el plástico reflejaban el entorno claro y se volvían blanquecinos: se rebaja ese reflejo en todo lo que no es metal ni vidrio */
+  const calm=()=>{if(typeof SC!=='undefined')SC.traverse(q=>{const m=q.isMesh&&q.material;if(m&&m.isMeshStandardMaterial&&!m.transparent&&!(m.transmission>0)&&m.metalness<.4&&!m.userData.calm){m.userData.calm=1;m.envMapIntensity*=.4}})};calm();setTimeout(()=>{calm();if(typeof invalidate==='function')invalidate()},0)}
  return {rng,vnoise,scratches,smudges,panel,wear,metric,apply,dress};
 })();
 
@@ -896,7 +898,7 @@ try{document.querySelectorAll('.eq[data-tex]').forEach(e=>katex.render(e.dataset
 // acabados: pintura con relieve, metal cepillado, grano del plástico y roces (los polímetros ya tienen los suyos)
 FIN.panel(SUP.face.material,{w:640,ratio:400/640,seed:91,socks:Object.values(SUP.SK).map(q=>[q[0]/SUP.W,q[1]/SUP.H,.05])});
 FIN.panel(FM.face.material,{seed:93,socks:Object.values(FM.SKP).map(q=>[q[0]/FM.W,q[1]/FM.H,.07])});
-FIN.apply([BG,SUP.root],{exclude:[EF],foreign:[DV.root,DE.root],skip:[...Object.values(plugMat),...Object.values(cabMat)],kinds:new Map([[whitePVC,'gloss']])});
+FIN.apply([BG,SUP.root],{exclude:[EF,...RULE.strips],foreign:[DV.root,DE.root],skip:[...Object.values(plugMat),...Object.values(cabMat)],kinds:new Map([[whitePVC,'gloss']])});
 /* ================= móvil: mandos compactos bajo la escena ================= */
 /* En el móvil cuesta girar los mandos con el dedo: bajo la escena hay un deslizador por mando y un desplegable por selector de polímetro. No muestran valores, que se leen en los aparatos. */
 const MC=[],mcBox=$('#mctl');

@@ -474,7 +474,9 @@ const FIN=(()=>{
    let e=byMat.get(m);if(!e){e={max:0,ms:[]};byMat.set(m,e)}e.max=Math.max(e.max,dg);e.ms.push(q)}
   for(const [m,e] of byMat){if(e.max<(o.min||.022))continue;const c=m.color,lum=.2126*c.r+.7152*c.g+.0722*c.b;
    const kind=kinds.get(m)||(m.metalness>=.5?'brush':m.roughness<.35?'gloss':lum<.045?'grain':'paint');if(kind==='none')continue;
-   const t=dress(foreign.has(m)?m.clone():m,kind,o);for(const q of e.ms){q.material=t;q.geometry=metric(q.geometry,q.scale)}}}
+   const t=dress(foreign.has(m)?m.clone():m,kind,o);for(const q of e.ms){q.material=t;q.geometry=metric(q.geometry,q.scale)}}
+  /* vistos casi de canto, la pintura y el plástico reflejaban el entorno claro y se volvían blanquecinos: se rebaja ese reflejo en todo lo que no es metal ni vidrio */
+  const calm=()=>{if(typeof SC!=='undefined')SC.traverse(q=>{const m=q.isMesh&&q.material;if(m&&m.isMeshStandardMaterial&&!m.transparent&&!(m.transmission>0)&&m.metalness<.4&&!m.userData.calm){m.userData.calm=1;m.envMapIntensity*=.4}})};calm();setTimeout(()=>{calm();if(typeof invalidate==='function')invalidate()},0)}
  return {rng,vnoise,scratches,smudges,panel,wear,metric,apply,dress};
 })();
 /* ================= materiales y piezas comunes ================= */
@@ -594,9 +596,9 @@ function drawPSU1(P){const x=P.ctx,st=S?S[P.sid]:null;x.setTransform(2,0,0,2,0,0
  P.tex.needsUpdate=true}
 function drawPSU(P){return P.v1?drawPSU1(P):drawPSU2(P)}
 /* ================= campo magnético de una bobina: bobina, rejilla, teslámetro y sonda ================= */
-// Sistema de la práctica: z a lo largo del eje de la bobina (hacia la izquierda de la escena) y ρ perpendicular a él, hacia quien mira. Origen en el centro de la bobina.
-const XC=.14,ZC=-.08,RC=.20,YC=.262,NV=100,ZMAX=20,RMAX=24; // centro de la bobina y altura de su eje, radio medio, vueltas; extensión de la rejilla en cm
-const LZ=z=>XC-z,LR=r=>ZC+r; // de (z, ρ) en metros a coordenadas de la escena
+// Sistema de la práctica: z a lo largo del eje de la bobina (hacia la izquierda de la escena) y ρ perpendicular a él, alejándose de quien mira: así la sonda atravesada queda por detrás de la rejilla y mide Bρ con su signo. Origen en el centro de la bobina.
+const XC=.14,ZC=-.02,RC=.20,YC=.262,NV=100,ZMAX=20,RMAX=24; // centro de la bobina y altura de su eje, radio medio, vueltas; extensión de la rejilla en cm
+const LZ=z=>XC-z,LR=r=>ZC-r; // de (z, ρ) en metros a coordenadas de la escena
 const WR=.009,WA=.011; // semiancho radial y axial del devanado
 const COIL=new THREE.Group();COIL.position.set(XC,0,ZC);SC.add(COIL);
 {const turns=canvasTex(8,128,(c,w,h)=>{for(let i=0;i<h;i++){const t=(i%8)/8,k=.80+.20*Math.sin(t*Math.PI);c.fillStyle='rgb('+Math.round(214*k)+','+Math.round(74*k)+','+Math.round(44*k)+')';c.fillRect(0,i,w,1)}});turns.wrapS=turns.wrapT=THREE.RepeatWrapping;turns.repeat.set(1,3);
@@ -618,21 +620,20 @@ COIL.jack=k=>{const sk=COIL.userData.sk,a=k==='a'?.021:-.021;return {p:sk.localT
 COIL.plug=(k,c)=>plugAt(COIL.userData.sk,k==='a'?.021:-.021,0,c);
 
 // Rejilla proyectada en la mesa, bajo el plano horizontal que pasa por el eje: una línea por centímetro
-const GRID=(()=>{const PX=64,M0=3.4,M1=1.6,MF=5.6,W=(ZMAX+M0+M1),H=(RMAX+M1+MF),cw=Math.round(W*PX),ch=Math.round(H*PX),U=z=>(ZMAX+M0-z)*PX,Vv=r=>(r+M1)*PX;
+const GRID=(()=>{const PX=64,M0=6.4,M1=1.3,MT=1.3,MB=7.0,W=(ZMAX+M0+M1),H=(RMAX+MT+MB),cw=Math.round(W*PX),ch=Math.round(H*PX),U=z=>(ZMAX+M0-z)*PX,Vv=r=>(RMAX-r+MT)*PX; // el eje (ρ = 0), en el borde de delante
  const t=canvasTex(cw,ch,(c)=>{c.clearRect(0,0,cw,ch);const INK='#35404c';c.strokeStyle=INK;c.fillStyle=INK;c.lineCap='butt';
   for(let z=0;z<=ZMAX;z++){c.globalAlpha=z%5===0?.85:.42;c.lineWidth=z%5===0?3.6:1.7;c.beginPath();c.moveTo(U(z),Vv(0));c.lineTo(U(z),Vv(RMAX));c.stroke()}
   for(let r=0;r<=RMAX;r++){c.globalAlpha=r===0?1:r%5===0?.85:.42;c.lineWidth=r===0?5.5:r%5===0?3.6:1.7;c.beginPath();c.moveTo(U(ZMAX),Vv(r));c.lineTo(U(0),Vv(r));c.stroke()}
   // puntos en los que pide medir la ficha: en el eje, cada centímetro; para dibujar el campo, uno cada 5 cm
   c.globalAlpha=1;for(let z=0;z<=ZMAX;z++){c.fillStyle='#1d5fa8';c.beginPath();c.arc(U(z),Vv(0),z%5===0?13:9,0,7);c.fill()}
   for(let z=0;z<=ZMAX;z+=5)for(let r=5;r<=RMAX;r+=5){if(r===20&&z===0)continue;c.fillStyle='#fff';c.strokeStyle='#1d5fa8';c.lineWidth=5;c.beginPath();c.arc(U(z),Vv(r),11,0,7);c.fill();c.stroke()}
-  c.fillStyle=INK;c.strokeStyle=INK;c.textAlign='center';c.font='bold 62px Arial, sans-serif';for(let z=0;z<=ZMAX;z+=5)c.fillText(String(z),U(z),Vv(RMAX)+82);
-  c.font='bold 40px Arial, sans-serif';c.globalAlpha=.8;for(let z=0;z<=ZMAX;z++)if(z%5)c.fillText(String(z),U(z),Vv(RMAX)+66);c.globalAlpha=1;
-  c.font='italic bold 76px Georgia, "Times New Roman", serif';c.fillText('z',U(ZMAX/2)-92,Vv(RMAX)+196);c.font='bold 62px Arial, sans-serif';c.fillText('(cm)',U(ZMAX/2)+34,Vv(RMAX)+196);
-  c.textAlign='right';c.font='bold 62px Arial, sans-serif';for(let r=0;r<=RMAX;r+=5)c.fillText(String(r),U(ZMAX)-30,Vv(r)+22);
-  c.font='bold 40px Arial, sans-serif';c.globalAlpha=.8;for(let r=0;r<=RMAX;r++)if(r%5)c.fillText(String(r),U(ZMAX)-34,Vv(r)+14);c.globalAlpha=1;
-  c.save();c.translate(U(ZMAX)-166,Vv(RMAX/2));c.rotate(-Math.PI/2);c.textAlign='center';c.font='italic bold 76px Georgia, "Times New Roman", serif';c.fillText('ρ',-84,0);c.font='bold 62px Arial, sans-serif';c.fillText('(cm)',44,0);c.restore()});
+  // solo los números de las líneas principales, cada 5 cm, y bien grandes
+  c.fillStyle=INK;c.strokeStyle=INK;c.textAlign='center';c.font='bold 136px Arial, sans-serif';for(let z=0;z<=ZMAX;z+=5)c.fillText(String(z),U(z),Vv(0)+146);
+  c.font='italic bold 156px Georgia, "Times New Roman", serif';c.fillText('z',U(ZMAX/2)-178,Vv(0)+352);c.font='bold 124px Arial, sans-serif';c.fillText('(cm)',U(ZMAX/2)+66,Vv(0)+352);
+  c.textAlign='right';c.font='bold 136px Arial, sans-serif';for(let r=0;r<=RMAX;r+=5)c.fillText(String(r),U(ZMAX)-38,Vv(r)+(r===0?14:48));
+  c.save();c.translate(U(ZMAX)-268,Vv(RMAX/2+1));c.rotate(-Math.PI/2);c.textAlign='center';c.font='italic bold 156px Georgia, "Times New Roman", serif';c.fillText('ρ',-160,0);c.font='bold 124px Arial, sans-serif';c.fillText('(cm)',88,0);c.restore()});
  const m=new THREE.Mesh(new THREE.PlaneGeometry(W/100,H/100),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false,toneMapped:false,polygonOffset:true,polygonOffsetFactor:-3,polygonOffsetUnits:-6}));
- m.rotation.x=-Math.PI/2;m.position.set(LZ((ZMAX+M0-W/2)/100),.0006,LR((H/2-M1)/100));m.renderOrder=1;SC.add(m);return m})();
+ m.rotation.x=-Math.PI/2;m.position.set(LZ((ZMAX+M0-W/2)/100),.0006,ZC-(RMAX+MT-MB)/200);m.renderOrder=1;SC.add(m);return m})();
 
 /* ================= teslámetro ================= */
 // Caja azul con el frente claro: visor rojo en mT, selector de alcance (20, 200 y 2000 mT), conmutador de campo alterno o continuo, mando de cero, toma de la sonda y salida analógica.
@@ -714,13 +715,13 @@ const MARK=new THREE.Group();SC.add(MARK);const MKL={};{const mm=new THREE.MeshB
  const ring=new THREE.Mesh(new THREE.RingGeometry(.0042,.0064,32),mm);ring.rotation.x=-Math.PI/2;ring.position.y=.0014;ring.renderOrder=7;MARK.add(ring);
  const dot=new THREE.Mesh(new THREE.CircleGeometry(.0016,16),mm);dot.rotation.x=-Math.PI/2;dot.position.y=.0014;dot.renderOrder=7;MARK.add(dot);
  const pl=new THREE.Mesh(new THREE.CylinderGeometry(.0006,.0006,YC-.004,6),ml);pl.position.y=YC/2;pl.renderOrder=7;MARK.add(pl);
- // líneas a los ejes: una a lo largo de ρ, hasta la escala de z (delante), y otra a lo largo de z, hasta la escala de ρ (a la izquierda)
+ // líneas a los ejes: una a lo largo de ρ, hasta la escala de z (delante, junto al eje), y otra a lo largo de z, hasta la escala de ρ (a la izquierda)
  for(const k of['r','z']){const m=new THREE.Mesh(new THREE.PlaneGeometry(1,.0018),ml);m.rotation.x=-Math.PI/2;m.position.y=.0013;m.renderOrder=6;SC.add(m);MKL[k]=m}}
-function markAt(z,r){const x=LZ(z/100),w=LR(r/100);MARK.position.set(x,0,w);const zf=LR((RMAX+.9)/100),xl=LZ((ZMAX+.9)/100);
+function markAt(z,r){const x=LZ(z/100),w=LR(r/100);MARK.position.set(x,0,w);const zf=LR(-.9/100),xl=LZ((ZMAX+.9)/100);
  MKL.r.rotation.z=Math.PI/2;MKL.r.scale.x=Math.max(1e-4,zf-w);MKL.r.position.set(x,.0013,(zf+w)/2);MKL.z.scale.x=Math.max(1e-4,x-xl);MKL.z.position.set((x+xl)/2,.0013,w)}
 /* ================= aparatos ================= */
-const AX=.55,AZ=.24,AY=-.42,TX=-.44,TZ=-.34,TY=-.20; // amperímetro y teslámetro: sitio y giro, de cara a quien mira
-const PL=makePSU1({sid:'L',x:.60,z:-.32,title:'FUENTE DE ALIMENTACIÓN',sgx:-38,sgy:7,
+const AX=.36,AZ=.29,AY=-.42,TX=-.37,TZ=-.40,TY=-.22; // amperímetro y teslámetro: sitio y giro, de cara a quien mira
+const PL=makePSU1({sid:'L',x:.58,z:-.20,title:'FUENTE DE ALIMENTACIÓN',sgx:-38,sgy:7,
  K:[{c:[106,146],max:18,st:3,cap:'0…18 V ⎓',r:36,dy:104},{c:[290,146],max:5,st:1,cap:'0…5 A',r:36,dy:104}],
  SK:{p:[196,298,'r'],n:[196,352,'b']},deco:[[330,325,'y'],[470,298,'k'],[470,352,'k']],PW:[566,84,44,70],
  art:x=>{x.fillStyle='#c3e3f1';rr(x,146,264,82,118,8);x.fill();rr(x,420,264,82,118,8);x.fill();
@@ -754,11 +755,14 @@ function floorLabel(x,z,l1,l2,W=.36,H=.060){const t=canvasTex(1024,Math.round(10
 function wirePower(){SC.updateMatrixWorld(true);const c=Math.cos(AY),s=Math.sin(AY),DL=(x,z)=>[AX+x*c+z*s,AZ-x*s+z*c],dA=(x,z)=>[x*c+z*s,-x*s+z*c],jp=PL.jack('p'),jn=PL.jack('n'),ja=COIL.jack('a'),jb=COIL.jack('b'),nx=jp.n.x,nz=jp.n.z,rx=nz,rz=-nx; // n: hacia donde mira la fuente; r: su derecha
  const P0=[jp.p.x+nx*.085-rx*.012,jp.p.z+nz*.085-rz*.012],Pe=[ja.p.x+.045,ja.p.z];
  route(CB.P,jp,ja,[P0,[P0[0]+(Pe[0]-P0[0])*.5,P0[1]+(Pe[1]-P0[1])*.5+.03],[Pe[0]+.07,Pe[1]+.004],Pe],{d0:[nx-rx*.3,nz-rz*.3],a2:.03,d1:[-1,0],b1:.045,b2:.04});
- route(CB.M,jb,AMM.jack('10A'),[[jb.p.x+.05,jb.p.z],[.31,.03],[.36,.20],DL(-.0924,.172),DL(-.0524,.115)],{d0:[1,0],a1:.045,a2:.04,d1:dA(.35,-1),b1:.05,b2:.045});
+ {const A0=[jb.p.x+.05,jb.p.z],E0=DL(-.0924,.172);route(CB.M,jb,AMM.jack('10A'),[A0,[A0[0]+.02,(A0[1]+E0[1])/2],E0,DL(-.0524,.115)],{d0:[1,0],a1:.045,a2:.04,d1:dA(.35,-1),b1:.05,b2:.045})}
  const Pn=[jn.p.x+nx*.10+rx*.035,jn.p.z+nz*.10+rz*.035];
  route(CB.N,AMM.jack('COM'),jn,[DL(.0174,.115),DL(.0674,.165),DL(.165,.11),[Pn[0]+rx*.16+nx*.10,Pn[1]+rz*.16+nz*.10],Pn],{d0:dA(0,1),a1:.055,a2:.04,d1:[-nx-rx*.25,-nz-rz*.25],b1:.05,b2:.04})}
+// Cable de la sonda: cae del mango a la mesa y va hasta la toma del teslámetro. Con la sonda atravesada, el mango queda detrás y el cable baja por el pasillo que hay entre el teslámetro y el pie.
 function wireProbe(){PROBE.updateMatrixWorld(true);const a=PROBE.jack(),b=TM.jack(),L0=[a.p.x+a.n.x*.115,a.p.z+a.n.z*.115],P1=[b.p.x+b.n.x*.115,b.p.z+b.n.z*.115],dx=P1[0]-L0[0],dz=P1[1]-L0[1],l=Math.hypot(dx,dz)||1,k=Math.min(.09,.25*l);
- route(CB.S,a,b,[L0,[L0[0]+dx*.5-dz/l*k,L0[1]+dz*.5+dx/l*k],P1],{d0:[a.n.x,a.n.z],a1:.07,a2:.05,d1:[-b.n.x,-b.n.z],b1:.06,b2:.05,r:.0030})}
+ const q=Math.max(0,Math.min(1,(Math.PI-VIS.th)/(Math.PI/2))),mx=(u,v)=>u+(v-u)*q,rx=Math.cos(TY),rz=-Math.sin(TY),cR=[TX+rx*.215-Math.sin(TY)*.0,TZ+rz*.215]; // cR: junto al costado derecho del teslámetro
+ const A1=[L0[0]+dx*.34-dz/l*k,L0[1]+dz*.34+dx/l*k],A2=[L0[0]+dx*.70-dz/l*k*.6,L0[1]+dz*.70+dx/l*k*.6],T1=[cR[0]+.01,Math.min(L0[1]+.10,cR[1]-.13)],T2=[cR[0]-.01,cR[1]+.07];
+ route(CB.S,a,b,[L0,[mx(A1[0],T1[0]),mx(A1[1],T1[1])],[mx(A2[0],T2[0]),mx(A2[1],T2[1])],P1],{d0:[a.n.x,a.n.z],a1:.07,a2:.05,d1:[-b.n.x,-b.n.z],b1:.06,b2:.05,r:.0030})}
 const LBL={A:floorLabel(AX+.248*Math.sin(AY),AZ+.248*Math.cos(AY),'INTENSIDAD','I, en amperios',.215,.041),
  T0:floorLabel(TX+.145*Math.sin(TY),TZ+.145*Math.cos(TY),'CAMPO A LO LARGO DEL EJE','B_z_, en militeslas',.27,.045),T1:floorLabel(TX+.145*Math.sin(TY),TZ+.145*Math.cos(TY),'CAMPO PERPENDICULAR AL EJE','B_ρ_, en militeslas',.27,.045)};
 LBL.A.rotation.z=AY;LBL.T0.rotation.z=LBL.T1.rotation.z=TY;
@@ -784,7 +788,7 @@ function loopB(R,z,r){const a2=(R+r)*(R+r)+z*z,b2=(R-r)*(R-r)+z*z,[K,E]=ellKE(4*
 function coilB(z,r,I){let bz=0,br=0;for(const dR of[-.006,0,.006])for(const dz of[-.0073,0,.0073]){const b=loopB(RC+dR,z-dz,r);bz+=b[0];br+=b[1]}return [bz*NV*I/9,br*NV*I/9]}
 const current=()=>S.L.on?Math.min(S.L.u[1],S.L.u[0]/(RCOIL+RSER)):0;
 // Lo que marca el teslámetro, en mT: la componente del campo a lo largo de la varilla, en la punta, más el campo de la Tierra y el desajuste del cero
-function teslaNow(){if(S.tm.ac)return 0;const [bz,br]=coilB(VIS.z/100,VIS.r/100,current()),c=-Math.cos(VIS.th),s=-Math.sin(VIS.th);return ((bz*c+br*s)*1e3*gT+BE[0]*c+BE[1]*s)+OFF0+S.tm.zero}
+function teslaNow(){if(S.tm.ac)return 0;const [bz,br]=coilB(VIS.z/100,VIS.r/100,current()),c=-Math.cos(VIS.th),s=Math.sin(VIS.th);return ((bz*c+br*s)*1e3*gT+BE[0]*c+BE[1]*s)+OFF0+S.tm.zero}
 const gauss=()=>{let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
 function lcd(m,val,p){ // val en unidades del rango (V, A, Ω)
  const ac=p.fn==='ACV'?'AC':p.fn==='OHM'?'':'DC',sc=p.sc,dec=p.dec,res=Math.pow(10,-dec);
@@ -873,7 +877,7 @@ function ctlMove(D){const uv=faceUV(D.inst);if(!uv)return;
  if(D.t==='sk')supFromAngle(D.inst,D.i,uv)}
 // la sonda se arrastra sobre el plano horizontal en el que está, a la altura del eje
 const PLN=new THREE.Plane(V3(0,1,0),-YC),PLT=new THREE.Plane(V3(0,1,0),0),tmpV=V3();
-const labOf=p=>({z:(XC-p.x)*100,r:(p.z-ZC)*100});
+const labOf=p=>({z:(XC-p.x)*100,r:(ZC-p.z)*100});
 let mode=null,down=null,ctl=null,grab=null;const PTR=new Map();let pd0=0,pm0=null;
 const pdist=()=>{const p=[...PTR.values()];return Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1])},pmid=()=>{const p=[...PTR.values()];return [(p[0][0]+p[1][0])/2,(p[0][1]+p[1][1])/2]};
 box.addEventListener('contextmenu',e=>e.preventDefault());
@@ -912,7 +916,7 @@ box.addEventListener('wheel',e=>{e.preventDefault();const h=e.ctrlKey?null:pick(
   if(c&&c.t==='sk'){setSup(inst,c.i,S[inst.sid].u[c.i]+k*ruedaGan(e,k)*PASO[inst.sid][c.i]);return}}
  const nd=Math.max(.03,Math.min(6,dist*Math.exp(e.deltaY*(e.ctrlKey?.01:.0012))));zAt(e.clientX,e.clientY,nd/dist);dist=nd;touched=true;invalidate()},{passive:false});
 box.addEventListener('dblclick',e=>{const h=pick(e);if(!h)return;
- if(h.object===GRID){zoomTo('rejilla',V3(LZ(.105),0,LR(.135)),.60,0,1.42);return} // a la rejilla, casi desde arriba
+ if(h.object===GRID){zoomTo('rejilla',V3(LZ(.115),0,LR(.095)),.64,0,1.42);return} // a la rejilla, casi desde arriba
  if(h.object.userData.inst){const inst=h.object.userData.inst;if(hitCtl(inst,faceUV(inst)))return;const p=inst.fr.getWorldPosition(V3()),n=V3(0,0,1).applyQuaternion(inst.fr.getWorldQuaternion(new THREE.Quaternion()));
   const t=Math.tan(CAM.fov*Math.PI/360),d=inst.root.scale.x*Math.max(inst.hM*1.12,inst.wM*1.12/CAM.aspect)/(2*t)+.02;zoomTo(inst,p,d,Math.atan2(n.x,n.z),Math.max(.15,Math.asin(Math.min(1,n.y))));return}
  if(h.object.userData.probe){zoomTo('sonda',V3(PROBE.position.x,YC*.5,PROBE.position.z),.62,az,Math.max(el,.75));return}
@@ -928,7 +932,7 @@ function invalidate(){dirty=true;if(!frame&&!document.hidden)frame=requestAnimat
 function loop(now){frame=0;if(document.hidden)return;const dt=Math.min(.12,(now-(tPrev||now))/1000);tPrev=now;
  if(fly){const u=ease(Math.min(1,(now-fly.t0)/fly.dur));az=fly.a.az+(((fly.b.az-fly.a.az)%(2*Math.PI)+3*Math.PI)%(2*Math.PI)-Math.PI)*u;el=fly.a.el+(fly.b.el-fly.a.el)*u;dist=fly.a.dist+(fly.b.dist-fly.a.dist)*u;TG.copy(fly.a.tg).lerp(fly.b.tg,u);if(u>=1)fly=null;invalidate()}
  // la sonda sigue con suavidad a su destino: la posición, deprisa; el giro, algo más despacio
- let moving=false;{const kp=1-Math.exp(-dt/(grab?.035:.085)),kt=1-Math.exp(-dt/.16),tt=S.ori?1.5*Math.PI:Math.PI,ez=S.p.z-VIS.z,er=S.p.r-VIS.r,et=tt-VIS.th;
+ let moving=false;{const kp=1-Math.exp(-dt/(grab?.035:.085)),kt=1-Math.exp(-dt/.16),tt=S.ori?.5*Math.PI:Math.PI,ez=S.p.z-VIS.z,er=S.p.r-VIS.r,et=tt-VIS.th;
   if(Math.abs(ez)>2e-3||Math.abs(er)>2e-3||Math.abs(et)>4e-4){VIS.z+=ez*kp;VIS.r+=er*kp;VIS.th+=et*kt;moving=true}else if(ez||er||et){VIS.z=S.p.z;VIS.r=S.p.r;VIS.th=tt;moved=true}
   if(moving||moved){placeProbe();moved=false;dirty=true;if(now-lastMeas>90)measure()}}
  if(now-lastMeas>650)measure();
@@ -997,7 +1001,7 @@ $('#gbtn').onclick=()=>{if(PM()){document.documentElement.style.setProperty('--g
 mcSlider('<i>z</i>',0,ZMAX,1,1,()=>S.p.z,v=>setP(v,S.p.r,true));mcSlider('<i>ρ</i>',0,RMAX,1,1,()=>S.p.r,v=>setP(S.p.z,v,true));
 mcSlider('Corriente',0,PL.K[1].max,.01,.01,()=>S.L.u[1],v=>setSup(PL,1,v));mcSlider('Cero',-.5,.5,.002,.01,()=>S.tm.zero,v=>setZero(v));
 drawTeslaFace();wirePower();
-for(const o of[TM.root,PL.root,AMM.root,COIL,GRID,LBL.A,LBL.T0])bbAdd(o);for(const [z,r,th] of[[20,0,Math.PI],[20,24,Math.PI],[0,24,Math.PI],[12,8,1.5*Math.PI]]){PROBE.position.set(LZ(z/100),YC,LR(r/100));PROBE.rotation.y=th;bbAdd(PROBE)}
+for(const o of[TM.root,PL.root,AMM.root,COIL,GRID,LBL.A,LBL.T0])bbAdd(o);for(const [z,r,th] of[[20,0,Math.PI],[20,24,Math.PI],[0,24,Math.PI],[2,24,.5*Math.PI],[20,12,.5*Math.PI]]){PROBE.position.set(LZ(z/100),YC,LR(r/100));PROBE.rotation.y=th;bbAdd(PROBE)}
 size();camReset();applyState();placeProbe();invalidate();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{drawPSU(PL);drawTeslaFace();measure(true);invalidate()});
 window.__cm={SC,TM,PROBE,COIL,GRID,CB,AMM,PL,VIS,MEAS,S:()=>S,coilB,current,teslaNow,setP,setOri,setSup,setZero,setRange,measure,OFF0,BE,gA,gT,camState:()=>({az,el,dist,TG}),view:(a,e,d,x,y,z)=>{az=a;el=e;dist=d;TG.set(x,y,z);touched=true;camSet();invalidate()},flyTo,
