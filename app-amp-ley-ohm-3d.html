@@ -1304,10 +1304,12 @@ function refresh(){measure();potSync()}
 
 /* ================= cámara ================= */
 const PM=()=>matchMedia('(max-width:820px),(max-height:520px)').matches;
-const V0=()=>({az:0,el:PM()&&box.clientHeight>box.clientWidth?.80:.76});
+const V0=()=>({az:0,el:PM()?(box.clientHeight>box.clientWidth?.80:.76):S.part===0?.72:.76}); // «Móntalo tú mismo», en el portátil, algo más de frente
 let az,el,dist;const TG=V3();
 const BB=[V3(XP-.16,0,ZP-.285),V3(XP-.16,.29,ZP-.26),V3(XP+.16,.29,ZP-.26),V3(XP-.16,0,ZP),V3(XP+.16,0,ZP),V3(XA-.21,0,.10),V3(XA-.115,0,ZM+.275),V3(XA+.11,0,ZM+.275),V3(XV-.11,0,ZM+.275),V3(XV+.115,0,ZM+.275),
  V3(XA-.085,.185,ZM-.26),V3(XA+.085,.185,ZM-.26),V3(XV-.085,.185,ZM-.26),V3(XV+.085,.185,ZM-.26),V3(XV+.09,0,ZM),V3(XV+.09,0,ZM-.26),V3(XV+.09,.10,ZM-.13),V3(0,.07,-BD/2-.005),V3(BW/2,.03,-BD/2-.005),V3(.10,0,-.33),V3(XV,.19,ZM-.2),V3(XV+.04,.14,ZM-.12),V3(0,0,BD/2+.09),V3(XV+.135,0,.05),V3(XV+.13,0,-.16),V3(XV+.06,0,-.212),V3(XA-.215,0,-.05)];
+// en «Móntalo tú mismo» no hay rótulos delante de los polímetros: el encuadre llega hasta sus patas y el montaje se ve más grande
+const BBF=BB.map(q=>Math.abs(q.z-(ZM+.275))<1e-6?V3(q.x,0,ZM+.035):q);
 /* los botones nunca tapan el montaje: el límite superior del encuadre sale de la altura real del botón de visualización, en cualquier pantalla; en el móvil, el hueco que sobra se reparte entre los botones y el borde inferior */
 function topLim(base){const r=box.getBoundingClientRect(),b=document.querySelector('.fbtn.tog').getBoundingClientRect();return r.height?Math.min(base,1-2*(b.bottom-r.top+9)/r.height):.77}
 function balance(best,v,top,pts){let bm=-9,bs=0;const c=V3(),d=best.dist,up=V3(-Math.sin(v.el)*Math.sin(v.az),Math.cos(v.el),-Math.sin(v.el)*Math.cos(v.az)); // la mira se desplaza en vertical sobre la pantalla, sin acercar ni alejar
@@ -1316,12 +1318,14 @@ function balance(best,v,top,pts){let bm=-9,bs=0;const c=V3(),d=best.dist,up=V3(-
   const m=Math.min(top-hi,lo+.95);if(wide<.985&&m>bm){bm=m;bs=k*.004}}
  best.tg=best.tg.clone().addScaledVector(up,bs);return best}
 function fitV0(){ // encuadre de partida: el punto de mira y la distancia que más acercan el montaje sin recortarlo
- const v=V0(),top=topLim(.875),PTS=BB;let best=null;const br=box.getBoundingClientRect(),sr=$('#sch').getBoundingClientRect(),sx=br.width?(sr.left-br.left-10)/br.width*2-1:2,sy=br.height?1-(sr.bottom-br.top+10)/br.height*2:2; // esquina que ocupa el esquema: el montaje no entra en ella
- for(let cz=-.40;cz<=.14;cz+=.015)for(const cx of[-.20,-.16,-.12,-.08,-.04]){const c=V3(cx,.10,cz);let lo=.5,hi=7;
+ const pm=PM(),v=V0(),top=pm?topLim(.875):.95,PTS=S.part===0?BBF:BB;let best=null;const br=box.getBoundingClientRect(),
+  bb=document.querySelector('.fbtn.tog').getBoundingClientRect(),bx=pm||!br.width?2:(bb.right-br.left+10)/br.width*2-1,by=pm||!br.height?2:1-(bb.bottom-br.top+10)/br.height*2, // en el portátil, los botones de arriba a la izquierda son una esquina en la que el montaje no entra; por encima del resto, el montaje puede llegar casi al borde
+  sr=$('#sch').getBoundingClientRect(),sx=br.width?(sr.left-br.left-10)/br.width*2-1:2,sy=br.height?1-(sr.bottom-br.top+10)/br.height*2:2; // esquina que ocupa el esquema: el montaje no entra en ella
+ for(let cz=-.40;cz<=.14;cz+=.015)for(const cx of[-.28,-.24,-.20,-.16,-.12,-.08,-.04,0]){const c=V3(cx,.10,cz);let lo=.5,hi=7;
   const ok=d=>{const p=V3(c.x+d*Math.cos(v.el)*Math.sin(v.az),c.y+d*Math.sin(v.el),c.z+d*Math.cos(v.el)*Math.cos(v.az));CAM.position.copy(p);CAM.lookAt(c);CAM.updateMatrixWorld();
-   return PTS.every(q=>{const n=q.clone().project(CAM);return Math.abs(n.x)<.97&&n.y<top&&n.y>-.95&&!(n.x>sx&&n.y>sy)})};
-  for(let i=0;i<26;i++){const m=(lo+hi)/2;ok(m)?hi=m:lo=m}if(!best||hi<best.dist)best={az:v.az,el:v.el,dist:hi,tg:c}}
- return PM()?balance(best,v,top,PTS):best}
+   return PTS.every(q=>{const n=q.clone().project(CAM);return Math.abs(n.x)<.97&&n.y<top&&n.y>-.95&&!(n.x>sx&&n.y>sy)&&!(n.x<bx&&n.y>by)})};
+  for(let i=0;i<26;i++){const m=(lo+hi)/2;ok(m)?hi=m:lo=m}if(!best||hi<best.dist-1e-3||hi<best.dist+1e-3&&Math.abs(cx+.06)<Math.abs(best.tg.x+.06))best={az:v.az,el:v.el,dist:hi,tg:c}}
+ return pm?balance(best,v,top,PTS):best}
 function camReset(){const v=fitV0();az=v.az;el=v.el;dist=v.dist;TG.copy(v.tg)}
 function camSet(){CAM.position.set(TG.x+dist*Math.cos(el)*Math.sin(az),TG.y+dist*Math.sin(el),TG.z+dist*Math.cos(el)*Math.cos(az));CAM.lookAt(TG)}
 function size(){const w=box.clientWidth,h=box.clientHeight;if(!w||!h)return;const ratio=Math.min(window.devicePixelRatio||1,2,Math.sqrt(1750000/(w*h)));if(R3.getPixelRatio()!==ratio)R3.setPixelRatio(ratio);R3.setSize(w,h,false);CAM.aspect=w/h;CAM.updateProjectionMatrix();invalidate()}
@@ -1437,7 +1441,7 @@ function tabs(){document.body.dataset.part=S.part;histBtn();document.querySelect
   const again=()=>{drawSheet();tabs();invalidate()};$('#sublab').textContent='Esquema';fill($('#subtabs'),['serie'+ZS,'paral<span class="lg">elo</span><span class="sh">.</span>'+ZS],S.fs,i=>{S.fs=i;again()});
   $('#sublab2').innerHTML='<span class="lg">Mide </span>'+(S.fs?'<i>I</i>':'<i>V</i>')+' en';fill($('#subtabs2'),S.fs?['común'+ZS,'R<sub>3</sub>','R<sub>4</sub>']:['asoc<span class="lg">iación</span><span class="sh">.</span>'+ZS,'R<sub>1</sub>','R<sub>2</sub>'],S.fs?S.fa:S.fv,i=>{if(S.fs)S.fa=i;else S.fv=i;again()});return}
  const [lab,list]=SUBS[S.part];$('#sublab').textContent=lab;fill($('#subtabs'),list,S.part===1?S.vm:S.am,i=>{if(S.part===1)S.vm=i;else S.am=i;wire();tabs();measure(true)})}
-document.querySelectorAll('#ptabs .tab').forEach(b=>b.onclick=()=>{S.part=+b.dataset.p;wire();tabs();measure(true)});
+document.querySelectorAll('#ptabs .tab').forEach(b=>b.onclick=()=>{const was=S.part;S.part=+b.dataset.p;wire();tabs();measure(true);if(!touched&&(was===0)!==(S.part===0)){const v=fitV0();zb=null;flyTo(v.tg,v.dist,v.az,v.el);touched=false}}); // sin haber movido la vista, cada modo con su encuadre de partida
 $('#fldBtn').onclick=()=>setFlow(!FLOW.on);
 $('#fuseBtn').onclick=()=>{histPush();S.m.forEach(m=>m.fuse=true);FREE.sol=null;measure(true);fuseAlarm();potSync();invalidate()};
 $('#undoBtn').onclick=undo;document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&(e.key==='z'||e.key==='Z')&&S.part===0){e.preventDefault();undo()}});
