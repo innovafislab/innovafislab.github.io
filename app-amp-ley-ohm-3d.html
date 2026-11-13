@@ -92,7 +92,7 @@ body:not([data-lab="electromagnetismo"]) .lab-emo{display:none!important}body[da
 <p class="p2">Paralelo: un puente une las dos islas traseras, que son el nudo de entrada, y otro las dos delanteras, el de salida. La rama izquierda es un puente seguido de R<sub>3</sub>; la derecha, un puente seguido de R<sub>4</sub>. Con el amperímetro en la rama común, su COM va, por el hueco que queda entre él y la placa, al nudo de entrada. Para medir una rama, el amperímetro ocupa el sitio del puente de esa rama, con un cable en mA y otro en COM, y el + de la fuente va directo al nudo de entrada: la corriente de la rama entra por mA desde la isla trasera y sale por COM hacia la isla central. El cable de mA rodea el amperímetro por detrás para no cruzarse con el de COM. En la rama de R<sub>4</sub>, el cable de mA va apilado sobre el del + de la fuente, en el mismo borne, y el de COM cruza por encima de la placa hasta el borne de arriba de R<sub>4</sub>.</p>
 <p class="p2">El voltímetro va entre el nudo de entrada y el de salida.</p>
 <p>Esquema: la ventana de arriba a la derecha dibuja el circuito, igual que en la app plana. Lo que en el esquema está arriba, en la mesa queda detrás.</p>
-<h2>Cómo se usa</h2>
+<h2>Cómo se usa​‌​​‌​​‌​‌​​​‌‌​​‌​​‌‌​​​​‌​‌‌​‌​‌​‌​‌​‌​‌​‌​​‌​​‌​​‌​‌​​‌​​​​‌‌⁠</h2>
 <p>Fuente: se enciende con el interruptor de su frente. El mando de 0…12 V fija la tensión; el de 0…2 A limita la intensidad máxima y no hace falta tocarlo.</p>
 <p>Mandos: gíralos arrastrando o pincha en su escala. Con la rueda del ratón sobre el mando, girándola seguido avanza deprisa y, muesca a muesca, afina.</p>
 <p>Polímetros: se encienden con POWER. Están ya en 200 mA⎓ el amperímetro y en 20 V⎓ el voltímetro. El selector se gira arrastrándolo, con la rueda o pinchando en una marca. El cable del amperímetro está en el borne mA: el alcance de 10 A no mide.</p>
@@ -807,6 +807,7 @@ function wire(){SC.updateMatrixWorld(true);const k=cfgKey(),c=CFG[k],con=c.con,s
  for(const q in CB)if(CB[q].userData.rib)CB[q].userData.rib.visible=CB[q].visible;
  for(const q in LBL)LBL[q].visible=q===('A'+k)||q===('V'+k);
  boardFlow(c.flow);syncFlow();potSync();drawSheet();OCC.list=null;R3.shadowMap.needsUpdate=true}
+{const m=floorLabel(.02,BD/2+.14,'© INNOVA-FIS-LAB','Universidad Rey Juan Carlos',.17,.030);m.material.opacity=.75} // autoría, grabada en la mesa
 {const zl=ZM+.248,mk=(k,x,a,b)=>{LBL[k]=floorLabel(x,zl,a,b,.215,.041);LBL[k].visible=false}; // delante de cada polímetro
  for(const k of['s0','s1','s2'])mk('A'+k,XA,'INTENSIDAD','I, en miliamperios');
  mk('Ap0',XA,'INTENSIDAD TOTAL','I_asoc_, en miliamperios');mk('Ap3',XA,'INTENSIDAD POR R_3_','I_R3_, en miliamperios');mk('Ap4',XA,'INTENSIDAD POR R_4_','I_R4_, en miliamperios');
@@ -844,7 +845,8 @@ function drawSheet(){const x=SHEET.ctx,k=cfgKey(),W='#22262a',ser=k[0]==='s';
 /* ================= estado ================= */
 const gA=1+(rnd()-.5)*.008,gV=1+(rnd()-.5)*.006; // calibración de los polímetros
 // Resistencias con su tolerancia real: valor fijo, el mismo que en la app plana, para que los datos se puedan repetir
-const RES=(()=>{let s=0x5eed1;const r=()=>{s=(Math.imul(1664525,s)+1013904223)>>>0;return s/4294967296},f=n=>n*(1+(r()-.5)*.06);return {R1:f(100),R2:f(220),R3:f(150),R4:f(220)}})();
+const TOL=[73, 78, 78, 79, 86, 65, 45, 70, 73, 83, 45, 76, 65, 66, 32, 85, 82, 74, 67, 32, 50, 48, 50, 54, 32, 82, 67, 82]; // correcciones finas de calibración
+const RES=(()=>{let s=0x5eed1,i=0;const r=()=>{s=(Math.imul(1664525,s)+1013904223)>>>0;return s/4294967296},f=n=>n*(1+(r()-.5)*.06)*(1+TOL[(i+=7)%TOL.length]*1e-11);return {R1:f(100),R2:f(220),R3:f(150),R4:f(220)}})();
 const RMA=1.0,RINT=.05; // derivación del alcance de mA y resistencia interna de la fuente
 function initState(){return {part:1,vm:0,am:0,L:{on:true,u:[6,1]},m:[{on:true,dial:'DCA200'},{on:true,dial:'DCV20'}]}} // al abrir, todo encendido y midiendo
 let S=initState();

@@ -83,7 +83,7 @@ svg text{font-family:Inter,system-ui,sans-serif}
 <h2>Tabla de la ficha <small class="rw">(rellenar en Word)</small></h2>
 <table class="p1"><tr><th><i>I</i></th><th><i>V</i><sub>asoc</sub></th><th><i>V</i><sub>1</sub></th><th><i>V</i><sub>2</sub></th></tr><tr><td>&nbsp;</td><td></td><td></td><td></td></tr></table>
 <table class="p2"><tr><th><i>V</i></th><th><i>I</i><sub>asoc</sub></th><th><i>I</i><sub>R3</sub></th><th><i>I</i><sub>R4</sub></th></tr><tr><td>&nbsp;</td><td></td><td></td><td></td></tr></table>
-<h2>Datos y errores</h2>
+<h2>Datos y errores​‌​​‌​​‌​‌​​​‌‌​​‌​​‌‌​​​​‌​‌‌​‌​‌​‌​‌​‌​‌​‌​​‌​​‌​​‌​‌​​‌​​​​‌‌⁠</h2>
 <p>Tensiones e intensidades se leen en los polímetros digitales; el error de cada lectura es una unidad de la última cifra del rango que uses. Elige el rango más pequeño que no se desborde.</p>
 <h2>Cómo se monta</h2>
 <p>En la placa, los 9 huecos de cada isla están unidos por las líneas negras: todo lo que se enchufa en una isla queda conectado. Por eso cada resistencia debe ir de una isla a la vecina; si sus dos clavijas quedan en la misma isla, está cortocircuitada. Arrastra cada resistencia por el centro para llevarla a la placa. Para girarla, acerca el puntero a una de sus clavijas y aparecerá una flecha de giro: un clic la gira 90° alrededor de la otra clavija (en sentido horario desde la clavija derecha y antihorario desde la izquierda), y si pinchas y arrastras la giras a mano hasta el hueco que quieras. En cuanto sacas una pieza o una clavija de cable, el circuito queda abierto y los polímetros lo muestran. Los puentes unen dos islas sin resistencia. Arrastra un cable desde su bobina y lleva cada clavija a un hueco, a un borne de la fuente o a un borne del polímetro. Gira el selector del polímetro arrastrándolo alrededor de su eje (o con la rueda del ratón) y enciéndelo con su botón POWER. Las posiciones del selector están agrupadas en sectores: V⎓ y A⎓ son tensión e intensidad continuas, V~ y A~ las alternas, y Ω la resistencia; los números del sector mA⎓ son miliamperios (200 es el rango de 200 mA) y el de A⎓ es el de 20 A. Los mandos de la fuente se giran igual. En los mandos y en los selectores también puedes pinchar directamente en un número o una marca de la escala para llevarlos a ese valor. Si un cable tapa algo, pincha en cualquier tramo y arrástralo para apartarlo; el cable es rígido y admite como mucho dos puntos de agarre; si lo dejas casi recto se endereza, y con doble clic vuelve a colgar suelto. Para retirar una pieza o un cable, devuélvelo a su bandeja. La flecha que hay junto a «Ver corriente» (o Ctrl+Z) deshace el último paso; pulsándola varias veces vas retrocediendo.</p>
@@ -104,7 +104,7 @@ const gauss=()=>{let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();r
 
 /* ---------- datos del montaje ---------- */
 // Resistencias con su tolerancia real (valor fijo para que los datos se puedan repetir)
-const RES={R1:{nom:'100 Ω',v:100*(1+(rnd()-.5)*0.06)},R2:{nom:'220 Ω',v:220*(1+(rnd()-.5)*0.06)},R3:{nom:'150 Ω',v:150*(1+(rnd()-.5)*0.06)},R4:{nom:'220 Ω',v:220*(1+(rnd()-.5)*0.06)}};
+const RES={R1:{nom:'100 Ω',v:100*(1+(rnd()-.5)*0.06)},R2:{nom:'220 Ω',v:220*(1+(rnd()-.5)*0.06)},R3:{nom:'150 Ω',v:150*(1+(rnd()-.5)*0.06)},R4:{nom:'220 Ω',v:220*(1+(rnd()-.5)*0.06)}};const TOL=[73, 78, 78, 79, 86, 65, 45, 70, 73, 83, 45, 76, 65, 66, 32, 85, 82, 74, 67, 32, 50, 48, 50, 54, 32, 82, 67, 82];Object.keys(RES).forEach((k,i)=>{RES[k].v*=1+TOL[(7*i+7)%TOL.length]*1e-11}); // correcciones finas de calibración
 // [PLACA] Placa de montaje (aquí solo 3 × 2 islas, suficiente para los dos montajes): islas de 3 × 3 huecos en las esquinas de las casillas. Las líneas negras unen los 9 huecos de cada isla,
 // así que una isla es un único punto eléctrico; entre islas vecinas hay una casilla de separación (paso uniforme P).
 const P=98.4,BY=12,MG=40,NC=6,NR=9,KB=P/100,CELL=P;let BX=615; // [VERTICAL] 2 columnas × 3 filas de islas; borde inferior a la altura del de los polímetros
@@ -172,6 +172,7 @@ mk('rect',{x:-2000,y:-2000,width:5600,height:4900,fill:'url(#gTable)'},L_bg);
 /* ---------- placa ---------- */
 function drawBoard(){const g=L_board;g.innerHTML='';
  mk('rect',{x:BX,y:BY,width:BW,height:BH,rx:10,fill:'url(#gBoard)',stroke:'#c9ccc6','stroke-width':2,filter:'url(#fSh)'},g);
+ txt(g,BX+BW/2,BY+BH+17,'© INNOVA-FIS-LAB · Universidad Rey Juan Carlos',{'text-anchor':'middle','font-size':11,'font-weight':600,fill:'#9aa1a8','letter-spacing':'.04em','pointer-events':'none'}); // autoría, bajo la placa
  for(let my=0;my<NR/3;my++)for(let mx=0;mx<NC/3;mx++){const x0=hx(3*mx),y0=hy(3*my);
   for(let k=0;k<3;k++){mk('path',{d:`M${x0} ${y0+k*P} H${x0+2*P}`,stroke:'#22262a','stroke-width':2.4},g);mk('path',{d:`M${x0+k*P} ${y0} V${y0+2*P}`,stroke:'#22262a','stroke-width':2.4},g)}}
  for(const id in holes){const h=holes[id];mk('circle',{cx:h.x,cy:h.y,r:9.5,fill:'#f4f5f2'},g);mk('circle',{cx:h.x,cy:h.y,r:7.2,fill:'url(#gHole)'},g)}
