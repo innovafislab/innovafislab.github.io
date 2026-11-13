@@ -1177,9 +1177,9 @@ function solveLin(A,b){const n=b.length;for(let i=0;i<n;i++){let p=i;for(let r=i
   for(let r=i+1;r<n;r++){const f=A[r][i]/d;if(!f)continue;for(let c=i;c<n;c++)A[r][c]-=f*A[i][c];b[r]-=f*b[i]}}
  const x=new Array(n).fill(0);for(let i=n-1;i>=0;i--){let s=b[i];for(let c=i+1;c<n;c++)s-=A[i][c]*x[c];x[i]=s/(A[i][i]||1e-30)}return x}
 const nodeOf=at=>{if(at[0]!=='B')return at;const t=at.split(':');return 'c'+(+t[1]<3?0:1)+'r'+Math.floor(+t[2]/3)}; // los nueve bornes de una isla son un mismo nudo
-function freeNet(skipV){const el=[],F=S.free;
- MODS.forEach((m,i)=>{const a=F.mods[i].at;if(a)el.push({a:nodeOf('B:'+a[0]+':'+a[1]),b:nodeOf('B:'+a[2]+':'+a[3]),r:m.kind==='R'?RES[m.label]:RWIRE,mod:i})});
- for(const k of CK){const [a,b]=F.ends[k];if(isJ(a)&&isJ(b))el.push({a:nodeOf(a),b:nodeOf(b),r:RWIRE,cab:k})}
+function freeNet(skipV){const el=[],F=S.free,dr=FREE.drag&&FREE.drag.moved?FREE.drag:null; // lo que se tiene en la mano (pieza levantada, cable con una clavija sacada) ya no conduce
+ MODS.forEach((m,i)=>{const a=F.mods[i].at;if(a&&!(dr&&dr.t==='mod'&&dr.i===i))el.push({a:nodeOf('B:'+a[0]+':'+a[1]),b:nodeOf('B:'+a[2]+':'+a[3]),r:m.kind==='R'?RES[m.label]:RWIRE,mod:i})});
+ for(const k of CK){const [a,b]=F.ends[k];if(isJ(a)&&isJ(b)&&!(dr&&dr.t==='plug'&&dr.k===k))el.push({a:nodeOf(a),b:nodeOf(b),r:RWIRE,cab:k})}
  S.m.forEach((st,id)=>{const n=j=>'M'+id+':'+j;if(id!==skipV)el.push({a:n('V'),b:n('COM'),r:RV,vm:id});if(st.fuse!==false)el.push({a:n('mA'),b:n('COM'),r:RMA,ma:id});el.push({a:n('10A'),b:n('COM'),r:RA,a10:id})});return el}
 function nodal(el,fix,inj){const ids=new Map(),ix=k=>{if(!ids.has(k))ids.set(k,ids.size);return ids.get(k)};ix(fix);for(const e of el){ix(e.a);ix(e.b)}for(const [k] of inj)ix(k);
  const n=ids.size,G=Array.from({length:n},()=>new Array(n).fill(0)),I=new Array(n).fill(0);for(let i=0;i<n;i++)G[i][i]+=1e-12;
@@ -1187,7 +1187,7 @@ function nodal(el,fix,inj){const ids=new Map(),ix=k=>{if(!ids.has(k))ids.set(k,i
  for(const [k,g,c] of inj){const i=ix(k);G[i][i]+=g;I[i]+=c}const f=ix(fix);for(let c=0;c<n;c++)G[f][c]=0;G[f][f]=1;I[f]=0;
  const x=solveLin(G,I);return k=>{const i=ids.get(k);return i===undefined?0:x[i]}}
 // Tensiones de todos los nudos, con el − de la fuente como referencia. La fuente da su tensión mientras no se le pida más intensidad que la de su segundo mando; si se le pide más, la limita.
-function solveFree(){const st=S.L,key=JSON.stringify([S.free,st.on,st.u,S.m.map(m=>m.fuse!==false)]);if(FREE.sol&&FREE.key===key)return FREE.sol;
+function solveFree(){const st=S.L,dk=()=>{const d=FREE.drag;return d&&d.moved?d.t+(d.t==='mod'?d.i:d.k):''},key=JSON.stringify([S.free,st.on,st.u,S.m.map(m=>m.fuse!==false),dk()]);if(FREE.sol&&FREE.key===key)return FREE.sol;
  let r;for(let pass=0;pass<3;pass++){const el=freeNet(),v=st.on?st.u[0]:0,il=st.u[1];
   let V=nodal(el,'S:n',st.on?[['S:p',1/RINT,v/RINT]]:[]),cc=false;if(st.on&&(v-V('S:p'))/RINT>il){const V2=nodal(el,'S:n',[['S:p',0,il]]);if(V2('S:p')<v){V=V2;cc=true}}
   for(const e of el)e.i=(V(e.a)-V(e.b))/e.r;
@@ -1196,7 +1196,7 @@ function solveFree(){const st=S.L,key=JSON.stringify([S.free,st.on,st.u,S.m.map(
   const live=new Set(['S:p','S:n']);for(let ch=true;ch;){ch=false;for(const e of el)if(live.has(e.a)!==live.has(e.b)){live.add(e.a);live.add(e.b);ch=true}}
   r={V,el,read,cc,live,Ic:{},Im:{}};for(const e of el){if(e.cab)r.Ic[e.cab]=e.i;if(e.mod!==undefined)r.Im[e.mod]=e.i}
   const blown=read.findIndex((q,id)=>S.m[id].fuse!==false&&Math.abs(q.iMA)>.25);if(blown<0)break;S.m[blown].fuse=false} // más de 250 mA por el borne de mA: se funde su fusible
- FREE.sol=r;FREE.key=JSON.stringify([S.free,st.on,st.u,S.m.map(m=>m.fuse!==false)]);$('#fuseBtn').hidden=S.m.every(m=>m.fuse!==false);fuseAlarm();return r}
+ FREE.sol=r;FREE.key=JSON.stringify([S.free,st.on,st.u,S.m.map(m=>m.fuse!==false),dk()]);$('#fuseBtn').hidden=S.m.every(m=>m.fuse!==false);fuseAlarm();return r}
 function ohmFree(id){const el=freeNet(id),a='M'+id+':V',b='M'+id+':COM';const V=nodal(el,b,[[a,0,1e-3]]);return V(a)/1e-3} // resistencia entre V·Ω y COM, con la fuente fuera
 function measureFree(force){const r=solveFree();
  [AMM,VOLT].forEach((m,id)=>{const p=dpos(m.dial),q=r.read[id],g=id?gV:gA;let v=0;
@@ -1235,7 +1235,7 @@ function quickCable(k,e,tip,n){const J=DPL[k][1-e].userData.out||parkJack(k,1-e)
  const m=CB[k];m.geometry.dispose();m.geometry=new THREE.TubeGeometry(new THREE.CatmullRomCurve3([a.clone().addScaledVector(J.n,-.004),a,...B3(a,c1,c2,tip,18)],false,'centripetal'),56,.0034,10,false)}
 function freeDown(f,e){FREE.drag=Object.assign(f,{moved:false,x0:e.clientX,y0:e.clientY,touch:e.pointerType==='touch',snap:null});
  if(f.t==='mod'){const g=f.m.g.position;f.dx=g.x-f.pt.x;f.dz=g.z-f.pt.z;f.hor=f.m.at?f.m.at[1]===f.m.at[3]:S.free.mods[f.i].hor}box.classList.add('dragging')}
-function freeMove(e){const D=FREE.drag;if(!D)return;if(!D.moved){if(Math.hypot(e.clientX-D.x0,e.clientY-D.y0)<5)return;D.moved=true;
+function freeMove(e){const D=FREE.drag;if(!D)return;if(!D.moved){if(Math.hypot(e.clientX-D.x0,e.clientY-D.y0)<5)return;D.moved=true;setTimeout(()=>{if(FREE.drag===D){measure(true);potSync();invalidate()}},0);
    if(D.t==='plug'){const o=S.free.ends[D.k][D.e];if(isJ(o)&&stacks()[o].length>1)wireFree();D.cnt={};const M=stacks([D.k,D.e]);for(const a in M)D.cnt[a]=M[a].length; // al sacarla de una pila, las de encima bajan
     if(CB[D.k].userData.rib)CB[D.k].userData.rib.visible=false;for(const f of FLOW.list)if(f.k===D.k)f.m.visible=false;for(const t of TINT)if(t.k===D.k)t.m.visible=false}}
  const x=e.clientX,y=e.clientY-(D.touch&&D.t==='plug'?46:0);HL[0].visible=HL[1].visible=false;
