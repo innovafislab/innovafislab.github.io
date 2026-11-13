@@ -610,9 +610,7 @@ const WR=.009,WA=.011; // semiancho radial y axial del devanado
 const COIL=new THREE.Group();COIL.position.set(XC,0,ZC);SC.add(COIL);
 {const turns=canvasTex(8,128,(c,w,h)=>{for(let i=0;i<h;i++){const t=(i%8)/8,k=.80+.20*Math.sin(t*Math.PI);c.fillStyle='rgb('+Math.round(214*k)+','+Math.round(74*k)+','+Math.round(44*k)+')';c.fillRect(0,i,w,1)}});turns.wrapS=turns.wrapT=THREE.RepeatWrapping;turns.repeat.set(1,3);
  const wind=turned([[RC-WR,-WA],[RC+WR,-WA],[RC+WR,WA],[RC-WR,WA],[RC-WR,-WA]],std(0xffffff,.34,.28,{map:turns,envMapIntensity:.9}),120);wind.rotation.z=Math.PI/2;wind.position.y=YC;COIL.add(wind);
- // carrete: dos aros negros que sujetan el devanado por los lados
- for(const s of[-1,1]){const fl=turned([[RC-WR-.003,s*WA],[RC+WR+.0015,s*WA],[RC+WR+.0015,s*(WA+.003)],[RC-WR-.003,s*(WA+.003)],[RC-WR-.003,s*WA]],blackPlastic,120);fl.rotation.z=Math.PI/2;fl.position.y=YC;COIL.add(fl)}
- const inner=turned([[RC-WR-.003,-WA-.003],[RC-WR-.0005,-WA-.003],[RC-WR-.0005,WA+.003],[RC-WR-.003,WA+.003],[RC-WR-.003,-WA-.003]],blackPlastic,120);inner.rotation.z=Math.PI/2;inner.position.y=YC;COIL.add(inner);
+ // el devanado va a la vista por sus cuatro caras: hilo de cobre esmaltado, sin carrete que lo tape
  // abrazaderas negras, arriba a un lado y a otro
  for(const s of[-1,1]){const a=s*.72,b=new THREE.Mesh(roundBox(.036,.046,.046,.005,.002),blackPlastic);b.position.set(0,YC+RC*Math.cos(a),RC*Math.sin(a));b.rotation.x=a;COIL.add(b)}
  // pie: zócalo y columna que abraza el aro por abajo, con los dos bornes en su cara derecha
