@@ -79,13 +79,13 @@ body:not([data-lab="electromagnetismo"]) .lab-emo{display:none!important}body[da
 <p class="lab-emo">Representa <i>B</i><sub>z</sub> frente a <i>z</i>.</p>
 <p>Con esos datos, representa <i>B</i><sub>z</sub> frente a <i>t</i> = (<i>z</i>² + <i>R</i>²)<sup>−3/2</sup> y ajusta la recta <i>B</i><sub>z</sub> = <i>a t</i> + <i>b</i>. Da la pendiente, la ordenada en el origen y el coeficiente de correlación, y con ellos halla la permeabilidad del vacío <i>μ</i><sub>0</sub>.</p>
 <p class="lab-amp">Forma del campo: en los puntos de la rejilla marcados con un círculo, uno cada 5 cm, mide <i>B</i><sub>z</sub> con la sonda a lo largo del eje y <i>B</i><sub>ρ</sub> con la sonda atravesada, y dibuja en cada punto el vector campo. Por simetría basta un lado de la bobina.</p>
-<p class="lab-emo">Vector campo: en los trece puntos de la tabla de la ficha (<i>z</i> = 0, 10 y 20 cm, con <i>ρ</i> de −20 a 20 cm de 10 en 10; en <i>z</i> = 0, solo <i>ρ</i> = −10, 0 y 10 cm), marcados en la rejilla con un círculo, mide <i>B</i><sub>z</sub> con la sonda a lo largo del eje y <i>B</i><sub>ρ</sub> con la sonda atravesada. Dibuja los vectores en el plano (<i>ρ</i>, <i>z</i>) con la escala 0,5 mT/cm. En <i>z</i> = 0 la sonda atravesada no cabe, porque la varilla tropieza con el devanado: en el plano de la bobina, por simetría, <i>B</i><sub>ρ</sub> = 0.</p>
+<p class="lab-emo">Vector campo: la rejilla es un cuarto del plano (<i>ρ</i> ≥ 0). En los puntos marcados con un círculo (<i>z</i> = 0, 10 y 20 cm con <i>ρ</i> = 10 y 20 cm; en <i>z</i> = 0, solo <i>ρ</i> = 10 cm) y en los del eje, mide <i>B</i><sub>z</sub> con la sonda a lo largo del eje y <i>B</i><sub>ρ</sub> con la sonda atravesada. Los puntos de la tabla de la ficha con <i>ρ</i> negativa salen por simetría: <i>B</i><sub>z</sub>(−<i>ρ</i>) = <i>B</i><sub>z</sub>(<i>ρ</i>) y <i>B</i><sub>ρ</sub>(−<i>ρ</i>) = −<i>B</i><sub>ρ</sub>(<i>ρ</i>). Dibuja los vectores en el plano (<i>ρ</i>, <i>z</i>) con la escala 0,5 mT/cm. En <i>z</i> = 0 la sonda atravesada no cabe, porque la varilla tropieza con el devanado: en el plano de la bobina, por simetría, <i>B</i><sub>ρ</sub> = 0.</p>
 <h2>Tabla de la ficha <small class="rw">(rellenar en Word)</small></h2>
 <table><tr><th><i>z</i></th><th><i>ε</i><sub>z</sub></th><th><i>B</i><sub>z</sub></th><th><i>ε</i><sub>Bz</sub></th><th><i>t</i></th><th><i>ε</i><sub>t</sub></th></tr><tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr></table>
 <table class="lab-emo"><tr><th><i>z</i></th><th><i>ρ</i></th><th><i>B</i><sub>z</sub></th><th><i>ε</i><sub>Bz</sub></th><th><i>B</i><sub>ρ</sub></th><th><i>ε</i><sub>Bρ</sub></th></tr><tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr></table>
 <h2>Datos y errores</h2>
 <p>El campo se lee en el teslámetro, en militeslas, y la intensidad en el amperímetro, en amperios; el error de cada lectura es una unidad de su última cifra.</p>
-<p><i>z</i> y <i>ρ</i> se leen en la rejilla de la mesa, que tiene una línea por centímetro. El aro rojo señala el punto que queda bajo la punta de la sonda, que es donde se mide el campo, y dos líneas rojas lo llevan hasta las escalas de <i>z</i> y de <i>ρ</i>.<span class="lab-emo"> <i>ρ</i> es positiva hacia el fondo y negativa hacia ti.</span></p>
+<p><i>z</i> y <i>ρ</i> se leen en la rejilla de la mesa, que tiene una línea por centímetro. El aro rojo señala el punto que queda bajo la punta de la sonda, que es donde se mide el campo, y dos líneas rojas lo llevan hasta las escalas de <i>z</i> y de <i>ρ</i>.</p>
 <p>2<i>R</i> se lee en la regla; su error es la división más pequeña de la regla.</p>
 <p>El número de vueltas, <i>N</i> = 100, es un dato.</p>
 <h2>Cómo se usa</h2>
@@ -601,10 +601,10 @@ function drawPSU1(P){const x=P.ctx,st=S?S[P.sid]:null;x.setTransform(2,0,0,2,0,0
 function drawPSU(P){return P.v1?drawPSU1(P):drawPSU2(P)}
 /* ================= campo magnético de una bobina: bobina, rejilla, teslámetro y sonda ================= */
 // Sistema de la práctica: z a lo largo del eje de la bobina (hacia la izquierda de la escena) y ρ perpendicular a él, alejándose de quien mira: así la sonda atravesada queda por detrás de la rejilla y mide Bρ con su signo. Origen en el centro de la bobina.
-// La misma app sirve a dos laboratorios: en el de Electromagnetismo (…?lab=electromagnetismo) la ficha pide también puntos al otro lado del eje, así que la rejilla va de ρ = −22 a 22 cm.
+// La misma app sirve a dos laboratorios (…?lab=electromagnetismo): cambian la guía y los puntos marcados en la rejilla, que en los dos es un cuarto del plano.
 const LABQ=(new URLSearchParams(location.search).get('lab')||'').toLowerCase(),EMO=LABQ==='electromagnetismo';
 if(/^[a-z]+$/.test(LABQ)){document.body.dataset.lab=LABQ;const bk=document.querySelector('header a.back');if(bk){bk.href='laboratorios.html#'+LABQ;if(EMO)bk.setAttribute('aria-label','Volver al Laboratorio de Electromagnetismo')}}
-const XC=.14,ZC=.24,RC=.20,YC=.262,NV=100,ZMAX=20,RMAX=EMO?22:24,RMIN=EMO?-22:0; // centro de la bobina y altura de su eje, radio medio, vueltas; extensión de la rejilla en cm
+const XC=.14,ZC=.20,RC=.20,YC=.262,NV=100,ZMAX=20,RMAX=24,RMIN=0; // centro de la bobina y altura de su eje, radio medio, vueltas; extensión de la rejilla en cm
 const LZ=z=>XC-z,LR=r=>ZC-r; // de (z, ρ) en metros a coordenadas de la escena
 const WR=.009,WA=.011; // semiancho radial y axial del devanado
 const COIL=new THREE.Group();COIL.position.set(XC,0,ZC);SC.add(COIL);
@@ -627,8 +627,8 @@ COIL.jack=k=>{const sk=COIL.userData.sk,a=k==='a'?.021:-.021;return {p:sk.localT
 COIL.plug=(k,c)=>plugAt(COIL.userData.sk,k==='a'?.021:-.021,0,c);
 
 // Rejilla proyectada en la mesa, bajo el plano horizontal que pasa por el eje: una línea por centímetro
-// Puntos en los que la ficha pide las dos componentes: en Ampliación, uno cada 5 cm a un lado del eje; en Electromagnetismo, los trece de su tabla, a los dos lados.
-const FPTS=[];if(EMO){for(const z of[0,10,20])for(const r of[-20,-10,10,20])if(z||Math.abs(r)<20)FPTS.push([z,r])}else for(let z=0;z<=ZMAX;z+=5)for(let r=5;r<=RMAX;r+=5)if(!(r===20&&z===0))FPTS.push([z,r]);
+// Puntos en los que la ficha pide las dos componentes: en Ampliación, uno cada 5 cm; en Electromagnetismo, los de su tabla con ρ positiva (los de ρ negativa salen por simetría).
+const FPTS=[];if(EMO){for(const z of[0,10,20])for(const r of[10,20])if(z||r<20)FPTS.push([z,r])}else for(let z=0;z<=ZMAX;z+=5)for(let r=5;r<=RMAX;r+=5)if(!(r===20&&z===0))FPTS.push([z,r]);
 const GRID=(()=>{const PX=64,RS=EMO?10:5,M0=EMO?7.4:6.4,M1=1.3,MT=1.3,MB=7.0,W=(ZMAX+M0+M1),H=(RMAX-RMIN+MT+MB),cw=Math.round(W*PX),ch=Math.round(H*PX),U=z=>(ZMAX+M0-z)*PX,Vv=r=>(RMAX-r+MT)*PX; // ρ crece hacia el fondo; las escalas, en el borde de delante y en el de la izquierda
  const t=canvasTex(cw,ch,(c)=>{c.clearRect(0,0,cw,ch);const INK='#35404c';c.strokeStyle=INK;c.fillStyle=INK;c.lineCap='butt';
   for(let z=0;z<=ZMAX;z++){c.globalAlpha=z%5===0?.85:.42;c.lineWidth=z%5===0?3.6:1.7;c.beginPath();c.moveTo(U(z),Vv(RMIN));c.lineTo(U(z),Vv(RMAX));c.stroke()}
@@ -729,8 +729,8 @@ const MARK=new THREE.Group();SC.add(MARK);const MKL={};{const mm=new THREE.MeshB
 function markAt(z,r){const x=LZ(z/100),w=LR(r/100);MARK.position.set(x,0,w);const zf=LR((RMIN-.9)/100),xl=LZ((ZMAX+.9)/100);
  MKL.r.rotation.z=Math.PI/2;MKL.r.scale.x=Math.max(1e-4,zf-w);MKL.r.position.set(x,.0013,(zf+w)/2);MKL.z.scale.x=Math.max(1e-4,x-xl);MKL.z.position.set((x+xl)/2,.0013,w)}
 /* ================= aparatos ================= */
-const AX=.36,AZ=.29,AY=-.42,TX=-.37,TZ=-.40,TY=-.22; // amperímetro y teslámetro: sitio y giro, de cara a quien mira
-const PL=makePSU1({sid:'L',x:.58,z:-.20,title:'FUENTE DE ALIMENTACIÓN',sgx:-38,sgy:7,
+const AX=.34,AZ=.50,AY=-.35,TX=-.28,TZ=-.40,TY=-.20; // amperímetro y teslámetro: sitio y giro, de cara a quien mira
+const PL=makePSU1({sid:'L',x:.50,z:-.24,title:'FUENTE DE ALIMENTACIÓN',sgx:-38,sgy:7,
  K:[{c:[106,146],max:18,st:3,cap:'0…18 V ⎓',r:36,dy:104},{c:[290,146],max:5,st:1,cap:'0…5 A',r:36,dy:104}],
  SK:{p:[196,298,'r'],n:[196,352,'b']},deco:[[330,325,'y'],[470,298,'k'],[470,352,'k']],PW:[566,84,44,70],
  art:x=>{x.fillStyle='#c3e3f1';rr(x,146,264,82,118,8);x.fill();rr(x,420,264,82,118,8);x.fill();
@@ -824,7 +824,7 @@ function placeProbe(){PROBE.position.set(LZ(VIS.z/100),YC,LR(VIS.r/100));PROBE.r
 
 /* ================= cámara ================= */
 const PM=()=>matchMedia('(max-width:820px),(max-height:520px)').matches;
-const V0=()=>({az:-.42,el:PM()&&box.clientHeight>box.clientWidth?.80:.72});
+const V0=()=>(PM()&&box.clientHeight>box.clientWidth?{az:-.20,el:1.10}:{az:-.42,el:.72}); // en el móvil en vertical, más desde el lado y más desde arriba: el montaje ocupa la pantalla a lo alto
 let az,el,dist;const TG=V3();
 // Lo que tiene que caber en el encuadre de partida: los aparatos, la rejilla y el soporte de la sonda en sus posiciones extremas a lo largo del eje y en una atravesada
 const BB=[];function bbAdd(o){o.updateMatrixWorld(true);const b=new THREE.Box3().setFromObject(o);for(const x of[b.min.x,b.max.x])for(const y of[Math.max(0,b.min.y),b.max.y])for(const z of[b.min.z,b.max.z])BB.push(V3(x,y,z))}

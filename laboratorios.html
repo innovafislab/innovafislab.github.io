@@ -1373,9 +1373,11 @@ body.inlab details.lab>summary{cursor:default}body.inlab details.lab>summary .ch
     ids.forEach(function (id) { var d = document.getElementById(id); if (d) { d.classList.toggle("off", id !== want); d.open = id === want; } });
     cards.forEach(function (c) { c.classList.toggle("on", c.getAttribute("data-lab") === want); });
     document.body.classList.toggle("inlab", ids.indexOf(want) >= 0);
-    if (scroll) window.scrollTo(0, 0);
+    if (scroll) { var gy = 0; if (ids.indexOf(want) < 0) { try { gy = +sessionStorage.getItem("labGridY") || 0; } catch (e) {} } window.scrollTo(0, gy); if (gy) requestAnimationFrame(function () { window.scrollTo(0, gy); }); }
   }
-  cards.forEach(function (c) { c.addEventListener("click", function (e) { e.preventDefault(); var w = c.getAttribute("data-lab"); try { if ((location.hash || "") === "#" + w) {} else if (location.hash) history.replaceState(null, "", "#" + w); else { history.pushState(null, "", "#" + w); window.__labPushed = true; } } catch (x) {} sel(w, true); }); });
+  // al entrar en un laboratorio se guarda dónde estaba la página de bloques, para volver justo ahí
+  function keepGrid() { if (!document.body.classList.contains("inlab")) { try { sessionStorage.setItem("labGridY", String(window.scrollY)); } catch (e) {} } }
+  cards.forEach(function (c) { c.addEventListener("click", function (e) { e.preventDefault(); keepGrid(); var w = c.getAttribute("data-lab"); try { if ((location.hash || "") === "#" + w) {} else if (location.hash) history.replaceState(null, "", "#" + w); else { history.pushState(null, "", "#" + w); window.__labPushed = true; } } catch (x) {} sel(w, true); }); });
 
   document.getElementById("labback").addEventListener("click", function (e) { e.preventDefault(); if (window.__labPushed) { window.__labPushed = false; history.back(); return; } try { history.replaceState(null, "", location.pathname); } catch (x) {} sel("", true); });
   document.addEventListener("click", function (e) { var s = e.target.closest && e.target.closest("details.lab > summary"); if (s && document.body.classList.contains("inlab")) e.preventDefault(); }, true);
@@ -1385,7 +1387,7 @@ body.inlab details.lab>summary{cursor:default}body.inlab details.lab>summary .ch
   var K = "labScroll", back = null;
   try { back = JSON.parse(sessionStorage.getItem(K) || "null"); } catch (e) {}
   window.addEventListener("pagehide", function () { try { sessionStorage.setItem(K, JSON.stringify({ lab: (location.hash || "").replace("#", ""), y: window.scrollY, t: Date.now() })); } catch (e) {} });
-  if (back && ids.indexOf(want) >= 0 && back.lab === want && Date.now() - back.t < 3600000) {
+  if (back && (ids.indexOf(want) >= 0 || !want) && back.lab === want && Date.now() - back.t < 3600000) {
     try { history.scrollRestoration = "manual"; } catch (e) {}
     sel(want, false);
     var go = function () { window.scrollTo(0, back.y); };
