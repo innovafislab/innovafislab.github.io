@@ -909,7 +909,7 @@ function stacks(skip){const M={};for(const k of CK)S.free.ends[k].forEach((a,e)=
 // bornes en los que no cabe otra clavija de cable: los de las piezas y los que ya tienen MAXST
 function plugFull(skip){const T=new Set(),M=stacks(skip);for(const a in M)if(M[a].length>=MAXST)T.add(a);S.free.mods.forEach(q=>{if(q.at){T.add('B:'+q.at[0]+':'+q.at[1]);T.add('B:'+q.at[2]+':'+q.at[3])}});return T}
 // rumbo de salida de cada cable de una pila: hacia donde va su otro extremo. Se separan entre sí sin cambiar de orden, para que los cables no se crucen al salir.
-function stackAngles(at,list){const J=jack0(at),qi=J.q.clone().invert(),isB=at[0]==='B',P=at==='S:p',G=P?45:60,lim=isB?400:P?50:100; // del + de la fuente, nunca hacia abajo (debajo está el borne −): solo a un lado o al otro
+function stackAngles(at,list){const J=jack0(at),qi=J.q.clone().invert(),isB=at[0]==='B',P=at==='S:p',G=P?45:60,lim=isB?400:P?45:at==='S:n'?90:100; // del + de la fuente, de lado o hacia arriba; del −, de lado o hacia abajo: así los cables de un borne no se meten entre los del otro
  const w=list.map(([k,e])=>{const v=endBase(k,1-e).clone().sub(J.base).applyQuaternion(qi),a=Math.atan2(v.x,-v.y)*180/Math.PI;
   return P?Math.max(-lim,Math.min(lim,a>=0?Math.max(0,a-50)+.01:Math.min(0,a+50)-.01)):Math.max(-lim,Math.min(lim,a))});
  const ord=w.map((_,i)=>i).sort((a,b)=>w[a]-w[b]),a=ord.map(i=>w[i]);
@@ -917,13 +917,13 @@ function stackAngles(at,list){const J=jack0(at),qi=J.q.clone().invert(),isB=at[0
   if(m){for(let i=1;i<a.length;i++)a[i]=Math.max(a[i],a[i-1]+G);const o=Math.max(0,a[a.length-1]-lim);for(let i=0;i<a.length;i++)a[i]-=o}
   else{for(let i=a.length-2;i>=0;i--)a[i]=Math.min(a[i],a[i+1]-G);const o=Math.max(0,-lim-a[0]);for(let i=0;i<a.length;i++)a[i]+=o}}
  else for(let it=0;it<30;it++){for(let i=1;i<a.length;i++){const g=G-(a[i]-a[i-1]);if(g>0){a[i-1]-=g/2;a[i]+=g/2}}if(!isB){const o=Math.max(0,a[a.length-1]-lim)-Math.max(0,-lim-a[0]);for(let i=0;i<a.length;i++)a[i]-=o}}
- const out=[];ord.forEach((i,r)=>{let v=Math.round(a[r]/15)*15;if(P)v=a[r]>=0?v+45:v-45;out[i]=((v%360)+540)%360-180});return out}
+ const out=[];ord.forEach((i,r)=>{let v=Math.round(a[r]/15)*15;if(P)v=a[r]>=0?v+90:v-90;out[i]=((v%360)+540)%360-180});return out}
 // coloca todas las clavijas de los cables; guarda en cada una por dónde sale su cable
 function placePlugs(){const D=FREE.drag&&FREE.drag.t==='plug'?[FREE.drag.k,FREE.drag.e]:null,M=stacks(D);SC.updateMatrixWorld(true);
  for(const at in M){const L=M[at],A=L.length>1?stackAngles(at,L):null;
   L.forEach(([k,e],l)=>{const J=jackAt(at,l),h=DPL[k][e];h.position.copy(J.base);h.quaternion.copy(J.q);h.scale.setScalar(J.s);h.visible=true;const sp=plugMode(h,A?A[l]:null);
-   if(sp){h.updateMatrixWorld(true);const o=sp.out();h.userData.out={p:o.p,n:o.n}}else h.userData.out={p:J.p,n:J.n};h.userData.base=J.base;h.userData.len=A?SST*J.s:.040*J.s;h.userData.nn=J.n;h.userData.lvl=l;h.userData.stk=!!A;h.userData.rank=A?A.filter(q=>q<A[l]).length-(A.length-1)/2:0})}
- for(const k of CK)S.free.ends[k].forEach((a,e)=>{if(isJ(a)||(D&&D[0]===k&&D[1]===e))return;const J=a?tableJack(k,e):parkJack(k,e),h=DPL[k][e];h.position.copy(J.base);h.quaternion.copy(J.q);h.scale.setScalar(1);h.visible=FREE.show.has(k);plugMode(h,null);h.userData.out={p:J.p,n:J.n};h.userData.lvl=0;h.userData.stk=false;h.userData.rank=0})}
+   if(sp){h.updateMatrixWorld(true);const o=sp.out();h.userData.out={p:o.p,n:o.n}}else h.userData.out={p:J.p,n:J.n};h.userData.base=J.base;h.userData.len=A?SST*J.s:.040*J.s;h.userData.nn=J.n;h.userData.lvl=l;h.userData.above=L.length-1-l;h.userData.stk=!!A;h.userData.rank=A?A.filter(q=>q<A[l]).length-(A.length-1)/2:0})}
+ for(const k of CK)S.free.ends[k].forEach((a,e)=>{if(isJ(a)||(D&&D[0]===k&&D[1]===e))return;const J=a?tableJack(k,e):parkJack(k,e),h=DPL[k][e];h.position.copy(J.base);h.quaternion.copy(J.q);h.scale.setScalar(1);h.visible=FREE.show.has(k);plugMode(h,null);h.userData.out={p:J.p,n:J.n};h.userData.lvl=0;h.userData.above=0;h.userData.stk=false;h.userData.rank=0})}
 function taken(skipEnd,skipMod){const T=new Set();for(const k of CK)S.free.ends[k].forEach((a,e)=>{if(isJ(a)&&!(skipEnd&&skipEnd[0]===k&&skipEnd[1]===e))T.add(a)});
  S.free.mods.forEach((q,i)=>{if(q.at&&i!==skipMod){T.add('B:'+q.at[0]+':'+q.at[1]);T.add('B:'+q.at[2]+':'+q.at[3])}});return T}
 
@@ -945,11 +945,12 @@ function ring(k){const o=ROFF(k),q=o*Math.PI/2,T=2*BW+2*BD+4*q;
 function access(at,k,e,R){
  if(!at){const J=parkJack(k,e);return {J,st:'K',kind:'fall',L:[J.p.x,J.base.z+.07],d:[0,1],c:[{s:R.BL,air:0}],skip:.05,fa:[.02,.03],pre:J.base.z<-.55?[[-BW/2-R.o-.06,-BD/2-R.o-.012]]:[]}}
  if(at[0]==='T'){const J=tableJack(k,e),L=[J.p.x+J.n.x*.03,J.p.z+J.n.z*.03];let bs=0,bd=9;for(let q=0;q<R.T;q+=.02){const w=R.pt(q),d=Math.hypot(w[0]-L[0],w[1]-L[1]);if(d<bd){bd=d;bs=q}}return {J,st:'T'+k+e,kind:'fall',L,d:[J.n.x,J.n.z],c:[{s:bs,air:0}],skip:.05,fa:[.02,.03]}}
- const u=DPL[k][e].userData,J=Object.assign(jack0(at),u.out),t=at.split(':'),lv=u.lvl||0,rk=u.rank||0;
+ const u=DPL[k][e].userData,J=Object.assign(jack0(at),u.out),t=at.split(':'),lv=u.lvl||0,rk=u.rank||0,E={p:J.p,n:J.n,stk:u.stk,nn:u.nn,Lr:(u.above||0)*(u.len||0)};
  if(t[0]==='B'){const i=+t[1],j=+t[2],c=[i<3?{s:R.left(SZ(j)),air:SX(i)+BW/2}:{s:R.right(SZ(j)),air:BW/2-SX(i)}];
-  if(j<=4)c.push({s:R.back(SX(i)),air:SZ(j)+BD/2});if(j>=4)c.push({s:R.front(SX(i)),air:BD/2-SZ(j)});return {J,st:at,kind:'over',c,skip:.05,S:[SX(i),SZ(j)]}}
- if(t[0]==='S'){const pos=t[1]==='p';return {J,st:'S',kind:'fall',c:[{s:R.back(J.p.x),air:0}],skip:.06,fa:[undefined,.03],lv,rk,
-  side:g=>({L:[J.p.x+g*((pos?.046:.026)+.02*lv),(pos?-.352:-.349)+.012*lv],d:[g*.3,1]})}} // rodeando la placa: el cable de la fuente baja hacia el lado por el que va a seguir; el del +, que sale de más arriba, cae más lejos
+  if(j<=4)c.push({s:R.back(SX(i)),air:SZ(j)+BD/2});if(j>=4)c.push({s:R.front(SX(i)),air:BD/2-SZ(j)});return {J,E,st:at,kind:'over',c,skip:.05,S:[SX(i),SZ(j)]}}
+ if(t[0]==='S'){const pos=t[1]==='p';E.sd=pos?1:-1;E.ay=J.base.y;return {J,E,st:'S',kind:'fall',c:[{s:R.back(J.p.x),air:0}],skip:.06,fa:[u.stk?.045:undefined,.03],lv,rk,
+  // hacia la izquierda la esquina de la placa queda justo debajo: el cable se posa ya en línea con su carril (el de fuera, más afuera) y baja recto por él
+  side:g=>{const z=(pos?-.352:-.349)+.012*lv;return g<0?{L:[-BW/2-R.o+.003,Math.min(-.275,Math.max(z,J.p.z+.014))],d:[-.1,1],skip:R.back(J.p.x)+R.q+.006}:{L:[J.p.x+g*((pos?.062:.042)+.02*lv),Math.max(z,Math.min(J.p.z+.014,-BD/2-R.o))],d:[g*.7,.7],skip:.115+.02*lv}}}} // rodeando la placa: el cable de la fuente baja hacia el lado por el que va a seguir; el del +, que sale de más arriba, cae más lejos
  // de un polímetro, el cable baja hacia delante. Si luego va hacia atrás, da media vuelta y sigue por el pasillo que queda entre el polímetro y la placa (u); si no, pasa por delante de la placa
  const g=t[0]==='M0'?1:-1,L=[J.p.x+.02*rk,ZL+.01*Math.abs(rk)];
  return {J,st:t[0],kind:'fall',g,L,d:[0,1],c:[{s:g>0?R.left(L[1]):R.right(L[1]),air:0,out:g,u:1,skip:.04},{s:g>0?R.FL:R.FR,air:0,out:-g}],skip:.07,fa:[.055,.04]}}
@@ -964,6 +965,15 @@ const OBST=[[-BW/2,BW/2,-BD/2,BD/2,.016],[XA-.086,XA+.086,-.225,.150,.012],[XV-.
 const blocked=q=>OBST.some(([x1,x2,z1,z2,m])=>q.x>x1-m&&q.x<x2+m&&q.z>z1-m&&q.z<z2+m);
 // Tendido directo, sin rodear la placa, cuando nada estorba: el cable baja de una clavija, se posa en la mesa y sube a la otra por el camino más corto.
 // Da null si por ahí hay algo en medio (entonces el cable rodea la placa por su carril). mk(h) hace el tendido con el arco de la placa h más alto.
+// Un cable por el aire de una clavija a otra. Una clavija apilada saca el cable de costado: si no mira hacia donde va, hace un codo corto, sigue junto a las clavijas que tenga apiladas encima hasta rebasarlas y de ahí sale el arco, como el de una clavija sola. Sin rizos ni vaivenes.
+function airArc(A,B,k,off,n=28){
+ const end=(X,O)=>{if(!X.stk)return {P:[],E:X.p,t:X.n,k};
+  if(!(X.Lr>0))return {P:[],E:X.p,t:X.n,k:Math.min(k,X.n.dot(O.p.clone().sub(X.p).normalize())>.6?.05:.035)}; // la última de la pila: su cable sale ya libre
+  const E=X.p.clone().addScaledVector(X.n,.03).addScaledVector(X.nn,.02);if(X.sd&&X.sd*(E.y-X.ay)<.014)E.y=X.ay+X.sd*.014; // en la fuente, cada cable por el lado de su borne: el del + no baja hacia el −, ni al revés
+  const P=B3(X.p,X.p.clone().addScaledVector(X.n,.017),E.clone().addScaledVector(X.nn,-.014),E,5),run=X.Lr-.04;
+  if(run>0){const E2=E.clone().addScaledVector(X.nn,run);P.push(E.clone().lerp(E2,.5),E2);return {P,E:E2,t:X.nn,k:Math.max(.03,k-.03)}}return {P,E,t:X.nn,k:Math.max(.03,k-.03)}};
+ const a=end(A,B),b=end(B,A);
+ return [...a.P,...B3(a.E,a.E.clone().addScaledVector(a.t,a.k).add(off),b.E.clone().addScaledVector(b.t,b.k).add(off),b.E,n),...b.P.slice(0,-1).reverse(),...(b.P.length?[B.p.clone()]:[])]}
 function directPlan(A,B,idx){const eA=A.J,eB=B.J,d2=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
  // dónde se posa el cable de un aparato, yendo hacia T. La fuente lo deja caer hacia donde va; si va muy cerca, ni se posa antes
  const land=(X,T,force)=>{if(X.st!=='S')return {L:X.L,d:un2(X.d)};const j=[X.J.p.x,X.J.p.z],g=d2(T,j);if(g<.19&&!force)return null;const u=un2([T[0]-j[0],Math.max(T[1]-j[1],.35*g)]);return {L:[j[0]+u[0]*.078+.016*X.rk,j[1]+u[1]*.078],d:u}};
@@ -977,17 +987,17 @@ function directPlan(A,B,idx){const eA=A.J,eB=B.J,d2=(a,b)=>Math.hypot(a[0]-b[0],
    const s=edge(w,O.S);if(s>.215||g<s+.068)return null; // a un borne de delante: el cable gira delante del polímetro, con la misma hondura, y sube a la placa
    const F=[O.S[0]+w[0]*(s+.05),O.S[1]+w[1]*(s+.05)],d=uDepth(F[0]-L[0]),c=Math.min(.05,.4*d2(L,F)),fp=bez2(L,[L[0],L[1]+d],[F[0]+w[0]*c,F[1]+w[1]*c],F);if(fp.some(blocked))return null;
    return ([h])=>{const P=[...fall(X.J,L,[0,1],X.fa[0],X.fa[1]),...fp,...over(O.J,F,w,.098+.004*(idx%3)+h).reverse()];return X===A?P:P.reverse()}}
-  const s=edge(w,O.S);if(s>.215||g<s+.068)return null;
-  const F=[O.S[0]+w[0]*(s+.05)+(X.st==='S'?.016*X.rk:0),O.S[1]+w[1]*(s+.05)],lx=land(X,F),fp=lx?floorPath2([lx.L,F],lx.d,[-w[0],-w[1]]):[];
+  const s=edge(w,O.S),near=X.st==='S'&&g<s+.068;if(s>.275||g<s+.068&&!near)return null; // near: clavija apilada de la fuente, que asoma hasta casi la placa: derecho al borne, por el aire
+  const F=[O.S[0]+w[0]*(s+.05)+(X.st==='S'?.016*X.rk:0),O.S[1]+w[1]*(s+.05)],lx=near?null:land(X,F),fp=lx?floorPath2([lx.L,F],lx.d,[-w[0],-w[1]]):[];
   if(lx&&(d2(lx.L,F)<.03||fp.some(blocked)))return null;
   if(!lx)return ([h,l=0])=>{const a=X.J.p,b=O.J.p,sd=V3(b.z-a.z,0,a.x-b.x).normalize().multiplyScalar(l),k0=Math.max(.06,Math.min(.12,.32*a.distanceTo(b)))+.005*idx+h, // de la fuente a un borne cercano de la placa: un solo arco por el aire, sin posarse
-    P=[a.clone().addScaledVector(X.J.n,-.004),a.clone(),...B3(a,a.clone().addScaledVector(X.J.n,k0).add(sd),b.clone().addScaledVector(O.J.n,k0).add(sd),b,30),b.clone().addScaledVector(O.J.n,-.004)];return X===A?P:P.reverse()};
+    P=[a.clone().addScaledVector(X.J.n,-.004),a.clone(),...airArc(X.E,O.E,k0,sd,30),b.clone().addScaledVector(O.J.n,-.004)];return X===A?P:P.reverse()};
   return ([h])=>{const P=[...fl(X,X.J,lx.L,lx.d),...fp,...over(O.J,F,w,.098+.004*idx+h).reverse()];return X===A?P:P.reverse()}}
  if(A.g&&B.g)return null; // de un polímetro al otro, por delante de la placa y arrimado a ella
  const la=land(A,B.st==='S'?[eB.p.x,eB.p.z+.03]:B.L,true),lb=land(B,la.L,true);
  // un polímetro cuyo cable tiene que volver hacia atrás: media vuelta delante de él (si lo otro queda a un lado, no muy lejos) y atrás en línea recta
  const back=(X,l,o)=>X.g&&o.L[1]<l.L[1]-.02,ta=back(A,la,lb),tb=!ta&&back(B,lb,la);
- if(ta||tb){const l=ta?la:lb,o=ta?lb:la,X=ta?A:B,O=ta?B:A,w=Math.abs(o.L[0]-l.L[0]);if(w<.03||w>.22)return null;const U=uTurn(l.L,o.L[0]),G=[o.L[0],l.L[1]];if(d2(G,o.L)<.05||U.some(blocked))return null;
+ if(ta||tb){const l=ta?la:lb,o=ta?lb:la,X=ta?A:B,O=ta?B:A,w=Math.abs(o.L[0]-l.L[0]);if(w<.03||w>.22||O.st==='S')return null;const U=uTurn(l.L,o.L[0]),G=[o.L[0],l.L[1]];if(d2(G,o.L)<.05||U.some(blocked))return null;
   for(const od of O.st[0]==='T'?[o.d,un2([G[0]-o.L[0],G[1]-o.L[1]])]:[o.d]){const fp=floorPath2([G,o.L],[0,-1],[-od[0],-od[1]]);if(fp.some(blocked))continue; // una clavija suelta en la mesa: si su cable no puede salir derecho, sale ya girado
    return ()=>{const P=[...fl(X,X.J,l.L,l.d),...U,...fp,...fl(O,O.J,o.L,od).reverse()];return ta?P:P.reverse()}}
   return null}
@@ -1022,7 +1032,7 @@ function freePath(k,done,plugs){const idx=FREE.lane[k]||0,[a0,a1]=S.free.ends[k]
  // entre varias formas de tender el cable, la primera que no tropieza por el aire con nada; si todas tropiezan, la que menos
  const pick=(opts,mk)=>{let best=null,bb=1e9;for(const o of opts){const P=mk(o),c=airClash(dense(P,.006),k,done,plugs);if(c<1e-6)return P;if(c<bb){bb=c;best=P}}return best};
  if(A.kind==='over'&&B.kind==='over'){const a=eA.p,b=eB.p,d=a.distanceTo(b),k0=Math.max(.05,Math.min(.11,.30*d))+.006*idx,sd=V3(b.z-a.z,0,a.x-b.x).normalize(); // de borne a borne de la placa: un arco por el aire, más alto o ladeado si hace falta
-  return pick([[0,0],[.024,0],[0,.03],[0,-.03],[.045,0],[.03,.04],[.03,-.04],[.07,0]],([h,l])=>[a.clone().addScaledVector(eA.n,-.004),a.clone(),...B3(a,a.clone().addScaledVector(eA.n,k0+h).addScaledVector(sd,l),b.clone().addScaledVector(eB.n,k0+h).addScaledVector(sd,l),b,26),b.clone().addScaledVector(eB.n,-.004)])}
+  return pick([[0,0],[.024,0],[0,.03],[0,-.03],[.045,0],[.03,.04],[.03,-.04],[.07,0]],([h,l])=>[a.clone().addScaledVector(eA.n,-.004),a.clone(),...airArc(A.E,B.E,k0+h,sd.clone().multiplyScalar(l),26),b.clone().addScaledVector(eB.n,-.004)])}
  const dn=(X,e,L,d,h,m=1)=>{if(X.kind==='over')return over(e,L,d,.098+.004*idx+h);const k1=(X.fa[0]===undefined?Math.min(.12,.35*e.p.distanceTo(V3(L[0],FY,L[1]))):X.fa[0])*m;return fall(e,L,d,k1,X.fa[1])};
  if(A.st===B.st){if(A.side){Object.assign(A,A.side(-1));Object.assign(B,B.side(1))}const dA=un2(A.d),dB=un2(B.d);return pick([1,.6,1.6,2.2,.35],m=>[...dn(A,eA,A.L,dA,0,m),...floorPath2([A.L,B.L],dA,[-dB[0],-dB[1]]),...dn(B,eB,B.L,dB,0,m).reverse()])} // los dos extremos en el mismo aparato
  const dp=directPlan(A,B,idx);if(dp)return pick([[0,0],[.03,0],[0,.035],[0,-.035],[.055,0],[.03,.05],[.03,-.05],[.08,0]],dp);
@@ -1031,7 +1041,7 @@ function freePath(k,done,plugs){const idx=FREE.lane[k]||0,[a0,a1]=S.free.ends[k]
  // sh: la salida de la placa, desplazada a lo largo del borde (pasa entre dos bornes en vez de por encima de uno); h: más alta
 const OFF=[[0,0],[.022,.014],[-.022,.014],[0,.03],[.042,.022],[-.042,.022]]; // dónde más puede posarse el cable de un aparato si en su sitio tropieza
  // a un borne de la placa el cable no llega de frente, en ángulo recto: deja el carril un poco antes y sube en diagonal (ld)
- const room=Math.max(0,(arc-(ca.skip||A.skip)-(cb.skip||B.skip))/((A.kind==='over')+(B.kind==='over')||1)-.01),ld=c=>Math.min(.07,.012+.4*c.air,room);
+ const room=Math.max(0,(arc-(ca.skip||A.skip)-(cb.skip||B.skip))/((A.kind==='over')+(B.kind==='over')||1)-.01),ld=c=>Math.min(.08,.03+.4*c.air,room);
  const mk=([sh,h,m=1,q=0])=>{const sA=ca.s+(A.kind==='over'?sh+dir*ld(ca):0),sB=cb.s+(B.kind==='over'?sh-dir*ld(cb):0),ar=((dir*(sB-sA))%R.T+R.T)%R.T;
   const sf=L=>[L[0]+OFF[q][0],L[1]+OFF[q][1]],uA=ca.u,uB=cb.u,tb=tan(sB),skA=ca.skip||A.skip,skB=cb.skip||B.skip;
   const ta=tan(sA),bl=(X,L,t)=>{const w=un2([L[0]-X.S[0],L[1]-X.S[1]]);return un2([t[0]+.8*w[0],t[1]+.8*w[1]])}; // al posarse, el cable que baja de la placa en diagonal va ya girando hacia el carril
