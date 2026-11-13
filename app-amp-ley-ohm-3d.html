@@ -950,7 +950,15 @@ function access(at,k,e,R){
   if(j<=4)c.push({s:R.back(SX(i)),air:SZ(j)+BD/2});if(j>=4)c.push({s:R.front(SX(i)),air:BD/2-SZ(j)});return {J,st:at,kind:'over',c,skip:.05,S:[SX(i),SZ(j)]}}
  if(t[0]==='S'){const pos=t[1]==='p';return {J,st:'S',kind:'fall',c:[{s:R.back(J.p.x),air:0}],skip:.06,fa:[undefined,.03],lv,rk,
   side:g=>({L:[J.p.x+g*((pos?.046:.026)+.02*lv),(pos?-.352:-.349)+.012*lv],d:[g*.3,1]})}} // rodeando la placa: el cable de la fuente baja hacia el lado por el que va a seguir; el del +, que sale de más arriba, cae más lejos
- return {J,st:t[0],kind:'fall',L:[J.p.x+.02*rk,ZM+.115+.01*Math.abs(rk)],d:[0,1],c:[{s:t[0]==='M0'?R.FL:R.FR,air:0}],skip:.07,fa:[.055,.04]}}
+ // de un polímetro, el cable baja hacia delante. Si luego va hacia atrás, da media vuelta y sigue por el pasillo que queda entre el polímetro y la placa (u); si no, pasa por delante de la placa
+ const g=t[0]==='M0'?1:-1,L=[J.p.x+.02*rk,ZL+.01*Math.abs(rk)];
+ return {J,st:t[0],kind:'fall',g,L,d:[0,1],c:[{s:g>0?R.left(L[1]):R.right(L[1]),air:0,out:g,u:1,skip:.04},{s:g>0?R.FL:R.FR,air:0,out:-g}],skip:.07,fa:[.055,.04]}}
+const ZL=ZM+.10; // dónde se posa el cable de un polímetro, delante de él
+// Media vuelta delante de un polímetro: el cable, que viene hacia delante desde L, vuelve hacia atrás por x=xr. Tanto más honda cuanto más ancha, y así las de dos bornes vecinos quedan una dentro de otra, sin cruzarse.
+const uDepth=w=>(.02+.25*Math.abs(w))*4/3;
+function bez2(a,b,c,d,ends){const n=Math.max(8,Math.ceil((Math.hypot(b[0]-a[0],b[1]-a[1])+Math.hypot(c[0]-b[0],c[1]-b[1])+Math.hypot(d[0]-c[0],d[1]-c[1]))/.008)),o=[];
+ for(let i=1;i<(ends?n+1:n);i++){const t=i/n,u=1-t,w0=u*u*u,w1=3*u*u*t,w2=3*u*t*t,w3=t*t*t;o.push(V3(w0*a[0]+w1*b[0]+w2*c[0]+w3*d[0],FY,w0*a[1]+w1*b[1]+w2*c[1]+w3*d[1]))}return o}
+const uTurn=(L,xr)=>{const d=uDepth(xr-L[0]);return bez2(L,[L[0],L[1]+d],[xr,L[1]+d],[xr,L[1]],true)};
 // Lo que un cable posado en la mesa no puede pisar: la placa, los polímetros, la fuente y la bandeja (con su margen)
 const OBST=[[-BW/2,BW/2,-BD/2,BD/2,.016],[XA-.086,XA+.086,-.225,.150,.012],[XV-.086,XV+.086,-.225,.150,.012],[XP-.16,XP+.16,-.72,-.385,.006],[TRX+1.5*TRP-.1925,TRX+1.5*TRP+.1925,TRZ-TRP/2-.1025,TRZ-TRP/2+.1025,.012]];
 const blocked=q=>OBST.some(([x1,x2,z1,z2,m])=>q.x>x1-m&&q.x<x2+m&&q.z>z1-m&&q.z<z2+m);
@@ -961,13 +969,29 @@ function directPlan(A,B,idx){const eA=A.J,eB=B.J,d2=(a,b)=>Math.hypot(a[0]-b[0],
  const land=(X,T,force)=>{if(X.st!=='S')return {L:X.L,d:un2(X.d)};const j=[X.J.p.x,X.J.p.z],g=d2(T,j);if(g<.19&&!force)return null;const u=un2([T[0]-j[0],Math.max(T[1]-j[1],.35*g)]);return {L:[j[0]+u[0]*.078+.016*X.rk,j[1]+u[1]*.078],d:u}};
  const fl=(X,e,L,d)=>{const k1=X.fa[0]===undefined?Math.min(.12,.35*e.p.distanceTo(V3(L[0],FY,L[1]))):X.fa[0];return fall(e,L,d,k1,X.fa[1])};
  if(A.kind==='over'||B.kind==='over'){const O=A.kind==='over'?A:B,X=O===A?B:A,T=X.st==='S'?[X.J.p.x,X.J.p.z+.02]:X.L,w=un2([T[0]-O.S[0],T[1]-O.S[1]]),g=d2(T,O.S);
-  const s=Math.min(w[0]?(BW/2-Math.sign(w[0])*O.S[0])/Math.abs(w[0]):9,w[1]?(BD/2-Math.sign(w[1])*O.S[1])/Math.abs(w[1]):9);if(s>.215||g<s+.068)return null;
+  const edge=(w,S)=>Math.min(w[0]?(BW/2-Math.sign(w[0])*S[0])/Math.abs(w[0]):9,w[1]?(BD/2-Math.sign(w[1])*S[1])/Math.abs(w[1]):9);
+  if(X.g){const xr=-X.g*(BW/2+ROFF(idx)),zF=O.S[1]+.45*Math.abs(O.S[0]-xr),L=X.L;
+   if(zF<=L[1]-.03){ // de un polímetro a un borne de la placa que queda más atrás: media vuelta, atrás por el pasillo y arriba
+    const F=[xr,zF],wf=un2([F[0]-O.S[0],F[1]-O.S[1]]);if(edge(wf,O.S)>.275)return null;const D=un2([.35*wf[0],.35*wf[1]+.8]),G=[xr,L[1]],W=G[1]-zF>.09?[G,[xr,zF+.05],F]:[G,F];
+    const f=([h])=>{const P=[...fall(X.J,L,[0,1],X.fa[0],X.fa[1]),...uTurn(L,xr),...floorPath2(W,[0,-1],[-D[0],-D[1]]),...over(O.J,F,D,.098+.004*(idx%3)+h).reverse()];return X===A?P:P.reverse()};f.u={X,zF};return f}
+   const s=edge(w,O.S);if(s>.215||g<s+.068)return null; // a un borne de delante: el cable gira delante del polímetro, con la misma hondura, y sube a la placa
+   const F=[O.S[0]+w[0]*(s+.05),O.S[1]+w[1]*(s+.05)],d=uDepth(F[0]-L[0]),c=Math.min(.05,.4*d2(L,F)),fp=bez2(L,[L[0],L[1]+d],[F[0]+w[0]*c,F[1]+w[1]*c],F);if(fp.some(blocked))return null;
+   return ([h])=>{const P=[...fall(X.J,L,[0,1],X.fa[0],X.fa[1]),...fp,...over(O.J,F,w,.098+.004*(idx%3)+h).reverse()];return X===A?P:P.reverse()}}
+  const s=edge(w,O.S);if(s>.215||g<s+.068)return null;
   const F=[O.S[0]+w[0]*(s+.05)+(X.st==='S'?.016*X.rk:0),O.S[1]+w[1]*(s+.05)],lx=land(X,F),fp=lx?floorPath2([lx.L,F],lx.d,[-w[0],-w[1]]):[];
   if(lx&&(d2(lx.L,F)<.03||fp.some(blocked)))return null;
   if(!lx)return ([h,l=0])=>{const a=X.J.p,b=O.J.p,sd=V3(b.z-a.z,0,a.x-b.x).normalize().multiplyScalar(l),k0=Math.max(.06,Math.min(.12,.32*a.distanceTo(b)))+.005*idx+h, // de la fuente a un borne cercano de la placa: un solo arco por el aire, sin posarse
     P=[a.clone().addScaledVector(X.J.n,-.004),a.clone(),...B3(a,a.clone().addScaledVector(X.J.n,k0).add(sd),b.clone().addScaledVector(O.J.n,k0).add(sd),b,30),b.clone().addScaledVector(O.J.n,-.004)];return X===A?P:P.reverse()};
   return ([h])=>{const P=[...fl(X,X.J,lx.L,lx.d),...fp,...over(O.J,F,w,.098+.004*idx+h).reverse()];return X===A?P:P.reverse()}}
- const la=land(A,B.st==='S'?[eB.p.x,eB.p.z+.03]:B.L,true),lb=land(B,la.L,true),fp=floorPath2([la.L,lb.L],la.d,[-lb.d[0],-lb.d[1]]);
+ if(A.g&&B.g)return null; // de un polímetro al otro, por delante de la placa y arrimado a ella
+ const la=land(A,B.st==='S'?[eB.p.x,eB.p.z+.03]:B.L,true),lb=land(B,la.L,true);
+ // un polímetro cuyo cable tiene que volver hacia atrás: media vuelta delante de él (si lo otro queda a un lado, no muy lejos) y atrás en línea recta
+ const back=(X,l,o)=>X.g&&o.L[1]<l.L[1]-.02,ta=back(A,la,lb),tb=!ta&&back(B,lb,la);
+ if(ta||tb){const l=ta?la:lb,o=ta?lb:la,X=ta?A:B,O=ta?B:A,w=Math.abs(o.L[0]-l.L[0]);if(w<.03||w>.22)return null;const U=uTurn(l.L,o.L[0]),G=[o.L[0],l.L[1]];if(d2(G,o.L)<.05||U.some(blocked))return null;
+  for(const od of O.st[0]==='T'?[o.d,un2([G[0]-o.L[0],G[1]-o.L[1]])]:[o.d]){const fp=floorPath2([G,o.L],[0,-1],[-od[0],-od[1]]);if(fp.some(blocked))continue; // una clavija suelta en la mesa: si su cable no puede salir derecho, sale ya girado
+   return ()=>{const P=[...fl(X,X.J,l.L,l.d),...U,...fp,...fl(O,O.J,o.L,od).reverse()];return ta?P:P.reverse()}}
+  return null}
+ const fp=floorPath2([la.L,lb.L],la.d,[-lb.d[0],-lb.d[1]]);
  if(d2(la.L,lb.L)<.05||fp.some(blocked)||la.d[0]*(lb.L[0]-la.L[0])+la.d[1]*(lb.L[1]-la.L[1])<0&&lb.d[0]*(la.L[0]-lb.L[0])+lb.d[1]*(la.L[1]-lb.L[1])<0)return null;
  return ()=>[...fl(A,eA,la.L,la.d),...fp,...fl(B,eB,lb.L,lb.d).reverse()]}
 // De una clavija de la placa a la mesa: el cable sube, pasa por encima de las piezas y de las clavijas vecinas, cruza el borde de la placa y baja a su carril.
@@ -979,13 +1003,18 @@ function over(e,L,d,H){const p=e.p.clone(),a=p.clone().addScaledVector(e.n,-.004
 function floorPath2(W,d0,d1){const n=W.length,T=W.map((q,i)=>{if(i===0){const l=Math.hypot(W[1][0]-q[0],W[1][1]-q[1]);return [d0[0]*l,d0[1]*l]}if(i===n-1){const l=Math.hypot(q[0]-W[i-1][0],q[1]-W[i-1][1]);return [d1[0]*l,d1[1]*l]}return [(W[i+1][0]-W[i-1][0])/2,(W[i+1][1]-W[i-1][1])/2]}),o=[];
  for(let i=0;i<n-1;i++){const per=Math.max(5,Math.ceil(Math.hypot(W[i+1][0]-W[i][0],W[i+1][1]-W[i][1])/.007));for(let j=1;j<=per;j++){if(i===n-2&&j===per)break;const t=j/per,t2=t*t,t3=t2*t,h0=2*t3-3*t2+1,h1=t3-2*t2+t,h2=-2*t3+3*t2,h3=t3-t2;o.push(V3(h0*W[i][0]+h1*T[i][0]+h2*W[i+1][0]+h3*T[i+1][0],FY,h0*W[i][1]+h1*T[i][1]+h2*W[i+1][1]+h3*T[i+1][1]))}}return o}
 const un2=d=>{const l=Math.hypot(d[0],d[1])||1;return [d[0]/l,d[1]/l]};
-function railPlan(A,B,R){let best=null;for(const ca of A.c)for(const cb of B.c)for(const dir of[1,-1]){const arc=((dir*(cb.s-ca.s))%R.T+R.T)%R.T,cost=arc+2.2*(ca.air+cb.air);if(!best||cost<best.cost)best={ca,cb,dir,arc,cost}}return best}
+function railPlan(A,B,R){let best=null;for(const ca of A.c)for(const cb of B.c)for(const dir of[1,-1]){if(ca.out&&ca.out!==dir||cb.out&&cb.out!==-dir)continue;const arc=((dir*(cb.s-ca.s))%R.T+R.T)%R.T;let cost=arc+2.2*(ca.air+cb.air);
+  for(const [st,z] of[['M0',R.FL],['M1',R.FR]]){const t=((dir*(z-ca.s))%R.T+R.T)%R.T;if(A.st!==st&&B.st!==st&&t>.05&&t<arc-.05)cost+=.3} // mejor no pasar por delante de un polímetro ajeno: ahí dan la vuelta sus cables
+  if(!best||cost<best.cost)best={ca,cb,dir,arc,cost}}return best}
 // Cada cable que rodea la placa va por un carril (a una distancia de ella): dos cables solo comparten carril si usan tramos distintos. Los cortos, por dentro.
 const NLANE=6;
-function assignLanes(){const R=ring(0),L=[];
- for(const k of FREE.act){const [a0,a1]=S.free.ends[k];if(!a0&&!a1)continue;const A=access(a0,k,0,R),B=access(a1,k,1,R);if((A.kind==='over'&&B.kind==='over')||A.st===B.st||directPlan(A,B,0))continue;
-  const p=railPlan(A,B,R),s0=p.dir>0?p.ca.s:p.cb.s;L.push({k,s0:((s0-.03)%R.T+R.T)%R.T,len:p.arc+.06})}
- L.sort((a,b)=>a.len-b.len);const used=[...Array(NLANE)].map(()=>[]),ov=(a,b)=>{const d=((b.s0-a.s0)%R.T+R.T)%R.T,e=((a.s0-b.s0)%R.T+R.T)%R.T;return d<a.len||e<b.len};
+function assignLanes(){const R=ring(0),L=[],G={M0:[],M1:[]},used=[...Array(NLANE)].map(()=>[]),ov=(a,b)=>{const d=((b.s0-a.s0)%R.T+R.T)%R.T,e=((a.s0-b.s0)%R.T+R.T)%R.T;return d<a.len||e<b.len};
+ for(const k of FREE.act){const [a0,a1]=S.free.ends[k];if(!a0&&!a1)continue;const A=access(a0,k,0,R),B=access(a1,k,1,R);if((A.kind==='over'&&B.kind==='over')||A.st===B.st)continue;
+  const dp=directPlan(A,B,4);if(dp){if(dp.u){const X=dp.u.X;G[X.st].push({k,x:X.L[0],s0:(X.g>0?R.left(X.L[1]):R.right(dp.u.zF))-.03,len:X.L[1]-dp.u.zF+.06})}continue}
+  const p=railPlan(A,B,R),s0=p.dir>0?p.ca.s:p.cb.s,c={k,s0:((s0-.03)%R.T+R.T)%R.T,len:p.arc+.06},X=p.ca.u?A:p.cb.u?B:null;if(X){c.x=X.L[0];G[X.st].push(c)}else L.push(c)}
+ // los cables que dan media vuelta delante de un polímetro: el del borne más cercano al pasillo, pegado al polímetro; los demás, cada uno un carril más allá, y así ni se cruzan ni se trenzan
+ for(const st in G){const g=st==='M0'?1:-1;G[st].sort((a,b)=>g*(b.x-a.x)).forEach((c,r)=>{const ln=Math.max(0,4-r);FREE.lane[c.k]=ln;used[ln].push(c)})}
+ L.sort((a,b)=>a.len-b.len);
  for(const c of L){let ln=used.findIndex(u=>!u.some(o=>ov(o,c)));if(ln<0){let bm=1e9;used.forEach((u,i)=>{const m=u.filter(o=>ov(o,c)).length;if(m<bm){bm=m;ln=i}})}used[ln].push(c);FREE.lane[c.k]=ln}}
 function freePath(k,done,plugs){const idx=FREE.lane[k]||0,[a0,a1]=S.free.ends[k],R=ring(idx);
  if(!a0&&!a1){const x=RACKX(k[0]),y=PKY,zf=PKF;return [[-.011,y,PKZ+.036],[-.011,y,PKZ+.04],[-.011,FY,PKZ+.062],[-.0112,FY,zf-.085],[-.0185,FY,zf-.040],[-.0155,FY,zf-.012],[0,FY,zf],[.0155,FY,zf-.012],[.0185,FY,zf-.040],[.0112,FY,zf-.085],[.011,FY,PKZ+.062],[.011,y,PKZ+.04],[.011,y,PKZ+.036]].map(q=>V3(x+q[0],q[1],q[2]))}
@@ -1001,12 +1030,22 @@ function freePath(k,done,plugs){const idx=FREE.lane[k]||0,[a0,a1]=S.free.ends[k]
  const pt=s=>{const q=R.pt(s);return [q[0],q[1]]},tan=s=>{const q=R.pt(s);return [q[2]*dir,q[3]*dir]};
  // sh: la salida de la placa, desplazada a lo largo del borde (pasa entre dos bornes en vez de por encima de uno); h: más alta
 const OFF=[[0,0],[.022,.014],[-.022,.014],[0,.03],[.042,.022],[-.042,.022]]; // dónde más puede posarse el cable de un aparato si en su sitio tropieza
- const mk=([sh,h,m=1,q=0])=>{const sA=ca.s+(A.kind==='over'?sh:0),sB=cb.s+(B.kind==='over'?sh:0),ar=((dir*(sB-sA))%R.T+R.T)%R.T;
-  const sf=L=>[L[0]+OFF[q][0],L[1]+OFF[q][1]],LA=A.kind==='over'?pt(sA):sf(A.L),dA=A.kind==='over'?tan(sA):un2(A.d),LB=B.kind==='over'?pt(sB):sf(B.L),tb=tan(sB),dB=B.kind==='over'?[-tb[0],-tb[1]]:un2(B.d);
-  const W=[LA,...(A.pre||[])],span=ar-A.skip-B.skip;
-  if(span>=0&&ar<R.T*.75){const n=Math.max(1,Math.ceil(span/.035));for(let i=0;i<=n;i++)W.push(pt(sA+dir*(A.skip+span*i/n)))}
+ // a un borne de la placa el cable no llega de frente, en ángulo recto: deja el carril un poco antes y sube en diagonal (ld)
+ const room=Math.max(0,(arc-(ca.skip||A.skip)-(cb.skip||B.skip))/((A.kind==='over')+(B.kind==='over')||1)-.01),ld=c=>Math.min(.07,.012+.4*c.air,room);
+ const mk=([sh,h,m=1,q=0])=>{const sA=ca.s+(A.kind==='over'?sh+dir*ld(ca):0),sB=cb.s+(B.kind==='over'?sh-dir*ld(cb):0),ar=((dir*(sB-sA))%R.T+R.T)%R.T;
+  const sf=L=>[L[0]+OFF[q][0],L[1]+OFF[q][1]],uA=ca.u,uB=cb.u,tb=tan(sB),skA=ca.skip||A.skip,skB=cb.skip||B.skip;
+  const ta=tan(sA),bl=(X,L,t)=>{const w=un2([L[0]-X.S[0],L[1]-X.S[1]]);return un2([t[0]+.8*w[0],t[1]+.8*w[1]])}; // al posarse, el cable que baja de la placa en diagonal va ya girando hacia el carril
+  const LA=A.kind==='over'?pt(sA):uA?[pt(sA)[0],A.L[1]]:sf(A.L),dA=A.kind==='over'?bl(A,LA,ta):uA?[0,-1]:un2(A.d),LB=B.kind==='over'?pt(sB):uB?[pt(sB)[0],B.L[1]]:sf(B.L),dB=B.kind==='over'?bl(B,LB,[-tb[0],-tb[1]]):uB?[0,-1]:un2(B.d);
+  const W=[LA,...(A.pre||[])],span=ar-skA-skB;
+  if(span>=0&&ar<R.T*.75){const n=Math.max(1,Math.ceil(span/.035));for(let i=0;i<=n;i++)W.push(pt(sA+dir*(skA+span*i/n)))}
   W.push(...(B.pre||[]).slice().reverse(),LB);
-  return [...dn(A,eA,LA,dA,h,m),...floorPath2(W,dA,[-dB[0],-dB[1]]),...dn(B,eB,LB,dB,h,m).reverse()]};
+  const end=(X,e,L,d,u)=>u?[...fall(e,X.L,[0,1],X.fa[0]*m,X.fa[1]),...uTurn(X.L,L[0])]:dn(X,e,L,d,h,m); // del polímetro, con media vuelta hasta el carril
+  // del polímetro hacia delante de la placa: gira delante de él con la hondura que le toca por su borne, y así no se cruza con los que dan media vuelta
+  const pre=(L,P,t)=>{const c=Math.min(.06,.4*Math.hypot(P[0]-L[0],P[1]-L[1]));return bez2(L,[L[0],L[1]+uDepth(P[0]-L[0])],[P[0]-t[0]*c,P[1]-t[1]*c],P,true)};
+  let W2=W,pA=[],pB=[],d0=dA,d1=[-dB[0],-dB[1]];
+  if(A.g&&!uA&&!q&&W2.length>2){const t=tan(sA+dir*skA);pA=pre(LA,W2[1],t);W2=W2.slice(1);d0=t}
+  if(B.g&&!uB&&!q&&W2.length>2){const t=tan(sB-dir*skB);pB=pre(LB,W2[W2.length-2],[-t[0],-t[1]]).reverse();W2=W2.slice(0,-1);d1=t}
+  return [...end(A,eA,LA,dA,uA),...pA,...floorPath2(W2,d0,d1),...pB,...end(B,eB,LB,dB,uB).reverse()]};
  return A.kind==='over'||B.kind==='over'?pick([[0,0],[.028,0],[-.028,0],[0,.024],[.045,.012],[-.045,.012],[.028,.03],[-.028,.03],[0,0,1.6],[.028,.024,.6],[0,0,1,1],[0,0,1,2],[0,0,1,3],[.028,0,1,1],[-.028,0,1,2],[0,.024,1,4],[0,.024,1,5]],mk):pick([[0,0,1],[0,0,.6],[0,0,1.6],[0,0,1,1],[0,0,1,2],[0,0,1,3],[0,0,1.6,1],[0,0,1.6,2],[0,0,1,4],[0,0,1,5],[0,0,2.2]],mk)}
 // Donde un cable cruza a otro ya tendido (o se le arrima más de lo que ocupan los dos), pasa por encima de él.
 // El mismo cable, con puntos cada 4 mm sobre su curva (no sobre sus cuerdas): hacen falta para levantarlo con suavidad donde cruza a otro.
