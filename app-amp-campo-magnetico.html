@@ -948,9 +948,9 @@ function loop(now){frame=0;if(document.hidden)return;const dt=Math.min(.12,(now-
   if(moving||moved){placeProbe();moved=false;dirty=true;if(now-lastMeas>90)measure()}}
  if(now-lastMeas>650)measure();
  const aug=augStep(dt);if(aug)dirty=true;
- if(ghostStep(dt))dirty=true;
+ const gh=ghostStep(dt);if(gh)dirty=true;
  if(dirty){camSet();CAM.updateMatrixWorld();R3.render(SC,CAM);dirty=false}
- if(fly||moving||aug){if(!frame)frame=requestAnimationFrame(loop)}
+ if(fly||moving||aug||gh){if(!frame)frame=requestAnimationFrame(loop)} // gh: la bobina aún se está transparentando o volviendo a opaca
  else{tPrev=0;if(!poll){poll=setTimeout(()=>{poll=0;if(!document.hidden&&!frame)frame=requestAnimationFrame(loop)},Math.max(12,651-(performance.now()-lastMeas)))}}
 }
 document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(poll);poll=0;if(frame)cancelAnimationFrame(frame);frame=0;tPrev=0}else invalidate()});
