@@ -1079,6 +1079,7 @@ function airClash(P,k,done,plugs){let bad=0;for(const q of P){if(q.y<.02)continu
   for(const Q of done)for(let j=1;j<Q.length;j++){const c=Q[j-1],d=Q[j];if(c.y<.02&&d.y<.02)continue;const sx=d.x-c.x,sy=d.y-c.y,sz=d.z-c.z,px=q.x-c.x,py=q.y-c.y,pz=q.z-c.z,l2=sx*sx+sy*sy+sz*sz;if(px*px+py*py+pz*pz>l2+.0004)continue;
    const u=l2?Math.max(0,Math.min(1,(px*sx+py*sy+pz*sz)/l2)):0,dd=Math.hypot(px-u*sx,py-u*sy,pz-u*sz);if(dd<.0078)bad+=.0078-dd}}
  return bad}
+const ROPE_ON=true; // tendido B (cuerda): se activa al construir la versión B
 const FREE={paths:{},drag:null,sol:null,key:'',sig:'',lane:{},loose:{},show:new Set()};
 // Aviso de fusible fundido, sobre el visor del polímetro al que le ha pasado: una placa roja que parpadea
 const FUSEAL=[AMM,VOLT].map(m=>{const [x0,y0]=m.L(25,47),[x1,y1]=m.L(225,126),tx=canvasTex(512,202,(c,w,h)=>{c.fillStyle='#d0302a';rr(c,0,0,w,h,26);c.fill();c.fillStyle='#fff';c.textAlign='center';c.font='bold 74px Arial, sans-serif';c.fillText('FUSIBLE',w/2,88);c.fillText('FUNDIDO',w/2,170)});
@@ -1086,9 +1087,86 @@ const FUSEAL=[AMM,VOLT].map(m=>{const [x0,y0]=m.L(25,47),[x1,y1]=m.L(225,126),tx
 let fuseTick=0;function fuseAlarm(){const on=S.part===0?S.m.map(m=>m.fuse===false):[false,false];FUSEAL.forEach((p,i)=>{if(p.visible!==on[i]){p.visible=on[i];invalidate()}});
  if(on.some(Boolean)){if(!fuseTick)fuseTick=setInterval(()=>{const a=FUSEAL[0].material.opacity>.6?.12:1;for(const p of FUSEAL)p.material.opacity=a;invalidate()},480)}else if(fuseTick){clearInterval(fuseTick);fuseTick=0;for(const p of FUSEAL)p.material.opacity=1}}
 FREE.lbl=[floorLabel(-.4425,-.652,'CABLES','arrastra cada clavija a un borne',.235,.040),floorLabel(TRX+1.5*TRP,-.640,'RESISTENCIAS Y PUENTES','arrástralos a la placa · un toque los gira',.33,.040)];for(const m of FREE.lbl)m.visible=false;
+
+/* ---- tendido B: cada cable, como una cuerda con algo de rigidez ---- */
+// El cable va por el camino corto entre sus dos clavijas y se dobla solo en curvas amplias: se tiende una cuerda entre los dos extremos y se deja que se tense (camino corto),
+// que se resista a doblarse (curvatura suave, sin codos) y que caiga por su peso hasta apoyarse en la mesa, en la placa o en otro cable. No atraviesa los aparatos, las piezas, las clavijas ni otros cables.
+const ROPE={sig:'',paths:{},lam:.06,a:.3,R:.0036};
+function ropeScene(){const F=S.free,dr=FREE.drag,boxes=[{x1:-BW/2,x2:BW/2,z1:-BD/2,z2:BD/2,top:BTOP}],caps=[];
+ MODS.forEach((m,i)=>{const q=F.mods[i];if(!q.at||dr&&dr.t==='mod'&&dr.i===i)return;const g=m.g.position,hor=Math.abs(m.g.rotation.y)<.1,hx=(hor?MODL:MODW)/2,hz=(hor?MODW:MODL)/2;boxes.push({x1:g.x-hx,x2:g.x+hx,z1:g.z-hz,z2:g.z+hz,top:g.y+MODH})});
+ for(const X of[XA,XV])boxes.push({x1:X-.086,x2:X+.086,z1:-.225,z2:.150,tf:z=>Math.min(.21,.034+.703*Math.max(0,.143-z)),sk:4}); // el cuerpo inclinado de cada polímetro
+ const mg=.012,walls=OBST.slice(1).map(([x1,x2,z1,z2],i)=>({x1:x1-mg,x2:x2+mg,z1:z1-mg,z2:(i<2?.160:z2)+mg,st:['M0','M1','S',''][i]})); // los aparatos y la bandeja se rodean; la placa y las piezas, por encima
+ for(const k of CK)F.ends[k].forEach((a,e)=>{const h=DPL[k][e];if(!h.visible||dr&&dr.t==='plug'&&dr.k===k&&dr.e===e)return;const u=h.userData;
+  if(isJ(a)){caps.push({k,e,a:u.base,n:u.nn,L:u.len||.04});caps.push({k,e,a:u.out.p,n:u.out.n,L:.034})}else{const J=a?tableJack(k,e):parkJack(k,e);caps.push({k,e,a:J.base,n:J.n,L:.04})}});
+ return {boxes,walls,caps,grid:new Map()}}
+const ropeH=(sc,x,z)=>{let h=0;for(const b of sc.boxes){const dx=x<b.x1?b.x1-x:x>b.x2?x-b.x2:0,dz=z<b.z1?b.z1-z:z>b.z2?z-b.z2:0,d=dx&&dz?Math.hypot(dx,dz):dx+dz,t=(b.tf?b.tf(z<b.z1?b.z1:z>b.z2?b.z2:z):b.top)-(d>.005?(d-.005)*(b.sk||1.2):0);if(t>h)h=t}return h}; // altura de lo que hay debajo, con una rampa alrededor de cada cosa: el cable no sube escalones
+function ropeAdd(sc,P){const D=2*ROPE.R+.004,c=.03;for(let i=3;i<P.length;i+=3){const a=P[i-3],b=P[i],s=[a.x,a.y,a.z,b.x,b.y,b.z];
+  for(let ix=Math.floor((Math.min(a.x,b.x)-D+1)/c);ix<=Math.floor((Math.max(a.x,b.x)+D+1)/c);ix++)for(let iz=Math.floor((Math.min(a.z,b.z)-D+1)/c);iz<=Math.floor((Math.max(a.z,b.z)+D+1)/c);iz++){const key=ix*4096+iz;let L=sc.grid.get(key);if(!L)sc.grid.set(key,L=[]);L.push(s)}}}
+// saca un punto del cable de donde no puede estar
+function ropeFix(sc,q,own,i,m){
+ for(const w of sc.walls){if(q[0]>w.x1&&q[0]<w.x2&&q[2]>w.z1&&q[2]<w.z2){if(w.st&&(w.st===own.a&&i<=8||w.st===own.b&&i>=m-8))continue;
+   const d0=q[0]-w.x1,d1=w.x2-q[0],d2=q[2]-w.z1,d3=w.z2-q[2],mn=Math.min(d0,d1,d2,d3);if(mn===d0)q[0]=w.x1;else if(mn===d1)q[0]=w.x2;else if(mn===d2)q[2]=w.z1;else q[2]=w.z2}}
+ const DP=.0072+ROPE.R+.0014;
+ for(const c of sc.caps){if(c.k===own.k&&(c.e===0?i<=3:i>=m-3))continue;const dx=q[0]-c.a.x,dy=q[1]-c.a.y,dz=q[2]-c.a.z;if(dx*dx+dy*dy+dz*dz>.05)continue;
+  let t=dx*c.n.x+dy*c.n.y+dz*c.n.z;t=t<-.002?-.002:t>c.L+.004?c.L+.004:t;const rx=dx-t*c.n.x,ry=dy-t*c.n.y,rz=dz-t*c.n.z,d=Math.hypot(rx,ry,rz);
+  if(d<DP){if(d<1e-6)q[1]+=DP;else{const f=(DP-d)/d;q[0]+=rx*f;q[1]+=ry*f;q[2]+=rz*f}}}
+ const L=sc.grid.get(Math.floor((q[0]+1)/.03)*4096+Math.floor((q[2]+1)/.03));
+ if(L){const D=2*ROPE.R+.0012;for(const s of L){const sx=s[3]-s[0],sy=s[4]-s[1],sz=s[5]-s[2],px=q[0]-s[0],py=q[1]-s[1],pz=q[2]-s[2],l2=sx*sx+sy*sy+sz*sz,u=l2?Math.max(0,Math.min(1,(px*sx+py*sy+pz*sz)/l2)):0;
+   let rx=px-u*sx,ry=py-u*sy,rz=pz-u*sz;const d=Math.hypot(rx,ry,rz);if(d>=D)continue;const cy=s[1]+u*sy;
+   if(d<1e-6){rx=0;ry=1;rz=0}else{rx/=d;ry/=d;rz/=d}if(cy<.03||ry>-.3){ry+=.9;const l=Math.hypot(rx,ry,rz);rx/=l;ry/=l;rz/=l} // por encima del otro, salvo que el otro vaya por el aire y este por debajo
+   const f=D-d;q[0]+=rx*f;q[1]+=ry*f;q[2]+=rz*f}}
+ const h0=ropeH(sc,q[0],q[2]),h=h0+ROPE.R+(h0>0?.0016:0);if(q[1]<h)q[1]=h}
+// camino corto en planta entre a y b rodeando los aparatos
+function ropeGuide(sc,a,b){const g=.012,W=sc.walls.map(w=>({x1:w.x1-g,x2:w.x2+g,z1:w.z1-g,z2:w.z2+g}));
+ const out=p=>{for(const w of W)if(p[0]>w.x1&&p[0]<w.x2&&p[1]>w.z1&&p[1]<w.z2){const d0=p[0]-w.x1,d1=w.x2-p[0],d2=p[1]-w.z1,d3=w.z2-p[1],mn=Math.min(d0,d1,d2,d3);return mn===d0?[w.x1-.002,p[1]]:mn===d1?[w.x2+.002,p[1]]:mn===d2?[p[0],w.z1-.002]:[p[0],w.z2+.002]}return p};
+ const hit=(p,q)=>{for(const w of W){let t0=0,t1=1;const dx=q[0]-p[0],dz=q[1]-p[1],e=.001;let ok=true;
+   for(const [pp,qq] of[[-dx,p[0]-(w.x1+e)],[dx,(w.x2-e)-p[0]],[-dz,p[1]-(w.z1+e)],[dz,(w.z2-e)-p[1]]]){if(Math.abs(pp)<1e-12){if(qq<0){ok=false;break}}else{const r=qq/pp;if(pp<0){if(r>t1){ok=false;break}if(r>t0)t0=r}else{if(r<t0){ok=false;break}if(r<t1)t1=r}}}
+   if(ok&&t1-t0>1e-6)return true}return false};
+ const a1=out(a),b1=out(b),N=[a1,b1];for(const w of W)N.push([w.x1-.002,w.z1-.002],[w.x2+.002,w.z1-.002],[w.x1-.002,w.z2+.002],[w.x2+.002,w.z2+.002]);
+ const n=N.length,dist=new Array(n).fill(1e9),prev=new Array(n).fill(-1),done=new Array(n).fill(false);dist[0]=0;
+ for(let it=0;it<n;it++){let u=-1;for(let i=0;i<n;i++)if(!done[i]&&(u<0||dist[i]<dist[u]))u=i;if(u<0||dist[u]>1e8)break;done[u]=true;if(u===1)break;
+  for(let v=0;v<n;v++){if(done[v])continue;const d=dist[u]+Math.hypot(N[v][0]-N[u][0],N[v][1]-N[u][1]);if(d<dist[v]&&!hit(N[u],N[v])){dist[v]=d;prev[v]=u}}}
+ const path=[];for(let u=1;u>=0;u=prev[u]){path.unshift(N[u]);if(u===0)break}if(path[0]!==a1)path.unshift(a1);
+ if(a1!==a)path.unshift(a);if(b1!==b)path.push(b);return path}
+function ropeResample(P,m){const n=P.length,cum=[0];for(let i=1;i<n;i++)cum.push(cum[i-1]+Math.hypot(P[i][0]-P[i-1][0],P[i][1]-P[i-1][1],P[i][2]-P[i-1][2]));const L=cum[n-1],Q=[];let j=1;
+ for(let i=0;i<=m;i++){const s=L*i/m;while(j<n-1&&cum[j]<s)j++;const t=cum[j]>cum[j-1]?(s-cum[j-1])/(cum[j]-cum[j-1]):0,a=P[j-1],b=P[j];Q.push([a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t])}Q.L=L;return Q}
+// El cable como una viga fina y tensa que pesa: puntos cada 12 mm, tramos de longitud casi fija, rigidez a la flexión (lam: cuanto mayor, curvas más amplias), una tensión que lo acorta y su peso (a: cuanto menor, más cae).
+// En cada vuelta se resuelve de golpe el equilibrio (un sistema pentadiagonal por coordenada) con los apoyos y topes que tenga en ese momento; sale derecho de cada clavija, siguiendo su eje.
+const ropeLen=P=>{let L=0;for(let i=1;i<P.length;i++)L+=Math.hypot(P[i][0]-P[i-1][0],P[i][1]-P[i-1][1],P[i][2]-P[i-1][2]);return L};
+function ropeBand(A,b,n){for(let i=0;i<n;i++){const p=A[i][2];for(let k=1;k<=2&&i+k<n;k++){const f=A[i+k][2-k]/p;if(!f)continue;for(let j=0;j<=2&&i+j<n;j++){const cj=j-k+2;if(cj>=0)A[i+k][cj]-=f*A[i][2+j]}b[i+k]-=f*b[i]}}
+ for(let i=n-1;i>=0;i--){let v=b[i];for(let j=1;j<=2&&i+j<n;j++)v-=A[i][2+j]*b[i+j];b[i]=v/A[i][2]}return b}
+function ropeSolve(sc,own,EA,na,EB,nb,P0){const h0=.012,ks=30,its=44;let m=Math.max(4,Math.round(ropeLen(P0)/h0)),Y=ropeResample(P0,m);Y[0]=EA;Y[m]=EB;let act=[new Map(),new Map(),new Map()];
+ for(let it=0;it<its;it++){const he=ropeLen(Y)/m,be=(ROPE.lam/he)**2,ga=he*he/ROPE.a,n=m-1,kap=300*(1+be+ks),l0=he*(1-1/ks);
+  const gA=[EA[0]-na[0]*he,EA[1]-na[1]*he,EA[2]-na[2]*he],gB=[EB[0]-nb[0]*he,EB[1]-nb[1]*he,EB[2]-nb[2]*he],pos=i=>i===-1?gA:i===m+1?gB:Y[i],free=i=>i>=1&&i<=m-1;
+  const A=[];for(let i=0;i<n;i++)A.push([0,0,0,0,0]);const b=[new Float64Array(n),new Float64Array(n),new Float64Array(n)];
+  const add=(idx,co,w)=>{for(let p=0;p<idx.length;p++){if(!free(idx[p]))continue;const r=idx[p]-1;for(let q=0;q<idx.length;q++){if(free(idx[q]))A[r][idx[q]-idx[p]+2]+=w*co[p]*co[q];else{const f=pos(idx[q]);for(let j=0;j<3;j++)b[j][r]-=w*co[p]*co[q]*f[j]}}}};
+  for(let i=0;i<=m;i++)add([i-1,i,i+1],[1,-2,1],be);
+  for(let i=1;i<=m;i++){add([i-1,i],[-1,1],ks);const a=Y[i-1],c=Y[i],d=Math.hypot(c[0]-a[0],c[1]-a[1],c[2]-a[2])||1;for(let j=0;j<3;j++){const u=(c[j]-a[j])/d*l0*ks;if(free(i))b[j][i-1]+=u;if(free(i-1))b[j][i-2]-=u}}
+  for(let r=0;r<n;r++)b[1][r]-=ga;
+  const As=[A,A.map(r=>r.slice()),A.map(r=>r.slice())],T=[0,0,0];
+  for(let i=1;i<m;i++){T[0]=Y[i][0];T[1]=Y[i][1];T[2]=Y[i][2];ropeFix(sc,T,own,i,m);for(let j=0;j<3;j++){const d=T[j]-Y[i][j],a=act[j].get(i);if(Math.abs(d)>1e-6)act[j].set(i,{t:T[j],s:d>0?1:-1});else if(a&&(Y[i][j]-a.t)*a.s>2e-5)act[j].delete(i);
+    const c=act[j].get(i);if(c){As[j][i-1][2]+=kap;b[j][i-1]+=kap*c.t}}}
+  const w=it<its-6?.7:1;for(let j=0;j<3;j++){const X=ropeBand(As[j],b[j],n);for(let i=1;i<m;i++){let d=w*(X[i-1]-Y[i][j]);if(d>.02)d=.02;else if(d<-.02)d=-.02;Y[i][j]+=d}}
+  if(it%6===5&&it<its-8){const m2=Math.max(4,Math.round(ropeLen(Y)/h0));if(m2!==m){Y=ropeResample(Y,m2);m=m2;Y[0]=EA;Y[m]=EB;act=[new Map(),new Map(),new Map()]}}}
+ for(let i=1;i<m;i++)ropeFix(sc,Y[i],own,i,m);return Y}
+function ropePath(k,sc){const [a0,a1]=S.free.ends[k],R0=ring(0),A=access(a0,k,0,R0),B=access(a1,k,1,R0),pa=A.J.p,na=A.J.n,pb=B.J.p,nb=B.J.n,s1=.012,own={k,a:A.st,b:B.st};
+ const EA=[pa.x+na.x*s1,pa.y+na.y*s1,pa.z+na.z*s1],EB=[pb.x+nb.x*s1,pb.y+nb.y*s1,pb.z+nb.z*s1];
+ const G=ropeGuide(sc,[EA[0],EA[2]],[EB[0],EB[2]]),cum=[0];for(let i=1;i<G.length;i++)cum.push(cum[i-1]+Math.hypot(G[i][0]-G[i-1][0],G[i][1]-G[i-1][1]));
+ let P=G.map((q,i)=>{const t=cum[cum.length-1]?cum[i]/cum[cum.length-1]:0;return [q[0],EA[1]+(EB[1]-EA[1])*t,q[1]]});P[0]=EA;P[P.length-1]=EB;
+ let L=Math.max(cum[cum.length-1],Math.hypot(EB[0]-EA[0],EB[1]-EA[1],EB[2]-EA[2]),.02);
+ P=ropeSolve(sc,own,EA,[na.x,na.y,na.z],EB,[nb.x,nb.y,nb.z],P);
+ const v=q=>V3(q[0],q[1],q[2]);
+ return dense([pa.clone().addScaledVector(na,-.004),pa.clone(),...P.map(v),pb.clone(),pb.clone().addScaledVector(nb,-.004)])}
+function ropeWire(){const F=S.free,dr=FREE.drag,sig=JSON.stringify([F.ends,F.mods,F.seq,dr&&[dr.t,dr.k,dr.e,dr.i],[...FREE.show]]);
+ if(sig!==ROPE.sig){ROPE.sig=sig;ROPE.paths={};const sc=ropeScene(),use=CK.filter(k=>FREE.show.has(k)&&!(dr&&dr.t==='plug'&&dr.k===k));
+  for(const k of use)if(!F.ends[k][0]&&!F.ends[k][1]){const P=dense(freePath(k,[],[]));ROPE.paths[k]=P;ropeAdd(sc,P)} // los que esperan en su sitio, primero
+  for(const k of use)if(F.ends[k][0]||F.ends[k][1]){const P=ropePath(k,sc);ROPE.paths[k]=P;ropeAdd(sc,P)}
+  for(const k in ROPE.paths){FREE.paths[k]=ROPE.paths[k];setTube(CB[k],ROPE.paths[k])}}
+ for(const k of CK)CB[k].visible=FREE.show.has(k)&&!(dr&&dr.t==='plug'&&dr.k===k)&&!!ROPE.paths[k]}
 function wireFree(){SC.updateMatrixWorld(true);const F=S.free;
  MODS.forEach((m,i)=>{const q=F.mods[i];if(FREE.drag&&FREE.drag.t==='mod'&&FREE.drag.i===i)return;if(q.at)m.put(q.at);else{m.at=null;const [x,z]=traySlot(i);m.pose(x,TRY+.0012,z,q.hor)}});
- poolSync();placePlugs();assignLanes();const done=[],plugs=[];for(const k of CK)F.ends[k].forEach((a,e)=>{if(a&&a[0]==='B'&&!(FREE.drag&&FREE.drag.t==='plug'&&FREE.drag.k===k&&FREE.drag.e===e)){const u=DPL[k][e].userData;plugs.push({k,a:u.base,n:u.nn})}});
+ poolSync();placePlugs();if(ROPE_ON){ropeWire();for(const q in CB)if(CB[q].userData.rib)CB[q].userData.rib.visible=CB[q].visible&&!(FREE.drag&&FREE.drag.k===q);OCC.list=null;R3.shadowMap.needsUpdate=true;return}
+ assignLanes();const done=[],plugs=[];for(const k of CK)F.ends[k].forEach((a,e)=>{if(a&&a[0]==='B'&&!(FREE.drag&&FREE.drag.t==='plug'&&FREE.drag.k===k&&FREE.drag.e===e)){const u=DPL[k][e].userData;plugs.push({k,a:u.base,n:u.nn})}});
  for(const k of CK){const dr=FREE.drag&&FREE.drag.t==='plug'&&FREE.drag.k===k;
   if(!FREE.show.has(k)){CB[k].visible=false;continue}if(dr)continue;const P=dense(freePath(k,done,plugs));liftOver(P,done);done.push(P);FREE.paths[k]=P;setTube(CB[k],P);CB[k].visible=true}
  for(const q in CB)if(CB[q].userData.rib)CB[q].userData.rib.visible=CB[q].visible&&!(FREE.drag&&FREE.drag.k===q);
