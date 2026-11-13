@@ -684,10 +684,10 @@ function mkModule(kind,label,bands,vert){const g=new THREE.Group();SC.add(g);
 const R1=mkModule('R','R1','nkno',true),R2=mkModule('R','R2','rrno',true),R3M=mkModule('R','R3','ngno',true),R4=mkModule('R','R4','rrno',true),BL3=mkModule('B','',null,true),BL4=mkModule('B','',null,true),BFR2=mkModule('B',''),BBK=mkModule('B','');
 /* ================= aparatos ================= */
 const XA=-.335,XV=.335,ZM=.12,XP=-.10,ZP=-.42; // amperímetro a la izquierda de la placa y voltímetro a la derecha; la fuente, detrás y a la izquierda
-const PL=makePSU1({sid:'L',x:XP,z:ZP,title:'FUENTE DE ALIMENTACIÓN',sgx:-38,sgy:7,handle:true,
+const PL=makePSU1({sid:'L',x:XP,z:ZP,title:'FUENTE DE ALIMENTACIÓN',sgx:0,sgy:-36,handle:true,
  K:[{c:[106,146],max:12,st:2,cap:'0…12 V ⎓',r:36,dy:104},{c:[290,146],max:2,st:.5,cap:'0…2 A',r:36,dy:104}],
- SK:{p:[196,298,'r'],n:[196,352,'b']},deco:[[330,325,'y'],[470,298,'k'],[470,352,'k']],PW:[566,84,44,70],
- art:x=>{x.fillStyle='#c3e3f1';rr(x,146,264,82,118,8);x.fill();rr(x,420,264,82,118,8);x.fill();
+ SK:{p:[166,322,'r'],n:[222,322,'b']},deco:[[330,325,'y'],[470,298,'k'],[470,352,'k']],PW:[566,84,44,70],
+ art:x=>{x.fillStyle='#c3e3f1';rr(x,136,268,116,92,8);x.fill();rr(x,420,264,82,118,8);x.fill();
   x.fillStyle='#1d2327';x.textAlign='center';x.font='bold 14px Arial, sans-serif';x.fillText('⏚',330,366);x.fillText('2…15 V ~',470,250);x.fillStyle='#7a6a00';x.font='bold 21px Arial, sans-serif';x.fillText('~',432,305);x.fillText('~',432,359);
   x.fillStyle='#1d2327';x.lineWidth=1.6;x.strokeStyle='#1d2327';for(let i=0;i<8;i++){const a=(-140+40*i-90)*Math.PI/180;x.beginPath();x.arc(470+50*Math.cos(a),142+50*Math.sin(a),3.4,0,7);x.fill()}
   x.fillStyle='#34373c';x.beginPath();x.arc(470,142,30,0,7);x.fill();x.fillStyle='#b9bdc0';x.beginPath();x.arc(470,142,21,0,7);x.fill();x.fillStyle='#16181b';x.fillRect(468.5,121,3,17)}});
@@ -756,7 +756,7 @@ const unit=(a,b)=>{const x=b[0]-a[0],z=b[1]-a[1],l=Math.hypot(x,z)||1;return [x/
 // Cable completo: baja de la clavija A, recorre la mesa por W y sube a la clavija B. o.lift: tramo en el que pasa por encima de otros cables posados en la mesa.
 function route(mesh,eA,eB,W,o={}){const n=W.length,d0=o.d0||unit(W[0],W[1]),d1=o.d1||unit(W[n-2],W[n-1]);
  const P=[...fall(eA,W[0],d0,o.a1,o.a2),...floorPath(W,d0,d1),...(o.over?leap(eB,W[n-1],[-d1[0],-d1[1]],o.b2):fall(eB,W[n-1],[-d1[0],-d1[1]],o.b1,o.b2)).reverse()];
- if(o.lift){const [z0,z1,h]=o.lift;for(const q of P){const k=sst((q.z-z0+.035)/.035)*sst((z1+.035-q.z)/.035);q.y=Math.max(q.y,FY+h*k)}}
+ if(o.lift){const [z0,z1,h,x0,x1]=o.lift;for(const q of P){let k=sst((q.z-z0+.035)/.035)*sst((z1+.035-q.z)/.035);if(x0!==undefined)k*=sst((q.x-x0+.05)/.05)*sst((x1+.05-q.x)/.05);q.y=Math.max(q.y,FY+h*k)}} // x0, x1: si se dan, solo en ese tramo de x
  setTube(mesh,P,o.r)}
 // Cable corto por el aire, de un borne de polímetro a una clavija de la placa: sale en la dirección del borne, hace un arco y baja a plomo sobre la clavija.
 function hop(mesh,eA,eB,o={}){const a=eA.p,b=eB.p,d=a.distanceTo(b),ka=o.ka||Math.max(.04,Math.min(.085,.30*d)),kb=o.kb||Math.max(.045,Math.min(.10,.38*d));
@@ -798,7 +798,7 @@ function wire(){SC.updateMatrixWorld(true);const fr=S.part===0;TRAY.visible=fr;f
  const JK={d0:[0,1],a1:.055,a2:.04}; // de un borne de polímetro a la mesa
  // Ningún cable se cruza con otro. De cada polímetro, el cable del borne más cercano a la placa entra por el hueco que hay entre los dos; el otro rodea el polímetro por fuera y por detrás.
  // fuente −: baja por fuera del amperímetro, pasa por delante de él y de la placa y sube a la isla delantera (la de salida)
- {const i=ser?3:1;go('N',[[XP-.10,-.356],[-.36,-.362],[XA-.205,-.10],[XA-.19,.12],[XA-.125,zf+.066],[XA,zf+.085],[-.20,ZF+.022],[SX(i)-.07,ZF+.036],[SX(i)-.004,ZF-.022]],{d0:[-.6,.8],a2:.03,d1:[.2,-1],over:true})}
+ {const i=ser?3:1;go('N',[[XP-.115,-.356],[-.36,-.362],[XA-.205,-.10],[XA-.19,.12],[XA-.125,zf+.066],[XA,zf+.085],[-.20,ZF+.022],[SX(i)-.07,ZF+.036],[SX(i)-.004,ZF-.022]],{d0:[-.9,.45],a2:.03,d1:[.2,-1],over:true,lift:[-.40,-.35,.064,-.19,-.16]})} // el − está a la derecha del +: su cable sale hacia la izquierda pasando por encima del del +
  const GAP=[[co,zf],[co+.045,zf+.03],[-T2+.008,zf-.05]]; // del COM del amperímetro al hueco entre él y la placa
  for(const q of['P','N','C','Vr','Vb'])CB[q].visible=true;CB.A.visible=!!con.A; // (en el montaje libre estos cables se guardan)
  if(con.P[1]==='mA'){ // amperímetro en la rama común: el + de la fuente rodea el amperímetro por fuera y entra en su borne de mA; del COM sale el cable hacia el nudo de entrada
@@ -909,15 +909,14 @@ function stacks(skip){const M={};for(const k of CK)S.free.ends[k].forEach((a,e)=
 // bornes en los que no cabe otra clavija de cable: los de las piezas y los que ya tienen MAXST
 function plugFull(skip){const T=new Set(),M=stacks(skip);for(const a in M)if(M[a].length>=MAXST)T.add(a);S.free.mods.forEach(q=>{if(q.at){T.add('B:'+q.at[0]+':'+q.at[1]);T.add('B:'+q.at[2]+':'+q.at[3])}});return T}
 // rumbo de salida de cada cable de una pila: hacia donde va su otro extremo. Se separan entre sí sin cambiar de orden, para que los cables no se crucen al salir.
-function stackAngles(at,list){const J=jack0(at),qi=J.q.clone().invert(),isB=at[0]==='B',P=at==='S:p',G=P?45:60,lim=isB?400:P?45:at==='S:n'?90:100; // del + de la fuente, de lado o hacia arriba; del −, de lado o hacia abajo: así los cables de un borne no se meten entre los del otro
+function stackAngles(at,list){const J=jack0(at),qi=J.q.clone().invert(),isB=at[0]==='B',P=at==='S:p'||at==='S:n',sg=at==='S:p'?-1:1,G=P?45:60,lim=isB?400:100; // en la fuente, el + y el − están uno junto al otro: cada uno saca sus cables hacia su lado (el + a la izquierda, el − a la derecha), nunca hacia el otro borne
  const w=list.map(([k,e])=>{const v=endBase(k,1-e).clone().sub(J.base).applyQuaternion(qi),a=Math.atan2(v.x,-v.y)*180/Math.PI;
-  return P?Math.max(-lim,Math.min(lim,a>=0?Math.max(0,a-50)+.01:Math.min(0,a+50)-.01)):Math.max(-lim,Math.min(lim,a))});
+  return P?sg*Math.max(20,Math.min(160,sg*a)):Math.max(-lim,Math.min(lim,a))});
  const ord=w.map((_,i)=>i).sort((a,b)=>w[a]-w[b]),a=ord.map(i=>w[i]);
- if(P){const m=a.reduce((u,v)=>u+v,0)>=0; // en el + de la fuente: todos hacia el lado al que van, abriéndose desde el primero
-  if(m){for(let i=1;i<a.length;i++)a[i]=Math.max(a[i],a[i-1]+G);const o=Math.max(0,a[a.length-1]-lim);for(let i=0;i<a.length;i++)a[i]-=o}
-  else{for(let i=a.length-2;i>=0;i--)a[i]=Math.min(a[i],a[i+1]-G);const o=Math.max(0,-lim-a[0]);for(let i=0;i<a.length;i++)a[i]+=o}}
- else for(let it=0;it<30;it++){for(let i=1;i<a.length;i++){const g=G-(a[i]-a[i-1]);if(g>0){a[i-1]-=g/2;a[i]+=g/2}}if(!isB){const o=Math.max(0,a[a.length-1]-lim)-Math.max(0,-lim-a[0]);for(let i=0;i<a.length;i++)a[i]-=o}}
- const out=[];ord.forEach((i,r)=>{let v=Math.round(a[r]/15)*15;if(P)v=a[r]>=0?v+90:v-90;out[i]=((v%360)+540)%360-180});return out}
+ for(let it=0;it<30;it++){for(let i=1;i<a.length;i++){const g=G-(a[i]-a[i-1]);if(g>0){a[i-1]-=g/2;a[i]+=g/2}}
+  if(P){const lo=sg>0?20:-160,hi=sg>0?160:-20,o=Math.max(0,a[a.length-1]-hi)-Math.max(0,lo-a[0]);for(let i=0;i<a.length;i++)a[i]-=o}
+  else if(!isB){const o=Math.max(0,a[a.length-1]-lim)-Math.max(0,-lim-a[0]);for(let i=0;i<a.length;i++)a[i]-=o}}
+ const out=[];ord.forEach((i,r)=>{const v=Math.round(a[r]/15)*15;out[i]=((v%360)+540)%360-180});return out}
 // coloca todas las clavijas de los cables; guarda en cada una por dónde sale su cable
 function placePlugs(){const D=FREE.drag&&FREE.drag.t==='plug'?[FREE.drag.k,FREE.drag.e]:null,M=stacks(D);SC.updateMatrixWorld(true);
  for(const at in M){const L=M[at],A=L.length>1?stackAngles(at,L):null;
@@ -948,9 +947,9 @@ function access(at,k,e,R){
  const u=DPL[k][e].userData,J=Object.assign(jack0(at),u.out),t=at.split(':'),lv=u.lvl||0,rk=u.rank||0,E={p:J.p,n:J.n,stk:u.stk,nn:u.nn,Lr:(u.above||0)*(u.len||0)};
  if(t[0]==='B'){const i=+t[1],j=+t[2],c=[i<3?{s:R.left(SZ(j)),air:SX(i)+BW/2}:{s:R.right(SZ(j)),air:BW/2-SX(i)}];
   if(j<=4)c.push({s:R.back(SX(i)),air:SZ(j)+BD/2});if(j>=4)c.push({s:R.front(SX(i)),air:BD/2-SZ(j)});return {J,E,st:at,kind:'over',c,skip:.05,S:[SX(i),SZ(j)]}}
- if(t[0]==='S'){const pos=t[1]==='p';E.sd=pos?1:-1;E.ay=J.base.y;return {J,E,st:'S',kind:'fall',c:[{s:R.back(J.p.x),air:0}],skip:.06,fa:[u.stk?.045:undefined,.03],lv,rk,
+ if(t[0]==='S'){const pos=t[1]==='p';E.sd=pos?-1:1;E.ax=J.base.x;return {J,E,st:'S',kind:'fall',c:[{s:R.back(J.p.x),air:0}],skip:.06,fa:[u.stk?.045:undefined,.03],lv,rk,
   // hacia la izquierda la esquina de la placa queda justo debajo: el cable se posa ya en línea con su carril (el de fuera, más afuera) y baja recto por él
-  side:g=>{const z=(pos?-.352:-.349)+.012*lv;return g<0?{L:[-BW/2-R.o+.003,Math.min(-.275,Math.max(z,J.p.z+.014))],d:[-.1,1],skip:R.back(J.p.x)+R.q+.006}:{L:[J.p.x+g*((pos?.062:.042)+.02*lv),Math.max(z,Math.min(J.p.z+.014,-BD/2-R.o))],d:[g*.7,.7],skip:.115+.02*lv}}}} // rodeando la placa: el cable de la fuente baja hacia el lado por el que va a seguir; el del +, que sale de más arriba, cae más lejos
+  side:g=>{const z=-.35+.012*lv;return g<0?{L:[-BW/2-R.o+.003,Math.min(-.275,Math.max(z,J.p.z+.014))],d:[-.1,1],skip:R.back(J.p.x)+R.q+.006}:{L:[J.p.x+g*(.052+.02*lv),Math.max(z,Math.min(J.p.z+.014,-BD/2-R.o))],d:[g*.7,.7],skip:.115+.02*lv}}}} // rodeando la placa: el cable de la fuente baja hacia el lado por el que va a seguir; el del +, que sale de más arriba, cae más lejos
  // de un polímetro, el cable baja hacia delante. Si luego va hacia atrás, da media vuelta y sigue por el pasillo que queda entre el polímetro y la placa (u); si no, pasa por delante de la placa
  const g=t[0]==='M0'?1:-1,L=[J.p.x+.02*rk,ZL+.01*Math.abs(rk)];
  return {J,st:t[0],kind:'fall',g,L,d:[0,1],c:[{s:g>0?R.left(L[1]):R.right(L[1]),air:0,out:g,u:1,skip:.04},{s:g>0?R.FL:R.FR,air:0,out:-g}],skip:.07,fa:[.055,.04]}}
@@ -969,7 +968,7 @@ const blocked=q=>OBST.some(([x1,x2,z1,z2,m])=>q.x>x1-m&&q.x<x2+m&&q.z>z1-m&&q.z<
 function airArc(A,B,k,off,n=28){
  const end=(X,O)=>{if(!X.stk)return {P:[],E:X.p,t:X.n,k};
   if(!(X.Lr>0))return {P:[],E:X.p,t:X.n,k:Math.min(k,X.n.dot(O.p.clone().sub(X.p).normalize())>.6?.05:.035)}; // la última de la pila: su cable sale ya libre
-  const E=X.p.clone().addScaledVector(X.n,.03).addScaledVector(X.nn,.02);if(X.sd&&X.sd*(E.y-X.ay)<.014)E.y=X.ay+X.sd*.014; // en la fuente, cada cable por el lado de su borne: el del + no baja hacia el −, ni al revés
+  const E=X.p.clone().addScaledVector(X.n,.03).addScaledVector(X.nn,.02);if(X.sd&&X.sd*(E.x-X.ax)<.014)E.x=X.ax+X.sd*.014; // en la fuente, cada cable por el lado de su borne: el del + no baja hacia el −, ni al revés
   const P=B3(X.p,X.p.clone().addScaledVector(X.n,.017),E.clone().addScaledVector(X.nn,-.014),E,5),run=X.Lr-.04;
   if(run>0){const E2=E.clone().addScaledVector(X.nn,run);P.push(E.clone().lerp(E2,.5),E2);return {P,E:E2,t:X.nn,k:Math.max(.03,k-.03)}}return {P,E,t:X.nn,k:Math.max(.03,k-.03)}};
  const a=end(A,B),b=end(B,A);
@@ -1456,18 +1455,26 @@ FIN.panel(PL.face.material,{w:640,ratio:PL.H/PL.W,seed:95,socks:Object.values(PL
 FIN.apply([BOARD,PL.root],{exclude:[BOARD.userData.top],foreign:[AMM.root,VOLT.root],skip:[...Object.values(plugMat),...Object.values(cabMat)]});
 /* ================= móvil: mandos compactos bajo la escena ================= */
 /* En el móvil cuesta girar los mandos con el dedo: bajo la escena hay un deslizador por mando y un desplegable por selector de polímetro. No muestran valores, que se leen en los aparatos. */
+// En el móvil, al tocar un deslizador o un selector de abajo, el mando que mueve en la escena se ilumina con un halo suave alrededor, y se apaga solo al soltarlo
+const HALO={list:new Set(),raf:0},haloTex=canvasTex(256,256,(c,w,h)=>{const g=c.createRadialGradient(w/2,h/2,0,w/2,h/2,w/2);g.addColorStop(0,'rgba(255,170,60,0)');g.addColorStop(.52,'rgba(255,170,60,0)');g.addColorStop(.64,'rgba(255,150,30,1)');g.addColorStop(.80,'rgba(255,175,70,.45)');g.addColorStop(1,'rgba(255,190,90,0)');c.fillStyle=g;c.fillRect(0,0,w,h)});
+function haloOf(obj){let h=obj.userData.halo;if(h)return h;const par=obj.parent;SC.updateMatrixWorld(true);const inv=par.matrixWorld.clone().invert(),box=new THREE.Box3();
+ obj.traverse(c=>{if(c.isMesh){c.geometry.computeBoundingBox();box.union(c.geometry.boundingBox.clone().applyMatrix4(inv.clone().multiply(c.matrixWorld)))}});
+ const r=Math.max(box.max.x-box.min.x,box.max.y-box.min.y)/2;h=new THREE.Mesh(new THREE.PlaneGeometry(r*3.6,r*3.6),new THREE.MeshBasicMaterial({map:haloTex,transparent:true,opacity:0,depthWrite:false,toneMapped:false}));
+ h.position.set((box.min.x+box.max.x)/2,(box.min.y+box.max.y)/2,box.min.z+r*.04);h.renderOrder=6;h.visible=false;par.add(h);h.userData.until=0;obj.userData.halo=h;return h}
+function halo(obj){if(!PM()||!obj)return;const h=haloOf(obj);h.userData.until=performance.now()+900;h.visible=true;HALO.list.add(h);if(!HALO.raf)HALO.raf=requestAnimationFrame(haloTick)}
+function haloTick(now){HALO.raf=0;for(const h of HALO.list){const on=now<h.userData.until,o=h.material.opacity,t=on?1:0;h.material.opacity=o+(t-o)*(on?.35:.12);if(!on&&h.material.opacity<.02){h.material.opacity=0;h.visible=false;HALO.list.delete(h)}}invalidate();if(HALO.list.size)HALO.raf=requestAnimationFrame(haloTick)}
 const MC=[],mcBox=$('#mctl');
 function mcRow(){const r=document.createElement('div');r.className='mrow';mcBox.appendChild(r);return r}
-function mcSlider(label,min,max,step,fine,get,set){const l=document.createElement('div'),s=document.createElement('span'),i=document.createElement('input'),bt=(t,k)=>{const b=document.createElement('button');b.type='button';b.className='mst';b.textContent=t;b.setAttribute('aria-label',(k<0?'Bajar ':'Subir ')+label.replace(/<[^>]*>/g,''));b.onclick=()=>set(Math.max(min,Math.min(max,get()+k*fine)));return b};
+function mcSlider(label,min,max,step,fine,get,set,obj){const l=document.createElement('div'),s=document.createElement('span'),i=document.createElement('input'),bt=(t,k)=>{const b=document.createElement('button');b.type='button';b.className='mst';b.textContent=t;b.setAttribute('aria-label',(k<0?'Bajar ':'Subir ')+label.replace(/<[^>]*>/g,''));b.onclick=()=>{halo(obj);set(Math.max(min,Math.min(max,get()+k*fine)))};return b};
  l.className='msl';s.innerHTML=label;i.type='range';i.min=min;i.max=max;i.step=step;i.setAttribute('aria-label',label.replace(/<[^>]*>/g,''));l.append(s,bt('−',-1),i,bt('+',1));mcRow().appendChild(l);
- i.oninput=()=>set(+i.value);MC.push(()=>{const v=get();if(Math.abs(+i.value-v)>step*.51)i.value=v})}
+ i.oninput=()=>{halo(obj);set(+i.value)};i.addEventListener('pointerdown',()=>halo(obj));MC.push(()=>{const v=get();if(Math.abs(+i.value-v)>step*.51)i.value=v})}
 function mcDials(list){const row=mcRow();for(const [label,m] of list){const l=document.createElement('label'),s=document.createElement('span'),e=document.createElement('select');l.className='msel';s.textContent=label;
   for(const p of DIAL.pos){const o=document.createElement('option');o.value=p.id;o.textContent=p.sym+(p.fn[0]==='D'?' ⎓ ':' ')+p.lab;e.appendChild(o)}
-  l.append(s,e);row.appendChild(l);e.onchange=()=>setDial(m,e.value);MC.push(()=>{if(e.value!==m.dial)e.value=m.dial})}}
+  l.append(s,e);row.appendChild(l);e.addEventListener('focus',()=>halo(m.kn));e.addEventListener('pointerdown',()=>halo(m.kn));e.onchange=()=>{halo(m.kn);setDial(m,e.value)};MC.push(()=>{if(e.value!==m.dial)e.value=m.dial})}}
 function mcSync(){for(const f of MC)f()}
 {const m0=measure;measure=function(f){m0(f);mcSync()}}
 $('#gbtn').onclick=()=>{if(PM()){document.documentElement.style.setProperty('--gtop',$('header').getBoundingClientRect().bottom+'px');document.body.classList.toggle('guide');return}const h=document.body.classList.toggle('noside');$('#gbtn').innerHTML='<span>'+(h?'Mostrar':'Ocultar')+' </span>guía'};
-mcSlider('Tensión',0,PL.K[0].max,.01,.05,()=>S.L.u[0],v=>setSup(PL,0,v));mcDials([['Amperímetro',AMM],['Voltímetro',VOLT]]);
+mcSlider('Tensión',0,PL.K[0].max,.01,.05,()=>S.L.u[0],v=>setSup(PL,0,v),PL.kn[0]);mcDials([['Amperímetro',AMM],['Voltímetro',VOLT]]);
 size();camReset();applyState();invalidate();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{drawPSU(PL);measure(true);invalidate()});
 window.__o3={DIAL,CB,SC,BOARD,BPG,MODS,CFG,RES,FLOW,SPOT,islandOf,RMA,RINT,NAMES:new Map([[R1,'R1'],[R2,'R2'],[R3M,'R3'],[R4,'R4'],[BL3,'BL3'],[BL4,'BL4'],[BFR2,'BFR2'],[BBK,'BBK']]),scr:(inst,u,v)=>{const[lx,ly]=inst.L(u,v),w=inst.fr.localToWorld(V3(lx,ly,0)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},
