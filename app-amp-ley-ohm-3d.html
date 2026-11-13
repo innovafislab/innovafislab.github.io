@@ -865,7 +865,7 @@ const CCOL=Object.fromEntries(CK.map(k=>[k,k[0]])),RWIRE=1e-3,RA=.01,RV=10e6; //
 const freeInit=()=>({mods:MODS.map(()=>({at:null,hor:true})),ends:Object.fromEntries(CK.map(k=>[k,[null,null]])),seq:{},n:0}); // seq: orden en que se enchufó cada clavija (en un borne con varias, la primera queda abajo)
 // bandeja de las piezas, detrás y a la derecha de la placa: las clavijas de las piezas quedan hundidas en ella
 const TRAY=new THREE.Group();TRAY.visible=false;SC.add(TRAY);
-const TRX=.125,TRZ=-.43,TRP=.09,TRY=.012,traySlot=i=>[TRX+TRP*(i%4),TRZ-TRP*Math.floor(i/4)];
+const TRX=.17,TRZ=-.43,TRP=.09,TRY=.012,traySlot=i=>[TRX+TRP*(i%4),TRZ-TRP*Math.floor(i/4)];
 {const mat=new THREE.Mesh(roundBox(.385,.205,TRY,.012,.002),finish(0x3b4048,.82,.02));mat.rotation.x=-Math.PI/2;mat.position.set(TRX+1.5*TRP,TRY/2,TRZ-TRP/2);mat.castShadow=mat.receiveShadow=true;TRAY.add(mat)}
 // clavijas de los cables: dos por cable, que van adonde se las lleve
 const DPL={},PROXY=[];
