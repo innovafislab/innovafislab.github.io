@@ -819,7 +819,7 @@ const CFG={
   flow:[['I3',SG([0,1],[1,1],[1,2]),BL3,...RB3],['I4',...RB4]]}};
 const cfgKey=()=>S.part===1?'s'+S.vm:'p'+[0,3,4][S.am];
 const LBL={};
-function wire(){SC.updateMatrixWorld(true);const fr=S.part===0;{const m=FREE.lbl[0],pm=PM();m.position.x=pm?-.4065:-.4425;m.position.z=pm?-.965:-.652}TRAY.visible=fr;for(const m of FREE.lbl)m.visible=fr;if(!FREE.mlbl)FREE.mlbl=[[XA,'MULTÍMETRO 1'],[XV,'MULTÍMETRO 2']].map(([x,t])=>floorLabel(x,ZM+.08,t,'',.2,.034)); // en «Móntalo tú mismo» no se sabe qué mide cada polímetro: solo su nombre
+function wire(){SC.updateMatrixWorld(true);const fr=S.part===0;{const m=FREE.lbl[0],pm=PM();m.position.x=pm?-.4065:-.4425;m.position.z=pm?-.965:-.652}TRAY.visible=fr;for(const m of FREE.lbl)m.visible=fr;if(!FREE.mlbl)FREE.mlbl=[[XA,'MULTÍMETRO 1'],[XV,'MULTÍMETRO 2']].map(([x,t])=>floorLabel(x,ZM+.08,t,'',.2,.034));meterLabels(); // en «Móntalo tú mismo» no se sabe qué mide cada polímetro: solo su nombre
  for(const m of FREE.mlbl)m.visible=fr;for(const g of FIXP)g.visible=!fr;for(const q of CK)for(const h of DPL[q])h.visible=fr;
  if(fr){for(const q of['P','N','A','C','Vr','Vb'])CB[q].visible=false;for(const q in BPG)BPG[q].g.visible=false;for(const q in LBL)LBL[q].visible=false;wireFree();syncFlow();FREE.sig='';potSync();drawSheet();return}
  FREE.sig='';$('#fuseBtn').hidden=true;fuseAlarm();for(const q of CK){CB[q].visible=false;if(CB[q].userData.rib)CB[q].userData.rib.visible=false}const k=cfgKey(),c=CFG[k],con=c.con,ser=k[0]==='s';
@@ -997,6 +997,15 @@ function bez2(a,b,c,d,ends){const n=Math.max(8,Math.ceil((Math.hypot(b[0]-a[0],b
 const uTurn=(L,xr)=>{const d=uDepth(xr-L[0]);return bez2(L,[L[0],L[1]+d],[xr,L[1]+d],[xr,L[1]],true)};
 // Lo que un cable posado en la mesa no puede pisar: la placa, los polímetros, la fuente y la bandeja (con su margen)
 const OBST=[[-BW/2,BW/2,-BD/2,BD/2,.016],[XA-.086,XA+.086,-.225,.150,.012],[XV-.086,XV+.086,-.225,.150,.012],[XP-.16,XP+.16,-.72,-.385,.006],[TRX+1.5*TRP-.1925,TRX+1.5*TRP+.1925,TRZ-TRP/2-.1025,TRZ-TRP/2+.1025,.012]];
+// En el móvil los polímetros son un 20 % más grandes: crecen hacia delante y hacia la placa, sin subir en la pantalla ni salirse por fuera, y su rótulo de la mesa baja con ellos
+const OBST0=OBST.map(o=>o.slice()),MLAY=[{dx:0,dz:0},{dx:0,dz:0}];
+function meterLayout(){const pm=PM(),s0=.85,s=pm?s0*1.2:s0,el=V0().el,u=V3(0,Math.cos(el),-Math.sin(el));
+ [AMM,VOLT].forEach((m,i)=>{if(Math.abs(m.root.scale.x-s)<1e-6&&m.root.userData.lay===pm)return;m.root.userData.lay=pm;const x0=i?XV:XA;
+  m.root.scale.setScalar(s0);m.root.position.set(x0,0,ZM);m.root.updateMatrixWorld(true);const B0=new THREE.Box3().setFromObject(m.root),top=B=>{let t=-9;for(const x of[B.min.x,B.max.x])for(const y of[B.min.y,B.max.y])for(const z of[B.min.z,B.max.z])t=Math.max(t,y*u.y+z*u.z);return t};
+  let dx=0,dz=0;if(s!==s0){m.root.scale.setScalar(s);m.root.updateMatrixWorld(true);const B1=new THREE.Box3().setFromObject(m.root);dx=i?B0.max.x-B1.max.x:B0.min.x-B1.min.x;dz=(top(B1)-top(B0))/Math.sin(el);m.root.position.set(x0+dx,0,ZM+dz);m.root.updateMatrixWorld(true)}
+  const B2=new THREE.Box3().setFromObject(m.root),o=OBST0[1+i];OBST[1+i]=[o[0]+B2.min.x-B0.min.x,o[1]+B2.max.x-B0.max.x,o[2]+B2.min.z-B0.min.z,o[3]+B2.max.z-B0.max.z,o[4]];
+  MLAY[i]={dx:(B2.min.x+B2.max.x-B0.min.x-B0.max.x)/2,dz:B2.max.z-B0.max.z}});meterLabels()}
+function meterLabels(){const L=(o,i,z)=>{if(o){o.position.x=(i?XV:XA)+MLAY[i].dx;o.position.z=z+MLAY[i].dz}};if(FREE.mlbl)FREE.mlbl.forEach((o,i)=>L(o,i,ZM+.08));for(const k in LBL)L(LBL[k],k[0]==='V'?1:0,ZM+.085)}
 const blocked=q=>OBST.some(([x1,x2,z1,z2,m])=>q.x>x1-m&&q.x<x2+m&&q.z>z1-m&&q.z<z2+m);
 // Tendido directo, sin rodear la placa, cuando nada estorba: el cable baja de una clavija, se posa en la mesa y sube a la otra por el camino más corto.
 // Da null si por ahí hay algo en medio (entonces el cable rodea la placa por su carril). mk(h) hace el tendido con el arco de la placa h más alto.
@@ -1130,7 +1139,7 @@ const ROPE={sig:'',paths:{},lam:.06,a:.3,R:.0036};
 function ropeScene(){const F=S.free,dr=FREE.drag,boxes=[{x1:-BW/2,x2:BW/2,z1:-BD/2,z2:BD/2,top:BTOP}],caps=[];
  MODS.forEach((m,i)=>{const q=F.mods[i];if(!q.at||dr&&dr.t==='mod'&&dr.i===i)return;const g=m.g.position,hor=Math.abs(m.g.rotation.y)<.1,hx=(hor?MODL:MODW)/2,hz=(hor?MODW:MODL)/2;boxes.push({x1:g.x-hx,x2:g.x+hx,z1:g.z-hz,z2:g.z+hz,top:g.y+MODH})});
  for(const X of[XA,XV])boxes.push({x1:X-.086,x2:X+.086,z1:-.225,z2:.150,tf:z=>Math.min(.21,.034+.703*Math.max(0,.143-z)),sk:4}); // el cuerpo inclinado de cada polímetro
- const mg=.012,walls=OBST.slice(1).map(([x1,x2,z1,z2],i)=>({x1:x1-mg,x2:x2+mg,z1:z1-mg,z2:(i<2?.160:z2)+mg,st:['M0','M1','S',''][i]})); // los aparatos y la bandeja se rodean; la placa y las piezas, por encima
+ const mg=.012,walls=OBST.slice(1).map(([x1,x2,z1,z2],i)=>({x1:x1-mg,x2:x2+mg,z1:z1-mg,z2:(i<2?z2+.010:z2)+mg,st:['M0','M1','S',''][i]})); // los aparatos y la bandeja se rodean; la placa y las piezas, por encima
  for(const k of CK)F.ends[k].forEach((a,e)=>{const h=DPL[k][e];if(!h.visible||dr&&dr.t==='plug'&&dr.k===k&&dr.e===e)return;const u=h.userData;
   if(isJ(a)){caps.push({k,e,a:u.base,n:u.nn,L:u.len||.04});caps.push({k,e,a:u.out.p,n:u.out.n,L:.034})}else{const J=a?tableJack(k,e):parkJack(k,e);caps.push({k,e,a:J.base,n:J.n,L:.04})}});
  return {boxes,walls,caps,grid:new Map()}}
@@ -1202,7 +1211,7 @@ function ropeWire(){const F=S.free,dr=FREE.drag,sig=JSON.stringify([F.ends,F.mod
 function ropePreset(con,J){const st=e=>e==='psu+'||e==='psu-'?'S':e==='mA'||e==='COM'?'M0':e==='V'||e==='VCOM'?'M1':'',boxes=[{x1:-BW/2,x2:BW/2,z1:-BD/2,z2:BD/2,top:BTOP}],caps=[];
  MODS.forEach(m=>{if(!m.g.visible)return;const g=m.g.position,hor=Math.abs(m.g.rotation.y)<.1,hx=(hor?MODL:MODW)/2,hz=(hor?MODW:MODL)/2;boxes.push({x1:g.x-hx,x2:g.x+hx,z1:g.z-hz,z2:g.z+hz,top:g.y+MODH})});
  for(const X of[XA,XV])boxes.push({x1:X-.086,x2:X+.086,z1:-.225,z2:.150,tf:z=>Math.min(.21,.034+.703*Math.max(0,.143-z)),sk:4});
- const mg=.012,walls=OBST.slice(1,4).map(([x1,x2,z1,z2],i)=>({x1:x1-mg,x2:x2+mg,z1:z1-mg,z2:(i<2?.160:z2)+mg,st:['M0','M1','S'][i]}));
+ const mg=.012,walls=OBST.slice(1,4).map(([x1,x2,z1,z2],i)=>({x1:x1-mg,x2:x2+mg,z1:z1-mg,z2:(i<2?z2+.010:z2)+mg,st:['M0','M1','S'][i]}));
  const Q=Object.keys(con).filter(q=>CB[q].visible),E={};for(const q of Q)E[q]=con[q].map(e=>{const j=J(e);return {p:j.p.clone(),n:j.n.clone().normalize()}});
  for(const q of Q)E[q].forEach((j,e)=>caps.push({k:q,e,a:j.p.clone().addScaledVector(j.n,-.04),n:j.n,L:.04}));
  const sc={boxes,walls,caps,grid:new Map()},s1=.012;
@@ -1383,7 +1392,7 @@ const br=box.getBoundingClientRect(),
 function camReset(){const v=fitV0();az=v.az;el=v.el;dist=v.dist;TG.copy(v.tg)}
 function camSet(){CAM.position.set(TG.x+dist*Math.cos(el)*Math.sin(az),TG.y+dist*Math.sin(el),TG.z+dist*Math.cos(el)*Math.cos(az));CAM.lookAt(TG)}
 function size(){const w=box.clientWidth,h=box.clientHeight;if(!w||!h)return;const ratio=Math.min(window.devicePixelRatio||1,2,Math.sqrt(1750000/(w*h)));if(R3.getPixelRatio()!==ratio)R3.setPixelRatio(ratio);R3.setSize(w,h,false);CAM.aspect=w/h;CAM.updateProjectionMatrix();invalidate()}
-let touched=false,lastPM=null;new ResizeObserver(()=>{size();const pm=PM();if(lastPM!==null&&pm!==lastPM&&S.part===0){FREE.sig='';if(typeof ROPE!=='undefined')ROPE.sig='';wire()}lastPM=pm;if(!touched&&CAM.aspect)camReset()}).observe(box); // al pasar de móvil a portátil o al revés, los cables sin usar cambian de sitio
+let touched=false,lastPM=null;new ResizeObserver(()=>{size();const pm=PM();if(lastPM!==null&&pm!==lastPM){meterLayout();FREE.sig='';if(typeof ROPE!=='undefined')ROPE.sig='';wire()}lastPM=pm;if(!touched&&CAM.aspect)camReset()}).observe(box); // al pasar de móvil a portátil o al revés, los cables sin usar cambian de sitio
 function pan(dx,dy){const k=2*dist*Math.tan(CAM.fov*Math.PI/360)/box.clientHeight,ca=Math.cos(az),sa=Math.sin(az),ce=Math.cos(el),se=Math.sin(el);
  TG.x+=k*(-dx*ca-dy*se*sa);TG.y+=k*dy*ce;TG.z+=k*(dx*sa-dy*se*ca);TG.x=Math.max(-1.4,Math.min(1.4,TG.x));TG.y=Math.max(-.2,Math.min(.8,TG.y));TG.z=Math.max(-1.3,Math.min(.9,TG.z));invalidate()}
 function zAt(cx,cy,f){const b=box.getBoundingClientRect();camSet();CAM.updateMatrixWorld();const v=TG.clone().project(CAM);const sx=cx-b.left-(v.x+1)/2*box.clientWidth,sy=cy-b.top-(1-v.y)/2*box.clientHeight;pan(-(1-f)*sx,-(1-f)*sy)}
@@ -1566,7 +1575,7 @@ function mcSync(){for(const f of MC)f()}
 $('#mfBack').onclick=()=>meterBack();addEventListener('keydown',e=>{if(e.key==='Escape')meterBack()});addEventListener('popstate',()=>{if(MF)meterBack(true)});
 $('#gbtn').onclick=()=>{if(PM()){document.documentElement.style.setProperty('--gtop',$('header').getBoundingClientRect().bottom+'px');document.body.classList.toggle('guide');return}const h=document.body.classList.toggle('noside');$('#gbtn').innerHTML='<span>'+(h?'Mostrar':'Ocultar')+' </span>guía'};
 mcSlider('Tensión',0,PL.K[0].max,.01,.05,()=>S.L.u[0],v=>setSup(PL,0,v),PL.kn[0]);mcDials([['Amperímetro',AMM],['Voltímetro',VOLT]]);
-size();camReset();applyState();invalidate();
+size();meterLayout();camReset();applyState();invalidate();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{drawPSU(PL);measure(true);invalidate()});
 window.__o3={DIAL,CB,SC,BOARD,BPG,MODS,CFG,RES,FLOW,SPOT,islandOf,RMA,RINT,NAMES:new Map([[R1,'R1'],[R2,'R2'],[R3M,'R3'],[R4,'R4'],[BL3,'BL3'],[BL4,'BL4'],[BFR2,'BFR2'],[BBK,'BBK']]),scr:(inst,u,v)=>{const[lx,ly]=inst.L(u,v),w=inst.fr.localToWorld(V3(lx,ly,0)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},
  S:()=>S,solve,PL,AMM,VOLT,setSup,setDial,measure,wire,tabs,setFlow,camState:()=>({az,el,dist,TG}),view:(a,e,d,x,y,z)=>{az=a;el=e;dist=d;TG.set(x,y,z);touched=true;camSet();invalidate()},flyTo,gA,gV,set:(o)=>{Object.assign(S,o);FREE.sol=null;wire();tabs();measure(true)},
