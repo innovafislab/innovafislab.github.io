@@ -927,7 +927,7 @@ function placePlugs(){const D=FREE.drag&&FREE.drag.t==='plug'?[FREE.drag.k,FREE.
  for(const at in M){const L=M[at],A=L.length>1?stackAngles(at,L):null;
   L.forEach(([k,e],l)=>{const J=jackAt(at,l),h=DPL[k][e];h.position.copy(J.base);h.quaternion.copy(J.q);h.scale.setScalar(J.s);h.visible=true;const sp=plugMode(h,A?A[l]:null);
    if(sp){h.updateMatrixWorld(true);const o=sp.out();h.userData.out={p:o.p,n:o.n}}else h.userData.out={p:J.p,n:J.n};h.userData.base=J.base;h.userData.len=A?SST*J.s:.040*J.s;h.userData.nn=J.n;h.userData.lvl=l;h.userData.above=L.length-1-l;h.userData.stk=!!A;h.userData.rank=A?A.filter(q=>q<A[l]).length-(A.length-1)/2:0})}
- for(const k of CK)S.free.ends[k].forEach((a,e)=>{if(isJ(a)||(D&&D[0]===k&&D[1]===e))return;const J=a?tableJack(k,e):parkJack(k,e),h=DPL[k][e];h.position.copy(J.base);h.quaternion.copy(J.q);h.scale.setScalar(1);h.visible=FREE.show.has(k);plugMode(h,null);h.userData.out={p:J.p,n:J.n};h.userData.lvl=0;h.userData.above=0;h.userData.stk=false;h.userData.rank=0})}
+ for(const k of CK)S.free.ends[k].forEach((a,e)=>{if(isJ(a)||(D&&D[0]===k&&D[1]===e))return;const J=a?tableJack(k,e):parkJack(k,e),h=DPL[k][e];h.position.copy(J.base);h.quaternion.copy(J.q);h.scale.setScalar(!a&&PM()?1.3:1);h.visible=FREE.show.has(k);plugMode(h,null);h.userData.out={p:J.p,n:J.n};h.userData.lvl=0;h.userData.above=0;h.userData.stk=false;h.userData.rank=0})}
 function taken(skipEnd,skipMod){const T=new Set();for(const k of CK)S.free.ends[k].forEach((a,e)=>{if(isJ(a)&&!(skipEnd&&skipEnd[0]===k&&skipEnd[1]===e))T.add(a)});
  S.free.mods.forEach((q,i)=>{if(q.at&&i!==skipMod){T.add('B:'+q.at[0]+':'+q.at[1]);T.add('B:'+q.at[2]+':'+q.at[3])}});return T}
 
@@ -1163,9 +1163,9 @@ function ropePath(k,sc){const [a0,a1]=S.free.ends[k],R0=ring(0),A=access(a0,k,0,
  return dense([pa.clone().addScaledVector(na,-.004),pa.clone(),...P.map(v),pb.clone(),pb.clone().addScaledVector(nb,-.004)])}
 function ropeWire(){const F=S.free,dr=FREE.drag,sig=JSON.stringify([F.ends,F.mods,F.seq,dr&&[dr.t,dr.k,dr.e,dr.i],[...FREE.show]]);
  if(sig!==ROPE.sig){ROPE.sig=sig;ROPE.paths={};const sc=ropeScene(),use=CK.filter(k=>FREE.show.has(k)&&!(dr&&dr.t==='plug'&&dr.k===k));
-  for(const k of use)if(!F.ends[k][0]&&!F.ends[k][1]){const P=dense(freePath(k,[],[]));ROPE.paths[k]=P;ropeAdd(sc,P)} // los que esperan en su sitio, primero
+  for(const k of use)if(!F.ends[k][0]&&!F.ends[k][1]){const P=dense(freePath(k,[],[]));P.park=true;ROPE.paths[k]=P;ropeAdd(sc,P)} // los que esperan en su sitio, primero
   for(const k of use)if(F.ends[k][0]||F.ends[k][1]){const P=ropePath(k,sc);ROPE.paths[k]=P;ropeAdd(sc,P)}
-  for(const k in ROPE.paths){FREE.paths[k]=ROPE.paths[k];setTube(CB[k],ROPE.paths[k])}}
+  for(const k in ROPE.paths){FREE.paths[k]=ROPE.paths[k];setTube(CB[k],ROPE.paths[k],ROPE.paths[k].park&&PM()?.0046:undefined)}} // en el móvil, los de su sitio algo más gruesos
  for(const k of CK)CB[k].visible=FREE.show.has(k)&&!(dr&&dr.t==='plug'&&dr.k===k)&&!!ROPE.paths[k]}
 function wireFree(){SC.updateMatrixWorld(true);const F=S.free;
  MODS.forEach((m,i)=>{const q=F.mods[i];if(FREE.drag&&FREE.drag.t==='mod'&&FREE.drag.i===i)return;if(q.at)m.put(q.at);else{m.at=null;const [x,z]=traySlot(i);m.pose(x,TRY+.0012,z,q.hor)}});
@@ -1242,7 +1242,7 @@ function freeDown(f,e){FREE.drag=Object.assign(f,{moved:false,x0:e.clientX,y0:e.
 function freeMove(e){const D=FREE.drag;if(!D)return;if(!D.moved){if(Math.hypot(e.clientX-D.x0,e.clientY-D.y0)<5)return;D.moved=true;setTimeout(()=>{if(FREE.drag===D){measure(true);potSync();invalidate()}},0);
    if(D.t==='plug'){const o=S.free.ends[D.k][D.e];if(isJ(o)&&stacks()[o].length>1)wireFree();D.cnt={};const M=stacks([D.k,D.e]);for(const a in M)D.cnt[a]=M[a].length; // al sacarla de una pila, las de encima bajan
     if(CB[D.k].userData.rib)CB[D.k].userData.rib.visible=false;for(const f of FLOW.list)if(f.k===D.k)f.m.visible=false;for(const t of TINT)if(t.k===D.k)t.m.visible=false}}
- const x=e.clientX,y=e.clientY-(D.touch&&D.t==='plug'?46:0);HL[0].visible=HL[1].visible=false;
+ const x=e.clientX,y=e.clientY-(D.touch?46:0);HL[0].visible=HL[1].visible=false;
  if(D.t==='plug'){const T=plugFull([D.k,D.e]),oth=S.free.ends[D.k][1-D.e],lim=D.touch?34:26;let best=null,bd=lim;camSet();CAM.updateMatrixWorld();
    for(const at of ALLJ){if(T.has(at)||at===oth)continue;const J=jackAt(at,D.cnt[at]||0),s=scrOf(J.base.clone().addScaledVector(J.n,.012)),d=Math.hypot(s[0]-x,s[1]-y);if(d<bd){bd=d;best=at}}
    D.snap=best;const h=DPL[D.k][D.e];plugMode(h,null);let J;if(best){J=jackAt(best,D.cnt[best]||0);hlAt(HL[0],J)}else{const p=planeHit(x,y,.075)||V3(0,.075,.3);p.x=Math.max(-.66,Math.min(.56,p.x));p.z=Math.max(-.70,Math.min(.46,p.z));D.drop=[p.x,p.z];J={base:p,q:QUP,s:1,p:p.clone().setY(p.y+PLT),n:V3(0,1,0)}}
@@ -1481,7 +1481,13 @@ function lupaDraw(){const o=LUPA.obj;if(!o||performance.now()>LUPA.until||!PM()|
  const W=box.clientWidth,H=box.clientHeight,sz=Math.round(Math.max(84,Math.min(112,.27*W,.24*H))),p=c.clone().project(CAM),px=(p.x+1)/2*W,py=(1-p.y)/2*H,
   e=c.clone().addScaledVector(LCAM.up,r).project(CAM),kr=Math.max(4,Math.hypot((e.x-p.x)/2*W,(e.y-p.y)/2*H)),gap=26;
  let up=true,y=Math.round(py-kr-gap-sz);if(y<4){up=false;y=Math.round(py+kr+gap)}const x=Math.round(Math.max(4,Math.min(W-sz-4,px-sz/2)));
- R3.setScissorTest(true);R3.setScissor(x,H-y-sz,sz,sz);R3.setViewport(x,H-y-sz,sz,sz);R3.render(SC,LCAM);R3.setScissorTest(false);R3.setViewport(0,0,W,H);
+ // el mando ampliado se dibuja aparte y se pega con las esquinas redondeadas, como el marco: nada asoma por detrás de las curvas
+ const pr=R3.getPixelRatio(),rs=Math.round(sz*pr*1.5);if(!LUPA.rt){LUPA.rt=new THREE.WebGLRenderTarget(rs,rs);LUPA.rt.texture.encoding=THREE.sRGBEncoding;
+  const mk=canvasTex(128,128,(c,w,h)=>{c.fillStyle='#000';c.fillRect(0,0,w,h);c.fillStyle='#fff';rr(c,0,0,w,h,w*7/sz);c.fill()});mk.encoding=THREE.LinearEncoding;
+  LUPA.q=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:LUPA.rt.texture,alphaMap:mk,transparent:true,toneMapped:false,depthTest:false,depthWrite:false}));LUPA.s=new THREE.Scene();LUPA.s.add(LUPA.q);LUPA.oc=new THREE.OrthographicCamera(0,1,1,0,-1,1)}
+ if(LUPA.rt.width!==rs)LUPA.rt.setSize(rs,rs);R3.setRenderTarget(LUPA.rt);R3.render(SC,LCAM);R3.setRenderTarget(null);
+ const oc=LUPA.oc;oc.left=0;oc.right=W;oc.top=H;oc.bottom=0;oc.updateProjectionMatrix();LUPA.q.scale.set(sz,sz,1);LUPA.q.position.set(x+sz/2,H-y-sz/2,0);
+ const ac=R3.autoClear;R3.autoClear=false;R3.render(LUPA.s,oc);R3.autoClear=ac;
  Object.assign(lupaDiv.style,{display:'block',left:x+'px',top:y+'px',width:sz+'px',height:sz+'px'});
  const by=up?y+sz:y,cx=Math.max(x+14,Math.min(x+sz-14,px)),ty=up?py-kr-2:py+kr+2;lupaTail.setAttribute('viewBox','0 0 '+W+' '+H);lupaTail.style.display='block';
  lupaTail.firstChild.setAttribute('d','M'+(cx-9)+' '+by+' L'+px.toFixed(1)+' '+ty.toFixed(1)+' L'+(cx+9)+' '+by+' Z')}
