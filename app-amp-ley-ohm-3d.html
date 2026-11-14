@@ -825,6 +825,7 @@ function wire(){SC.updateMatrixWorld(true);const fr=S.part===0;{const m=FREE.lbl
  {const r=con.Vr[1]==='vr'?1:4,b=con.Vb[1]==='vb'?7:4,VW=[[vv,zf],[vv+.035,zf+.045],[XV+.105,zf+.008],[XV+.12,.05],[XV+.115,-.15],[XV+.05,-.20]],VG=[[vc,zf],[vc-.045,zf+.03]];
   go('Vb',b===7?[...VG,[T1+.032,zf-.02],[T1+.008,SZ(7)+.02]]:[...VG,[T2-.008,zf-.05],[T2-.012,.07],[T1+.006,SZ(4)+.03]],{...JK,d1:b===7?[-.8,-.6]:[-.6,-.8],b1:.05,b2:.04});
   go('Vr',r===1?[...VW,[.252,-.19],[T1+.012,SZ(1)-.004]]:[...VW,[T2+.03,-.186],[T2-.004,-.10],[T1+.008,SZ(4)-.03]],{...JK,d1:r===1?[-1,.1]:[-.5,.87],b1:.05,b2:.04})}
+ if(ROPE_ON)ropePreset(con,J); // los mismos cables que en «Móntalo tú mismo»: cortos y con curvas amplias
  for(const q in CB)if(CB[q].userData.rib)CB[q].userData.rib.visible=CB[q].visible;
  for(const q in LBL)LBL[q].visible=q===('A'+k)||q===('V'+k);
  boardFlow(c.flow);syncFlow();potSync();drawSheet();OCC.list=null;R3.shadowMap.needsUpdate=true}
@@ -1169,6 +1170,19 @@ function ropeWire(){const F=S.free,dr=FREE.drag,sig=JSON.stringify([F.ends,F.mod
   for(const k of use)if(F.ends[k][0]||F.ends[k][1]){const P=ropePath(k,sc);ROPE.paths[k]=P;ropeAdd(sc,P)}
   for(const k in ROPE.paths){FREE.paths[k]=ROPE.paths[k];setTube(CB[k],ROPE.paths[k])}}
  for(const k of CK)CB[k].visible=FREE.show.has(k)&&!(dr&&dr.t==='plug'&&dr.k===k)&&!!ROPE.paths[k]}
+// Montajes de las partes I y II: sus cables se tienden igual que en «Móntalo tú mismo» (cortos, con curvas amplias, apoyados y sin atravesar nada), de clavija a clavija.
+function ropePreset(con,J){const st=e=>e==='psu+'||e==='psu-'?'S':e==='mA'||e==='COM'?'M0':e==='V'||e==='VCOM'?'M1':'',boxes=[{x1:-BW/2,x2:BW/2,z1:-BD/2,z2:BD/2,top:BTOP}],caps=[];
+ MODS.forEach(m=>{if(!m.g.visible)return;const g=m.g.position,hor=Math.abs(m.g.rotation.y)<.1,hx=(hor?MODL:MODW)/2,hz=(hor?MODW:MODL)/2;boxes.push({x1:g.x-hx,x2:g.x+hx,z1:g.z-hz,z2:g.z+hz,top:g.y+MODH})});
+ for(const X of[XA,XV])boxes.push({x1:X-.086,x2:X+.086,z1:-.225,z2:.150,tf:z=>Math.min(.21,.034+.703*Math.max(0,.143-z)),sk:4});
+ const mg=.012,walls=OBST.slice(1,4).map(([x1,x2,z1,z2],i)=>({x1:x1-mg,x2:x2+mg,z1:z1-mg,z2:(i<2?.160:z2)+mg,st:['M0','M1','S'][i]}));
+ const Q=Object.keys(con).filter(q=>CB[q].visible),E={};for(const q of Q)E[q]=con[q].map(e=>{const j=J(e);return {p:j.p.clone(),n:j.n.clone().normalize()}});
+ for(const q of Q)E[q].forEach((j,e)=>caps.push({k:q,e,a:j.p.clone().addScaledVector(j.n,-.04),n:j.n,L:.04}));
+ const sc={boxes,walls,caps,grid:new Map()},s1=.012;
+ for(const q of Q){const [A,B]=E[q],own={k:q,a:st(con[q][0]),b:st(con[q][1])},EA=[A.p.x+A.n.x*s1,A.p.y+A.n.y*s1,A.p.z+A.n.z*s1],EB=[B.p.x+B.n.x*s1,B.p.y+B.n.y*s1,B.p.z+B.n.z*s1];
+  const G=ropeGuide(sc,[EA[0],EA[2]],[EB[0],EB[2]]),cum=[0];for(let i=1;i<G.length;i++)cum.push(cum[i-1]+Math.hypot(G[i][0]-G[i-1][0],G[i][1]-G[i-1][1]));
+  let P=G.map((g,i)=>{const t=cum[cum.length-1]?cum[i]/cum[cum.length-1]:0;return [g[0],EA[1]+(EB[1]-EA[1])*t,g[1]]});P[0]=EA;P[P.length-1]=EB;
+  P=ropeSolve(sc,own,EA,[A.n.x,A.n.y,A.n.z],EB,[B.n.x,B.n.y,B.n.z],P);
+  const D=dense([A.p.clone().addScaledVector(A.n,-.004),A.p.clone(),...P.map(v=>V3(v[0],v[1],v[2])),B.p.clone(),B.p.clone().addScaledVector(B.n,-.004)]);ropeAdd(sc,D);setTube(CB[q],D)}}
 function wireFree(){SC.updateMatrixWorld(true);const F=S.free;
  MODS.forEach((m,i)=>{const q=F.mods[i];if(FREE.drag&&FREE.drag.t==='mod'&&FREE.drag.i===i)return;if(q.at)m.put(q.at);else{m.at=null;const [x,z]=traySlot(i);m.pose(x,TRY+.0012,z,q.hor)}});
  poolSync();placePlugs();if(ROPE_ON){ropeWire();for(const q in CB)if(CB[q].userData.rib)CB[q].userData.rib.visible=CB[q].visible&&!(FREE.drag&&FREE.drag.k===q);OCC.list=null;R3.shadowMap.needsUpdate=true;return}

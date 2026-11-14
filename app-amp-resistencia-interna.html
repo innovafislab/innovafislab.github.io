@@ -57,7 +57,11 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 @media (max-width:1300px) and (min-width:821px){header{gap:8px;padding:8px 10px}.tab{padding:4px 10px}.hbtn{padding:6px 10px}}
 .mctl{display:none}@media (max-width:820px),(max-height:520px){html,body{overflow:hidden}body{height:100dvh}header{flex-wrap:wrap;white-space:normal;padding:6px 10px;gap:6px 8px}header .back{width:30px;height:34px}header h1{flex:1 1 0;min-width:60%;font-size:clamp(15px,4.1vw,19px);line-height:1.15}header .sp{display:none}header .tabs{order:3}#gbtn{display:inline-flex;align-items:center;gap:.4em;flex:none;padding:5px 10px;font-size:14px;color:var(--navy);border-color:#9fb0c2;text-transform:capitalize}#gbtn span{display:none}#gbtn::before{content:'i';display:inline-grid;place-items:center;width:1.15em;height:1.15em;border-radius:50%;border:1.5px solid currentColor;font-size:.8em;font-weight:800;font-style:italic;font-family:Georgia,serif;text-transform:none}body.guide #gbtn{background:#17324d;color:#fff;border-color:#17324d}body.guide #gbtn::before{content:'\2715';border:0;font-style:normal;font-family:inherit}main{display:flex;flex-direction:column;padding:8px 8px 6px}.left{flex:1;min-height:0}.side{display:none}body.guide .side{display:block;position:fixed;left:0;right:0;bottom:0;top:var(--gtop,46px);z-index:30;overflow-y:auto;-webkit-overflow-scrolling:touch;border:0;border-top:1px solid var(--line);border-radius:0;padding:14px 16px 48px;font-size:16px}.mctl{display:block;flex:none;padding:4px 2px 0}.mrow{display:flex;gap:10px;align-items:center;min-height:34px}.msl,.msel{flex:1;min-width:0;display:flex;align-items:center;gap:7px;font:600 13.5px/1.1 Inter,system-ui,sans-serif;color:var(--ink)}.msl span,.msel span{flex:none;white-space:nowrap}.msl span{min-width:6.4em}.msl input{flex:1;min-width:0;height:28px;margin:0;accent-color:#1d5fa8}.mst{flex:none;width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:600 17px/1 Inter,system-ui,sans-serif;padding:0;touch-action:manipulation}.msel select{flex:1;min-width:0;height:30px;font:inherit;padding:0 4px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}.vbtn{width:26px;height:26px;font-size:15px}.fbtn{height:26px;font-size:11px;padding:0 8px}}@media (max-height:520px) and (orientation:landscape){header{flex-wrap:nowrap;padding:3px 10px}header h1{flex:0 1 auto;min-width:0;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}header .tabs{order:0;flex:none}header .sp{display:block}.tab{padding:3px 10px;font-size:13px}#gbtn{padding:3px 10px}main{padding:6px 8px}.left{flex-direction:row;gap:10px}.left .card{flex:1;min-width:0}.mctl{width:236px;padding:0;overflow-y:auto;align-self:stretch}.mrow{flex-wrap:wrap;gap:6px;min-height:0;margin-bottom:10px}.msl{flex-wrap:wrap;gap:3px 6px}.msl span{flex:1 0 100%}.msel{flex:1 0 100%}}
 .side .esq{display:block;width:100%;max-width:440px;margin:.7em auto .5em;color:var(--ink)}
-</style></head><body data-part="1">
+</style><style>.lupa{display:none;position:absolute;z-index:4;pointer-events:none;border:2px solid #fff;border-radius:7px;box-shadow:0 0 0 1px rgba(20,30,45,.28),0 4px 12px rgba(20,30,45,.25)}.lupat{display:none;position:absolute;inset:0;width:100%;height:100%;z-index:4;pointer-events:none;overflow:visible}.lupat path{fill:#fff;stroke:rgba(20,30,45,.28);stroke-width:1;stroke-linejoin:round;filter:drop-shadow(0 2px 3px rgba(20,30,45,.2))}
+.mfbar{display:none}
+.msel .mmbtn{flex:none;height:30px;padding:0 10px;font:inherit;border:1px solid #1d5fa8;border-radius:8px;background:#eef4fb;color:#17324d;cursor:pointer;white-space:nowrap}.msel .mmbtn:active{background:#dbe8f6}.msel .mval{flex:1;min-width:0;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;color:var(--ink)}html.dk .msel .mmbtn{background:#1c2a3a;border-color:#7fb2e5;color:#cfe2f6}
+body.mfocus .sim3{position:fixed;left:0;right:0;bottom:0;top:58px;z-index:60;background:var(--paper)}body.mfocus .ctls{display:none}body.mfocus .mfbar{display:flex;position:fixed;left:0;right:0;top:0;z-index:61;align-items:center;gap:10px;padding:10px 12px;font:600 15px/1.2 Inter,system-ui,sans-serif;color:var(--ink);height:58px;box-sizing:border-box;background:var(--paper)}body.mfocus .mfbar span{margin-left:auto;font-weight:400;font-size:12.5px;color:var(--slate)}</style>
+</head><body data-part="1">
 <style>.fbtn.tog{background:#fff4e8;border-color:#f5821f;color:#7a3d06}.fbtn.tog:hover{background:#ffe9d2}.fbtn.tog svg{flex:none}.fbtn.tog circle{fill:#f5821f}.fbtn.tog.on{background:#f5821f;border-color:#f5821f;color:#fff}.fbtn.tog.on:hover{background:#ec7612}.fbtn.tog.on circle{fill:#fff}html.dk .fbtn.tog{background:#3a2412;border-color:#f5821f;color:#ffd9b5}html.dk .fbtn.tog.on{background:#f5821f;color:#fff}.fnote{align-self:center;font:500 12px/1.2 Inter,system-ui,sans-serif;color:var(--slate);background:rgba(255,255,255,.9);border-radius:10px;padding:4px 9px}.fnote[hidden]{display:none}html.dk .fnote{background:rgba(20,26,33,.9)}</style>
 <header><a class="back" href="laboratorios.html#ampliacion" aria-label="Volver al Laboratorio de Ampliación de Física">←</a><h1>Resistencia interna de una pila</h1>
 <div class="tabs" role="tablist" id="ptabs"><button class="tab on" data-p="1" type="button">Pila de petaca (4,5 V)</button><button class="tab" data-p="2" type="button">Pila de 9 V</button></div>
@@ -65,7 +69,7 @@ html.dk .fbtn{background:var(--bg);color:var(--ink)}
 <main><section class="left"><div class="card">
 <div class="sim3" id="v3" aria-label="Montaje en 3D: pila, dos reóstatos en serie de 100 Ω y 10 Ω, amperímetro en serie y voltímetro en paralelo con la pila"><canvas id="cv"></canvas></div>
 <div class="ctls"><div class="ctl"><button class="fbtn" id="vwBtn" type="button">Vista inicial</button><button class="fbtn tog" id="flowBtn" type="button" aria-pressed="false"><svg width="24" height="10" viewBox="0 0 24 10" aria-hidden="true"><circle cx="2.5" cy="5" r="2" opacity=".35"/><circle cx="8.5" cy="5" r="2.3" opacity=".65"/><circle cx="15" cy="5" r="2.6"/><path d="M19.5 1.5 L22.5 5 L19.5 8.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Ver corriente</button></div><div class="ctl"><button class="vbtn" id="rstBtn" type="button" aria-label="Volver a la configuración inicial" title="Volver a la configuración inicial">↺</button></div></div>
-</div><div class="mctl" id="mctl"></div></section>
+</div><div class="mctl" id="mctl"></div><div class="mfbar"><button class="fbtn" id="mfBack" type="button">← Volver</button><b id="mfT"></b><span>Toca un número de la rueda</span></div></section>
 <aside class="side card" id="side">
 <h2>Qué se observa</h2>
 <p>Una pila real se comporta como una fuente ideal de fuerza electromotriz <i>ε</i> en serie con una resistencia interna <i>R</i><sub>i</sub>. Cuando da una intensidad <i>I</i>, la tensión entre sus bornes es menor que <i>ε</i>:</p>
@@ -779,7 +783,8 @@ const pdist=()=>{const p=[...PTR.values()];return Math.hypot(p[0][0]-p[1][0],p[0
 box.addEventListener('contextmenu',e=>e.preventDefault());
 box.addEventListener('pointerdown',e=>{box.setPointerCapture(e.pointerId);PTR.set(e.pointerId,[e.clientX,e.clientY]);
  if(PTR.size>=2){mode='pinch';touched=true;ctl=null;pd0=pdist();pm0=pmid();return}
- down={x:e.clientX,y:e.clientY,moved:false};const h=pick(e);
+ down={x:e.clientX,y:e.clientY,moved:false};const h=pick(e);if(MF){if(h&&h.object.userData.inst===MF.m){const uv=faceUV(MF.m),c=hitCtl(MF.m,uv);if(c){const D=ctlDown(MF.m,c,uv);ctl=D;mode=D?'ctl':'none';return}}mode='none';return} // con el polímetro a pantalla completa solo se toca su selector
+ 
  if(h&&h.object.userData.inst){const inst=h.object.userData.inst,uv=faceUV(inst),c=hitCtl(inst,uv);if(c){const D=ctlDown(inst,c,uv);ctl=D;mode=D?'ctl':'none';return}}
  if(h&&h.object.userData.slide!==undefined&&e.button===0){const k=h.object.userData.slide,z=slideZ();if(z!==null){const r=RHEO[k];mode='slide';down.k=k;down.off=r.worldZ()-z;box.classList.add('dragging');return}}
  mode=(e.button===2||e.shiftKey)?'pan':'orbit';touched=true;box.classList.add('dragging')});
@@ -820,7 +825,7 @@ function loop(now){frame=0;if(document.hidden)return;
  if(fly){const u=ease(Math.min(1,(now-fly.t0)/fly.dur));az=fly.a.az+(((fly.b.az-fly.a.az)%(2*Math.PI)+3*Math.PI)%(2*Math.PI)-Math.PI)*u;el=fly.a.el+(fly.b.el-fly.a.el)*u;dist=fly.a.dist+(fly.b.dist-fly.a.dist)*u;TG.copy(fly.a.tg).lerp(fly.b.tg,u);if(u>=1)fly=null;invalidate()}
  if(FLOW.on){const dt=Math.min(.1,(now-(FLOW.t||now))/1000);FLOW.t=now;FLOW.tex.offset.x-=dt*(.035+.30*solve().I)/FLOW.per;dirty=true}
  if((AMM.on||VOLT.on)&&now-lastMeas>650)measure();
- if(dirty){camSet();CAM.updateMatrixWorld();R3.render(SC,CAM);dirty=false}
+ if(dirty){camSet();CAM.updateMatrixWorld();R3.render(SC,CAM);lupaDraw();dirty=false}
  if(fly||FLOW.on){if(!frame)frame=requestAnimationFrame(loop)}
  else if((AMM.on||VOLT.on)&&!poll){poll=setTimeout(()=>{poll=0;if(!document.hidden&&!frame)frame=requestAnimationFrame(loop)},Math.max(12,651-(performance.now()-lastMeas)))}
 }
@@ -840,14 +845,49 @@ try{document.querySelectorAll('.eq[data-tex]').forEach(e=>katex.render(e.dataset
 /* En el móvil cuesta girar los mandos con el dedo: bajo la escena hay un deslizador por mando y un desplegable por selector de polímetro. No muestran valores, que se leen en los aparatos. */
 const MC=[],mcBox=$('#mctl');
 function mcRow(){const r=document.createElement('div');r.className='mrow';mcBox.appendChild(r);return r}
-function mcSlider(label,min,max,step,fine,get,set){const l=document.createElement('div'),s=document.createElement('span'),i=document.createElement('input'),bt=(t,k)=>{const b=document.createElement('button');b.type='button';b.className='mst';b.textContent=t;b.setAttribute('aria-label',(k<0?'Bajar ':'Subir ')+label.replace(/<[^>]*>/g,''));b.onclick=()=>set(Math.max(min,Math.min(max,get()+k*fine)));return b};
+function mcSlider(label,min,max,step,fine,get,set,obj){const l=document.createElement('div'),s=document.createElement('span'),i=document.createElement('input'),bt=(t,k)=>{const b=document.createElement('button');b.type='button';b.className='mst';b.textContent=t;b.setAttribute('aria-label',(k<0?'Bajar ':'Subir ')+label.replace(/<[^>]*>/g,''));b.onclick=()=>{lupa(obj);set(Math.max(min,Math.min(max,get()+k*fine)))};return b};
  l.className='msl';s.innerHTML=label;i.type='range';i.min=min;i.max=max;i.step=step;i.setAttribute('aria-label',label.replace(/<[^>]*>/g,''));l.append(s,bt('−',-1),i,bt('+',1));mcRow().appendChild(l);
- i.oninput=()=>set(+i.value);MC.push(()=>{const v=get();if(Math.abs(+i.value-v)>step*.51)i.value=v})}
-function mcDials(list){const row=mcRow();for(const [label,m] of list){const l=document.createElement('label'),s=document.createElement('span'),e=document.createElement('select');l.className='msel';s.textContent=label;
-  for(const p of DIAL.pos){const o=document.createElement('option');o.value=p.id;o.textContent=p.sym+(p.fn[0]==='D'?' ⎓ ':' ')+p.lab;e.appendChild(o)}
-  l.append(s,e);row.appendChild(l);e.onchange=()=>setDial(m,e.value);MC.push(()=>{if(e.value!==m.dial)e.value=m.dial})}}
+ i.oninput=()=>{lupa(obj);set(+i.value)};i.addEventListener('pointerdown',()=>lupa(obj));MC.push(()=>{const v=get();if(Math.abs(+i.value-v)>step*.51)i.value=v});return l}
+function mcDials(list){const row=mcRow();list.forEach(([label,m,title])=>{const l=document.createElement('div'),s=document.createElement('button'),e=document.createElement('span');l.className='msel';s.type='button';s.className='mmbtn';s.textContent=label;
+  e.className='mval';const val=()=>{const p=DIAL.pos.find(p=>p.id===m.dial);return p?p.sym+(p.fn[0]==='D'?' ⎓ ':' ')+p.lab:''}; // el nombre es un botón que abre el polímetro; al lado, solo en qué posición está su selector
+  l.append(s,e);row.appendChild(l);s.onclick=()=>meterFocus(m,title||label);MC.push(()=>{const t=val();if(e.textContent!==t)e.textContent=t})})}
+
+// El polímetro a pantalla completa (solo en el móvil): se gira su selector tocando la rueda o un número de la escala, como en el aparato; «Volver» deja la vista como estaba
+let MF=null;
+function meterFocus(m,title){if(MF)return;MF={m,prev:{az,el,dist,tg:TG.clone(),touched}};try{history.pushState({mfocus:1},'')}catch(e){} // la flecha de «atrás» del móvil vuelve al montaje, sin salir de la app
+ document.body.classList.add('mfocus');$('#mfT').textContent=title;
+ requestAnimationFrame(()=>{size();const p=m.fr.getWorldPosition(V3()),nv=V3(0,0,1).applyQuaternion(m.fr.getWorldQuaternion(new THREE.Quaternion())),t=Math.tan(CAM.fov*Math.PI/360),d=m.root.scale.x*Math.max(m.hM*1.08,m.wM*1.06/CAM.aspect)/(2*t)+.01;
+  zb=null;flyTo(p,d,Math.atan2(nv.x,nv.z),Math.max(.15,Math.asin(Math.min(1,nv.y))))})}
+function meterBack(pop){if(!MF)return;if(pop!==true&&history.state&&history.state.mfocus){history.back();return} // «Volver» deshace también el paso añadido al historial
+ const p=MF.prev;MF=null;document.body.classList.remove('mfocus');requestAnimationFrame(()=>{size();zb=null;flyTo(p.tg,p.dist,p.az,p.el);touched=p.touched})}
+// En el móvil, al mover el deslizador de un mando, sobre el aparato aparece un bocadillo con el mando ampliado, que gira con el deslizador; se va solo al soltarlo
+const LUPA={obj:null,until:0,raf:0},LCAM=new THREE.PerspectiveCamera(28,1,.002,5),lupaDiv=document.createElement('div');lupaDiv.className='lupa';box.appendChild(lupaDiv);
+const lupaTail=document.createElementNS('http://www.w3.org/2000/svg','svg');lupaTail.setAttribute('class','lupat');lupaTail.innerHTML='<path/>';box.appendChild(lupaTail); // la punta del bocadillo, que señala el mando
+function lupa(obj){if(!PM()||!obj)return;LUPA.obj=obj;LUPA.until=performance.now()+1300;if(!LUPA.raf)LUPA.raf=requestAnimationFrame(lupaTick)}
+function lupaTick(now){LUPA.raf=0;invalidate();if(now<LUPA.until+50)LUPA.raf=requestAnimationFrame(lupaTick)}
+function lupaDraw(){const o=LUPA.obj;if(!o||performance.now()>LUPA.until||!PM()||MF){if(lupaDiv.style.display!=='none'){lupaDiv.style.display='none';lupaTail.style.display='none'}return}
+ const r=lupaR(o)*o.parent.getWorldScale(V3()).x,c=o.getWorldPosition(V3()),q=o.parent.getWorldQuaternion(new THREE.Quaternion()),n=V3(0,0,1).applyQuaternion(q);
+ LCAM.up.set(0,1,0).applyQuaternion(q);const t=c.clone().addScaledVector(LCAM.up,-.3*r);LCAM.position.copy(t).addScaledVector(n,2.6*r/Math.tan(14*Math.PI/180));LCAM.lookAt(t); // el mando con su escala y su rótuloLCAM.aspect=1;LCAM.updateProjectionMatrix();LCAM.updateMatrixWorld();
+ // bocadillo pequeño, encima del mando y con la punta en él (debajo si arriba no cabe)
+ const W=box.clientWidth,H=box.clientHeight,sz=Math.round(Math.max(84,Math.min(112,.27*W,.24*H))),p=c.clone().project(CAM),px=(p.x+1)/2*W,py=(1-p.y)/2*H,
+  e=c.clone().addScaledVector(LCAM.up,r).project(CAM),kr=Math.max(4,Math.hypot((e.x-p.x)/2*W,(e.y-p.y)/2*H)),gap=26;
+ let up=true,y=Math.round(py-kr-gap-sz);if(y<4){up=false;y=Math.round(py+kr+gap)}const x=Math.round(Math.max(4,Math.min(W-sz-4,px-sz/2)));
+ // el mando ampliado se dibuja aparte y se pega con las esquinas redondeadas, como el marco: nada asoma por detrás de las curvas
+ const pr=R3.getPixelRatio(),rs=Math.round(sz*pr*1.5);if(!LUPA.rt){LUPA.rt=new THREE.WebGLRenderTarget(rs,rs);LUPA.rt.texture.encoding=THREE.sRGBEncoding;
+  const mk=canvasTex(128,128,(c,w,h)=>{c.fillStyle='#000';c.fillRect(0,0,w,h);c.fillStyle='#fff';rr(c,0,0,w,h,w*7/sz);c.fill()});mk.encoding=THREE.LinearEncoding;
+  LUPA.q=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:LUPA.rt.texture,alphaMap:mk,transparent:true,toneMapped:false,depthTest:false,depthWrite:false}));LUPA.s=new THREE.Scene();LUPA.s.add(LUPA.q);LUPA.oc=new THREE.OrthographicCamera(0,1,1,0,-1,1)}
+ if(LUPA.rt.width!==rs)LUPA.rt.setSize(rs,rs);R3.setRenderTarget(LUPA.rt);R3.render(SC,LCAM);R3.setRenderTarget(null);
+ const oc=LUPA.oc;oc.left=0;oc.right=W;oc.top=H;oc.bottom=0;oc.updateProjectionMatrix();LUPA.q.scale.set(sz,sz,1);LUPA.q.position.set(x+sz/2,H-y-sz/2,0);
+ const ac=R3.autoClear;R3.autoClear=false;R3.render(LUPA.s,oc);R3.autoClear=ac;
+ Object.assign(lupaDiv.style,{display:'block',left:x+'px',top:y+'px',width:sz+'px',height:sz+'px'});
+ const by=up?y+sz:y,cx=Math.max(x+14,Math.min(x+sz-14,px)),ty=up?py-kr-2:py+kr+2;lupaTail.setAttribute('viewBox','0 0 '+W+' '+H);lupaTail.style.display='block';
+ lupaTail.firstChild.setAttribute('d','M'+(cx-9)+' '+by+' L'+px.toFixed(1)+' '+ty.toFixed(1)+' L'+(cx+9)+' '+by+' Z')}
+function lupaR(o){if(o.userData.lr)return o.userData.lr;SC.updateMatrixWorld(true);const inv=o.parent.matrixWorld.clone().invert(),b=new THREE.Box3();o.traverse(c=>{if(c.isMesh){c.geometry.computeBoundingBox();b.union(c.geometry.boundingBox.clone().applyMatrix4(inv.clone().multiply(c.matrixWorld)))}});return o.userData.lr=Math.max(b.max.x-b.min.x,b.max.y-b.min.y)/2}
+
 function mcSync(){for(const f of MC)f()}
 {const m0=measure;measure=function(f){m0(f);mcSync()}}
+$('#mfBack').onclick=()=>meterBack();addEventListener('keydown',e=>{if(e.key==='Escape')meterBack()});addEventListener('popstate',()=>{if(MF)meterBack(true)});
+
 $('#gbtn').onclick=()=>{if(PM()){document.documentElement.style.setProperty('--gtop',$('header').getBoundingClientRect().bottom+'px');document.body.classList.toggle('guide');return}const h=document.body.classList.toggle('noside');$('#gbtn').innerHTML='<span>'+(h?'Mostrar':'Ocultar')+' </span>guía'};
 mcSlider('Reóstato 100 Ω',0,1,.002,.005,()=>S.u[0],v=>setSlide(0,v));mcSlider('Reóstato 10 Ω',0,1,.002,.005,()=>S.u[1],v=>setSlide(1,v));mcDials([['Voltímetro',VOLT],['Amperímetro',AMM]]);
 fixedCables();size();camReset();applyState();invalidate();
