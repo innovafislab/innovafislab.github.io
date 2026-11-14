@@ -82,7 +82,8 @@ html.dk .enc a{color:#7fb2e5}
 html.dk .enc button{background:#27313c;color:#9aa5b2}
 @media(max-width:420px){.enc{gap:8px;padding:5px 5px 5px 12px;font-size:13px}.enc span{display:none}}
 </style>
-<style id="deskcss">@media (min-width:821px) and (min-height:521px){ /* portátil: los mandos del móvil, en un panel pequeño en una esquina de la escena */
+<style id="deskcss">.lupa{border:0;box-shadow:none;border-radius:0;background:none}.lupat path{fill:#fff;fill-rule:evenodd;stroke:rgba(20,30,45,.2);stroke-width:1;stroke-linejoin:round;filter:drop-shadow(0 3px 7px rgba(20,30,45,.2))} /* el bocadillo, de una sola pieza */
+@media (min-width:821px) and (min-height:521px){ /* portátil: los mandos del móvil, en un panel pequeño en una esquina de la escena */
 section.left{position:relative}.mctl{display:block;position:absolute;right:10px;top:9px;z-index:5;width:auto;padding:4px 6px;background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:10px;box-shadow:0 2px 8px rgba(20,30,45,.07);overflow:visible}html.dk .mctl{background:rgba(22,29,38,.9)}
 .mctl .mrow{display:flex;gap:5px;align-items:center;flex-wrap:nowrap;margin:0;min-height:0}.mctl .mrow+.mrow{margin-top:4px}.mctl .msl,.mctl .msel{flex:none;display:flex;align-items:center;gap:4px;font:600 11px/1.1 Inter,system-ui,sans-serif;color:var(--ink)}
 .mctl .msl>span{flex:none;min-width:5.8em;white-space:nowrap;font-variant-numeric:tabular-nums}.mctl .msl input{flex:none;width:112px;height:20px;margin:0;accent-color:#1d5fa8}
@@ -1565,12 +1566,12 @@ function lupaDraw(){const o=LUPA.obj;if(!o||performance.now()>LUPA.until||MF){if
  const W=box.clientWidth,H=box.clientHeight,tc=tip.getWorldPosition(V3()),tr=tip===o?r:lupaR(tip)*tip.parent.getWorldScale(V3()).x;
  let sz=Math.round(pm?Math.max(84,Math.min(112,.27*W,.24*H)):Math.max(76,Math.min(124,.21*H)));const wmax=pm?W-8:Math.min(W-8,330);if(sz*asp>wmax)sz=Math.floor(wmax/asp);const sw=Math.round(sz*asp),
   p=tc.clone().project(CAM),px=(p.x+1)/2*W,py=(1-p.y)/2*H,e=tc.clone().addScaledVector(LCAM.up,tr).project(CAM),kr=Math.max(4,Math.hypot((e.x-p.x)/2*W,(e.y-p.y)/2*H)),gap=26;
- // el bocadillo va encima del mando; si arriba no cabe, en el móvil va debajo y en el portátil a un lado (y solo como último recurso debajo). En el portátil no se mete debajo del panel de mandos
- const xc=Math.round(Math.max(4,Math.min(W-sw-4,px-sw/2))),yc=Math.round(Math.max(4,Math.min(H-sz-4,py-sz*.75)));let side='up',y=Math.round(py-kr-gap-sz),x=xc;
- if(pm){if(y<4){side='down';y=Math.round(py+kr+gap)}}
- else{const br=box.getBoundingClientRect(),mr=mcBox.getBoundingClientRect(),m=[mr.left-br.left-6,mr.top-br.top-6,mr.right-br.left+6,mr.bottom-br.top+6],
-   ok=(x,y)=>x>=4&&y>=4&&x+sw<=W-4&&y+sz<=H-4&&!(mr.width&&x<m[2]&&x+sw>m[0]&&y<m[3]&&y+sz>m[1]),
-   C=[['up',xc,y],['up',Math.round(m[0]-sw-2),y],['right',Math.round(px+kr+gap),yc],['left',Math.round(px-kr-gap-sw),yc],['down',xc,Math.round(py+kr+gap)]],c=C.find(c=>ok(c[1],c[2])&&(c[0]!=='up'||Math.abs(c[1]+sw/2-px)<sw/2-10))||C[4];side=c[0];x=c[1];y=c[2]}
+ // el bocadillo va encima del mando si cabe; si no, debajo o a un lado. Nunca tapa la pantalla de un aparato de medida (es lo que se mira mientras se mueve el mando) ni, en el portátil, se mete bajo el panel de mandos
+ const br=box.getBoundingClientRect(),mr=mcBox.getBoundingClientRect(),AV=lupaAvoid(W,H);if(mr.width)AV.push([mr.left-br.left-6,mr.top-br.top-6,mr.right-br.left+6,mr.bottom-br.top+6]);
+ const xc=Math.round(Math.max(6,Math.min(W-sw-6,px-sw/2))),yc=Math.round(Math.max(6,Math.min(H-sz-6,py-sz*.75))),yu=Math.round(py-kr-gap-sz),yd=Math.round(py+kr+gap),xr=Math.round(px+kr+gap),xl=Math.round(px-kr-gap-sw),
+  inb=(x,y)=>x>=6&&y>=6&&x+sw<=W-6&&y+sz<=H-6,free=(x,y)=>AV.every(a=>!(x<a[2]&&x+sw>a[0]&&y<a[3]&&y+sz>a[1])),
+  C=pm?[['up',xc,yu],['down',xc,yd],['right',xr,yc],['left',xl,yc]]:[['up',xc,yu],['right',xr,yc],['left',xl,yc],['down',xc,yd]],
+  ch=C.find(c=>inb(c[1],c[2])&&free(c[1],c[2]))||C.find(c=>inb(c[1],c[2]))||C[1];const side=ch[0],x=ch[1],y=ch[2];
  // el mando ampliado se dibuja aparte y se pega con las esquinas redondeadas, como el marco: nada asoma por detrás de las curvas
  const pr=R3.getPixelRatio(),rs=Math.round(sz*pr*1.5),rw=Math.round(rs*asp);if(!LUPA.rt){LUPA.rt=new THREE.WebGLRenderTarget(rw,rs);LUPA.rt.texture.encoding=THREE.sRGBEncoding;
   LUPA.q=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:LUPA.rt.texture,transparent:true,toneMapped:false,depthTest:false,depthWrite:false}));LUPA.s=new THREE.Scene();LUPA.s.add(LUPA.q);LUPA.oc=new THREE.OrthographicCamera(0,1,1,0,-1,1)}
@@ -1579,8 +1580,17 @@ function lupaDraw(){const o=LUPA.obj;if(!o||performance.now()>LUPA.until||MF){if
  const oc=LUPA.oc;oc.left=0;oc.right=W;oc.top=H;oc.bottom=0;oc.updateProjectionMatrix();LUPA.q.scale.set(sw,sz,1);LUPA.q.position.set(x+sw/2,H-y-sz/2,0);
  const ac=R3.autoClear;R3.autoClear=false;R3.render(LUPA.s,oc);R3.autoClear=ac;
  Object.assign(lupaDiv.style,{display:'block',left:x+'px',top:y+'px',width:sw+'px',height:sz+'px'});
- const hz=side==='up'||side==='down',bx=side==='right'?x:x+sw,by=side==='up'?y+sz:y,cx=Math.max(x+14,Math.min(x+sw-14,px)),cy=Math.max(y+14,Math.min(y+sz-14,py)),tx=side==='right'?px+kr+2:side==='left'?px-kr-2:px,ty=side==='up'?py-kr-2:side==='down'?py+kr+2:py;lupaTail.setAttribute('viewBox','0 0 '+W+' '+H);lupaTail.style.display='block';
- lupaTail.firstChild.setAttribute('d',hz?'M'+(cx-9)+' '+by+' L'+tx.toFixed(1)+' '+ty.toFixed(1)+' L'+(cx+9)+' '+by+' Z':'M'+bx+' '+(cy-9)+' L'+tx.toFixed(1)+' '+ty.toFixed(1)+' L'+bx+' '+(cy+9)+' Z')}
+ // marco y punta, de una sola pieza (como un bocadillo de conversación): contorno blanco con las esquinas redondeadas y la punta saliendo de un lado; por el hueco se ve el mando ampliado
+ const f=3,R=10,X0=x-f,Y0=y-f,X1=x+sw+f,Y1=y+sz+f,b=8,cx=Math.max(X0+R+b,Math.min(X1-R-b,px)),cy=Math.max(Y0+R+b,Math.min(Y1-R-b,py)),k=n=>n.toFixed(1),
+  tx=side==='right'?px+kr+3:side==='left'?px-kr-3:px,ty=side==='up'?py-kr-3:side==='down'?py+kr+3:py,
+  tail=(ax,ay,bx2,by2)=>' L'+k(ax)+' '+k(ay)+' Q'+k(ax+(tx-ax)*.18)+' '+k(ay+(ty-ay)*.18)+' '+k(tx)+' '+k(ty)+' Q'+k(bx2+(tx-bx2)*.18)+' '+k(by2+(ty-by2)*.18)+' '+k(bx2)+' '+k(by2);
+ let d='M'+(X0+R)+' '+Y0+(side==='down'?tail(cx-b,Y0,cx+b,Y0):'')+' L'+(X1-R)+' '+Y0+' A'+R+' '+R+' 0 0 1 '+X1+' '+(Y0+R)+(side==='left'?tail(X1,cy-b,X1,cy+b):'')+' L'+X1+' '+(Y1-R)+' A'+R+' '+R+' 0 0 1 '+(X1-R)+' '+Y1+(side==='up'?tail(cx+b,Y1,cx-b,Y1):'')+' L'+(X0+R)+' '+Y1+' A'+R+' '+R+' 0 0 1 '+X0+' '+(Y1-R)+(side==='right'?tail(X0,cy+b,X0,cy-b):'')+' L'+X0+' '+(Y0+R)+' A'+R+' '+R+' 0 0 1 '+(X0+R)+' '+Y0+' Z';
+ const r2=6.5;d+=' M'+(x+r2)+' '+y+' L'+(x+sw-r2)+' '+y+' A'+r2+' '+r2+' 0 0 1 '+(x+sw)+' '+(y+r2)+' L'+(x+sw)+' '+(y+sz-r2)+' A'+r2+' '+r2+' 0 0 1 '+(x+sw-r2)+' '+(y+sz)+' L'+(x+r2)+' '+(y+sz)+' A'+r2+' '+r2+' 0 0 1 '+x+' '+(y+sz-r2)+' L'+x+' '+(y+r2)+' A'+r2+' '+r2+' 0 0 1 '+(x+r2)+' '+y+' Z';
+ lupaTail.setAttribute('viewBox','0 0 '+W+' '+H);lupaTail.style.display='block';lupaTail.firstChild.setAttribute('d',d)}
+// pantallas de los aparatos de medida, en píxeles de la escena: el bocadillo no las tapa
+function lupaAvoid(W,H){const out=[],add=(o,P)=>{let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;for(const [a,b] of P){const w=o.localToWorld(V3(a,b,0)).project(CAM),x=(w.x+1)/2*W,y=(1-w.y)/2*H;x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y)}out.push([x0-5,y0-5,x1+5,y1+5])};
+ for(const m of INST)if(m.fr&&m.L&&m.kind!=='gen'){const a=m.L(19,40),b=m.L(231,133);add(m.fr,[a,[b[0],a[1]],b,[a[0],b[1]]])}
+ for(const q of LUPA.screens||[]){const g=q.geometry.parameters,w=g.width/2,h=g.height/2;add(q,[[-w,-h],[w,-h],[w,h],[-w,h]])}return out}
 // zona del generador que enseña el bocadillo: la pantalla con sus números y el mando de ajuste
 const LUPAGEN=new THREE.Object3D();{const[x0,y0]=GEN.L(20,44),[x1,y1]=GEN.L(GKX+GKR+12,199),hw=Math.abs(x1-x0)/2,hh=Math.abs(y1-y0)/2;LUPAGEN.position.set((x0+x1)/2,(y0+y1)/2,.003);GEN.fr.add(LUPAGEN);LUPAGEN.userData={lr:hh*1.06/2.6,asp:hw/hh,tip:GEN.kn}}
 function lupaR(o){if(o.userData.lr)return o.userData.lr;SC.updateMatrixWorld(true);const inv=o.parent.matrixWorld.clone().invert(),b=new THREE.Box3();o.traverse(c=>{if(c.isMesh){c.geometry.computeBoundingBox();b.union(c.geometry.boundingBox.clone().applyMatrix4(inv.clone().multiply(c.matrixWorld)))}});return o.userData.lr=Math.max(b.max.x-b.min.x,b.max.y-b.min.y)/2}
