@@ -1475,6 +1475,10 @@ try{document.querySelectorAll('.eq[data-tex]').forEach(e=>katex.render(e.dataset
 // acabados: pintura con relieve, metal cepillado, grano del plástico y roces (los polímetros ya tienen los suyos)
 FIN.panel(PL.face.material,{w:640,ratio:PL.H/PL.W,seed:95,socks:Object.values(PL.SK).map(q=>[q[0]/PL.W,q[1]/PL.H,.04])});
 FIN.apply([BOARD,PL.root],{exclude:[BOARD.userData.top],foreign:[AMM.root,VOLT.root],skip:[...Object.values(plugMat),...Object.values(cabMat)]});
+// frontales de los aparatos (fuentes, teslámetro, medidores, generador) en blanco de verdad, no gris apagado: el dibujo se ilumina por sí mismo, lo justo para que su fondo quede casi blanco
+function blancoFrontal(o){const m=o&&o.material;if(!m||!m.map||!m.map.image||!m.map.image.getContext)return;const c=m.map.image,L=[];try{const d=c.getContext('2d').getImageData(0,0,c.width,c.height).data;for(let i=0;i<d.length;i+=4*61)if(d[i+3]>127)L.push(.2126*d[i]+.7152*d[i+1]+.0722*d[i+2])}catch(e){return}
+ L.sort((a,b)=>a-b);const bg=Math.pow((L[Math.floor(L.length*.75)]||230)/255,2.2);m.emissive=new THREE.Color(0xffffff);m.emissiveMap=m.map;m.emissiveIntensity=Math.max(.3,Math.min(1.1,.955/bg-.67));m.toneMapped=false;m.needsUpdate=true}
+blancoFrontal(PL.face);
 /* ================= móvil: mandos compactos bajo la escena ================= */
 /* En el móvil cuesta girar los mandos con el dedo: bajo la escena hay un deslizador por mando y un desplegable por selector de polímetro. No muestran valores, que se leen en los aparatos. */
 // En el móvil, al tocar un deslizador o un selector de abajo, el mando que mueve en la escena se ilumina con un halo suave alrededor, y se apaga solo al soltarlo

@@ -567,13 +567,14 @@ const FM={kind:'fm',W:700,H:700,wM:.07,hM:.07,root:{scale:{x:GS}},BTN:{c:[112,15
  const vd=new THREE.Mesh(new THREE.CircleGeometry(.0236,40),std(0xffffff,.3,.75,{map:FM.vaneTex[0],envMapIntensity:.9}));vd.rotation.y=-Math.PI/2;vd.position.set(XF+.0010,YC,0);g.add(vd);FM.vane=vd;
  const box=new THREE.Mesh(roundBox(.147,.067,.07,.004,.0015),finish(0xe9e9e4,.42,.12));box.position.set(XB0+.075,YC,0);g.add(box);FM.box=box;
  // rótulo del costado y tabla de escalas de la cara superior
+ FM.lados=[]; // las caras blancas de la caja del medidor
  const side=canvasTex(1024,478,(x,w,h)=>{x.fillStyle='#e9e9e4';x.fillRect(0,0,w,h);x.fillStyle='#1d2327';x.textAlign='left';x.font='bold 74px Arial, sans-serif';x.fillText('Medidor de campo',70,215);x.fillText('eléctrico',70,300);x.font='34px Arial, sans-serif';x.fillStyle='#4b555b';x.fillText('1 · 10 · 100 kV/m      salida ±10 V',72,372)});
- const sp=new THREE.Mesh(new THREE.PlaneGeometry(.146,.068),std(0xffffff,.5,.05,{map:side,envMapIntensity:.5}));sp.position.set(XB0+.075,YC,.0353);g.add(sp);
+ const sp=new THREE.Mesh(new THREE.PlaneGeometry(.146,.068),std(0xffffff,.5,.05,{map:side,envMapIntensity:.5}));sp.position.set(XB0+.075,YC,.0353);g.add(sp);FM.lados.push(sp);
  const tab=canvasTex(1024,478,(x,w,h)=>{x.fillStyle='#e9e9e4';x.fillRect(0,0,w,h);x.fillStyle='#1d2327';x.strokeStyle='#1d2327';x.lineWidth=3;x.textAlign='center';
   const X0=520,cw=160,Y0=120,rh=92;x.font='bold 40px Arial, sans-serif';x.fillText('Escala',X0+cw*1.5,Y0-22);x.font='bold 36px Arial, sans-serif';x.fillText('10 V de salida',X0+cw*1.5,Y0+rh*2+70);x.fillText('equivalen a',X0+cw*1.5,Y0+rh*2+114);
   ['1','10','100'].forEach((t,i)=>{x.strokeRect(X0+i*cw,Y0,cw,rh);x.strokeRect(X0+i*cw,Y0+rh,cw,rh);x.font='bold 46px Arial, sans-serif';x.fillText(t,X0+i*cw+cw/2,Y0+62);x.font='36px Arial, sans-serif';x.fillText(t+' kV/m',X0+i*cw+cw/2,Y0+rh+60)});
   x.textAlign='left';x.font='bold 40px Arial, sans-serif';x.fillText('Cara trasera:',60,150);x.font='36px Arial, sans-serif';x.fillText('pulsador de escala',60,205);x.fillText('rueda de cero  ← 0 →',60,255);x.fillText('entrada 14…18 V ⎓',60,305);x.fillText('salida ±10 V',60,355)});
- const tp=new THREE.Mesh(new THREE.PlaneGeometry(.146,.068),std(0xffffff,.5,.05,{map:tab,envMapIntensity:.5}));tp.rotation.x=-Math.PI/2;tp.position.set(XB0+.075,YC+.0353,0);g.add(tp);
+ const tp=new THREE.Mesh(new THREE.PlaneGeometry(.146,.068),std(0xffffff,.5,.05,{map:tab,envMapIntensity:.5}));tp.rotation.x=-Math.PI/2;tp.position.set(XB0+.075,YC+.0353,0);g.add(tp);FM.lados.push(tp);
  // collarín del taladro de tierra en el vástago, con su clavija
  const yh=YC-.035-.040,col=new THREE.Mesh(new THREE.CylinderGeometry(.0078,.0078,.014,20),nickel);col.position.set(XS,yh,0);g.add(col);
  const eg=new THREE.Group();eg.position.set(XS,yh,.0055);g.add(eg);plugAt(eg,0,0,'b').scale.setScalar(1/GS);
@@ -904,6 +905,10 @@ try{document.querySelectorAll('.eq[data-tex]').forEach(e=>katex.render(e.dataset
 FIN.panel(SUP.face.material,{w:640,ratio:400/640,seed:91,socks:Object.values(SUP.SK).map(q=>[q[0]/SUP.W,q[1]/SUP.H,.05])});
 FIN.panel(FM.face.material,{seed:93,socks:Object.values(FM.SKP).map(q=>[q[0]/FM.W,q[1]/FM.H,.07])});
 FIN.apply([BG,SUP.root],{exclude:[EF,...RULE.strips],foreign:[DV.root,DE.root],skip:[...Object.values(plugMat),...Object.values(cabMat)],kinds:new Map([[whitePVC,'gloss']])});
+// frontales de los aparatos (fuentes, teslámetro, medidores, generador) en blanco de verdad, no gris apagado: el dibujo se ilumina por sí mismo, lo justo para que su fondo quede casi blanco
+function blancoFrontal(o){const m=o&&o.material;if(!m||!m.map||!m.map.image||!m.map.image.getContext)return;const c=m.map.image,L=[];try{const d=c.getContext('2d').getImageData(0,0,c.width,c.height).data;for(let i=0;i<d.length;i+=4*61)if(d[i+3]>127)L.push(.2126*d[i]+.7152*d[i+1]+.0722*d[i+2])}catch(e){return}
+ L.sort((a,b)=>a-b);const bg=Math.pow((L[Math.floor(L.length*.75)]||230)/255,2.2);m.emissive=new THREE.Color(0xffffff);m.emissiveMap=m.map;m.emissiveIntensity=Math.max(.3,Math.min(1.1,.955/bg-.67));m.toneMapped=false;m.needsUpdate=true}
+for(const o of [SUP.face,FM.face,...FM.lados])blancoFrontal(o);
 /* ================= móvil: mandos compactos bajo la escena ================= */
 /* En el móvil cuesta girar los mandos con el dedo: bajo la escena hay un deslizador por mando y un desplegable por selector de polímetro. No muestran valores, que se leen en los aparatos. */
 const MC=[],mcBox=$('#mctl');
