@@ -1337,13 +1337,17 @@ function balance(best,v,top,pts){let bm=-9,bs=0;const c=V3(),d=best.dist,up=V3(-
   let hi=-9,lo=9,wide=0;for(const q of pts){const n=q.clone().project(CAM);hi=Math.max(hi,n.y);lo=Math.min(lo,n.y);wide=Math.max(wide,Math.abs(n.x))}
   const m=Math.min(top-hi,lo+.95);if(wide<.985&&m>bm){bm=m;bs=k*.004}}
  best.tg=best.tg.clone().addScaledVector(up,bs);return best}
+// las esquinas de cada aparato visible (fuente, polímetros, placa, cables, bandeja y rótulos de la mesa), para encuadrar el montaje tal como se ve
+function visPts(){SC.updateMatrixWorld(true);const P=[];for(const top of SC.children){if(!top.visible)continue;const B=new THREE.Box3();top.traverseVisible(q=>{if(!q.isMesh||!q.material||q.material.isShadowMaterial||q.material.visible===false)return;const g=q.geometry;if(!g.boundingBox)g.computeBoundingBox();const b=g.boundingBox.clone().applyMatrix4(q.matrixWorld);if(b.max.x-b.min.x>1.5||b.max.z-b.min.z>1.5)return;B.union(b)});
+ if(B.isEmpty())continue;for(const x of[B.min.x,B.max.x])for(const y of[B.min.y,B.max.y])for(const z of[B.min.z,B.max.z])P.push(V3(x,y,z))}return P}
 function fitV0(){ // encuadre de partida: el punto de mira y la distancia que más acercan el montaje sin recortarlo
- const pm=PM(),v=V0(),top=pm?topLim(.875):.95,PTS=S.part===0?BBF:BB;let best=null;const br=box.getBoundingClientRect(),
+ const pm=PM(),v=V0(),top=pm?topLim(.875):.95,fm=pm&&S.part===0,PTS=fm?visPts():S.part===0?BBF:BB,XL=fm?.93:.97;let best=null; // en el móvil, «Móntalo tú mismo» se encuadra con lo que de verdad se ve, con un margen a los lados
+const br=box.getBoundingClientRect(),
   bb=document.querySelector('.fbtn.tog').getBoundingClientRect(),bx=pm||!br.width?2:(bb.right-br.left+10)/br.width*2-1,by=pm||!br.height?2:1-(bb.bottom-br.top+10)/br.height*2, // en el portátil, los botones de arriba a la izquierda son una esquina en la que el montaje no entra; por encima del resto, el montaje puede llegar casi al borde
   sr=$('#sch').getBoundingClientRect(),sx=br.width?(sr.left-br.left-10)/br.width*2-1:2,sy=br.height?1-(sr.bottom-br.top+10)/br.height*2:2; // esquina que ocupa el esquema: el montaje no entra en ella
  for(let cz=-.40;cz<=.14;cz+=.015)for(const cx of[-.28,-.24,-.20,-.16,-.12,-.08,-.04,0]){const c=V3(cx,.10,cz);let lo=.5,hi=7;
   const ok=d=>{const p=V3(c.x+d*Math.cos(v.el)*Math.sin(v.az),c.y+d*Math.sin(v.el),c.z+d*Math.cos(v.el)*Math.cos(v.az));CAM.position.copy(p);CAM.lookAt(c);CAM.updateMatrixWorld();
-   return PTS.every(q=>{const n=q.clone().project(CAM);return Math.abs(n.x)<.97&&n.y<top&&n.y>-.95&&!(n.x>sx&&n.y>sy)&&!(n.x<bx&&n.y>by)})};
+   return PTS.every(q=>{const n=q.clone().project(CAM);return Math.abs(n.x)<XL&&n.y<top&&n.y>-.95&&!(n.x>sx&&n.y>sy)&&!(n.x<bx&&n.y>by)})};
   for(let i=0;i<26;i++){const m=(lo+hi)/2;ok(m)?hi=m:lo=m}if(!best||hi<best.dist-1e-3||hi<best.dist+1e-3&&Math.abs(cx+.06)<Math.abs(best.tg.x+.06))best={az:v.az,el:v.el,dist:hi,tg:c}}
  return pm?balance(best,v,top,PTS):best}
 function camReset(){const v=fitV0();az=v.az;el=v.el;dist=v.dist;TG.copy(v.tg)}

@@ -1491,27 +1491,30 @@ const lupaTail=document.createElementNS('http://www.w3.org/2000/svg','svg');lupa
 function lupa(obj){if(!PM()||!obj)return;LUPA.obj=obj;LUPA.until=performance.now()+1300;if(!LUPA.raf)LUPA.raf=requestAnimationFrame(lupaTick)}
 function lupaTick(now){LUPA.raf=0;invalidate();if(now<LUPA.until+50)LUPA.raf=requestAnimationFrame(lupaTick)}
 function lupaDraw(){const o=LUPA.obj;if(!o||performance.now()>LUPA.until||!PM()||MF){if(lupaDiv.style.display!=='none'){lupaDiv.style.display='none';lupaTail.style.display='none'}return}
- const r=lupaR(o)*o.parent.getWorldScale(V3()).x,c=o.getWorldPosition(V3()),q=o.parent.getWorldQuaternion(new THREE.Quaternion()),n=V3(0,0,1).applyQuaternion(q);
- LCAM.up.set(0,1,0).applyQuaternion(q);const t=c.clone().addScaledVector(LCAM.up,-.3*r);LCAM.position.copy(t).addScaledVector(n,2.6*r/Math.tan(14*Math.PI/180));LCAM.lookAt(t); // el mando con su escala y su rótuloLCAM.aspect=1;LCAM.updateProjectionMatrix();LCAM.updateMatrixWorld();
+ // o.userData.asp: bocadillo apaisado que enmarca una zona del frontal (en el generador, la pantalla y el mando, para leer los números); la punta señala o.userData.tip
+ const asp=o.userData.asp||1,tip=o.userData.tip||o,r=lupaR(o)*o.parent.getWorldScale(V3()).x,c=o.getWorldPosition(V3()),q=o.parent.getWorldQuaternion(new THREE.Quaternion()),n=V3(0,0,1).applyQuaternion(q);
+ LCAM.up.set(0,1,0).applyQuaternion(q);const t=c.clone().addScaledVector(LCAM.up,asp>1?0:-.3*r);LCAM.position.copy(t).addScaledVector(n,2.6*r/Math.tan(14*Math.PI/180));LCAM.lookAt(t);LCAM.aspect=asp;LCAM.updateProjectionMatrix();LCAM.updateMatrixWorld();
  // bocadillo pequeño, encima del mando y con la punta en él (debajo si arriba no cabe)
- const W=box.clientWidth,H=box.clientHeight,sz=Math.round(Math.max(84,Math.min(112,.27*W,.24*H))),p=c.clone().project(CAM),px=(p.x+1)/2*W,py=(1-p.y)/2*H,
-  e=c.clone().addScaledVector(LCAM.up,r).project(CAM),kr=Math.max(4,Math.hypot((e.x-p.x)/2*W,(e.y-p.y)/2*H)),gap=26;
- let up=true,y=Math.round(py-kr-gap-sz);if(y<4){up=false;y=Math.round(py+kr+gap)}const x=Math.round(Math.max(4,Math.min(W-sz-4,px-sz/2)));
+ const W=box.clientWidth,H=box.clientHeight,tc=tip.getWorldPosition(V3()),tr=tip===o?r:lupaR(tip)*tip.parent.getWorldScale(V3()).x;let sz=Math.round(Math.max(84,Math.min(112,.27*W,.24*H)));if(sz*asp>W-8)sz=Math.floor((W-8)/asp);const sw=Math.round(sz*asp),
+  p=tc.clone().project(CAM),px=(p.x+1)/2*W,py=(1-p.y)/2*H,e=tc.clone().addScaledVector(LCAM.up,tr).project(CAM),kr=Math.max(4,Math.hypot((e.x-p.x)/2*W,(e.y-p.y)/2*H)),gap=26;
+ let up=true,y=Math.round(py-kr-gap-sz);if(y<4){up=false;y=Math.round(py+kr+gap)}const x=Math.round(Math.max(4,Math.min(W-sw-4,px-sw/2)));
  // el mando ampliado se dibuja aparte y se pega con las esquinas redondeadas, como el marco: nada asoma por detrás de las curvas
- const pr=R3.getPixelRatio(),rs=Math.round(sz*pr*1.5);if(!LUPA.rt){LUPA.rt=new THREE.WebGLRenderTarget(rs,rs);LUPA.rt.texture.encoding=THREE.sRGBEncoding;
-  const mk=canvasTex(128,128,(c,w,h)=>{c.fillStyle='#000';c.fillRect(0,0,w,h);c.fillStyle='#fff';rr(c,0,0,w,h,w*7/sz);c.fill()});mk.encoding=THREE.LinearEncoding;
-  LUPA.q=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:LUPA.rt.texture,alphaMap:mk,transparent:true,toneMapped:false,depthTest:false,depthWrite:false}));LUPA.s=new THREE.Scene();LUPA.s.add(LUPA.q);LUPA.oc=new THREE.OrthographicCamera(0,1,1,0,-1,1)}
- if(LUPA.rt.width!==rs)LUPA.rt.setSize(rs,rs);R3.setRenderTarget(LUPA.rt);R3.render(SC,LCAM);R3.setRenderTarget(null);
- const oc=LUPA.oc;oc.left=0;oc.right=W;oc.top=H;oc.bottom=0;oc.updateProjectionMatrix();LUPA.q.scale.set(sz,sz,1);LUPA.q.position.set(x+sz/2,H-y-sz/2,0);
+ const pr=R3.getPixelRatio(),rs=Math.round(sz*pr*1.5),rw=Math.round(rs*asp);if(!LUPA.rt){LUPA.rt=new THREE.WebGLRenderTarget(rw,rs);LUPA.rt.texture.encoding=THREE.sRGBEncoding;
+  LUPA.q=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:LUPA.rt.texture,transparent:true,toneMapped:false,depthTest:false,depthWrite:false}));LUPA.s=new THREE.Scene();LUPA.s.add(LUPA.q);LUPA.oc=new THREE.OrthographicCamera(0,1,1,0,-1,1);LUPA.mk={}}
+ const mkey=sw+'x'+sz;if(LUPA.mkey!==mkey){LUPA.mkey=mkey;const mw=Math.round(128*asp),mk=canvasTex(mw,128,(c,w,h)=>{c.fillStyle='#000';c.fillRect(0,0,w,h);c.fillStyle='#fff';rr(c,0,0,w,h,h*7/sz);c.fill()});mk.encoding=THREE.LinearEncoding;LUPA.q.material.alphaMap=mk;LUPA.q.material.needsUpdate=true}
+ if(LUPA.rt.width!==rw||LUPA.rt.height!==rs)LUPA.rt.setSize(rw,rs);R3.setRenderTarget(LUPA.rt);R3.render(SC,LCAM);R3.setRenderTarget(null);
+ const oc=LUPA.oc;oc.left=0;oc.right=W;oc.top=H;oc.bottom=0;oc.updateProjectionMatrix();LUPA.q.scale.set(sw,sz,1);LUPA.q.position.set(x+sw/2,H-y-sz/2,0);
  const ac=R3.autoClear;R3.autoClear=false;R3.render(LUPA.s,oc);R3.autoClear=ac;
- Object.assign(lupaDiv.style,{display:'block',left:x+'px',top:y+'px',width:sz+'px',height:sz+'px'});
- const by=up?y+sz:y,cx=Math.max(x+14,Math.min(x+sz-14,px)),ty=up?py-kr-2:py+kr+2;lupaTail.setAttribute('viewBox','0 0 '+W+' '+H);lupaTail.style.display='block';
+ Object.assign(lupaDiv.style,{display:'block',left:x+'px',top:y+'px',width:sw+'px',height:sz+'px'});
+ const by=up?y+sz:y,cx=Math.max(x+14,Math.min(x+sw-14,px)),ty=up?py-kr-2:py+kr+2;lupaTail.setAttribute('viewBox','0 0 '+W+' '+H);lupaTail.style.display='block';
  lupaTail.firstChild.setAttribute('d','M'+(cx-9)+' '+by+' L'+px.toFixed(1)+' '+ty.toFixed(1)+' L'+(cx+9)+' '+by+' Z')}
+// zona del generador que enseña el bocadillo: la pantalla con sus números y el mando de ajuste
+const LUPAGEN=new THREE.Object3D();{const[x0,y0]=GEN.L(20,44),[x1,y1]=GEN.L(GKX+GKR+12,199),hw=Math.abs(x1-x0)/2,hh=Math.abs(y1-y0)/2;LUPAGEN.position.set((x0+x1)/2,(y0+y1)/2,.003);GEN.fr.add(LUPAGEN);LUPAGEN.userData={lr:hh*1.06/2.6,asp:hw/hh,tip:GEN.kn}}
 function lupaR(o){if(o.userData.lr)return o.userData.lr;SC.updateMatrixWorld(true);const inv=o.parent.matrixWorld.clone().invert(),b=new THREE.Box3();o.traverse(c=>{if(c.isMesh){c.geometry.computeBoundingBox();b.union(c.geometry.boundingBox.clone().applyMatrix4(inv.clone().multiply(c.matrixWorld)))}});return o.userData.lr=Math.max(b.max.x-b.min.x,b.max.y-b.min.y)/2}
 
 function mcSync(){for(const f of MC)f()} {const m0=measure;measure=function(f){m0(f);mcSync()}}
 $('#mfBack').onclick=()=>meterBack();addEventListener('keydown',e=>{if(e.key==='Escape')meterBack()});addEventListener('popstate',()=>{if(MF)meterBack(true)});
- $('#gbtn').onclick=()=>{if(PM()){document.documentElement.style.setProperty('--gtop',$('header').getBoundingClientRect().bottom+'px');document.body.classList.toggle('guide');return}const h=document.body.classList.toggle('noside');$('#gbtn').innerHTML='<span>'+(h?'Mostrar':'Ocultar')+' </span>guía'};mcSlider('Frecuencia <i>f</i>',0,20000,50,10,()=>S.gen.f,v=>{S.gen.sel='f';const o=S.gen.f;S.gen.f=Math.round(Math.max(1,v));GEN.kn.rotation.z-=(S.gen.f-o)/20000*6*Math.PI;drawGen(GEN);measure()},GEN.kn);mcSlider('Tensión <i>U</i>',0,10000,10,10,()=>S.gen.U,v=>{S.gen.sel='U';const o=S.gen.U;S.gen.U=Math.round(v);GEN.kn.rotation.z-=(S.gen.U-o)/10000*6*Math.PI;drawGen(GEN);measure()},GEN.kn);mcDials([['Amperímetro',AMM],['Voltímetro',VOLT]]);staticCables();size();camReset();setPart(1);invalidate();
+ $('#gbtn').onclick=()=>{if(PM()){document.documentElement.style.setProperty('--gtop',$('header').getBoundingClientRect().bottom+'px');document.body.classList.toggle('guide');return}const h=document.body.classList.toggle('noside');$('#gbtn').innerHTML='<span>'+(h?'Mostrar':'Ocultar')+' </span>guía'};mcSlider('Frecuencia <i>f</i>',0,20000,50,10,()=>S.gen.f,v=>{S.gen.sel='f';const o=S.gen.f;S.gen.f=Math.round(Math.max(1,v));GEN.kn.rotation.z-=(S.gen.f-o)/20000*6*Math.PI;drawGen(GEN);measure()},LUPAGEN);mcSlider('Tensión <i>U</i>',0,10000,10,10,()=>S.gen.U,v=>{S.gen.sel='U';const o=S.gen.U;S.gen.U=Math.round(v);GEN.kn.rotation.z-=(S.gen.U-o)/10000*6*Math.PI;drawGen(GEN);measure()},LUPAGEN);mcDials([['Amperímetro',AMM],['Voltímetro',VOLT]]);staticCables();size();camReset();setPart(1);invalidate();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{drawGen(GEN);measure(true);invalidate()});
 window.__ind={DIAL,SC,AUG,setAug,strands,scr:(inst,u,v)=>{const[lx,ly]=inst.L(u,v),w=inst.fr.localToWorld(V3(lx,ly,0)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},coilScr:i=>{const c=coils[i],w=c.g.localToWorld(V3(.012,c.top,.012)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},S:()=>S,solve,coils,COILS,AMM,VOLT,GEN,swapCoil,setPart,genStep,setDial,measure,camState:()=>({az,el,dist,TG}),flyTo,coupling};
 }
