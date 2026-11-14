@@ -81,6 +81,8 @@ html.dk .enc button{background:#27313c;color:#9aa5b2}
 </head><body data-part="1">
 <style>.lupa{display:none;position:absolute;z-index:4;pointer-events:none;border:2px solid #fff;border-radius:7px;box-shadow:0 0 0 1px rgba(20,30,45,.28),0 4px 12px rgba(20,30,45,.25)}.lupat{display:none;position:absolute;inset:0;width:100%;height:100%;z-index:4;pointer-events:none;overflow:visible}.lupat path{fill:#fff;stroke:rgba(20,30,45,.28);stroke-width:1;stroke-linejoin:round;filter:drop-shadow(0 2px 3px rgba(20,30,45,.2))}
 .mfbar{display:none}
+@media (min-width:821px) and (min-height:521px){html,body{overflow-x:hidden} /* la cabecera nunca ensancha la página: sin barra de desplazamiento abajo, la escena mide lo mismo en las tres pestañas */
+header.c2 #sublab,header.c2 #sublab2 .lg,header.c2 .sub .lg{display:none}header.c2 .sub .sh{display:inline}header.c3 .tab{font-size:13px;padding-left:9px;padding-right:9px}header.c3 h1{font-size:20px}header.c4 #sublab2{display:none}}
 .mctl .mpc{display:none}
 @media (min-width:821px) and (min-height:521px){ /* de prueba: los mandos del móvil también en el portátil, en un panel pequeño en la esquina de abajo a la izquierda; el encuadre del montaje no cambia */
 html body .card #sch{top:46px;left:10px;right:auto} /* de prueba: en el portátil, el esquema debajo de «Vista inicial» y los mandos donde estaba el esquema */
@@ -1510,6 +1512,11 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeo
 {const q=(new URLSearchParams(location.search).get('lab')||'').toLowerCase(),N={circuitos:'Circuitos Eléctricos',electromagnetismo:'Electromagnetismo'};if(N[q]){document.body.dataset.lab=q;const b=document.querySelector('header a.back');if(b){b.href='laboratorios.html#'+q;b.setAttribute('aria-label','Volver al Laboratorio de '+N[q])}}}
 function setFlow(on){FLOW.on=on;const b=$('#fldBtn');b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);syncFlow();potSync();invalidate()}
 const ZS='<sub class="z">1</sub>',SUBS={1:['Voltímetro en',['asociación','R<sub>1</sub>','R<sub>2</sub>']],2:['Amperímetro en la rama',['común','R<sub>3</sub>','R<sub>4</sub>']]};
+// en el portátil, si la cabecera no cabe en el ancho de la ventana (depende de la letra de cada ordenador), se compacta por pasos: «Danos tu opinión» solo con el icono, rótulos abreviados, letra algo menor
+function fitHeader(){const h=document.querySelector('header');if(!h)return;const e=document.querySelector('.encb');h.classList.remove('c1','c2','c3','c4');if(e)e.classList.remove('cmp');if(PM())return;
+ const over=()=>h.scrollWidth>h.clientWidth+1||document.documentElement.scrollWidth>document.documentElement.clientWidth+1;
+ for(const k of['c1','c2','c3','c4']){if(!over())break;h.classList.add(k);if(k==='c1'&&e)e.classList.add('cmp')}}
+addEventListener('resize',()=>requestAnimationFrame(fitHeader));if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitHeader);
 function tabs(){document.body.dataset.part=S.part;histBtn();document.querySelectorAll('#ptabs .tab').forEach(b=>b.classList.toggle('on',+b.dataset.p===S.part));
  const fill=(box,list,cur,pick)=>{box.innerHTML='';list.forEach((t,i)=>{const b=document.createElement('button');b.type='button';b.className='tab'+(i===cur?' on':'');b.innerHTML=t;b.onclick=()=>pick(i);box.appendChild(b)})},fr=S.part===0;
  $('#sublab2').hidden=$('#subtabs2').hidden=!fr;
@@ -1585,7 +1592,7 @@ function meterFocus(m,n){if(MF)return;MF={m,prev:{az,el,dist,tg:TG.clone(),touch
 function meterBack(pop){if(!MF)return;if(pop!==true&&history.state&&history.state.mfocus){history.back();return} // «Volver» deshace también el paso añadido al historial
  const p=MF.prev;MF=null;document.body.classList.remove('mfocus');requestAnimationFrame(()=>{size();zb=null;flyTo(p.tg,p.dist,p.az,p.el);touched=p.touched})}
 function mcSync(){for(const f of MC)f()}
-{const m0=measure;measure=function(f){m0(f);mcSync()}}
+{const m0=measure;measure=function(f){m0(f);mcSync()}}{const t0=tabs;tabs=function(){t0();fitHeader()}}
 $('#mfBack').onclick=()=>meterBack();addEventListener('keydown',e=>{if(e.key==='Escape')meterBack()});addEventListener('popstate',()=>{if(MF)meterBack(true)});
 $('#gbtn').onclick=()=>{if(PM()){document.documentElement.style.setProperty('--gtop',$('header').getBoundingClientRect().bottom+'px');document.body.classList.toggle('guide');return}const h=document.body.classList.toggle('noside');$('#gbtn').innerHTML='<span>'+(h?'Mostrar':'Ocultar')+' </span>guía'};
 mcSlider('Tensión<span class="mpc"> fuente</span>',0,PL.K[0].max,.01,.05,()=>S.L.u[0],v=>setSup(PL,0,v),PL.kn[0]);mcDials([['Amperímetro',AMM],['Voltímetro',VOLT]]);
