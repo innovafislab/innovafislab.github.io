@@ -1555,8 +1555,9 @@ function haloTick(now){HALO.raf=0;for(const h of HALO.list){const on=now<h.userD
 // En el móvil, al mover el deslizador de la tensión, sobre la fuente aparece una ventanita con el mando ampliado, que gira con el deslizador; se va sola al soltarlo
 const LUPA={obj:null,until:0,raf:0},LCAM=new THREE.PerspectiveCamera(28,1,.002,5),lupaDiv=document.createElement('div');lupaDiv.className='lupa';box.appendChild(lupaDiv);
 const lupaTail=document.createElementNS('http://www.w3.org/2000/svg','svg');lupaTail.setAttribute('class','lupat');lupaTail.innerHTML='<path/>';box.appendChild(lupaTail); // la punta del bocadillo, que señala el mando
-function lupa(obj){if(!obj)return; // en el móvil y, de prueba, también en el portátil
-LUPA.obj=obj;LUPA.until=performance.now()+1300;if(!LUPA.raf)LUPA.raf=requestAnimationFrame(lupaTick)}
+function lupa(obj){if(!obj)return;LUPA.obj=obj;LUPA.until=LUPA.hold?performance.now()+15000:performance.now()+650;if(!LUPA.raf)LUPA.raf=requestAnimationFrame(lupaTick)} // mientras se sujeta el deslizador, el bocadillo sigue; al soltarlo se va enseguida (con los botones − y +, dura un instante)
+function lupaHold(on){LUPA.hold=on;if(!on&&LUPA.obj){LUPA.until=Math.min(LUPA.until,performance.now());invalidate()}}
+for(const ev of['pointerup','touchend','touchcancel'])addEventListener(ev,()=>lupaHold(false),true);
 function lupaTick(now){LUPA.raf=0;invalidate();if(now<LUPA.until+50)LUPA.raf=requestAnimationFrame(lupaTick)}
 function lupaDraw(){const o=LUPA.obj;if(!o||performance.now()>LUPA.until||MF){if(lupaDiv.style.display!=='none'){lupaDiv.style.display='none';lupaTail.style.display='none'}return}
  const r=haloOf(o).geometry.parameters.width/3.6*o.parent.getWorldScale(V3()).x,c=o.getWorldPosition(V3()),q=o.parent.getWorldQuaternion(new THREE.Quaternion()),n=V3(0,0,1).applyQuaternion(q);
@@ -1580,7 +1581,7 @@ const MC=[],mcBox=$('#mctl');
 function mcRow(){const r=document.createElement('div');r.className='mrow';mcBox.appendChild(r);return r}
 function mcSlider(label,min,max,step,fine,get,set,obj){const l=document.createElement('div'),s=document.createElement('span'),i=document.createElement('input'),bt=(t,k)=>{const b=document.createElement('button');b.type='button';b.className='mst';b.textContent=t;b.setAttribute('aria-label',(k<0?'Bajar ':'Subir ')+label.replace(/<[^>]*>/g,''));b.onclick=()=>{lupa(obj);set(Math.max(min,Math.min(max,get()+k*fine)))};return b};
  l.className='msl';s.innerHTML=label;i.type='range';i.min=min;i.max=max;i.step=step;i.setAttribute('aria-label',label.replace(/<[^>]*>/g,''));l.append(s,bt('−',-1),i,bt('+',1));mcRow().appendChild(l);
- i.oninput=()=>{lupa(obj);set(+i.value)};i.addEventListener('pointerdown',()=>lupa(obj));MC.push(()=>{const v=get();if(Math.abs(+i.value-v)>step*.51)i.value=v})}
+ i.oninput=()=>{lupa(obj);set(+i.value)};i.addEventListener('pointerdown',()=>{lupaHold(i);lupa(obj)});for(const ev of['change','blur'])i.addEventListener(ev,()=>{if(LUPA.hold===i)lupaHold(false)});MC.push(()=>{const v=get();if(Math.abs(+i.value-v)>step*.51)i.value=v})}
 function mcDials(list){const row=mcRow();list.forEach(([label,m],n)=>{const l=document.createElement('div'),s=document.createElement('button'),e=document.createElement('span');l.className='msel';s.type='button';s.className='mmbtn';s.dataset.a=label;s.dataset.f='Multímetro '+(n+1);s.textContent=label;
   e.className='mval';const val=()=>{const p=DIAL.pos.find(p=>p.id===m.dial);return p?p.sym+(p.fn[0]==='D'?' ⎓ ':' ')+p.lab:''}; // el nombre es un botón que abre el polímetro; al lado, solo en qué posición está su selector
   l.append(s,e);row.appendChild(l);s.onclick=()=>meterFocus(m,n);MC.push(()=>{const t=val();if(e.textContent!==t)e.textContent=t;const lb=S.part===0?s.dataset.f:s.dataset.a;if(s.textContent!==lb)s.textContent=lb})})}
