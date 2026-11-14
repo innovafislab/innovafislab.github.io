@@ -576,7 +576,7 @@ function makePSU1(cfg){const P=Object.assign({kind:'psu',v1:true,hitR:86,W:640,H
  const fr=new THREE.Group();fr.position.set(0,H/2+.012,.0034);tilt.add(fr);P.fr=fr;
  P.L=(u,v)=>[(u/P.W-.5)*P.wM,(.5-v/P.H)*P.hM];
  const can=document.createElement('canvas');can.width=1280;can.height=800;const tex=new THREE.CanvasTexture(can);tex.encoding=THREE.sRGBEncoding;tex.anisotropy=ANI;P.ctx=can.getContext('2d');P.tex=tex;
- const face=new THREE.Mesh(new THREE.PlaneGeometry(P.wM,P.hM),std(0xffffff,.62,.03,{map:tex,envMapIntensity:.5,emissive:0xffffff,emissiveMap:tex,emissiveIntensity:.16}));face.receiveShadow=true;fr.add(face);P.face=face;
+ const face=new THREE.Mesh(new THREE.PlaneGeometry(P.wM,P.hM),std(0xffffff,.62,.03,{map:tex,envMapIntensity:.5,emissive:0xffffff,emissiveMap:tex,emissiveIntensity:.32}));face.material.toneMapped=false;face.receiveShadow=true;fr.add(face);P.face=face; // frontal de un blanco limpio: los números contrastan bien
  const hw=new THREE.Group();fr.add(hw);const SM={r:sockRed,b:sockBlue,y:sockYellow,k:bezelBlack};
  for(const k in P.SK){const [u,v,c]=P.SK[k],[a,b]=P.L(u,v);socketMetal(hw,a,b,1,SM[c])}
  for(const [u,v,c] of P.deco||[]){const [a,b]=P.L(u,v);socketMetal(hw,a,b,1,SM[c])}
@@ -791,7 +791,7 @@ const CFG={
   flow:[['I3',SG([0,1],[1,1],[1,2]),BL3,...RB3],['I4',...RB4]]}};
 const cfgKey=()=>S.part===1?'s'+S.vm:'p'+[0,3,4][S.am];
 const LBL={};
-function wire(){SC.updateMatrixWorld(true);const fr=S.part===0;TRAY.visible=fr;for(const m of FREE.lbl)m.visible=fr;if(!FREE.mlbl)FREE.mlbl=[[XA,'MULTÍMETRO 1'],[XV,'MULTÍMETRO 2']].map(([x,t])=>floorLabel(x,ZM+.08,t,'',.2,.034)); // en «Móntalo tú mismo» no se sabe qué mide cada polímetro: solo su nombre
+function wire(){SC.updateMatrixWorld(true);const fr=S.part===0;{const m=FREE.lbl[0],pm=PM();m.position.x=pm?-.4065:-.4425;m.position.z=pm?-.965:-.652}TRAY.visible=fr;for(const m of FREE.lbl)m.visible=fr;if(!FREE.mlbl)FREE.mlbl=[[XA,'MULTÍMETRO 1'],[XV,'MULTÍMETRO 2']].map(([x,t])=>floorLabel(x,ZM+.08,t,'',.2,.034)); // en «Móntalo tú mismo» no se sabe qué mide cada polímetro: solo su nombre
  for(const m of FREE.mlbl)m.visible=fr;for(const g of FIXP)g.visible=!fr;for(const q of CK)for(const h of DPL[q])h.visible=fr;
  if(fr){for(const q of['P','N','A','C','Vr','Vb'])CB[q].visible=false;for(const q in BPG)BPG[q].g.visible=false;for(const q in LBL)LBL[q].visible=false;wireFree();syncFlow();FREE.sig='';potSync();drawSheet();return}
  FREE.sig='';$('#fuseBtn').hidden=true;fuseAlarm();for(const q of CK){CB[q].visible=false;if(CB[q].userData.rib)CB[q].userData.rib.visible=false}const k=cfgKey(),c=CFG[k],con=c.con,ser=k[0]==='s';
@@ -894,8 +894,10 @@ function jack0(at){const t=at.split(':');
 const PKY=.0062,PKF=-.445,PKZ=-.60;
 // Extremos de un cable: enchufado a un borne ('S:p', 'M0:mA', 'B:i:j'…), suelto sobre la mesa donde se dejó ('T:x:z') o, sin sacar todavía, en su sitio junto a los demás cables (null).
 // Un cable sin ningún extremo enchufado vuelve a su sitio, doblado: x, z de sus clavijas y zf de la doblez.
-const RACKX=c=>-.345-.062*CCOLS.indexOf(c),isJ=a=>!!a&&a[0]!=='T';
-function parkJack(k,e){const x=RACKX(k[0])+(e?.011:-.011);return {base:V3(x,PKY,PKZ),q:QI,s:1,p:V3(x,PKY,PKZ+.040),n:V3(0,0,1)}}
+const RACKX=c=>RK(c).x,isJ=a=>!!a&&a[0]!=='T';
+// Sitio de los cables sin usar. En el portátil, los cuatro en fila; en el móvil, en dos filas de dos y un 50 % más grandes, para cogerlos bien con el dedo (el cable, del mismo grosor)
+function RK(c){const i=CCOLS.indexOf(c);if(!(typeof PM==='function'&&PM()))return {x:-.345-.062*i,z:PKZ,f:PKF,s:1};const s=1.5,z=i<2?-.63:-.90;return {x:-.36-.093*(i%2),z,f:z+(PKF-PKZ)*s,s}}
+function parkJack(k,e){const R=RK(k[0]),x=R.x+(e?.011:-.011)*R.s;return {base:V3(x,PKY*R.s,R.z),q:QI,s:R.s,p:V3(x,PKY*R.s,R.z+.040*R.s),n:V3(0,0,1)}}
 // dónde está la clavija de un extremo, esté como esté
 function endBase(k,e){const a=S.free.ends[k][e];if(!a)return parkJack(k,e).base;if(a[0]==='T'){const t=a.split(':');return V3(+t[1],PKY,+t[2])}return jack0(a).base}
 // clavija suelta en la mesa: tumbada, con el cable saliendo hacia su otro extremo
@@ -927,7 +929,7 @@ function placePlugs(){const D=FREE.drag&&FREE.drag.t==='plug'?[FREE.drag.k,FREE.
  for(const at in M){const L=M[at],A=L.length>1?stackAngles(at,L):null;
   L.forEach(([k,e],l)=>{const J=jackAt(at,l),h=DPL[k][e];h.position.copy(J.base);h.quaternion.copy(J.q);h.scale.setScalar(J.s);h.visible=true;const sp=plugMode(h,A?A[l]:null);
    if(sp){h.updateMatrixWorld(true);const o=sp.out();h.userData.out={p:o.p,n:o.n}}else h.userData.out={p:J.p,n:J.n};h.userData.base=J.base;h.userData.len=A?SST*J.s:.040*J.s;h.userData.nn=J.n;h.userData.lvl=l;h.userData.above=L.length-1-l;h.userData.stk=!!A;h.userData.rank=A?A.filter(q=>q<A[l]).length-(A.length-1)/2:0})}
- for(const k of CK)S.free.ends[k].forEach((a,e)=>{if(isJ(a)||(D&&D[0]===k&&D[1]===e))return;const J=a?tableJack(k,e):parkJack(k,e),h=DPL[k][e];h.position.copy(J.base);h.quaternion.copy(J.q);h.scale.setScalar(!a&&PM()?1.3:1);h.visible=FREE.show.has(k);plugMode(h,null);h.userData.out={p:J.p,n:J.n};h.userData.lvl=0;h.userData.above=0;h.userData.stk=false;h.userData.rank=0})}
+ for(const k of CK)S.free.ends[k].forEach((a,e)=>{if(isJ(a)||(D&&D[0]===k&&D[1]===e))return;const J=a?tableJack(k,e):parkJack(k,e),h=DPL[k][e];h.position.copy(J.base);h.quaternion.copy(J.q);h.scale.setScalar(a?1:J.s);h.visible=FREE.show.has(k);plugMode(h,null);h.userData.out={p:J.p,n:J.n};h.userData.lvl=0;h.userData.above=0;h.userData.stk=false;h.userData.rank=0})}
 function taken(skipEnd,skipMod){const T=new Set();for(const k of CK)S.free.ends[k].forEach((a,e)=>{if(isJ(a)&&!(skipEnd&&skipEnd[0]===k&&skipEnd[1]===e))T.add(a)});
  S.free.mods.forEach((q,i)=>{if(q.at&&i!==skipMod){T.add('B:'+q.at[0]+':'+q.at[1]);T.add('B:'+q.at[2]+':'+q.at[3])}});return T}
 
@@ -1031,7 +1033,7 @@ function assignLanes(){const R=ring(0),L=[],G={M0:[],M1:[]},used=[...Array(NLANE
  L.sort((a,b)=>a.len-b.len);
  for(const c of L){let ln=used.findIndex(u=>!u.some(o=>ov(o,c)));if(ln<0){let bm=1e9;used.forEach((u,i)=>{const m=u.filter(o=>ov(o,c)).length;if(m<bm){bm=m;ln=i}})}used[ln].push(c);FREE.lane[c.k]=ln}}
 function freePath(k,done,plugs){const idx=FREE.lane[k]||0,[a0,a1]=S.free.ends[k],R=ring(idx);
- if(!a0&&!a1){const x=RACKX(k[0]),y=PKY,zf=PKF;return [[-.011,y,PKZ+.036],[-.011,y,PKZ+.04],[-.011,FY,PKZ+.062],[-.0112,FY,zf-.085],[-.0185,FY,zf-.040],[-.0155,FY,zf-.012],[0,FY,zf],[.0155,FY,zf-.012],[.0185,FY,zf-.040],[.0112,FY,zf-.085],[.011,FY,PKZ+.062],[.011,y,PKZ+.04],[.011,y,PKZ+.036]].map(q=>V3(x+q[0],q[1],q[2]))}
+ if(!a0&&!a1){const R=RK(k[0]),s=R.s,x=R.x,y=PKY*s,z0=R.z,zf=R.f;return [[-.011,y,.036],[-.011,y,.04],[-.011,FY,.062],[-.0112,FY,-.085],[-.0185,FY,-.040],[-.0155,FY,-.012],[0,FY,0],[.0155,FY,-.012],[.0185,FY,-.040],[.0112,FY,-.085],[.011,FY,.062],[.011,y,.04],[.011,y,.036]].map((q,i)=>V3(x+q[0]*s,q[1],i<3||i>9?z0+q[2]*s:zf+q[2]*s))}
  const A=access(a0,k,0,R),B=access(a1,k,1,R),eA=A.J,eB=B.J;
  // entre varias formas de tender el cable, la primera que no tropieza por el aire con nada; si todas tropiezan, la que menos
  const pick=(opts,mk)=>{let best=null,bb=1e9;for(const o of opts){const P=mk(o),c=airClash(dense(P,.006),k,done,plugs);if(c<1e-6)return P;if(c<bb){bb=c;best=P}}return best};
@@ -1165,7 +1167,7 @@ function ropeWire(){const F=S.free,dr=FREE.drag,sig=JSON.stringify([F.ends,F.mod
  if(sig!==ROPE.sig){ROPE.sig=sig;ROPE.paths={};const sc=ropeScene(),use=CK.filter(k=>FREE.show.has(k)&&!(dr&&dr.t==='plug'&&dr.k===k));
   for(const k of use)if(!F.ends[k][0]&&!F.ends[k][1]){const P=dense(freePath(k,[],[]));P.park=true;ROPE.paths[k]=P;ropeAdd(sc,P)} // los que esperan en su sitio, primero
   for(const k of use)if(F.ends[k][0]||F.ends[k][1]){const P=ropePath(k,sc);ROPE.paths[k]=P;ropeAdd(sc,P)}
-  for(const k in ROPE.paths){FREE.paths[k]=ROPE.paths[k];setTube(CB[k],ROPE.paths[k],ROPE.paths[k].park&&PM()?.0046:undefined)}} // en el móvil, los de su sitio algo más gruesos
+  for(const k in ROPE.paths){FREE.paths[k]=ROPE.paths[k];setTube(CB[k],ROPE.paths[k])}}
  for(const k of CK)CB[k].visible=FREE.show.has(k)&&!(dr&&dr.t==='plug'&&dr.k===k)&&!!ROPE.paths[k]}
 function wireFree(){SC.updateMatrixWorld(true);const F=S.free;
  MODS.forEach((m,i)=>{const q=F.mods[i];if(FREE.drag&&FREE.drag.t==='mod'&&FREE.drag.i===i)return;if(q.at)m.put(q.at);else{m.at=null;const [x,z]=traySlot(i);m.pose(x,TRY+.0012,z,q.hor)}});
@@ -1333,7 +1335,7 @@ function fitV0(){ // encuadre de partida: el punto de mira y la distancia que m�
 function camReset(){const v=fitV0();az=v.az;el=v.el;dist=v.dist;TG.copy(v.tg)}
 function camSet(){CAM.position.set(TG.x+dist*Math.cos(el)*Math.sin(az),TG.y+dist*Math.sin(el),TG.z+dist*Math.cos(el)*Math.cos(az));CAM.lookAt(TG)}
 function size(){const w=box.clientWidth,h=box.clientHeight;if(!w||!h)return;const ratio=Math.min(window.devicePixelRatio||1,2,Math.sqrt(1750000/(w*h)));if(R3.getPixelRatio()!==ratio)R3.setPixelRatio(ratio);R3.setSize(w,h,false);CAM.aspect=w/h;CAM.updateProjectionMatrix();invalidate()}
-let touched=false;new ResizeObserver(()=>{size();if(!touched&&CAM.aspect)camReset()}).observe(box);
+let touched=false,lastPM=null;new ResizeObserver(()=>{size();const pm=PM();if(lastPM!==null&&pm!==lastPM&&S.part===0){FREE.sig='';if(typeof ROPE!=='undefined')ROPE.sig='';wire()}lastPM=pm;if(!touched&&CAM.aspect)camReset()}).observe(box); // al pasar de móvil a portátil o al revés, los cables sin usar cambian de sitio
 function pan(dx,dy){const k=2*dist*Math.tan(CAM.fov*Math.PI/360)/box.clientHeight,ca=Math.cos(az),sa=Math.sin(az),ce=Math.cos(el),se=Math.sin(el);
  TG.x+=k*(-dx*ca-dy*se*sa);TG.y+=k*dy*ce;TG.z+=k*(dx*sa-dy*se*ca);TG.x=Math.max(-1.4,Math.min(1.4,TG.x));TG.y=Math.max(-.2,Math.min(.8,TG.y));TG.z=Math.max(-1.3,Math.min(.9,TG.z));invalidate()}
 function zAt(cx,cy,f){const b=box.getBoundingClientRect();camSet();CAM.updateMatrixWorld();const v=TG.clone().project(CAM);const sx=cx-b.left-(v.x+1)/2*box.clientWidth,sy=cy-b.top-(1-v.y)/2*box.clientHeight;pan(-(1-f)*sx,-(1-f)*sy)}
@@ -1501,13 +1503,15 @@ function mcDials(list){const row=mcRow();list.forEach(([label,m],n)=>{const l=do
   l.append(s,e);row.appendChild(l);s.onclick=()=>meterFocus(m,n);MC.push(()=>{const t=val();if(e.textContent!==t)e.textContent=t;const lb=S.part===0?s.dataset.f:s.dataset.a;if(s.textContent!==lb)s.textContent=lb})})}
 // El polímetro a pantalla completa (solo en el móvil): se gira su selector tocando la rueda o un número de la escala, como en el aparato; «Volver» deja la vista como estaba
 let MF=null;
-function meterFocus(m,n){if(MF)return;MF={m,prev:{az,el,dist,tg:TG.clone(),touched}};document.body.classList.add('mfocus');$('#mfT').textContent=S.part===0?'Multímetro '+(n+1):n?'Voltímetro':'Amperímetro';
+function meterFocus(m,n){if(MF)return;MF={m,prev:{az,el,dist,tg:TG.clone(),touched}};try{history.pushState({mfocus:1},'')}catch(e){} // la flecha de «atrás» del móvil vuelve al montaje, sin salir de la app
+ document.body.classList.add('mfocus');$('#mfT').textContent=S.part===0?'Multímetro '+(n+1):n?'Voltímetro':'Amperímetro';
  requestAnimationFrame(()=>{size();const p=m.fr.getWorldPosition(V3()),nv=V3(0,0,1).applyQuaternion(m.fr.getWorldQuaternion(new THREE.Quaternion())),t=Math.tan(CAM.fov*Math.PI/360),d=m.root.scale.x*Math.max(m.hM*1.08,m.wM*1.06/CAM.aspect)/(2*t)+.01;
   zb=null;flyTo(p,d,Math.atan2(nv.x,nv.z),Math.max(.15,Math.asin(Math.min(1,nv.y))))})}
-function meterBack(){if(!MF)return;const p=MF.prev;MF=null;document.body.classList.remove('mfocus');requestAnimationFrame(()=>{size();zb=null;flyTo(p.tg,p.dist,p.az,p.el);touched=p.touched})}
+function meterBack(pop){if(!MF)return;if(pop!==true&&history.state&&history.state.mfocus){history.back();return} // «Volver» deshace también el paso añadido al historial
+ const p=MF.prev;MF=null;document.body.classList.remove('mfocus');requestAnimationFrame(()=>{size();zb=null;flyTo(p.tg,p.dist,p.az,p.el);touched=p.touched})}
 function mcSync(){for(const f of MC)f()}
 {const m0=measure;measure=function(f){m0(f);mcSync()}}
-$('#mfBack').onclick=meterBack;addEventListener('keydown',e=>{if(e.key==='Escape')meterBack()});addEventListener('popstate',()=>{if(MF)meterBack()});
+$('#mfBack').onclick=()=>meterBack();addEventListener('keydown',e=>{if(e.key==='Escape')meterBack()});addEventListener('popstate',()=>{if(MF)meterBack(true)});
 $('#gbtn').onclick=()=>{if(PM()){document.documentElement.style.setProperty('--gtop',$('header').getBoundingClientRect().bottom+'px');document.body.classList.toggle('guide');return}const h=document.body.classList.toggle('noside');$('#gbtn').innerHTML='<span>'+(h?'Mostrar':'Ocultar')+' </span>guía'};
 mcSlider('Tensión',0,PL.K[0].max,.01,.05,()=>S.L.u[0],v=>setSup(PL,0,v),PL.kn[0]);mcDials([['Amperímetro',AMM],['Voltímetro',VOLT]]);
 size();camReset();applyState();invalidate();
