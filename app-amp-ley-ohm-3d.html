@@ -641,32 +641,37 @@ function drawPSU(P){return P.v1?drawPSU1(P):drawPSU2(P)}
 const BP=.050,BW=.34,BD=.49,BTOP=.026,PLT=.040; // paso entre bornes, ancho y fondo de la placa, altura de su cara superior, lo que asoma una clavija
 const BZ=0,SX=i=>(i-2.5)*BP,SZ=j=>BZ+(j-4)*BP; // columnas i = 0…5 de izquierda a derecha, filas j = 0…8 de atrás hacia delante
 const BOARD=new THREE.Group();SC.add(BOARD);
-{const shell=new THREE.Mesh(roundBox(BW,BD,BTOP-.004,.014,.002),finish(0x2d3038,.52,.06));shell.rotation.x=-Math.PI/2;shell.position.set(0,.004+(BTOP-.004)/2,BZ);BOARD.add(shell);
+{const rrp=(p,w,h,r)=>{const x=-w/2,y=-h/2;p.moveTo(x+r,y);p.lineTo(x+w-r,y);p.quadraticCurveTo(x+w,y,x+w,y+r);p.lineTo(x+w,y+h-r);p.quadraticCurveTo(x+w,y+h,x+w-r,y+h);p.lineTo(x+r,y+h);p.quadraticCurveTo(x,y+h,x,y+h-r);p.lineTo(x,y+r);p.quadraticCurveTo(x,y,x+r,y);return p};
+ // marco negro: la caja de la placa, abierta por arriba donde va la cara blanca (así los agujeros de la cara tienen fondo)
+ const fs=rrp(new THREE.Shape(),BW,BD,.014);fs.holes.push(rrp(new THREE.Path(),BW-.0122,BD-.0122,.004));const fd=BTOP-.004,fb=.002,fg=new THREE.ExtrudeGeometry(fs,{depth:fd-2*fb,bevelEnabled:true,bevelThickness:fb,bevelSize:fb*.5,bevelSegments:2,curveSegments:5});fg.translate(0,0,-(fd-2*fb)/2);
+ const shell=new THREE.Mesh(fg,finish(0x2d3038,.52,.06));shell.rotation.x=-Math.PI/2;shell.position.set(0,.004+(BTOP-.004)/2,BZ);BOARD.add(shell);
  for(const sx of[-1,1])for(const sz of[-1,1]){const f=new THREE.Mesh(new THREE.CylinderGeometry(.011,.012,.005,20),blackPlastic);f.position.set(sx*(BW/2-.03),.0025,BZ+sz*(BD/2-.03));BOARD.add(f)}
  const TW=BW-.012,TD=BD-.012,K=3400,art=canvasTex(Math.round(TW*K),Math.round(TD*K),(x,w,h)=>{const X=i=>w/2+SX(i)*K,Y=j=>h/2+(SZ(j)-BZ)*K;
   x.fillStyle='#fbfbf9';x.fillRect(0,0,w,h);{let sd=7;const rn=()=>(sd=sd*16807%2147483647)/2147483647;for(let k=0;k<w*h/90;k++){const a=rn()*.05;x.fillStyle=rn()<.5?'rgba(120,118,110,'+a+')':'rgba(255,255,255,'+a*1.5+')';x.fillRect(rn()*w,rn()*h,1+rn()*2.2,1+rn()*2.2)}} // grano del plástico inyectado
   x.strokeStyle='#e2e2dc';x.lineWidth=5;rr(x,9,9,w-18,h-18,44);x.stroke();
   x.strokeStyle='#1d1e21';x.lineWidth=7;x.lineCap='round';
   for(let c=0;c<2;c++)for(let r=0;r<3;r++)for(let k=0;k<3;k++){x.beginPath();x.moveTo(X(3*c),Y(3*r+k));x.lineTo(X(3*c+2),Y(3*r+k));x.moveTo(X(3*c+k),Y(3*r));x.lineTo(X(3*c+k),Y(3*r+2));x.stroke()}
-  x.fillStyle='rgba(150,150,140,.22)';for(let i=0;i<6;i++)for(let j=0;j<9;j++){x.beginPath();x.arc(X(i),Y(j),24,0,7);x.fill()} // sombra suave del casquillo
+  x.strokeStyle='rgba(90,90,86,.6)';x.lineWidth=4;for(let i=0;i<6;i++)for(let j=0;j<9;j++){x.beginPath();x.arc(X(i),Y(j),12.5,0,7);x.stroke()} // canto achaflanado de cada agujero
   x.fillStyle='#8a8c88';x.font='bold 25px Arial, sans-serif';x.textAlign='right';x.fillText('PLACA DE MONTAJE · 4 mm',w-40,h-26)});
- const top=new THREE.Mesh(new THREE.PlaneGeometry(TW,TD),std(0xffffff,.62,.02,{map:art,envMapIntensity:.45,emissive:0xffffff,emissiveMap:art,emissiveIntensity:.34}));top.material.toneMapped=false;top.rotation.x=-Math.PI/2;top.position.set(0,BTOP+.0002,BZ);top.receiveShadow=true;BOARD.add(top);BOARD.userData.top=top;
- // bornes: agujero de 6,2 mm (las espigas de las piezas y las clavijas son de 4 mm) con un reborde moldeado de medio milímetro; las piezas y las clavijas se apoyan en él, como en la placa real
- const collar=turned([[.0031,.0001],[.0031,.0006],[.0052,.0006],[.0058,.0002],[.0058,0]],nickel,24).geometry,hole=new THREE.CircleGeometry(.0031,18),M=new THREE.Matrix4(),R=new THREE.Matrix4().makeRotationX(-Math.PI/2);
- const ic=new THREE.InstancedMesh(collar,finish(0xd3d4ce,.5,.03),54),ih=new THREE.InstancedMesh(hole,new THREE.MeshBasicMaterial({color:0x0b0c0e,toneMapped:false}),54);let n=0;
- for(let i=0;i<6;i++)for(let j=0;j<9;j++){M.makeTranslation(SX(i),BTOP,SZ(j));ic.setMatrixAt(n,M);M.makeTranslation(SX(i),BTOP+.0004,SZ(j)).multiply(R);ih.setMatrixAt(n,M);n++}
- ic.castShadow=true;ic.receiveShadow=true;BOARD.add(ic,ih);
+ const holes=canvasTex(Math.round(TW*K),Math.round(TD*K),(x,w,h)=>{x.fillStyle='#fff';x.fillRect(0,0,w,h);x.fillStyle='#000';for(let i=0;i<6;i++)for(let j=0;j<9;j++){x.beginPath();x.arc(w/2+SX(i)*K,h/2+(SZ(j)-BZ)*K,.0031*K,0,7);x.fill()}});holes.encoding=THREE.LinearEncoding;
+ const top=new THREE.Mesh(new THREE.PlaneGeometry(TW,TD),std(0xffffff,.62,.02,{map:art,alphaMap:holes,alphaTest:.5,envMapIntensity:.45,emissive:0xffffff,emissiveMap:art,emissiveIntensity:.34}));top.material.toneMapped=false;top.rotation.x=-Math.PI/2;top.position.set(0,BTOP+.0002,BZ);top.receiveShadow=true;BOARD.add(top);BOARD.userData.top=top;
+ // bornes: agujeros de 6,2 mm recortados en la cara, con su pozo de 9 mm (las espigas de las piezas y las clavijas son de 4 mm y entran en él); piezas y clavijas se apoyan en la cara, como en la placa real
+ const wall=new THREE.CylinderGeometry(.0031,.0031,.0090,24,1,true),hole=new THREE.CircleGeometry(.0032,20),M=new THREE.Matrix4(),R=new THREE.Matrix4().makeRotationX(-Math.PI/2);
+ const wg=canvasTex(4,128,(x,w,h)=>{const g=x.createLinearGradient(0,0,0,h);g.addColorStop(1,'#77797c');g.addColorStop(.88,'#3c3e42');g.addColorStop(.55,'#1a1b1e');g.addColorStop(0,'#0a0a0c');x.fillStyle=g;x.fillRect(0,0,w,h)}),ic=new THREE.InstancedMesh(wall,new THREE.MeshBasicMaterial({map:wg,side:THREE.BackSide,toneMapped:false}),54),ih=new THREE.InstancedMesh(hole,new THREE.MeshBasicMaterial({color:new THREE.Color(0x0b0b0d).convertSRGBToLinear(),toneMapped:false}),54);let n=0;
+ for(let i=0;i<6;i++)for(let j=0;j<9;j++){M.makeTranslation(SX(i),BTOP+.0002-.0045,SZ(j));ic.setMatrixAt(n,M);M.makeTranslation(SX(i),BTOP-.0086,SZ(j)).multiply(R);ih.setMatrixAt(n,M);n++}
+ ic.receiveShadow=true;ic.frustumCulled=ih.frustumCulled=false;BOARD.add(ic,ih); // instancias repartidas por toda la placa: sin recorte por la esfera del origen
+ {const fl=new THREE.Mesh(new THREE.PlaneGeometry(TW,TD),new THREE.MeshBasicMaterial({color:new THREE.Color(0x0a0a0c).convertSRGBToLinear(),toneMapped:false}));fl.rotation.x=-Math.PI/2;fl.position.set(0,BTOP-.0092,BZ);BOARD.add(fl)} // fondo oscuro bajo la cara, por si se mira un agujero muy de lado
  shell.castShadow=true;shell.receiveShadow=true}
 // clavijas que entran por arriba en la placa: el eje z de este grupo es la vertical
 const BFR=new THREE.Group();BFR.position.y=BTOP+.0032;BFR.rotation.x=-Math.PI/2;SC.add(BFR);
 // clavija apilable en un borne de la placa: el cable sale de lado y por detrás admite otra clavija encima. ang: hacia dónde sale el cable (0, hacia delante; +, a la derecha; −, a la izquierda); z0: altura a la que empieza, para apilarla sobre otra
 function bstack(i,j,col,ang,z0=0){const p=sPlug(BFR,SX(i),-SZ(j),z0,col,ang,1.2);p.g.visible=false;return {g:p.g,i,j,back:p.back,jack:()=>{BFR.updateMatrixWorld(true);return p.out()}}}
-function bplug(i,j,col){const g=plugAt(BFR,SX(i),-SZ(j),col);g.visible=false;return {g,i,j,jack:()=>({p:V3(SX(i),BTOP+.0008+PLT,SZ(j)),n:V3(0,1,0)})}}
+function bplug(i,j,col){const g=plugAt(BFR,SX(i),-SZ(j),col);g.visible=false;return {g,i,j,jack:()=>({p:V3(SX(i),BTOP+.0004+PLT,SZ(j)),n:V3(0,1,0)})}}
 
 /* ================= piezas enchufables: resistencias y puentes ================= */
 // Bloque de metacrilato con dos clavijas de 4 mm a un paso de distancia. Dentro, entre dos espárragos con tuerca, la resistencia con su código de colores
 // (no lleva el valor escrito) o un hilo de cobre. En la cara que mira hacia delante, la etiqueta blanca con el símbolo y el nombre.
-const MODL=BP+.030,MODW=.058,MODH=.038,MODY=BTOP+.0008,MK=2.4; // largo (a lo largo de las clavijas), fondo y alto del bloque; MK: tamaño de la resistencia
+const MODL=BP+.030,MODW=.058,MODH=.038,MODY=BTOP+.0004,MK=2.4; // largo (a lo largo de las clavijas), fondo y alto del bloque; MK: tamaño de la resistencia
 const modClear=new THREE.MeshStandardMaterial({color:new THREE.Color(0xbcd6e4).convertSRGBToLinear(),roughness:.04,metalness:0,transparent:true,opacity:.20,depthWrite:false,envMapIntensity:2.6}),modEdge=new THREE.LineBasicMaterial({color:0x1f2a33,transparent:true,opacity:.9});
 const modFloor=finish(0xfbfbf8,.55,.02),modFloorR=finish(0x232b34,.5,.04),resBody=finish(0xe0a94e,.36,.02),copperWire=finish(0xb8713a,.34,.85),nutMat=finish(0xb4babd,.3,.85);
 const BAND={k:0x121214,n:0x6b3a14,r:0xd0241c,g:0x1f8f3a,o:0xd9b23a};
@@ -911,7 +916,7 @@ const QUP=new THREE.Quaternion().setFromEuler(new THREE.Euler(-Math.PI/2,0,0)),Q
 // Da dónde va la clavija (base, giro y tamaño) y de dónde y con qué rumbo sale su cable (p, n).
 function jackAt(at,lvl=0){const J=jack0(at);if(lvl){const d=J.n.clone().multiplyScalar(lvl*SST*J.s);J.base.add(d);J.p.add(d)}return J} // lvl: sobre cuántas clavijas apiladas va
 function jack0(at){const t=at.split(':');
- if(t[0]==='B'){const i=+t[1],j=+t[2];return {base:V3(SX(i),BTOP+.0008,SZ(j)),q:QUP,s:1,p:V3(SX(i),BTOP+.0008+PLT,SZ(j)),n:V3(0,1,0)}}
+ if(t[0]==='B'){const i=+t[1],j=+t[2];return {base:V3(SX(i),BTOP+.0004,SZ(j)),q:QUP,s:1,p:V3(SX(i),BTOP+.0004+PLT,SZ(j)),n:V3(0,1,0)}}
  let fr,a,b;if(t[0]==='S'){fr=PL.fr;[a,b]=PL.L(PL.SK[t[1]][0],PL.SK[t[1]][1])}else{const m=t[0]==='M0'?AMM:VOLT;fr=m.fr;[a,b]=m.L(JACK.find(q=>q[0]===t[1])[2],JY)}
  const q=fr.getWorldQuaternion(new THREE.Quaternion());return {base:fr.localToWorld(V3(a,b,0)),q,s:fr.getWorldScale(V3()).x,p:fr.localToWorld(V3(a,b,.040)),n:V3(0,0,1).applyQuaternion(q)}}
 // Cable sin enchufar: descansa a la izquierda de la fuente, con la clavija tumbada en la mesa
