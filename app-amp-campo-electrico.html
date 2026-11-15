@@ -1029,10 +1029,10 @@ function meterBack(pop){if(!MF)return;if(pop!==true&&history.state&&history.stat
 // En el móvil, al mover el deslizador de un mando, sobre el aparato aparece un bocadillo con el mando ampliado, que gira con el deslizador; se va solo al soltarlo
 const LUPA={obj:null,until:0,raf:0},LCAM=new THREE.PerspectiveCamera(28,1,.002,5),lupaDiv=document.createElement('div');lupaDiv.className='lupa';box.appendChild(lupaDiv);
 const lupaTail=document.createElementNS('http://www.w3.org/2000/svg','svg');lupaTail.setAttribute('class','lupat');lupaTail.innerHTML='<path/>';box.appendChild(lupaTail); // la punta del bocadillo, que señala el mando
-function lupa(obj){if(!obj)return;LUPA.obj=obj;LUPA.until=LUPA.hold?performance.now()+15000:performance.now()+650;if(!LUPA.raf)LUPA.raf=requestAnimationFrame(lupaTick)} // mientras se sujeta el deslizador, el bocadillo sigue; al soltarlo se va enseguida (con los botones − y +, dura un instante)
+function lupa(obj){if(!obj)return;LUPA.obj=obj;LUPA.until=LUPA.hold?performance.now()+15000:performance.now()+650;invalidate();if(!LUPA.raf)LUPA.raf=requestAnimationFrame(lupaTick)} // mientras se sujeta el deslizador, el bocadillo sigue; al soltarlo se va enseguida (con los botones − y +, dura un instante)
 function lupaHold(on){LUPA.hold=on;if(!on&&LUPA.obj){LUPA.until=Math.min(LUPA.until,performance.now());invalidate()}}
 for(const ev of['pointerup','touchend','touchcancel'])addEventListener(ev,()=>lupaHold(false),true);
-function lupaTick(now){LUPA.raf=0;invalidate();if(now<LUPA.until+50)LUPA.raf=requestAnimationFrame(lupaTick)}
+function lupaTick(now){LUPA.raf=0;if(now<LUPA.until+50)LUPA.raf=requestAnimationFrame(lupaTick);else invalidate()} // la escena solo se vuelve a dibujar cuando cambia algo y cuando el bocadillo se quita
 function lupaDraw(){const o=LUPA.obj;if(!o||performance.now()>LUPA.until||MF){if(lupaDiv.style.display!=='none'){lupaDiv.style.display='none';lupaTail.style.display='none'}return}
  // o.userData.asp: bocadillo apaisado que enmarca una zona del frontal (en un generador, la pantalla y el mando, para leer los números); la punta señala o.userData.tip
  const pm=PM(),asp=o.userData.asp||1,tip=o.userData.tip||o,r=lupaR(o)*o.parent.getWorldScale(V3()).x,c=o.getWorldPosition(V3()),q=o.parent.getWorldQuaternion(new THREE.Quaternion()),n=V3(0,0,1).applyQuaternion(q);
@@ -1046,16 +1046,11 @@ function lupaDraw(){const o=LUPA.obj;if(!o||performance.now()>LUPA.until||MF){if
   inb=(x,y)=>x>=6&&y>=6&&x+sw<=W-6&&y+sz<=H-6,free=(x,y)=>AV.every(a=>!(x<a[2]&&x+sw>a[0]&&y<a[3]&&y+sz>a[1])),
   C=pm?[['up',xc,yu],['down',xc,yd],['right',xr,yc],['left',xl,yc]]:[['up',xc,yu],['right',xr,yc],['left',xl,yc],['down',xc,yd]],
   ch=C.find(c=>inb(c[1],c[2])&&free(c[1],c[2]))||C.find(c=>inb(c[1],c[2]))||C[1];const side=ch[0],x=ch[1],y=ch[2];
- // el mando ampliado se dibuja aparte y se pega con las esquinas redondeadas, como el marco: nada asoma por detrás de las curvas
- const pr=R3.getPixelRatio(),rs=Math.round(sz*pr*1.5),rw=Math.round(rs*asp);if(!LUPA.rt){LUPA.rt=new THREE.WebGLRenderTarget(rw,rs);LUPA.rt.texture.encoding=THREE.sRGBEncoding;
-  LUPA.q=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:LUPA.rt.texture,transparent:true,toneMapped:false,depthTest:false,depthWrite:false}));LUPA.s=new THREE.Scene();LUPA.s.add(LUPA.q);LUPA.oc=new THREE.OrthographicCamera(0,1,1,0,-1,1)}
- const mkey=sw+'x'+sz;if(LUPA.mkey!==mkey){LUPA.mkey=mkey;const mw=Math.round(128*asp),mk=canvasTex(mw,128,(c,w,h)=>{c.fillStyle='#000';c.fillRect(0,0,w,h);c.fillStyle='#fff';rr(c,0,0,w,h,h*7/sz);c.fill()});mk.encoding=THREE.LinearEncoding;LUPA.q.material.alphaMap=mk;LUPA.q.material.needsUpdate=true}
- if(LUPA.rt.width!==rw||LUPA.rt.height!==rs)LUPA.rt.setSize(rw,rs);R3.setRenderTarget(LUPA.rt);R3.render(SC,LCAM);R3.setRenderTarget(null);
- const oc=LUPA.oc;oc.left=0;oc.right=W;oc.top=H;oc.bottom=0;oc.updateProjectionMatrix();LUPA.q.scale.set(sw,sz,1);LUPA.q.position.set(x+sw/2,H-y-sz/2,0);
- const ac=R3.autoClear;R3.autoClear=false;R3.render(LUPA.s,oc);R3.autoClear=ac;
+ // el mando ampliado se dibuja directamente en su hueco de la pantalla, con un recorte y sin búfer intermedio (en algunos móviles, dibujar en un búfer aparte hacía parpadear las sombras); el marco, que va encima, tapa las esquinas
+ {const ac=R3.autoClear,vy=H-y-sz;R3.setViewport(x,vy,sw,sz);R3.setScissor(x,vy,sw,sz);R3.setScissorTest(true);R3.autoClear=false;R3.clear();R3.render(SC,LCAM);R3.autoClear=ac;R3.setScissorTest(false);R3.setViewport(0,0,W,H)}
  Object.assign(lupaDiv.style,{display:'block',left:x+'px',top:y+'px',width:sw+'px',height:sz+'px'});
  // marco y punta, de una sola pieza (como un bocadillo de conversación): contorno blanco con las esquinas redondeadas y la punta saliendo de un lado; por el hueco se ve el mando ampliado
- const f=3,R=10,X0=x-f,Y0=y-f,X1=x+sw+f,Y1=y+sz+f,b=8,cx=Math.max(X0+R+b,Math.min(X1-R-b,px)),cy=Math.max(Y0+R+b,Math.min(Y1-R-b,py)),k=n=>n.toFixed(1),
+ const f=3,R=9,X0=x-f,Y0=y-f,X1=x+sw+f,Y1=y+sz+f,b=8,cx=Math.max(X0+R+b,Math.min(X1-R-b,px)),cy=Math.max(Y0+R+b,Math.min(Y1-R-b,py)),k=n=>n.toFixed(1),
   tx=side==='right'?px+kr+3:side==='left'?px-kr-3:px,ty=side==='up'?py-kr-3:side==='down'?py+kr+3:py,
   tail=(ax,ay,bx2,by2)=>' L'+k(ax)+' '+k(ay)+' Q'+k(ax+(tx-ax)*.18)+' '+k(ay+(ty-ay)*.18)+' '+k(tx)+' '+k(ty)+' Q'+k(bx2+(tx-bx2)*.18)+' '+k(by2+(ty-by2)*.18)+' '+k(bx2)+' '+k(by2);
  let d='M'+(X0+R)+' '+Y0+(side==='down'?tail(cx-b,Y0,cx+b,Y0):'')+' L'+(X1-R)+' '+Y0+' A'+R+' '+R+' 0 0 1 '+X1+' '+(Y0+R)+(side==='left'?tail(X1,cy-b,X1,cy+b):'')+' L'+X1+' '+(Y1-R)+' A'+R+' '+R+' 0 0 1 '+(X1-R)+' '+Y1+(side==='up'?tail(cx+b,Y1,cx-b,Y1):'')+' L'+(X0+R)+' '+Y1+' A'+R+' '+R+' 0 0 1 '+X0+' '+(Y1-R)+(side==='right'?tail(X0,cy+b,X0,cy-b):'')+' L'+X0+' '+(Y0+R)+' A'+R+' '+R+' 0 0 1 '+(X0+R)+' '+Y0+' Z';

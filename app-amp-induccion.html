@@ -91,8 +91,8 @@ section.left{position:relative}.mctl{display:block;position:absolute;right:10px;
 .mctl .msel .mmbtn{height:20px;min-width:0;padding:0 5px;border-radius:5px;font-size:11px}.mctl .msel .mval{flex:none;min-width:0;text-align:left;font-weight:600;font-size:10.5px}body.mfocus .mctl{display:none}
 html body .ctls{justify-content:flex-start;gap:6px}html body .ctls .ctl:first-child{flex:0 1 auto;min-width:0;padding-right:0;flex-wrap:wrap;row-gap:6px;max-width:calc(100% - var(--mcw,300px))} /* el botón de reinicio, a continuación de los de la izquierda: la esquina de arriba a la derecha es para el panel */
 }</style>
-<style id="coilcss">.mcoil .msl .mcv{flex:1;min-width:0;text-align:center;font:600 13.5px/1.1 Inter,system-ui,sans-serif;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}.mcoil .msl .mst{font-size:21px;line-height:.9}
-@media (min-width:821px) and (min-height:521px){html body .mctl .mrow.mcoil{display:none}html body .mctl .mrow.mcoil+.mrow{margin-top:0}} /* la fila de la bobina es solo para el móvil: en pantalla grande se elige pasando el ratón por la bandeja */</style>
+<style id="coilcss">#ctags,#chint{display:none;position:absolute;pointer-events:none;z-index:3}#ctags{inset:0}#ctags div{position:absolute;transform:translate(-50%,-100%);padding:2px 6px;border-radius:7px;border:1px solid var(--line,#cfd6dd);background:rgba(255,255,255,.95);color:var(--ink,#1c2530);font:600 10px/1.25 Inter,system-ui,sans-serif;text-align:center;white-space:nowrap}#ctags div.on{background:#2f3842;border-color:#2f3842;color:#fff;z-index:1}
+#chint{left:8px;right:8px;bottom:8px;text-align:center;font:500 12px/1.3 Inter,system-ui,sans-serif;color:#56606b} /* móvil: rótulos de las bobinas y ayuda mientras se elige la secundaria en la bandeja ampliada */</style>
 <style id="finocss">
 /* estilo fino: deslizadores de pista muy delgada con un punto al final y botón redondo claro; botones a juego, ligeros pero con relieve de botón; los signos − y + van sueltos, como serigrafiados */
 :root{--fk-tk:#3b424b;--fk-tk2:rgba(59,66,75,.42);--fk-b1:#fff;--fk-b2:#eef0f2;--fk-bh:#e3e6e9;--fk-bd:rgba(45,52,62,.3);--fk-ink:#2c343d;--fk-sh:0 1px 1.5px rgba(20,30,45,.15);--fk-hl:rgba(255,255,255,.85);--fk-p1:#4b5664;--fk-p2:#2f3842;--fk-pi:#fff}
@@ -140,7 +140,7 @@ html body .left input[type=checkbox],html body .panel input[type=checkbox]{accen
 <h2>Cómo se usa</h2>
 <p>Generador: al abrir está ya encendido; se apaga y se enciende con POWER. Los botones <i>f</i> y <i>U</i> eligen qué se ajusta, la frecuencia o la amplitud, y ◄ ► mueven el cursor a la cifra que quieres cambiar (también puedes pinchar directamente en una cifra de la pantalla). Gira el mando arrastrando alrededor de su eje, o con la rueda del ratón, para subir o bajar esa cifra.</p>
 <p>Polímetros: al abrir están ya encendidos y midiendo, en mA~ y V~; se apagan y se encienden con POWER. Gira el selector arrastrándolo, con la rueda del ratón o pinchando en una marca. V~ y mA~ son tensión e intensidad alternas. El amperímetro está conectado a los bornes mA y COM: mientras su selector no esté en mA, no pasa corriente por el circuito.</p>
-<p>Corrientes y campo B: el botón de arriba muestra u oculta, sobre el montaje, la corriente alterna de la bobina primaria (una hélice amarilla tenue que se enrolla y se desenrolla, y pulsos en sus cables), el campo magnético que crea (líneas azul verdoso, rectas dentro de la bobina y abiertas al salir por sus extremos) y lo que induce en la bobina secundaria (hélice violeta). Todo va y viene, porque es alterna, y se muestra a cámara lenta; lo inducido es máximo cuando el campo cambia más deprisa, es decir, cuando pasa por cero. Por el par trenzado del voltímetro los pulsos son muy tenues: el voltímetro apenas deja pasar corriente, y lo que se mide es la tensión inducida. Es una ayuda visual: en el laboratorio no se ve.</p><p data-fino="panel">Panel de mandos: en el ordenador está arriba a la derecha y en el móvil, bajo la simulación. Los deslizadores «Frecuencia <i>f</i>» y «Tensión <i>U</i>» ajustan el generador sin usar su mando, y los signos − y + los mueven paso a paso; el valor se lee en la pantalla del generador, que en el móvil se amplía en un bocadillo mientras los usas. En el móvil, la fila «Secundaria» cambia la bobina de inducción con ‹ y ›, sin tener que acertar en la bandeja. El botón de cada polímetro acerca la vista a él para girar su selector: en el ordenador, al pulsarlo otra vez la vista vuelve a donde estaba; en el móvil se muestra a pantalla completa y se vuelve con «Volver». A su lado se lee en qué posición está el selector.</p>
+<p>Corrientes y campo B: el botón de arriba muestra u oculta, sobre el montaje, la corriente alterna de la bobina primaria (una hélice amarilla tenue que se enrolla y se desenrolla, y pulsos en sus cables), el campo magnético que crea (líneas azul verdoso, rectas dentro de la bobina y abiertas al salir por sus extremos) y lo que induce en la bobina secundaria (hélice violeta). Todo va y viene, porque es alterna, y se muestra a cámara lenta; lo inducido es máximo cuando el campo cambia más deprisa, es decir, cuando pasa por cero. Por el par trenzado del voltímetro los pulsos son muy tenues: el voltímetro apenas deja pasar corriente, y lo que se mide es la tensión inducida. Es una ayuda visual: en el laboratorio no se ve.</p><p data-fino="panel">Panel de mandos: en el ordenador está arriba a la derecha y en el móvil, bajo la simulación. Los deslizadores «Frecuencia <i>f</i>» y «Tensión <i>U</i>» ajustan el generador sin usar su mando, y los signos − y + los mueven paso a paso; el valor se lee en la pantalla del generador, que en el móvil se amplía en un bocadillo mientras los usas. En el móvil, para cambiar la bobina de inducción toca la bandeja: la vista se acerca a ella y cada bobina lleva su rótulo; toca una para marcarla y otra vez para ponerla. El botón de cada polímetro acerca la vista a él para girar su selector: en el ordenador, al pulsarlo otra vez la vista vuelve a donde estaba; en el móvil se muestra a pantalla completa y se vuelve con «Volver». A su lado se lee en qué posición está el selector.</p>
 <p>Vista: arrastra para girar, usa la rueda (o dos dedos) para acercar donde está el puntero y arrastra con el botón derecho (o dos dedos) para desplazar. Con doble clic te acercas a un aparato y, con otro doble clic sobre él, vuelves a la vista anterior; «Vista inicial» vuelve al encuadre de partida.</p>
 <p class="note">Gemelo de la práctica: bobinas con sus dimensiones reales, generador de funciones y polímetros con fusible · CC BY-NC-SA 4.0</p>
 </aside></main>
@@ -1475,6 +1475,7 @@ box.addEventListener('pointerdown',e=>{box.setPointerCapture(e.pointerId);PTR.se
  down={x:e.clientX,y:e.clientY,moved:false};const h=pick(e);if(MF){if(h&&h.object.userData.inst===MF.m){const uv=faceUV(MF.m),c=hitCtl(MF.m,uv);if(c){const D=ctlDown(MF.m,c,uv);ctl=D;mode=D?'ctl':'none';return}}mode='none';return} // con el polímetro a pantalla completa solo se toca su selector
  
  if(h&&h.object.userData.inst){const inst=h.object.userData.inst,uv=faceUV(inst),c=hitCtl(inst,uv);if(c){const D=ctlDown(inst,c,uv);ctl=D;mode=D?'ctl':'none';return}}
+ if(PM()&&!anim&&(CS||trayHit(e))){mode='tray';return} // móvil: la bobina se elige en la bandeja ampliada
  if(h&&h.object.userData.coil!==undefined&&!anim){const i=h.object.userData.coil;if(i!==S.coil){mode='coil';down.coil=i;return}}
  mode=(e.button===2||e.shiftKey)?'pan':'orbit';touched=true;box.classList.add('dragging')});
 box.addEventListener('pointermove',e=>{
@@ -1482,11 +1483,12 @@ box.addEventListener('pointermove',e=>{
  if(mode==='pinch'&&PTR.size>=2){const d1=pdist(),m1=pmid();if(pd0>0&&d1>0){const nd=Math.max(.056,Math.min(4,dist*pd0/d1));zAt(m1[0],m1[1],nd/dist);dist=nd}if(pm0)pan(m1[0]-pm0[0],m1[1]-pm0[1]);pd0=d1;pm0=m1;invalidate();return}
  if(!down){hover(e);return}
  const dx=e.clientX-down.x,dy=e.clientY-down.y;if(Math.hypot(dx,dy)>5)down.moved=true;
+ if(mode==='tray'&&down.moved){mode='orbit';touched=true;box.classList.add('dragging')}
  if(mode==='ctl'&&ctl){setRay(e);ctlMove(ctl);return}
  if(mode==='orbit'){az-=(e.clientX-(down.px??down.x))*.008;el=Math.max(.05,Math.min(1.45,el+(e.clientY-(down.py??down.y))*.006));down.px=e.clientX;down.py=e.clientY;invalidate()}
  else if(mode==='pan'){pan(e.clientX-(down.px??down.x),e.clientY-(down.py??down.y));down.px=e.clientX;down.py=e.clientY}});
 function endPtr(e){PTR.delete(e.pointerId);if(mode==='pinch'){if(PTR.size<2){mode=null;down=null}else{pd0=pdist();pm0=pmid()}return}
- if(mode==='coil'&&down&&!down.moved)swapCoil(down.coil);
+ if(mode==='coil'&&down&&!down.moved)swapCoil(down.coil);if(mode==='tray'&&down&&!down.moved)trayTap(e);
  mode=null;down=null;ctl=null;box.classList.remove('dragging')}
 ['pointerup','pointercancel'].forEach(k=>box.addEventListener(k,endPtr));
 // Pellizco con dos dedos en el panel táctil (el navegador lo envía como rueda con Ctrl): siempre zoom.
@@ -1500,7 +1502,7 @@ box.addEventListener('wheel',e=>{e.preventDefault();const h=e.ctrlKey?null:pick(
    if(dir){if(inst.kind==='dmm'){const L=DIAL.pos,i=L.findIndex(p=>p.id===inst.dial);setDial(inst,L[(i+dir+L.length)%L.length].id)}else genStep(dir)}
    return}}
  const nd=Math.max(.056,Math.min(4,dist*Math.exp(e.deltaY*(e.ctrlKey?.01:.0012))));zAt(e.clientX,e.clientY,nd/dist);dist=nd;touched=true;invalidate()},{passive:false});
-box.addEventListener('dblclick',e=>{const h=pick(e);if(!h)return;if(h.object.userData.inst){const inst=h.object.userData.inst;if(hitCtl(inst,faceUV(inst)))return;const p=inst.fr.getWorldPosition(V3()),n=V3(0,0,1).applyQuaternion(inst.fr.getWorldQuaternion(new THREE.Quaternion()));
+box.addEventListener('dblclick',e=>{if(CS||performance.now()-CSx<700)return;const h=pick(e);if(!h)return;if(h.object.userData.inst){const inst=h.object.userData.inst;if(hitCtl(inst,faceUV(inst)))return;const p=inst.fr.getWorldPosition(V3()),n=V3(0,0,1).applyQuaternion(inst.fr.getWorldQuaternion(new THREE.Quaternion()));
   const t=Math.tan(CAM.fov*Math.PI/360),d=inst.root.scale.x*Math.max(inst.hM*1.12,inst.wM*1.12/CAM.aspect)/(2*t)+.02;zoomTo(inst,p,d,Math.atan2(n.x,n.z),Math.max(.15,Math.asin(Math.min(1,n.y))));return}
  zoomTo('pt',h.point,Math.max(.35,dist*.55))});
 let hovC=-1;
@@ -1550,7 +1552,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeo
 {const q=(new URLSearchParams(location.search).get('lab')||'').toLowerCase(),N={circuitos:'Circuitos Eléctricos',electromagnetismo:'Electromagnetismo'};if(N[q]){document.body.dataset.lab=q;const b=document.querySelector('header a.back');if(b){b.href='laboratorios.html#'+q;b.setAttribute('aria-label','Volver al Laboratorio de '+N[q])}}} function setPart(p){part=p;S=ST[p];document.body.dataset.part=p;document.querySelectorAll('#ptabs .tab').forEach(q=>q.classList.toggle('on',+q.dataset.p===p));anim=null;applyState()}
 document.querySelectorAll('#ptabs .tab').forEach(t=>t.onclick=()=>setPart(+t.dataset.p));
 
-$('#augBtn').onclick=()=>setAug(!AUG.on);$('#vwBtn').onclick=()=>{const v=fitV0();zb=null;flyTo(v.tg,v.dist,v.az,v.el);touched=false};
+$('#augBtn').onclick=()=>setAug(!AUG.on);$('#vwBtn').onclick=()=>{trayOff(true);const v=fitV0();zb=null;flyTo(v.tg,v.dist,v.az,v.el);touched=false};
 $('#fuseBtn').onclick=()=>{S.m[0].fuse=true;AMM.fuse=true;$('#fuseBtn').hidden=true;measure()};
 $('#rstBtn').onclick=()=>{$('#dlg').hidden=false};$('#dlgNo').onclick=()=>{$('#dlg').hidden=true};
 $('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg')$('#dlg').hidden=true});
@@ -1582,10 +1584,10 @@ function meterBack(pop){if(!MF)return;if(pop!==true&&history.state&&history.stat
 // En el móvil, al mover el deslizador de un mando, sobre el aparato aparece un bocadillo con el mando ampliado, que gira con el deslizador; se va solo al soltarlo
 const LUPA={obj:null,until:0,raf:0},LCAM=new THREE.PerspectiveCamera(28,1,.002,5),lupaDiv=document.createElement('div');lupaDiv.className='lupa';box.appendChild(lupaDiv);
 const lupaTail=document.createElementNS('http://www.w3.org/2000/svg','svg');lupaTail.setAttribute('class','lupat');lupaTail.innerHTML='<path/>';box.appendChild(lupaTail); // la punta del bocadillo, que señala el mando
-function lupa(obj){if(!obj||!PM())return;LUPA.obj=obj;LUPA.until=LUPA.hold?performance.now()+15000:performance.now()+650;if(!LUPA.raf)LUPA.raf=requestAnimationFrame(lupaTick)} // mientras se sujeta el deslizador, el bocadillo sigue; al soltarlo se va enseguida (con los botones − y +, dura un instante)
+function lupa(obj){if(!obj||!PM())return;LUPA.obj=obj;LUPA.until=LUPA.hold?performance.now()+15000:performance.now()+650;invalidate();if(!LUPA.raf)LUPA.raf=requestAnimationFrame(lupaTick)} // mientras se sujeta el deslizador, el bocadillo sigue; al soltarlo se va enseguida (con los botones − y +, dura un instante)
 function lupaHold(on){LUPA.hold=on;if(!on&&LUPA.obj){LUPA.until=Math.min(LUPA.until,performance.now());invalidate()}}
 for(const ev of['pointerup','touchend','touchcancel'])addEventListener(ev,()=>lupaHold(false),true);
-function lupaTick(now){LUPA.raf=0;invalidate();if(now<LUPA.until+50)LUPA.raf=requestAnimationFrame(lupaTick)}
+function lupaTick(now){LUPA.raf=0;if(now<LUPA.until+50)LUPA.raf=requestAnimationFrame(lupaTick);else invalidate()} // la escena solo se vuelve a dibujar cuando cambia algo y cuando el bocadillo se quita
 function lupaDraw(){const o=LUPA.obj;if(!o||performance.now()>LUPA.until||MF){if(lupaDiv.style.display!=='none'){lupaDiv.style.display='none';lupaTail.style.display='none'}return}
  // o.userData.asp: bocadillo apaisado que enmarca una zona del frontal (en un generador, la pantalla y el mando, para leer los números); la punta señala o.userData.tip
  const pm=PM(),asp=o.userData.asp||1,tip=o.userData.tip||o,r=lupaR(o)*o.parent.getWorldScale(V3()).x,c=o.getWorldPosition(V3()),q=o.parent.getWorldQuaternion(new THREE.Quaternion()),n=V3(0,0,1).applyQuaternion(q);
@@ -1599,16 +1601,11 @@ function lupaDraw(){const o=LUPA.obj;if(!o||performance.now()>LUPA.until||MF){if
   inb=(x,y)=>x>=6&&y>=6&&x+sw<=W-6&&y+sz<=H-6,free=(x,y)=>AV.every(a=>!(x<a[2]&&x+sw>a[0]&&y<a[3]&&y+sz>a[1])),
   C=pm?[['up',xc,yu],['down',xc,yd],['right',xr,yc],['left',xl,yc]]:[['up',xc,yu],['right',xr,yc],['left',xl,yc],['down',xc,yd]],
   ch=C.find(c=>inb(c[1],c[2])&&free(c[1],c[2]))||C.find(c=>inb(c[1],c[2]))||C[1];const side=ch[0],x=ch[1],y=ch[2];
- // el mando ampliado se dibuja aparte y se pega con las esquinas redondeadas, como el marco: nada asoma por detrás de las curvas
- const pr=R3.getPixelRatio(),rs=Math.round(sz*pr*1.5),rw=Math.round(rs*asp);if(!LUPA.rt){LUPA.rt=new THREE.WebGLRenderTarget(rw,rs);LUPA.rt.texture.encoding=THREE.sRGBEncoding;
-  LUPA.q=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:LUPA.rt.texture,transparent:true,toneMapped:false,depthTest:false,depthWrite:false}));LUPA.s=new THREE.Scene();LUPA.s.add(LUPA.q);LUPA.oc=new THREE.OrthographicCamera(0,1,1,0,-1,1)}
- const mkey=sw+'x'+sz;if(LUPA.mkey!==mkey){LUPA.mkey=mkey;const mw=Math.round(128*asp),mk=canvasTex(mw,128,(c,w,h)=>{c.fillStyle='#000';c.fillRect(0,0,w,h);c.fillStyle='#fff';rr(c,0,0,w,h,h*7/sz);c.fill()});mk.encoding=THREE.LinearEncoding;LUPA.q.material.alphaMap=mk;LUPA.q.material.needsUpdate=true}
- if(LUPA.rt.width!==rw||LUPA.rt.height!==rs)LUPA.rt.setSize(rw,rs);R3.setRenderTarget(LUPA.rt);R3.render(SC,LCAM);R3.setRenderTarget(null);
- const oc=LUPA.oc;oc.left=0;oc.right=W;oc.top=H;oc.bottom=0;oc.updateProjectionMatrix();LUPA.q.scale.set(sw,sz,1);LUPA.q.position.set(x+sw/2,H-y-sz/2,0);
- const ac=R3.autoClear;R3.autoClear=false;R3.render(LUPA.s,oc);R3.autoClear=ac;
+ // el mando ampliado se dibuja directamente en su hueco de la pantalla, con un recorte y sin búfer intermedio (en algunos móviles, dibujar en un búfer aparte hacía parpadear las sombras); el marco, que va encima, tapa las esquinas
+ {const ac=R3.autoClear,vy=H-y-sz;R3.setViewport(x,vy,sw,sz);R3.setScissor(x,vy,sw,sz);R3.setScissorTest(true);R3.autoClear=false;R3.clear();R3.render(SC,LCAM);R3.autoClear=ac;R3.setScissorTest(false);R3.setViewport(0,0,W,H)}
  Object.assign(lupaDiv.style,{display:'block',left:x+'px',top:y+'px',width:sw+'px',height:sz+'px'});
  // marco y punta, de una sola pieza (como un bocadillo de conversación): contorno blanco con las esquinas redondeadas y la punta saliendo de un lado; por el hueco se ve el mando ampliado
- const f=3,R=10,X0=x-f,Y0=y-f,X1=x+sw+f,Y1=y+sz+f,b=8,cx=Math.max(X0+R+b,Math.min(X1-R-b,px)),cy=Math.max(Y0+R+b,Math.min(Y1-R-b,py)),k=n=>n.toFixed(1),
+ const f=3,R=9,X0=x-f,Y0=y-f,X1=x+sw+f,Y1=y+sz+f,b=8,cx=Math.max(X0+R+b,Math.min(X1-R-b,px)),cy=Math.max(Y0+R+b,Math.min(Y1-R-b,py)),k=n=>n.toFixed(1),
   tx=side==='right'?px+kr+3:side==='left'?px-kr-3:px,ty=side==='up'?py-kr-3:side==='down'?py+kr+3:py,
   tail=(ax,ay,bx2,by2)=>' L'+k(ax)+' '+k(ay)+' Q'+k(ax+(tx-ax)*.18)+' '+k(ay+(ty-ay)*.18)+' '+k(tx)+' '+k(ty)+' Q'+k(bx2+(tx-bx2)*.18)+' '+k(by2+(ty-by2)*.18)+' '+k(bx2)+' '+k(by2);
  let d='M'+(X0+R)+' '+Y0+(side==='down'?tail(cx-b,Y0,cx+b,Y0):'')+' L'+(X1-R)+' '+Y0+' A'+R+' '+R+' 0 0 1 '+X1+' '+(Y0+R)+(side==='left'?tail(X1,cy-b,X1,cy+b):'')+' L'+X1+' '+(Y1-R)+' A'+R+' '+R+' 0 0 1 '+(X1-R)+' '+Y1+(side==='up'?tail(cx+b,Y1,cx-b,Y1):'')+' L'+(X0+R)+' '+Y1+' A'+R+' '+R+' 0 0 1 '+X0+' '+(Y1-R)+(side==='right'?tail(X0,cy+b,X0,cy-b):'')+' L'+X0+' '+(Y0+R)+' A'+R+' '+R+' 0 0 1 '+(X0+R)+' '+Y0+' Z';
@@ -1622,13 +1619,23 @@ function lupaAvoid(W,H){const out=[],add=(o,P)=>{let x0=1e9,y0=1e9,x1=-1e9,y1=-1
 const LUPAGEN=new THREE.Object3D();{const[x0,y0]=GEN.L(20,44),[x1,y1]=GEN.L(GKX+GKR+12,199),hw=Math.abs(x1-x0)/2,hh=Math.abs(y1-y0)/2;LUPAGEN.position.set((x0+x1)/2,(y0+y1)/2,.003);GEN.fr.add(LUPAGEN);LUPAGEN.userData={lr:hh*1.06/2.6,asp:hw/hh,tip:GEN.kn}}
 function lupaR(o){if(o.userData.lr)return o.userData.lr;SC.updateMatrixWorld(true);const inv=o.parent.matrixWorld.clone().invert(),b=new THREE.Box3();o.traverse(c=>{if(c.isMesh){c.geometry.computeBoundingBox();b.union(c.geometry.boundingBox.clone().applyMatrix4(inv.clone().multiply(c.matrixWorld)))}});return o.userData.lr=Math.max(b.max.x-b.min.x,b.max.y-b.min.y)/2}
 
-function mcCoil(){let W=-1;const r=mcRow(),l=document.createElement('div'),s=document.createElement('span'),v=document.createElement('b'),cur=()=>W>=0?W:S.coil, // móvil: la secundaria se elige también aquí, pasando de una bobina a la siguiente; los toques dados durante el cambio no se pierden
- show=()=>{const c=COILS[cur()],t=c.N+' esp. · Ø '+c.d+' mm';if(v.textContent!==t)v.textContent=t},bt=(t,k)=>{const b=document.createElement('button');b.type='button';b.className='mst';b.textContent=t;b.setAttribute('aria-label',k<0?'Bobina anterior':'Bobina siguiente');b.onclick=()=>{const n=Math.max(0,Math.min(COILS.length-1,cur()+k));if(n===cur())return;W=n;show();if(!anim)swapCoil(n)};return b};
- r.classList.add('mcoil');l.className='msl';s.textContent='Secundaria';v.className='mcv';l.append(s,bt('‹',-1),v,bt('›',1));r.appendChild(l);MC.push(show);
- const s0=stepAnim;stepAnim=function(now){s0(now);if(!anim){if(W>=0&&W!==S.coil)swapCoil(W);else W=-1;show()}};const a0=applyState;applyState=function(){W=-1;a0();show()}}
+/* ================= móvil: elegir la bobina secundaria ================= */
+let CS=null,CSx=0;const CTG=document.createElement('div'),CHN=document.createElement('div');CTG.id='ctags';CHN.id='chint';CHN.textContent='Toca una bobina para marcarla y otra vez para ponerla. Toca fuera para salir.';lupaDiv.parentNode.append(CTG,CHN);
+const cTag=COILS.map(c=>{const d=document.createElement('div');CTG.appendChild(d);return d}),cScr=v=>{const p=v.project(CAM);return [(p.x+1)/2*box.clientWidth,(1-p.y)/2*box.clientHeight]},cXY=e=>{const b=box.getBoundingClientRect();return [e.clientX-b.left,e.clientY-b.top]};
+function trayHit(e){const [x,y]=cXY(e),P=[];let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;for(const sx of[-.18,.18])for(const sz of[-.12,.12])P.push(V3(TRAY.x+sx,.012,TRAY.z+sz));coils.forEach((c,i)=>{if(i!==S.coil)P.push(c.g.localToWorld(V3(0,c.top,0)))}); // ¿cae el toque en la bandeja o en sus bobinas?
+ for(const v of P){const [a,b]=cScr(v);x0=Math.min(x0,a);x1=Math.max(x1,a);y0=Math.min(y0,b);y1=Math.max(y1,b)}return x>x0-10&&x<x1+10&&y>y0-10&&y<y1+10}
+function trayOn(){CS={prev:{az,el,dist,tg:TG.clone(),touched},sel:-1};zb=null;flyTo(V3(TRAY.x,.075,TRAY.z-.005),Math.max(.6,.435/(CAM.aspect*2*Math.tan(CAM.fov*Math.PI/360))),0,.98);invalidate()}
+function trayOff(quieta){if(!CS)return;const p=CS.prev;if(CS.sel>=0)coils[CS.sel].wm.emissive.setHex(0);CS=null;CSx=performance.now();CTG.style.display=CHN.style.display='none';if(!quieta){zb=null;flyTo(p.tg,p.dist,p.az,p.el);touched=p.touched}invalidate()}
+function trayTap(e){if(!CS){trayOn();return}const [x,y]=cXY(e);let best=-1,bd=46; // la bobina más cercana al dedo, sin tener que acertar de lleno
+ coils.forEach((c,i)=>{if(i===S.coil)return;for(const h of[c.top,c.top*.5,0]){const [a,b]=cScr(c.g.localToWorld(V3(0,h,0))),d=Math.hypot(a-x,b-y);if(d<bd){bd=d;best=i}}});
+ if(best<0){trayOff();return}if(best===CS.sel){trayOff();swapCoil(best);return}
+ if(CS.sel>=0)coils[CS.sel].wm.emissive.setHex(0);CS.sel=best;coils[best].wm.emissive.setHex(0x5a2c00);invalidate()}
+function trayTags(){if(!CS)return;CTG.style.display=CHN.style.display='block';coils.forEach((c,i)=>{const d=cTag[i];if(i===S.coil){d.style.display='none';return}const [a,b]=cScr(c.g.localToWorld(V3(0,c.top+.014,0))),on=i===CS.sel,t=COILS[i].N+' esp. · Ø '+COILS[i].d+(on?'<br>toca otra vez':'');
+  if(d.innerHTML!==t)d.innerHTML=t;d.className=on?'on':'';d.style.display='block';d.style.left=a.toFixed(1)+'px';d.style.top=b.toFixed(1)+'px'})}
+{const l0=lupaDraw;lupaDraw=function(){l0();trayTags()};const a0=applyState;applyState=function(){trayOff(true);a0()}}
 function mcSync(){for(const f of MC)f()} {const m0=measure;measure=function(f){m0(f);mcSync()}}
 $('#mfBack').onclick=()=>meterBack();addEventListener('keydown',e=>{if(e.key==='Escape')meterBack()});addEventListener('popstate',()=>{if(MF)meterBack(true)});
- $('#gbtn').onclick=()=>{if(PM()){document.documentElement.style.setProperty('--gtop',$('header').getBoundingClientRect().bottom+'px');document.body.classList.toggle('guide');return}const h=document.body.classList.toggle('noside');$('#gbtn').innerHTML='<span>'+(h?'Mostrar':'Ocultar')+' </span>guía'};mcCoil();mcSlider('Frecuencia <i>f</i>',0,20000,50,10,()=>S.gen.f,v=>{S.gen.sel='f';const o=S.gen.f;S.gen.f=Math.round(Math.max(1,v));GEN.kn.rotation.z-=(S.gen.f-o)/20000*6*Math.PI;drawGen(GEN);measure()},LUPAGEN);mcSlider('Tensión <i>U</i>',0,10000,10,10,()=>S.gen.U,v=>{S.gen.sel='U';const o=S.gen.U;S.gen.U=Math.round(v);GEN.kn.rotation.z-=(S.gen.U-o)/10000*6*Math.PI;drawGen(GEN);measure()},LUPAGEN);mcDials([['Amperímetro',AMM],['Voltímetro',VOLT]]);staticCables();size();camReset();setPart(1);invalidate();deskReady();LUPA.mw=.7;
+ $('#gbtn').onclick=()=>{if(PM()){document.documentElement.style.setProperty('--gtop',$('header').getBoundingClientRect().bottom+'px');document.body.classList.toggle('guide');return}const h=document.body.classList.toggle('noside');$('#gbtn').innerHTML='<span>'+(h?'Mostrar':'Ocultar')+' </span>guía'};mcSlider('Frecuencia <i>f</i>',0,20000,50,10,()=>S.gen.f,v=>{S.gen.sel='f';const o=S.gen.f;S.gen.f=Math.round(Math.max(1,v));GEN.kn.rotation.z-=(S.gen.f-o)/20000*6*Math.PI;drawGen(GEN);measure()},LUPAGEN);mcSlider('Tensión <i>U</i>',0,10000,10,10,()=>S.gen.U,v=>{S.gen.sel='U';const o=S.gen.U;S.gen.U=Math.round(v);GEN.kn.rotation.z-=(S.gen.U-o)/10000*6*Math.PI;drawGen(GEN);measure()},LUPAGEN);mcDials([['Amperímetro',AMM],['Voltímetro',VOLT]]);staticCables();size();camReset();setPart(1);invalidate();deskReady();LUPA.mw=.7;
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{drawGen(GEN);measure(true);invalidate()});
 window.__ind={DIAL,SC,AUG,setAug,strands,scr:(inst,u,v)=>{const[lx,ly]=inst.L(u,v),w=inst.fr.localToWorld(V3(lx,ly,0)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},coilScr:i=>{const c=coils[i],w=c.g.localToWorld(V3(.012,c.top,.012)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},S:()=>S,solve,coils,COILS,AMM,VOLT,GEN,swapCoil,setPart,genStep,setDial,measure,camState:()=>({az,el,dist,TG}),flyTo,coupling};
 }
