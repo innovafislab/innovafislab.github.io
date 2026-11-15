@@ -851,7 +851,7 @@ function fixedCables(){SC.updateMatrixWorld(true);
  // Puentes: + de 0…50 V con − de 0…300 V, y − de 0…300 V con tierra. Ese punto común es el cero del tubo (cátodo).
  jumper(CB.j,EJ.Ja.out(),EJ.Jb.out());jumper(CB.l,EJ.La.out(),EJ.Lb.out());syncFlow();
 }
-function floorLabel(x,z,l1,l2,W=.36,H=.060){const t=canvasTex(1024,Math.round(1024*H/W),(c,w,h)=>{c.clearRect(0,0,w,h);c.fillStyle='#8a939d';const put=(tx,wt,px,y)=>{const P=tx.split('_'),f=s=>wt+Math.round(px*s)+'px Arial, sans-serif';let m=0;P.forEach((s,i)=>{c.font=f(i%2?.68:1);m+=c.measureText(s).width});c.save();c.translate(w/2,y);c.scale(Math.min(1,(w-16)/m),1);let q=-m/2;c.textAlign='left';P.forEach((s,i)=>{c.font=f(i%2?.68:1);c.fillText(s,q,i%2?px*.22:0);q+=c.measureText(s).width});c.restore()};put(l1,'bold ',h*.40,h*.42);put(l2,'',h*.33,h*.86)});const m=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false,toneMapped:false,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-8}));m.rotation.x=-Math.PI/2;m.position.set(x,.0007,z);m.renderOrder=2;SC.add(m);return m} // rótulo en la mesa, como grabado en ella; _x_ escribe x como subíndice
+function floorLabel(x,z,l1,l2,W=.36,H=.060){const t=canvasTex(1024,Math.round(1024*H/W),(c,w,h)=>{c.clearRect(0,0,w,h);c.fillStyle='#8a939d';const put=(tx,wt,px,y)=>{const P=tx.split('_'),f=s=>wt+Math.round(px*s)+'px Arial, sans-serif';let m=0;P.forEach((s,i)=>{c.font=f(i%2?.68:1);m+=c.measureText(s).width});c.save();c.translate(w/2,y);c.scale(Math.min(1,(w-16)/m),1);let q=-m/2;c.textAlign='left';P.forEach((s,i)=>{c.font=f(i%2?.68:1);c.fillText(s,q,i%2?px*.22:0);q+=c.measureText(s).width});c.restore()};put(l1,'bold ',h*.40,h*.42);put(l2,'',h*.33,h*.86)});const m=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false,toneMapped:false,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-8}));m.rotation.x=-Math.PI/2;m.position.set(x,.0007,z);m.renderOrder=2;SC.add(m);(SC.userData.flb=SC.userData.flb||[]).push(m);m.userData.x0=x;return m} // rótulo en la mesa, como grabado en ella; _x_ escribe x como subíndice
 floorLabel(-.32,ZD+.265,'INTENSIDAD EN LAS BOBINAS','I, en amperios');floorLabel(.32,ZD+.265,'TENSIÓN DE ACELERACIÓN','V, en voltios');
 
 /* ================= corriente y campo B (vista añadida, no se ve en el montaje real) ================= */
@@ -978,14 +978,17 @@ function fitDesk(v){const br=box.getBoundingClientRect(),W=br.width,H=br.height;
  DESK.key=key;DESK.res={dist:d,tg:c.clone()};return {az:v.az,el:v.el,dist:d,tg:c}}
 function deskLayout(){const c=document.querySelector('.ctls');if(c)c.style.setProperty('--mcw',(PM()?0:mcBox.offsetWidth+50)+'px')}
 function deskReady(){DESK.ready=true;DESK.pts=null;DESK.res=null;const go=()=>{deskLayout();DESK.res=null;if(!PM()&&!touched){camReset();invalidate()}};go();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(go);addEventListener('resize',deskLayout)}
-function fitV0(){if(!PM()){const r=fitDesk(V0());if(r)return r}else DESK.pts=null; // encuadre de partida: el punto de mira y la distancia que más acercan el montaje sin recortarlo
+function lblFit(){const on=PM()&&box.clientHeight>box.clientWidth;camSet();CAM.updateMatrixWorld(); // móvil en vertical: los rótulos de mesa que la vista de partida cortaría se corren hacia dentro lo justo
+ for(const m of SC.userData.flb||[]){m.position.x=m.userData.x0;if(!on)continue;const hw=m.geometry.parameters.width/2,out=s=>V3(m.position.x+s*hw,0,m.position.z).project(CAM).x*s>.95;
+  for(let i=0;i<80&&out(-1);i++)m.position.x+=.005;for(let i=0;i<80&&out(1);i++)m.position.x-=.005}invalidate()}
+function fitV0(){if(!PM()){const r=fitDesk(V0());if(r)return r}else{DESK.pts=null;if(box.clientHeight>box.clientWidth){const a=box.clientWidth/box.clientHeight;return {az:0,el:0.6,dist:2.827*Math.max(1,0.6843/a),tg:V3(0.0445,0.3383,-0.1134)}} /* móvil en vertical: vista de partida fija, elegida a mano */} // encuadre de partida: el punto de mira y la distancia que más acercan el montaje sin recortarlo
  const v=V0(),top=topLim(.875),PTS=COL?BBC:(PM()?BB.concat(BBM):BB);let best=null;
  for(let cz=-.45;cz<=.10;cz+=.015){const c=V3(COL?.08:0,.16,cz);let lo=.5,hi=7;
   const ok=d=>{const p=V3(c.x+d*Math.cos(v.el)*Math.sin(v.az),c.y+d*Math.sin(v.el),c.z+d*Math.cos(v.el)*Math.cos(v.az));CAM.position.copy(p);CAM.lookAt(c);CAM.updateMatrixWorld();
    return PTS.every(q=>{const n=q.clone().project(CAM);return Math.abs(n.x)<.97&&n.y<top&&n.y>-.95})};
   for(let i=0;i<26;i++){const m=(lo+hi)/2;ok(m)?hi=m:lo=m}if(!best||hi<best.dist)best={az:v.az,el:v.el,dist:hi,tg:c}}
  return PM()?balance(best,v,top,PTS):best}
-function camReset(){const v=fitV0();az=v.az;el=v.el;dist=v.dist;TG.copy(v.tg)}
+function camReset(){const v=fitV0();az=v.az;el=v.el;dist=v.dist;TG.copy(v.tg);lblFit()}
 function camSet(){CAM.position.set(TG.x+dist*Math.cos(el)*Math.sin(az),TG.y+dist*Math.sin(el),TG.z+dist*Math.cos(el)*Math.cos(az));CAM.lookAt(TG)}
 function size(){const w=box.clientWidth,h=box.clientHeight;if(!w||!h)return;const ratio=Math.min(window.devicePixelRatio||1,2,Math.sqrt(1750000/(w*h)));if(R3.getPixelRatio()!==ratio)R3.setPixelRatio(ratio);R3.setSize(w,h,false);CAM.aspect=w/h;CAM.updateProjectionMatrix();invalidate()}
 let touched=false;new ResizeObserver(()=>{size();if(arrange())touched=false;if(!touched&&CAM.aspect)camReset()}).observe(box);
@@ -1126,7 +1129,7 @@ function lupaDraw(){const o=LUPA.obj;if(!o||performance.now()>LUPA.until||MF){if
  const pm=PM(),asp=o.userData.asp||1,tip=o.userData.tip||o,r=lupaR(o)*o.parent.getWorldScale(V3()).x,c=o.getWorldPosition(V3()),q=o.parent.getWorldQuaternion(new THREE.Quaternion()),n=V3(0,0,1).applyQuaternion(q);
  LCAM.up.set(0,1,0).applyQuaternion(q);const t=c.clone().addScaledVector(LCAM.up,asp>1?0:-.3*r);LCAM.position.copy(t).addScaledVector(n,2.6*r/Math.tan(14*Math.PI/180));LCAM.lookAt(t);LCAM.aspect=asp;LCAM.updateProjectionMatrix();LCAM.updateMatrixWorld();
  const W=box.clientWidth,H=box.clientHeight,tc=tip.getWorldPosition(V3()),tr=tip===o?r:lupaR(tip)*tip.parent.getWorldScale(V3()).x;
- let sz=Math.round(pm?Math.max(84,Math.min(112,.27*W,.24*H)):Math.max(76,Math.min(124,.21*H)));const wmax=pm?W-8:Math.min(W-8,330);if(sz*asp>wmax)sz=Math.floor(wmax/asp);const sw=Math.round(sz*asp),
+ let sz=Math.round(pm?Math.max(84,Math.min(112,.27*W,.24*H)):Math.max(76,Math.min(124,.21*H)));const wmax=pm?Math.round((W-8)*(asp>1?LUPA.mw||1:1)):Math.min(W-8,330);if(sz*asp>wmax)sz=Math.floor(wmax/asp);const sw=Math.round(sz*asp),
   p=tc.clone().project(CAM),px=(p.x+1)/2*W,py=(1-p.y)/2*H,e=tc.clone().addScaledVector(LCAM.up,tr).project(CAM),kr=Math.max(4,Math.hypot((e.x-p.x)/2*W,(e.y-p.y)/2*H)),gap=26;
  // el bocadillo va encima del mando si cabe; si no, debajo o a un lado. Nunca tapa la pantalla de un aparato de medida (es lo que se mira mientras se mueve el mando) ni, en el portátil, se mete bajo el panel de mandos
  const br=box.getBoundingClientRect(),mr=mcBox.getBoundingClientRect(),AV=lupaAvoid(W,H);if(mr.width)AV.push([mr.left-br.left-6,mr.top-br.top-6,mr.right-br.left+6,mr.bottom-br.top+6]);

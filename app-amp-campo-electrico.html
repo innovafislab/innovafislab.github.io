@@ -764,7 +764,7 @@ function plateCable(){SC.updateMatrixWorld(true);const qd=DV.fr.getWorldQuaterni
  setTube(CB.c,[...A,...V,...B.reverse()]);}
 // rótulos en la mesa, delante de cada polímetro
 function floorLabel(x,z,l1,l2){const W=.36,H=.060,t=canvasTex(1024,Math.round(1024*H/W),(c,w,h)=>{c.clearRect(0,0,w,h);c.textAlign='center';c.fillStyle='#8a939d';const put=(tx,f,y)=>{c.font=f;const m=c.measureText(tx).width;c.save();c.translate(w/2,y);c.scale(Math.min(1,(w-16)/m),1);c.fillText(tx,0,0);c.restore()};put(l1,'bold '+Math.round(h*.40)+'px Arial, sans-serif',h*.42);put(l2,Math.round(h*.33)+'px Arial, sans-serif',h*.88)});
- const m=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false,toneMapped:false}));m.rotation.x=-Math.PI/2;m.position.set(x,.0007,z);m.renderOrder=2;SC.add(m)}
+ const m=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false,toneMapped:false}));m.rotation.x=-Math.PI/2;m.position.set(x,.0007,z);m.renderOrder=2;SC.add(m);(SC.userData.flb=SC.userData.flb||[]).push(m);m.userData.x0=x}
 floorLabel(-.37,.462,'TENSIÓN ENTRE LAS PLACAS','ΔV, en voltios');floorLabel(.47,.462,'SALIDA DEL MEDIDOR DE CAMPO','E = (lectura / 10 V) × escala');
 
 /* ================= campo eléctrico (vista añadida, no se ve en el montaje real) ================= */
@@ -872,14 +872,17 @@ function fitDesk(v){const br=box.getBoundingClientRect(),W=br.width,H=br.height;
 function deskLayout(){const c=document.querySelector('.ctls');if(c)c.style.setProperty('--mcw',(PM()?0:mcBox.offsetWidth+50)+'px')}
 function deskReady(){DESK.ready=true;DESK.pts=null;DESK.res=null;const go=()=>{deskLayout();DESK.res=null;if(!PM()&&!touched){camReset();invalidate()}};go();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(go);addEventListener('resize',deskLayout)}
 DESK.more=()=>BB.slice(6,14); // las placas en sus posiciones extremas
-function fitV0(){if(!PM()){const r=fitDesk(V0());if(r)return r}else DESK.pts=null; // encuadre de partida: el punto de mira y la distancia que más acercan el montaje sin recortarlo
+function lblFit(){const on=PM()&&box.clientHeight>box.clientWidth;camSet();CAM.updateMatrixWorld(); // móvil en vertical: los rótulos de mesa que la vista de partida cortaría se corren hacia dentro lo justo
+ for(const m of SC.userData.flb||[]){m.position.x=m.userData.x0;if(!on)continue;const hw=m.geometry.parameters.width/2,out=s=>V3(m.position.x+s*hw,0,m.position.z).project(CAM).x*s>.95;
+  for(let i=0;i<80&&out(-1);i++)m.position.x+=.005;for(let i=0;i<80&&out(1);i++)m.position.x-=.005}invalidate()}
+function fitV0(){if(!PM()){const r=fitDesk(V0());if(r)return r}else{DESK.pts=null;if(box.clientHeight>box.clientWidth){const a=box.clientWidth/box.clientHeight;return {az:0,el:0.645,dist:2.567*Math.max(1,0.7706/a),tg:V3(0.066,0.276,-0.1046)}} /* móvil en vertical: vista de partida fija, elegida a mano */} // encuadre de partida: el punto de mira y la distancia que más acercan el montaje sin recortarlo
  const v=V0(),top=topLim(.875),PTS=BB;let best=null;
  for(let cz=-.40;cz<=.05;cz+=.015){const c=V3(.045,.10,cz);let lo=.5,hi=6;
   const ok=d=>{const p=V3(c.x+d*Math.cos(v.el)*Math.sin(v.az),c.y+d*Math.sin(v.el),c.z+d*Math.cos(v.el)*Math.cos(v.az));CAM.position.copy(p);CAM.lookAt(c);CAM.updateMatrixWorld();
    return PTS.every(q=>{const n=q.clone().project(CAM);return Math.abs(n.x)<.97&&n.y<top&&n.y>-.95})};
   for(let i=0;i<26;i++){const m=(lo+hi)/2;ok(m)?hi=m:lo=m}if(!best||hi<best.dist)best={az:v.az,el:v.el,dist:hi,tg:c}}
  return PM()?balance(best,v,top,PTS):best}
-function camReset(){const v=fitV0();az=v.az;el=v.el;dist=v.dist;TG.copy(v.tg)}
+function camReset(){const v=fitV0();az=v.az;el=v.el;dist=v.dist;TG.copy(v.tg);lblFit()}
 function camSet(){CAM.position.set(TG.x+dist*Math.cos(el)*Math.sin(az),TG.y+dist*Math.sin(el),TG.z+dist*Math.cos(el)*Math.cos(az));CAM.lookAt(TG)}
 function size(){const w=box.clientWidth,h=box.clientHeight;if(!w||!h)return;const ratio=Math.min(window.devicePixelRatio||1,2,Math.sqrt(1750000/(w*h)));if(R3.getPixelRatio()!==ratio)R3.setPixelRatio(ratio);R3.setSize(w,h,false);CAM.aspect=w/h;CAM.updateProjectionMatrix();invalidate()}
 let touched=false;new ResizeObserver(()=>{size();if(!touched&&CAM.aspect)camReset()}).observe(box);
@@ -1035,7 +1038,7 @@ function lupaDraw(){const o=LUPA.obj;if(!o||performance.now()>LUPA.until||MF){if
  const pm=PM(),asp=o.userData.asp||1,tip=o.userData.tip||o,r=lupaR(o)*o.parent.getWorldScale(V3()).x,c=o.getWorldPosition(V3()),q=o.parent.getWorldQuaternion(new THREE.Quaternion()),n=V3(0,0,1).applyQuaternion(q);
  LCAM.up.set(0,1,0).applyQuaternion(q);const t=c.clone().addScaledVector(LCAM.up,asp>1?0:-.3*r);LCAM.position.copy(t).addScaledVector(n,2.6*r/Math.tan(14*Math.PI/180));LCAM.lookAt(t);LCAM.aspect=asp;LCAM.updateProjectionMatrix();LCAM.updateMatrixWorld();
  const W=box.clientWidth,H=box.clientHeight,tc=tip.getWorldPosition(V3()),tr=tip===o?r:lupaR(tip)*tip.parent.getWorldScale(V3()).x;
- let sz=Math.round(pm?Math.max(84,Math.min(112,.27*W,.24*H)):Math.max(76,Math.min(124,.21*H)));const wmax=pm?W-8:Math.min(W-8,330);if(sz*asp>wmax)sz=Math.floor(wmax/asp);const sw=Math.round(sz*asp),
+ let sz=Math.round(pm?Math.max(84,Math.min(112,.27*W,.24*H)):Math.max(76,Math.min(124,.21*H)));const wmax=pm?Math.round((W-8)*(asp>1?LUPA.mw||1:1)):Math.min(W-8,330);if(sz*asp>wmax)sz=Math.floor(wmax/asp);const sw=Math.round(sz*asp),
   p=tc.clone().project(CAM),px=(p.x+1)/2*W,py=(1-p.y)/2*H,e=tc.clone().addScaledVector(LCAM.up,tr).project(CAM),kr=Math.max(4,Math.hypot((e.x-p.x)/2*W,(e.y-p.y)/2*H)),gap=26;
  // el bocadillo va encima del mando si cabe; si no, debajo o a un lado. Nunca tapa la pantalla de un aparato de medida (es lo que se mira mientras se mueve el mando) ni, en el portátil, se mete bajo el panel de mandos
  const br=box.getBoundingClientRect(),mr=mcBox.getBoundingClientRect(),AV=lupaAvoid(W,H);if(mr.width)AV.push([mr.left-br.left-6,mr.top-br.top-6,mr.right-br.left+6,mr.bottom-br.top+6]);

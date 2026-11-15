@@ -781,7 +781,7 @@ function fitDesk(v){const br=box.getBoundingClientRect(),W=br.width,H=br.height;
 function deskLayout(){const c=document.querySelector('.ctls');if(c)c.style.setProperty('--mcw',(PM()?0:mcBox.offsetWidth+50)+'px')}
 function deskReady(){DESK.ready=true;DESK.pts=null;DESK.res=null;const go=()=>{deskLayout();DESK.res=null;if(!PM()&&!touched){camReset();invalidate()}};go();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(go);addEventListener('resize',deskLayout)}
 DESK.more=()=>BB.slice(6,16); // la placa móvil en sus posiciones extremas
-function fitV0(){if(!PM()){const r=fitDesk(V0());if(r)return r}else DESK.pts=null; // encuadre de partida: el punto de mira y la distancia que más acercan el montaje sin recortarlo
+function fitV0(){if(!PM()){const r=fitDesk(V0());if(r)return r}else{DESK.pts=null;if(box.clientHeight>box.clientWidth){const a=box.clientWidth/box.clientHeight;return {az:-0.16,el:0.495,dist:3.356*Math.max(1,0.6464/a),tg:V3(0.0542,0.2534,0.0293)}} /* móvil en vertical: vista de partida fija, elegida a mano */} // encuadre de partida: el punto de mira y la distancia que más acercan el montaje sin recortarlo
  const v=V0(),top=topLim(.875),PTS=BB;let best=null;
  for(let cz=-.40;cz<=.10;cz+=.015)for(const cx of[-.06,-.02,.02,.06]){const c=V3(cx,.12,cz);let lo=.5,hi=6;
   const ok=d=>{const p=V3(c.x+d*Math.cos(v.el)*Math.sin(v.az),c.y+d*Math.sin(v.el),c.z+d*Math.cos(v.el)*Math.cos(v.az));CAM.position.copy(p);CAM.lookAt(c);CAM.updateMatrixWorld();
