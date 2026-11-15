@@ -792,6 +792,14 @@ function setEF(on){efOn=on;const b=$('#efBtn');b.classList.toggle('on',on);b.set
 const gV1=1+(rnd()-.5)*.006,gV2=1+(rnd()-.5)*.006,gE=1+(rnd()-.5)*.02; // calibración de los polímetros y del medidor
 const strayA=(rnd()-.5)*.05,strayP=rnd()*6.28; // campo parásito (kV/m), que cambia al mover la placa
 const RANGES=[1,10,100],DMIN=.02,DMAX=.22;
+/*ses*/const SESK='ifl:ses:'+location.pathname,SESV=1; // al salir y volver a entrar en la misma sesión, la práctica sigue como se dejó
+function sesOk(d,o){if(d===null||o===null||o===undefined)return d===null||o===null;if(typeof d!==typeof o||Array.isArray(d)!==Array.isArray(o))return false;if(typeof d!=='object')return true;
+ if(Array.isArray(d))return d.length!==o.length?!d.length||typeof d[0]!=='object'||d[0]===null:d.every((q,i)=>sesOk(q,o[i]));return Object.keys(d).every(k=>k in o&&sesOk(d[k],o[k]))}
+function sesPut(){try{sessionStorage.setItem(SESK,JSON.stringify({v:SESV,S:S,x:{part}}))}catch(e){}}
+function sesIni(){addEventListener('pagehide',sesPut);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')sesPut()});
+ let o=null;try{o=JSON.parse(sessionStorage.getItem(SESK)||'null')}catch(e){}if(!o||o.v!==SESV||!sesOk(S,o.S))return;const x=o.x||{};
+ try{S=o.S;applyState();setPart(x.part===2?2:1)}catch(e){try{sessionStorage.removeItem(SESK)}catch(q){}S=initState();applyState();setPart(1)}} // si lo guardado no sirve, se descarta y se abre de cero
+/*ses-fin*/
 function initState(){return {sup:{on:true,u:[150,15]},d:.10,rng:1,zero:0,m:[{on:true,dial:'DCV200'},{on:true,dial:'DCV20'}]}} // al abrir, todo encendido y midiendo
 let S=initState(),part=1,cableDirty=false;
 function setKnob(m){const p=dpos(m.dial);m.kn.rotation.z=-p.an*Math.PI/180;R3.shadowMap.needsUpdate=true;invalidate()}
@@ -1069,7 +1077,7 @@ $('#mfBack').onclick=()=>meterBack();addEventListener('keydown',e=>{if(e.key==='
 $('#gbtn').onclick=()=>{if(PM()){document.documentElement.style.setProperty('--gtop',$('header').getBoundingClientRect().bottom+'px');document.body.classList.toggle('guide');return}const h=document.body.classList.toggle('noside');$('#gbtn').innerHTML='<span>'+(h?'Mostrar':'Ocultar')+' </span>guía'};
 mcSlider('Tensión Δ<i>V</i>',0,300,.5,.5,()=>S.sup.u[0],v=>setSup(0,v),SUP.kn[0]);mcSlider('Separación <i>d</i>',DMIN,DMAX,.0005,.0005,()=>S.d,v=>setD(v));{const l=mcSlider('Cero',-330,330,1,1,()=>S.zero,v=>setZero(v),FM.kZ),b=document.createElement('button');b.type='button';b.className='mesc';l.classList.add('hasesc');b.setAttribute('aria-label','Escala del medidor de campo'); // en la fila del cero, el pulsador de escala del medidor, que en el móvil cuesta alcanzar en la escena
  b.onclick=()=>setRng((S.rng+1)%3);l.appendChild(b);MC.push(()=>{const t='<small>Escala</small>'+RANGES[S.rng]+' kV/m';if(b.innerHTML!==t)b.innerHTML=t})}mcDials([['Polím. Δ<i>V</i>'.replace(/<[^>]*>/g,''),DV,'Polímetro ΔV'],['Polím. E',DE,'Polímetro E']]);
-fixedCables();size();camReset();applyState();setPart(1);invalidate();deskReady();
+fixedCables();size();camReset();applyState();setPart(1);invalidate();deskReady();sesIni();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{drawSupply();measure(true);invalidate()});
 window.__ce={DIAL,CB,BG,RES,MOV,EF,EFM,setEF,scr:(inst,u,v)=>{const[lx,ly]=inst.L(u,v),w=inst.fr.localToWorld(V3(lx,ly,0)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},
  plScr:()=>{const w=MOV.localToWorld(V3(HOLD-.001,YC-.08,.05)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},
@@ -1099,4 +1107,13 @@ e.onclick=function(ev){ev.stopPropagation();if(matchMedia('(min-width:821px) and
 b.querySelector('button').onclick=off;b.querySelector('a').addEventListener('click',function(){setTimeout(off,300)});
 document.addEventListener('pointerdown',function(ev){if(b.classList.contains('on')&&!b.contains(ev.target)&&!e.contains(ev.target))off()},true);
 addEventListener('resize',function(){if(b.classList.contains('on'))place()})})();</script>
+<script id="navjs">
+// Con la guía abierta a pantalla completa (móvil), «atrás» la cierra y no se sale de la práctica: vale la flecha de la cabecera, el botón de atrás del teléfono y el propio botón de la guía.
+(function(){var B=document.body,g=document.querySelector('#gbtn,header .gbtn'),bk=document.querySelector('header a.back,header a[href^="laboratorios"]');if(!g)return;
+ var on=function(){return B.classList.contains('guide')},st=function(){try{return !!(history.state&&history.state.guia)}catch(e){return false}};
+ new MutationObserver(function(){if(on()){if(!st())try{history.pushState({guia:1},'')}catch(e){}}else if(st())history.back()}).observe(B,{attributes:true,attributeFilter:['class']});
+ addEventListener('popstate',function(e){if(on()){e.stopImmediatePropagation();g.click()}});
+ if(bk)bk.addEventListener('click',function(e){if(on()){e.preventDefault();g.click()}});
+})();
+</script>
 </body></html>

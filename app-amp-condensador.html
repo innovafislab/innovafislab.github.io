@@ -706,6 +706,14 @@ floorLabel(BM.root.position.x-.03,BM.root.position.z+BM.bar.z+.235,'CAPACIDAD','
 
 /* ================= estado ================= */
 const DMIN=.010,DMAX=.36; // separación en aire, sin planchas
+/*ses*/const SESK='ifl:ses:'+location.pathname,SESV=1; // al salir y volver a entrar en la misma sesión, la práctica sigue como se dejó
+function sesOk(d,o){if(d===null||o===null||o===undefined)return d===null||o===null;if(typeof d!==typeof o||Array.isArray(d)!==Array.isArray(o))return false;if(typeof d!=='object')return true;
+ if(Array.isArray(d))return d.length!==o.length?!d.length||typeof d[0]!=='object'||d[0]===null:d.every((q,i)=>sesOk(q,o[i]));return Object.keys(d).every(k=>k in o&&sesOk(d[k],o[k]))}
+function sesPut(){try{sessionStorage.setItem(SESK,JSON.stringify({v:SESV,S:S,x:{}}))}catch(e){}}
+function sesIni(){addEventListener('pagehide',sesPut);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')sesPut()});
+ let o=null;try{o=JSON.parse(sessionStorage.getItem(SESK)||'null')}catch(e){}if(!o||o.v!==SESV||!sesOk(S,o.S))return;const x=o.x||{};
+ try{S=o.S;applyState()}catch(e){try{sessionStorage.removeItem(SESK)}catch(q){}S=initState();applyState()}} // si lo guardado no sirve, se descarta y se abre de cero
+/*ses-fin*/
 function initState(){return {n:0,d:DMAX,bm:{on:true,fn:'CAP'}}} // al abrir, el polímetro ya mide capacidad, con las placas separadas al máximo
 let S=initState(),cableDirty=true;
 const gapNow=()=>S.n?sheetGap(S.n):S.d;
@@ -892,7 +900,7 @@ function mcSync(){for(const f of MC)f()}
 {const m0=measure;measure=function(f){m0(f);mcSync()}}
 $('#gbtn').onclick=()=>{if(PM()){document.documentElement.style.setProperty('--gtop',$('header').getBoundingClientRect().bottom+'px');document.body.classList.toggle('guide');return}const h=document.body.classList.toggle('noside');$('#gbtn').innerHTML='<span>'+(h?'Mostrar':'Ocultar')+' </span>guía'};
 mcSlider('Separación',DMIN,DMAX,.001,.005,()=>S.d,v=>setD(v)).classList.add('onlyair');
-size();camReset();applyState();invalidate();deskReady();
+size();camReset();applyState();invalidate();deskReady();sesIni();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{measure(true);invalidate()});
 function zoomable(el,apply){if(el._zb)return;el._zb=1;el._z=1;el._px=0;el._py=0;el.style.touchAction='none';const P=new Map();let d0=0;
  const cl=()=>{const m=0.5-0.5/el._z;el._px=Math.max(-m,Math.min(m,el._px));el._py=Math.max(-m,Math.min(m,el._py));apply()};/* [ZOOM] amplía en el punto de los dedos o del ratón */const zp=(cx,cy,z1)=>{const z0=el._z,r=el.getBoundingClientRect();if(el._vb&&el.getScreenCTM&&el.getScreenCTM()){const u=new DOMPoint(cx,cy).matrixTransform(el.getScreenCTM().inverse());el._z=z1;apply();const M=el.getScreenCTM(),s=new DOMPoint(u.x,u.y).matrixTransform(M),v=el._vb.split(/[ ,]+/).map(Number);el._px+=(s.x-cx)/(M.a*v[2]);el._py+=(s.y-cy)/(M.d*v[3])}else{const q=1/z0-1/z1;el._px+=((cx-r.left)/r.width-0.5)*q;el._py+=((cy-r.top)/r.height-0.5)*q;el._z=z1}};
@@ -1114,4 +1122,13 @@ e.onclick=function(ev){ev.stopPropagation();if(matchMedia('(min-width:821px) and
 b.querySelector('button').onclick=off;b.querySelector('a').addEventListener('click',function(){setTimeout(off,300)});
 document.addEventListener('pointerdown',function(ev){if(b.classList.contains('on')&&!b.contains(ev.target)&&!e.contains(ev.target))off()},true);
 addEventListener('resize',function(){if(b.classList.contains('on'))place()})})();</script>
+<script id="navjs">
+// Con la guía abierta a pantalla completa (móvil), «atrás» la cierra y no se sale de la práctica: vale la flecha de la cabecera, el botón de atrás del teléfono y el propio botón de la guía.
+(function(){var B=document.body,g=document.querySelector('#gbtn,header .gbtn'),bk=document.querySelector('header a.back,header a[href^="laboratorios"]');if(!g)return;
+ var on=function(){return B.classList.contains('guide')},st=function(){try{return !!(history.state&&history.state.guia)}catch(e){return false}};
+ new MutationObserver(function(){if(on()){if(!st())try{history.pushState({guia:1},'')}catch(e){}}else if(st())history.back()}).observe(B,{attributes:true,attributeFilter:['class']});
+ addEventListener('popstate',function(e){if(on()){e.stopImmediatePropagation();g.click()}});
+ if(bk)bk.addEventListener('click',function(e){if(on()){e.preventDefault();g.click()}});
+})();
+</script>
 </body></html>

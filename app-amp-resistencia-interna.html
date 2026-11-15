@@ -742,6 +742,14 @@ function setFlow(on){FLOW.on=on;FLOW.t=0;const b=$('#flowBtn');b.classList.toggl
 /* ================= estado ================= */
 // Calibración de los polímetros y valores reales de los reóstatos (tolerancia de fabricación)
 const gA=1+(rnd()-.5)*.012,gV=1+(rnd()-.5)*.008,RREAL=[100*(.96+rnd()*.08),10*(.96+rnd()*.08)],RWIRE=.05+rnd()*.03;
+/*ses*/const SESK='ifl:ses:'+location.pathname,SESV=1; // al salir y volver a entrar en la misma sesión, la práctica sigue como se dejó
+function sesOk(d,o){if(d===null||o===null||o===undefined)return d===null||o===null;if(typeof d!==typeof o||Array.isArray(d)!==Array.isArray(o))return false;if(typeof d!=='object')return true;
+ if(Array.isArray(d))return d.length!==o.length?!d.length||typeof d[0]!=='object'||d[0]===null:d.every((q,i)=>sesOk(q,o[i]));return Object.keys(d).every(k=>k in o&&sesOk(d[k],o[k]))}
+function sesPut(){try{sessionStorage.setItem(SESK,JSON.stringify({v:SESV,S:S,x:{}}))}catch(e){}}
+function sesIni(){addEventListener('pagehide',sesPut);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')sesPut()});
+ let o=null;try{o=JSON.parse(sessionStorage.getItem(SESK)||'null')}catch(e){}if(!o||o.v!==SESV||!sesOk(S,o.S))return;const x=o.x||{};
+ try{S=o.S;applyState()}catch(e){try{sessionStorage.removeItem(SESK)}catch(q){}S=initState();applyState()}} // si lo guardado no sirve, se descarta y se abre de cero
+/*ses-fin*/
 function initState(){return {bat:1,u:[.10,.5],m:[{on:true,dial:'DCA10'},{on:true,dial:'DCV20'}]}}
 let S=initState();
 function applyState(){AMM.on=S.m[0].on;AMM.dial=S.m[0].dial;VOLT.on=S.m[1].on;VOLT.dial=S.m[1].dial;RA.set(S.u[0]);RB.set(S.u[1]);
@@ -937,7 +945,7 @@ $('#mfBack').onclick=()=>meterBack();addEventListener('keydown',e=>{if(e.key==='
 
 $('#gbtn').onclick=()=>{if(PM()){document.documentElement.style.setProperty('--gtop',$('header').getBoundingClientRect().bottom+'px');document.body.classList.toggle('guide');return}const h=document.body.classList.toggle('noside');$('#gbtn').innerHTML='<span>'+(h?'Mostrar':'Ocultar')+' </span>guía'};
 mcSlider('Reóstato 100 Ω',0,1,.002,.005,()=>S.u[0],v=>setSlide(0,v));mcSlider('Reóstato 10 Ω',0,1,.002,.005,()=>S.u[1],v=>setSlide(1,v));mcDials([['Voltímetro',VOLT],['Amperímetro',AMM]]);
-fixedCables();size();camReset();applyState();invalidate();
+fixedCables();size();camReset();applyState();invalidate();sesIni();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{measure(true);invalidate()});
 window.__ri={DIAL,CB,FLOW,setFlow,scr:(inst,u,v)=>{const[lx,ly]=inst.L(u,v),w=inst.fr.localToWorld(V3(lx,ly,0)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},
  slScr:k=>{const r=RHEO[k],w=r.sl.localToWorld(V3(0,.045,0)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},
@@ -967,4 +975,13 @@ e.onclick=function(ev){ev.stopPropagation();if(matchMedia('(min-width:821px) and
 b.querySelector('button').onclick=off;b.querySelector('a').addEventListener('click',function(){setTimeout(off,300)});
 document.addEventListener('pointerdown',function(ev){if(b.classList.contains('on')&&!b.contains(ev.target)&&!e.contains(ev.target))off()},true);
 addEventListener('resize',function(){if(b.classList.contains('on'))place()})})();</script>
+<script id="navjs">
+// Con la guía abierta a pantalla completa (móvil), «atrás» la cierra y no se sale de la práctica: vale la flecha de la cabecera, el botón de atrás del teléfono y el propio botón de la guía.
+(function(){var B=document.body,g=document.querySelector('#gbtn,header .gbtn'),bk=document.querySelector('header a.back,header a[href^="laboratorios"]');if(!g)return;
+ var on=function(){return B.classList.contains('guide')},st=function(){try{return !!(history.state&&history.state.guia)}catch(e){return false}};
+ new MutationObserver(function(){if(on()){if(!st())try{history.pushState({guia:1},'')}catch(e){}}else if(st())history.back()}).observe(B,{attributes:true,attributeFilter:['class']});
+ addEventListener('popstate',function(e){if(on()){e.stopImmediatePropagation();g.click()}});
+ if(bk)bk.addEventListener('click',function(e){if(on()){e.preventDefault();g.click()}});
+})();
+</script>
 </body></html>

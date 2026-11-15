@@ -835,6 +835,14 @@ LBL.A.rotation.z=AY;LBL.T0.rotation.z=LBL.T1.rotation.z=TY;
 const MU0=4e-7*Math.PI,RCOIL=2.1,RSER=.08; // resistencia de la bobina y del resto del circuito
 const gA=1+(rnd()-.5)*.008,gT=1+(rnd()-.5)*.010; // calibración del amperímetro y de la sonda
 const OFF0=(rnd()<.5?-1:1)*(.06+.09*rnd()),BE=[.018,.013]; // desajuste del cero del teslámetro al abrir y campo de la Tierra a lo largo de z y de ρ, en mT
+/*ses*/const SESK='ifl:ses:'+location.pathname,SESV=1; // al salir y volver a entrar en la misma sesión, la práctica sigue como se dejó
+function sesOk(d,o){if(d===null||o===null||o===undefined)return d===null||o===null;if(typeof d!==typeof o||Array.isArray(d)!==Array.isArray(o))return false;if(typeof d!=='object')return true;
+ if(Array.isArray(d))return d.length!==o.length?!d.length||typeof d[0]!=='object'||d[0]===null:d.every((q,i)=>sesOk(q,o[i]));return Object.keys(d).every(k=>k in o&&sesOk(d[k],o[k]))}
+function sesPut(){try{sessionStorage.setItem(SESK,JSON.stringify({v:SESV,S:S,x:{}}))}catch(e){}}
+function sesIni(){addEventListener('pagehide',sesPut);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')sesPut()});
+ let o=null;try{o=JSON.parse(sessionStorage.getItem(SESK)||'null')}catch(e){}if(!o||o.v!==SESV||!sesOk(S,o.S))return;const x=o.x||{};
+ try{S=o.S;applyState()}catch(e){try{sessionStorage.removeItem(SESK)}catch(q){}S=initState();applyState()}} // si lo guardado no sirve, se descarta y se abre de cero
+/*ses-fin*/
 function initState(){return {ori:0,p:{z:0,r:0},L:{on:true,u:[12,2]},m:[{on:true,dial:'DCA10'}],tm:{rng:0,ac:false,zero:0}}} // al abrir, todo encendido: 2 A por la bobina y la punta de la sonda en su centro
 let S=initState();const VIS={z:0,r:0,th:Math.PI};let moved=true;
 function setKnob(m){const p=dpos(m.dial);m.kn.rotation.z=-p.an*Math.PI/180;R3.shadowMap.needsUpdate=true;invalidate()}
@@ -1197,7 +1205,7 @@ mcSlider('<i>z</i>',0,ZMAX,1,1,()=>S.p.z,v=>setP(v,S.p.r,true),null,v=>(Math.rou
 mcSlider('Corriente',0,PL.K[1].max,.01,.01,()=>S.L.u[1],v=>setSup(PL,1,v),PL.kn[1]);mcSlider('Cero',-.5,.5,.002,.01,()=>S.tm.zero,v=>setZero(v),TM.kn[1]);
 drawTeslaFace();wirePower();
 for(const o of[TM.root,PL.root,AMM.root,COIL,GRID,LBL.A,LBL.T0])bbAdd(o);for(const [z,r,th] of[[20,RMIN,Math.PI],[20,RMAX,Math.PI],[0,RMAX,Math.PI],[2,RMAX,.5*Math.PI],[20,12,.5*Math.PI]]){PROBE.position.set(LZ(z/100),YC,LR(r/100));PROBE.rotation.y=th;bbAdd(PROBE);deskCorners(PROBE,DESK.extra)}
-size();camReset();applyState();placeProbe();invalidate();deskReady();LUPA.screens=[TM.disp];
+size();camReset();applyState();placeProbe();invalidate();deskReady();LUPA.screens=[TM.disp];sesIni();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{drawPSU(PL);drawTeslaFace();measure(true);invalidate()});
 window.__cm={AUG,setAug,SC,TM,PROBE,COIL,GRID,CB,AMM,PL,VIS,MEAS,S:()=>S,coilB,current,teslaNow,setP,setOri,setSup,setZero,setRange,measure,OFF0,BE,gA,gT,camState:()=>({az,el,dist,TG}),view:(a,e,d,x,y,z)=>{az=a;el=e;dist=d;TG.set(x,y,z);touched=true;camSet();invalidate()},flyTo,
  scr:(inst,u,v)=>{const[lx,ly]=inst.L(u,v),w=inst.fr.localToWorld(V3(lx,ly,0)).project(CAM),b=cv.getBoundingClientRect();return [b.left+(w.x+1)/2*b.width,b.top+(1-w.y)/2*b.height]},
@@ -1227,4 +1235,13 @@ e.onclick=function(ev){ev.stopPropagation();if(matchMedia('(min-width:821px) and
 b.querySelector('button').onclick=off;b.querySelector('a').addEventListener('click',function(){setTimeout(off,300)});
 document.addEventListener('pointerdown',function(ev){if(b.classList.contains('on')&&!b.contains(ev.target)&&!e.contains(ev.target))off()},true);
 addEventListener('resize',function(){if(b.classList.contains('on'))place()})})();</script>
+<script id="navjs">
+// Con la guía abierta a pantalla completa (móvil), «atrás» la cierra y no se sale de la práctica: vale la flecha de la cabecera, el botón de atrás del teléfono y el propio botón de la guía.
+(function(){var B=document.body,g=document.querySelector('#gbtn,header .gbtn'),bk=document.querySelector('header a.back,header a[href^="laboratorios"]');if(!g)return;
+ var on=function(){return B.classList.contains('guide')},st=function(){try{return !!(history.state&&history.state.guia)}catch(e){return false}};
+ new MutationObserver(function(){if(on()){if(!st())try{history.pushState({guia:1},'')}catch(e){}}else if(st())history.back()}).observe(B,{attributes:true,attributeFilter:['class']});
+ addEventListener('popstate',function(e){if(on()){e.stopImmediatePropagation();g.click()}});
+ if(bk)bk.addEventListener('click',function(e){if(on()){e.preventDefault();g.click()}});
+})();
+</script>
 </body></html>
