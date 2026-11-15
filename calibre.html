@@ -251,7 +251,7 @@ main.wrap,.wrap{max-width:1240px!important}
 <script>
 (function () {
   "use strict";
-  var AP = 0.05, K = 4, X0 = 112, ZW = 24;
+  var AP = 0.05, K = 4, X0 = 112, ZW = 24, ZL = 4.4; // ZL: milímetros de regla a la izquierda del cero del nonio en el detalle (deja sitio al rótulo de la parte entera)
   var INK = "#1b2430", ACC = "#1f4e79", STEEL = "#eef1f4", STEEL2 = "#e2e7ec", SLATE = "#5b6676", RED = "#c0392b";
   function fmt(v, d) { return v.toFixed(d).replace(".", ","); }
   function nDiv() { return 20; }
@@ -310,7 +310,7 @@ main.wrap,.wrap{max-width:1240px!important}
     for (var i = 0; i <= n; i++) {
       var xv = s + i * st * K, lab = AP === 0.05 ? (i % 2 === 0) : (i % 5 === 0);
       h += '<path d="M' + xv + ' ' + base + ' V' + (base + (lab ? 9 : 6)) + '" stroke="' + INK + '" stroke-width=".6"/>';
-      if (lab && (AP === 0.05 ? i % 4 === 0 : true)) h += '<text x="' + xv + '" y="' + (base + 20) + '" text-anchor="middle" font-size="8.5" font-family="InterT,sans-serif" fill="' + INK + '">' + (AP === 0.05 ? i / 2 : i) + '</text>';
+      if (lab) h += '<text x="' + (AP === 0.05 && i === n ? xv + 1.2 : xv) + '" y="' + (base + 20) + '" text-anchor="middle" font-size="' + (AP === 0.05 ? 7.4 : 8.5) + '" font-family="InterT,sans-serif" fill="' + INK + '">' + (AP === 0.05 ? i / 2 : i) + '</text>'; // el nonio lleva todos sus números, de 0 a 10, igual que en el detalle ampliado
     }
     h += '<text x="' + (s + n * st * K + 11) + '" y="' + (base + 20) + '" font-size="7.5" font-family="InterT,sans-serif" fill="' + SLATE + '">' + (AP === 0.05 ? "1/20" : "1/10") + '</text>';
     // tornillo de fijación
@@ -324,17 +324,17 @@ main.wrap,.wrap{max-width:1240px!important}
     for (var w = 0; w < 12; w++) { var a = w * Math.PI / 6; h += '<path d="M' + (s + 84 + 7 * Math.cos(a)) + ' ' + (base + 44 + 7 * Math.sin(a)) + ' L' + (s + 84 + 11 * Math.cos(a)) + ' ' + (base + 44 + 11 * Math.sin(a)) + '" stroke="' + SLATE + '" stroke-width=".6"/>'; }
     h += '<path d="M' + (s + 78) + ' ' + (base + 30) + ' V' + (base + 34) + ' M' + (s + 90) + ' ' + (base + 30) + ' V' + (base + 34) + '" stroke="' + INK + '" stroke-width="1"/>';
     h += late;
-    // marco de la lupa
+    // marco de la lupa (un poco más ancho que la zona ampliada, para no cortar el 10 del nonio)
     if (o.lens) {
-      var lx = X0 + (L - 3) * K;
-      h += '<rect x="' + lx + '" y="' + (base - 29) + '" width="' + (ZW * K) + '" height="53" rx="4" fill="none" stroke="' + RED + '" stroke-width="1"/>';
+      var lx = X0 + (L - ZL) * K;
+      h += '<rect x="' + lx + '" y="' + (base - 29) + '" width="' + (ZW * K + 5) + '" height="53" rx="4" fill="none" stroke="' + RED + '" stroke-width="1"/>';
     }
     return h;
   }
 
   /* ------------------------------------------------------------------ detalle del nonio (incrustado) */
   function zoom(L) {
-    var Z = 34, W = ZW * Z, m0 = L - 3, ox = 0, h = "";
+    var Z = 34, W = ZW * Z, m0 = L - ZL, ox = 0, h = "";
     var X = function (mm) { return ox + (mm - m0) * Z; };
     var base = 96, r = split(L);
     h += '<rect x="0" y="0" width="' + W + '" height="' + base + '" fill="' + STEEL + '"/>';
@@ -353,9 +353,13 @@ main.wrap,.wrap{max-width:1240px!important}
       if (lab) h += '<text x="' + xv + '" y="' + (base + 61) + '" text-anchor="middle" font-size="27" font-family="CMMain,serif" fill="' + (hk ? RED : INK) + '">' + (i / 2) + '</text>';
     }
     var xe = X(r.e), le = r.e % 10 === 0 ? 40 : (r.e % 5 === 0 ? 28 : 18);
-    if (r.e % 10 === 0) h += '<text x="' + (xe - 8) + '" y="' + (base - 21) + '" text-anchor="end" font-size="27" font-weight="700" font-family="InterT,sans-serif" fill="' + RED + '">' + r.e + '</text>';
-    else h += '<text x="' + xe + '" y="' + (base - le - 6) + '" text-anchor="middle" font-size="27" font-weight="700" font-family="InterT,sans-serif" fill="' + RED + '">' + r.e + '</text>';
-    h += '<text x="' + X(L + r.k * 0.95) + '" y="' + (base + 99) + '" text-anchor="middle" font-size="27" font-weight="700" font-family="InterT,sans-serif" fill="' + RED + '">+' + fmt(r.d, 2) + '</text>';
+    // La regla va en centímetros: la parte entera se rotula en cm y en mm, en rojo, en el hueco libre bajo su raya (a la izquierda del nonio), donde no tapa rayas ni números
+    var fr = 'font-size="26" font-weight="700" font-family="InterT,sans-serif" fill="' + RED + '"', xr = X(L) - 24;
+    h += '<text x="' + xr + '" y="' + (base + 38) + '" text-anchor="end" ' + fr + '>' + String(r.e / 10).replace(".", ",") + ' cm</text>';
+    h += '<text x="' + xr + '" y="' + (base + 70) + '" text-anchor="end" ' + fr + '>= ' + r.e + ' mm</text>';
+    // la parte decimal, con su unidad, bajo la raya del nonio que coincide; cerca de los bordes se arrima para no salirse
+    var xd = X(L + r.k * 0.95), ad = xd - 66 < X(L) - 10 ? "start" : (xd + 66 > W - 4 ? "end" : "middle");
+    h += '<text x="' + (ad === "start" ? X(L) - 8 : (ad === "end" ? W - 8 : xd)) + '" y="' + (base + 99) + '" text-anchor="' + ad + '" font-size="27" font-weight="700" font-family="InterT,sans-serif" fill="' + RED + '">+' + fmt(r.d, 2) + ' mm</text>';
     h += '<circle cx="' + X(r.e + r.k) + '" cy="' + base + '" r="9" fill="none" stroke="' + RED + '" stroke-width="2"/>';
     return { svg: h, W: W, H: 210 };
   }
