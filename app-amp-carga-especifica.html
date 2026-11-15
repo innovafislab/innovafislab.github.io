@@ -797,7 +797,7 @@ const unit=(a,b)=>{const x=b[0]-a[0],z=b[1]-a[1],l=Math.hypot(x,z)||1;return [x/
 // Cable completo: baja de la clavija A, recorre la mesa por W y sube a la clavija B. o.lift: tramo en el que pasa por encima de otros cables posados en la mesa.
 function route(mesh,eA,eB,W,o={}){const n=W.length,d0=o.d0||unit(W[0],W[1]),d1=o.d1||unit(W[n-2],W[n-1]);
  const P=[...fall(eA,W[0],d0,o.a1,o.a2),...floorPath(W,d0,d1),...fall(eB,W[n-1],[-d1[0],-d1[1]],o.b1,o.b2).reverse()];
- if(o.lift){const [z0,z1,h]=o.lift;for(const q of P){const k=sst((q.z-z0+.035)/.035)*sst((z1+.035-q.z)/.035);q.y=Math.max(q.y,FY+h*k)}}
+ if(o.lift){const [z0,z1,h,x0,x1]=o.lift;for(const q of P){if(x0!==undefined&&(q.x<x0||q.x>x1))continue;const k=sst((q.z-z0+.035)/.035)*sst((z1+.035-q.z)/.035);q.y=Math.max(q.y,FY+h*k)}}
  setTube(mesh,P,o.r)}
 // Puente corto entre dos clavijas vecinas: un lazo que cuelga hacia delante y se apoya en la mesa.
 function jumper(mesh,eA,eB,L=.07,w=.014){const a=eA.p,b=eB.p,s=V3(b.x-a.x,0,b.z-a.z).normalize();
@@ -812,7 +812,7 @@ function arrange(){const c=COLM();if(c===COL)return false;COL=c;PL.root.position
 function columnCables(){const [lx,lz]=CP.L,[px,pz]=CP.R;
  // Bobinas: el cable del + baja por la izquierda hasta el amperímetro y el de retorno llega a la fuente desde la bobina trasera.
  route(CB.c1,PL.jack('p'),AMM.jack('10A'),[[lx-.08,lz+.14],[lx-.115,lz+.30],[lx-.125,lz+.60],[-.515,-.02],[-.49,.25],[-.468,.325],[-.428,.388],[-.3816,.34]],{d1:[0,-1],b1:.07,b2:.075});
- route(CB.c4,COIL.B.jack(-1),PL.jack('n'),[[-.118,-.615],[-.20,-.65],[lx+.07,lz+.16],[lx-.035,lz+.11]],{d0:[0,-1],a1:.035,a2:.03,d1:[-.8,-.6],b1:.04,b2:.045});
+ route(CB.c4,COIL.B.jack(1),PL.jack('n'),[[.118,-.615],[.085,-.668],[-.05,-.676],[-.20,-.672],[-.275,-.735],[lx+.07,lz+.16],[lx-.035,lz+.11]],{d0:[0,-1],a1:.035,a2:.03,d1:[-.8,-.6],b1:.04,b2:.045});
  // Tubo → fuente: cada cable cuelga del capuchón, corre hacia atrás, dobla hacia la derecha por delante de la fuente y llega a su clavija por un carril propio.
  // Los cinco doblan en arcos concéntricos (centro CX, CZ), separados 18 mm, sin cruzarse.
  const CX=px-.11,CZ=pz+.257,T=(k,e,r,xd,zt,L,d1,o)=>{const W=[[xd,zt],[xd,-.54],[CX-r+.006,CZ+.05]];for(const a of[0,22.5,45,67.5,90]){const f=a*Math.PI/180;W.push([CX-r*Math.cos(f),CZ-r*Math.sin(f)])}W.push([px+L[0],pz+L[1]]);
@@ -829,12 +829,14 @@ function columnCables(){const [lx,lz]=CP.L,[px,pz]=CP.R;
 }
 function fixedCables(){SC.updateMatrixWorld(true);
  // Bobinas, en serie con el amperímetro: + de la fuente → amperímetro → bobina delantera → (puente) → bobina trasera → − de la fuente.
+ // Son dos piezas iguales montadas cara a cara: la corriente entra en las dos por el borne de la izquierda y sale por el de la derecha, y así gira en el mismo sentido en ambas (los campos se suman).
+ // Por eso el puente va del borne derecho de la delantera al izquierdo de la trasera, por detrás, y pasa por encima del cable de retorno justo antes de su clavija.
  // En los polímetros la clavija apunta hacia delante: el cable baja a la mesa por delante del aparato y allí da la vuelta.
  route(CB.c2,AMM.jack('COM'),COIL.F.jack(-1),[[-.2995,.34],[-.248,.388],[-.20,.325],[-.186,.16],[-.16,.0],[-.118,-.085]],{d0:[0,1],a1:.07,a2:.075,d1:[0,-1],b1:.035,b2:.03});
- route(CB.c3,COIL.F.jack(1),COIL.B.jack(1),[[.118,-.085],[.20,-.065],[.262,-.16],[.276,-.35],[.262,-.54],[.20,-.635],[.118,-.615]],{d0:[0,1],a1:.035,a2:.03,d1:[0,1],b1:.035,b2:.03});
+ route(CB.c3,COIL.F.jack(1),COIL.B.jack(-1),[[.118,-.085],[.20,-.065],[.262,-.16],[.276,-.35],[.268,-.56],[.215,-.70],[.10,-.742],[-.03,-.742],[-.105,-.715],[-.118,-.615]],{d0:[0,1],a1:.035,a2:.03,d1:[0,1],b1:.035,b2:.03,lift:[-.700,-.650,.0085,-.20,-.04]});
  if(COL)columnCables();else{
  route(CB.c1,PL.jack('p'),AMM.jack('10A'),[[-.80,-.16],[-.755,-.03],[-.60,.12],[-.49,.25],[-.468,.325],[-.428,.388],[-.3816,.34]],{d1:[0,-1],b1:.07,b2:.075});
- route(CB.c4,COIL.B.jack(-1),PL.jack('n'),[[-.118,-.615],[-.20,-.645],[-.32,-.61],[-.41,-.47],[-.47,-.30],[-.545,-.205],[-.67,-.175],[-.755,-.19]],{d0:[0,-1],a1:.035,a2:.03,d1:[-.8,-.6],b1:.04,b2:.045});
+ route(CB.c4,COIL.B.jack(1),PL.jack('n'),[[.118,-.615],[.085,-.668],[-.05,-.676],[-.20,-.662],[-.32,-.61],[-.41,-.47],[-.47,-.30],[-.545,-.205],[-.67,-.175],[-.755,-.19]],{d0:[0,-1],a1:.035,a2:.03,d1:[-.8,-.6],b1:.04,b2:.045});
  // Tubo → fuente. Cada cable cuelga del capuchón, corre por la mesa junto a la fuente, dobla su esquina y llega a su clavija por un carril propio, en paralelo con los demás.
  // Los cinco doblan la esquina de la fuente en arcos concéntricos (centro CX, CZ), separados 18 mm.
  const CX=.59,CZ=-.225,T=(k,e,r,zt,L,d1,o)=>{const W=[[CX-r,zt],[CX-r,CZ-.02]];for(const a of[0,22.5,45,67.5,90]){const f=a*Math.PI/180;W.push([CX-r*Math.cos(f),CZ+r*Math.sin(f)])}W.push(L);
