@@ -1317,7 +1317,7 @@ apply();
  var sync=function(){var c=n(),h=d();if(c>h){try{history.pushState({capas:c},'')}catch(e){}}else if(c<h)history.go(c-h)};
  new MutationObserver(sync).observe(B,{attributes:true,attributeFilter:['class','hidden'],subtree:true});
  addEventListener('popstate',function(e){var h=d(),k=0,t;while(n()>h&&k<8&&(t=top())){t[1]();k++}if(k)e.stopImmediatePropagation()});
- if(bk)bk.addEventListener('click',function(e){var t=top();if(t){e.preventDefault();t[1]()}else if(B.classList.contains('mfocus')&&q('#mfBack')){e.preventDefault();ck('#mfBack')}});
+ if(bk)bk.addEventListener('click',function(e){var t=top();if(t){e.preventDefault();t[1]()}else if(B.classList.contains('mfocus')&&q('#mfBack')){e.preventDefault();ck('#mfBack')}else if(document.fullscreenElement||document.webkitFullscreenElement){e.preventDefault();try{(document.exitFullscreen||document.webkitExitFullscreen).call(document)}catch(x){}}});
 })();
 </script>
 <script id="sesjs">
