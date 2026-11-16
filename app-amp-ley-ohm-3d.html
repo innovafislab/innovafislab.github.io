@@ -177,7 +177,7 @@ body.mfocus .sim3{position:fixed;left:0;right:0;bottom:0;top:58px;z-index:60;bac
 <p>Tensiones e intensidades se leen en los polímetros digitales; el error de cada lectura es una unidad de la última cifra del rango que uses. Elige el rango más pequeño que no se desborde: si la pantalla muestra solo un 1 a la izquierda, sube de rango.</p>
 <h2 class="p0">Cómo se monta</h2>
 <p class="p0">Piezas: arrastra una resistencia o un puente hasta la placa y suéltalo sobre dos bornes vecinos; se marcan en azul los dos bornes en los que va a entrar. Un toque sobre la pieza, sin arrastrarla, la gira un cuarto de vuelta. Si la sueltas fuera de la placa, vuelve a la bandeja.</p>
-<p class="p0">Cables: arrastra cada clavija hasta un borne libre de la fuente, de un polímetro o de la placa; el borne más cercano se marca en azul. En el móvil no hace falta acertar en la clavija: toca el cable en cualquier punto y coges su extremo más cercano. En un mismo borne puedes enchufar hasta tres clavijas, una encima de otra, como con las clavijas apilables del laboratorio; también en la fuente y en los polímetros. Una clavija soltada lejos de cualquier borne se queda en la mesa, donde la dejes, mientras la otra siga enchufada; si el cable queda sin ninguna clavija enchufada, vuelve a su sitio. El botón de la flecha curva, junto al de reinicio, deshace la última acción (también Ctrl+Z). Si sales de la práctica y vuelves a entrar, el montaje sigue como lo dejaste.</p>
+<p class="p0">Cables: arrastra cada clavija hasta un borne libre de la fuente, de un polímetro o de la placa; el borne más cercano se marca en azul. No hace falta acertar en la clavija: pincha o toca el cable en cualquier punto y coges su extremo más cercano. En un mismo borne puedes enchufar hasta tres clavijas, una encima de otra, como con las clavijas apilables del laboratorio; también en la fuente y en los polímetros. Una clavija soltada lejos de cualquier borne se queda en la mesa, donde la dejes, mientras la otra siga enchufada; si el cable queda sin ninguna clavija enchufada, vuelve a su sitio. El botón de la flecha curva, junto al de reinicio, deshace la última acción (también Ctrl+Z). Si sales de la práctica y vuelves a entrar, el montaje sigue como lo dejaste.</p>
 <p class="p0">Polímetros: los dos son iguales y cada uno mide según su selector y los bornes que uses. Tensión y resistencia, entre V·Ω y COM; intensidad, en serie, entrando por mA (hasta 200 mA) o por 10 A y saliendo por COM. Si por el borne de mA pasan más de 250 mA se funde su fusible y deja de medir: sobre su visor parpadea el aviso «FUSIBLE FUNDIDO». Corrige el montaje y pulsa el botón rojo de abajo a la izquierda para cambiarlo.</p>
 <h2 class="pre">Cómo está montado</h2>
 <p class="p0">Placa: los nueve bornes de cada isla están unidos por las líneas negras, así que todo lo que se enchufa en una isla queda conectado. Una resistencia entre dos islas las une a través de ella; un puente (bloque con un hilo de cobre), sin resistencia.</p>
@@ -1342,17 +1342,18 @@ function pickFree(e){setRay(e);const h=ray.intersectObjects([...PROXY.filter(p=>
   const lim=e.pointerType==='touch'?24:7;let best=null,bd=lim;const near=(v,f)=>{const s=scrOf(v),d=Math.hypot(s[0]-e.clientX,s[1]-e.clientY);if(d<bd){bd=d;best=f}};
   for(const k of CK)DPL[k].forEach((g,i)=>g.visible&&near(g.position.clone().add(V3(0,0,.02).applyQuaternion(g.quaternion)),{t:'plug',k,e:i}));
   MODS.forEach((m,i)=>near(m.g.position.clone().setY(m.g.position.y+MODH/2),{t:'mod',m,i,pt:m.g.position.clone().setY(m.g.position.y+MODH/2)}));
-  if(!best&&e.type==='pointerdown'&&e.pointerType==='touch')best=cableNear(e);
+  if(!best&&(e.type==='pointerdown'||e.type==='dblclick'&&e.pointerType!=='touch'))best=cableNear(e,e.pointerType==='touch'?26:9); // el cable se coge por cualquier punto, con el dedo y con el ratón
   if(best&&e.type!=='pointerdown'&&e.type!=='dblclick')return null;return best}
  const o=h[0].object,hi=ray.intersectObjects(PICK.filter(q=>q!==BOARD.userData.top),false);
  if(hi.length&&hi[0].distance<h[0].distance-.004)return null; // un aparato lo tapa
  if(o.userData.end)return {t:'plug',k:o.userData.end[0],e:o.userData.end[1]};const m=o.userData.mod;return {t:'mod',m,i:MODS.indexOf(m),pt:h[0].point.clone()}}
-// Con el dedo, tocar un cable en cualquier punto coge una de sus dos clavijas: la del extremo más cercano al punto tocado.
-function cableNear(e){const h0=pick(e);if(h0&&h0.object.userData.inst){const inst=h0.object.userData.inst;if(hitCtl(inst,faceUV(inst)))return null} // un mando de un aparato manda sobre el cable que le pase cerca
- const b=cv.getBoundingClientRect(),v=V3();let best=null,bd=26;
+// Tocar o pinchar un cable en cualquier punto coge una de sus dos clavijas: la del extremo más cercano a ese punto. Con el ratón el margen es el grosor del cable y no vale un tramo tapado por un aparato.
+function cableNear(e,lim=26){const h0=pick(e);if(h0&&h0.object.userData.inst){const inst=h0.object.userData.inst;if(hitCtl(inst,faceUV(inst)))return null} // un mando de un aparato manda sobre el cable que le pase cerca
+ const b=cv.getBoundingClientRect(),v=V3();let best=null,bd=lim;
  for(const k of CK){const m=CB[k];if(!m.visible||!DPL[k][0].visible)continue;const g=m.geometry,P=g.attributes.position;if(!P)continue;const st=((g.parameters&&g.parameters.radialSegments)||10)+1,n=Math.floor(P.count/st);
   for(let i=0;i<n;i++){v.fromBufferAttribute(P,i*st).applyMatrix4(m.matrixWorld).project(CAM);const d=Math.hypot(b.left+(v.x+1)/2*b.width-e.clientX,b.top+(1-v.y)/2*b.height-e.clientY);if(d<bd){bd=d;best={k,i,n,st}}}}
- if(!best)return null;const m=CB[best.k],P=m.geometry.attributes.position,a=V3().fromBufferAttribute(P,0).applyMatrix4(m.matrixWorld),D=DPL[best.k],e0=a.distanceTo(D[0].position)<=a.distanceTo(D[1].position)?0:1; // qué clavija está al principio del tubo
+ if(!best)return null;if(lim<20){const w=V3().fromBufferAttribute(CB[best.k].geometry.attributes.position,best.i*best.st).applyMatrix4(CB[best.k].matrixWorld);setRay(e);const hi=ray.intersectObjects(PICK.filter(q=>q!==BOARD.userData.top),false);if(hi.length&&hi[0].distance<w.distanceTo(CAM.position)-.03)return null}
+ const m=CB[best.k],P=m.geometry.attributes.position,a=V3().fromBufferAttribute(P,0).applyMatrix4(m.matrixWorld),D=DPL[best.k],e0=a.distanceTo(D[0].position)<=a.distanceTo(D[1].position)?0:1; // qué clavija está al principio del tubo
  return {t:'plug',k:best.k,e:best.i<best.n/2?e0:1-e0}}
 const planeHit=(x,y,h)=>{const b=cv.getBoundingClientRect();ndc.set((x-b.left)/b.width*2-1,-(y-b.top)/b.height*2+1);ray.setFromCamera(ndc,CAM);const o=V3();return ray.ray.intersectPlane(new THREE.Plane(V3(0,1,0),-h),o)?o:null};
 const hlAt=(m,J)=>{m.position.copy(J.base).addScaledVector(J.n,.0016);m.quaternion.copy(J.q);m.visible=true};
@@ -1458,10 +1459,10 @@ function visPts(){SC.updateMatrixWorld(true);const P=[];for(const top of SC.chil
 // el encuadre de las tres pestañas sale de «Móntalo tú mismo» tal como se abre (cables en su soporte): en las partes I y II el montaje ya hecho queda en el mismo sitio y del mismo tamaño
 const FPTS={};function freePts(){const k=PM()?'m':'d';if(FPTS[k])return FPTS[k];const P=visPts();if(S.part===0&&FREE.mlbl)FPTS[k]=P;return P}
 function fitV0(){ // encuadre de partida: el punto de mira y la distancia que más acercan el montaje sin recortarlo
- const pm=PM()&&!matchMedia('(orientation:landscape) and (max-height:520px)').matches,v=V0(),top=pm?topLim(.875):.95,bot=pm?-.95:-.97,PTS=freePts(),XL=pm?.93:.97;let best=null; // el montaje tal como se ve (aparatos, cables y rótulos de la mesa) llena la escena de arriba abajo, en el portátil casi hasta los bordes // en el móvil, «Móntalo tú mismo» se encuadra con lo que de verdad se ve, con un margen a los lados
+ const ld=matchMedia('(orientation:landscape) and (max-height:520px)').matches,pm=PM()&&!ld,v=V0(),top=pm?topLim(.875):.95,bot=pm?-.95:-.97,PTS=freePts(),XL=pm?.93:.97;let best=null; // el montaje tal como se ve (aparatos, cables y rótulos de la mesa) llena la escena de arriba abajo, en el portátil casi hasta los bordes // en el móvil, «Móntalo tú mismo» se encuadra con lo que de verdad se ve, con un margen a los lados
 const br=box.getBoundingClientRect(),
   bb=document.querySelector('.fbtn.tog').getBoundingClientRect(),bx=pm||!br.width?2:(bb.right-br.left+10)/br.width*2-1,by=pm||!br.height?2:1-(bb.bottom-br.top+10)/br.height*2, // en el portátil, los botones de arriba a la izquierda son una esquina en la que el montaje no entra; por encima del resto, el montaje puede llegar casi al borde
-  sr=$('#sch').getBoundingClientRect(),sl=br.width&&sr.left-br.left<br.width/2,sx=!br.width?2:sl?(sr.right-br.left+10)/br.width*2-1:(sr.left-br.left-10)/br.width*2-1,vr=$('#rstBtn').getBoundingClientRect(),vx0=sl&&br.width?(vr.left-br.left-8)/br.width*2-1:2,vx=sl&&br.width?(vr.right-br.left+8)/br.width*2-1:-2,vy=sl&&br.height?1-(vr.bottom-br.top+8)/br.height*2:2, // el hueco de los dos botones, esté o no el de deshacer: el encuadre es el mismo en las tres pestañas
+  sr=$('#sch').getBoundingClientRect(),sl=br.width&&sr.left-br.left<br.width/2,sx=!br.width?2:sl?(sr.right-br.left+10)/br.width*2-1:(sr.left-br.left-10)/br.width*2-1,vr=$('#rstBtn').getBoundingClientRect(),vx0=sl&&br.width?(vr.left-br.left-8)/br.width*2-1:2,vx=sl&&br.width?(vr.right+(ld?vr.width+(parseFloat(getComputedStyle($('#rstBtn').parentNode).columnGap)||6):0)-br.left+8)/br.width*2-1:-2,vy=sl&&br.height?1-(vr.bottom-br.top+8)/br.height*2:2, // el hueco de los dos botones, esté o no el de deshacer: el encuadre es el mismo en las tres pestañas // con el móvil tumbado el hueco cuenta también el sitio del botón de deshacer, que queda junto a los cables
 sy=br.height?1-(sr.bottom-br.top+10)/br.height*2:2, // y debajo, la columna estrecha de reinicio y deshacer
  // esquina que ocupa el esquema (arriba a la derecha, o a la izquierda en el portátil): el montaje no entra en ella
   mr=$('#mctl').getBoundingClientRect(),mx=pm||!mr.width||!br.width?2:(mr.left-br.left-10)/br.width*2-1,my=pm||!mr.height||!br.height?2:1-(mr.bottom-br.top+10)/br.height*2; // en el portátil, los mandos arriba a la derecha
@@ -1546,7 +1547,7 @@ box.addEventListener('dblclick',e=>{if(S.part===0&&pickFree(e))return;const h=pi
  zoomTo('pt',h.point,Math.max(.35,dist*.55))});
 function hover(e){const h=pick(e);let ptr=false;
  if(h&&h.object.userData.inst){const inst=h.object.userData.inst;if(hitCtl(inst,faceUV(inst)))ptr=true}
- if(!ptr&&S.part===0&&pickFree(e))ptr=true;box.classList.toggle('ptr',ptr)}
+ if(!ptr&&S.part===0&&(pickFree(e)||e.pointerType!=='touch'&&cableNear(e,9)))ptr=true;box.classList.toggle('ptr',ptr)}
 
 /* ================= el montaje tiene prioridad sobre el esquema ================= */
 // Si al mover la vista algún aparato, la placa o un cable queda bajo la ventanita del esquema, esta se vuelve casi transparente y deja ver el montaje.
