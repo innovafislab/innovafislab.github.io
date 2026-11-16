@@ -1310,12 +1310,24 @@ var sn=document.querySelector('header.snav .thm');if(sn){var b=document.createEl
 try{var FT=CanvasRenderingContext2D.prototype.fillText;CanvasRenderingContext2D.prototype.fillText=function(s,x,y,m){if(lang==='en'&&typeof s==='string'){var t=look(s);if(t!==undefined)s=t}return m===undefined?FT.call(this,s,x,y):FT.call(this,s,x,y,m)}}catch(e){}
 apply();
 })();</script><script id="navjs">
-// Con la guía abierta a pantalla completa (móvil), «atrás» la cierra y no se sale de la práctica: vale la flecha de la cabecera, el botón de atrás del teléfono y el propio botón de la guía.
-(function(){var B=document.body,g=document.querySelector('#gbtn,header .gbtn'),bk=document.querySelector('header a.back,header a[href^="laboratorios"]');if(!g)return;
- var on=function(){return B.classList.contains('guide')},st=function(){try{return !!(history.state&&history.state.guia)}catch(e){return false}};
- new MutationObserver(function(){if(on()){if(!st())try{history.pushState({guia:1},'')}catch(e){}}else if(st())history.back()}).observe(B,{attributes:true,attributeFilter:['class']});
- addEventListener('popstate',function(e){if(on()){e.stopImmediatePropagation();g.click()}});
- if(bk)bk.addEventListener('click',function(e){if(on()){e.preventDefault();g.click()}});
+// «Atrás» vuelve primero al experimento: si hay algo abierto encima (la guía a pantalla completa, el panel del calibre o de la regla, un aparato ampliado, un diálogo),
+// la flecha de la cabecera y el botón de atrás del teléfono lo cierran; solo con el experimento a la vista se sale de la práctica.
+(function(){var B=document.body,bk=document.querySelector('header a.back,header a[href^="laboratorios"]');
+ var q=function(s){return document.querySelector(s)},ck=function(s){var e=q(s);if(e)e.click()};
+ // capas, de la de más arriba a la de más abajo: [¿está abierta?, cerrarla]
+ var L=[[function(){return q('.vlb.on')},function(){ck('.vlb.on .x')}],
+  [function(){return q('.gate.on')},function(){ck('.gate.on')}],
+  [function(){var e=q('#dlg');return e&&!e.hidden},function(){ck('#dlgNo')}],
+  [function(){return q('.calov.on')},function(){ck('.calov.on .x')}],
+  [function(){var e=q('#nwDetail');return e&&!e.hidden},function(){ck('#nwClose')}],
+  [function(){return B.classList.contains('guide')},function(){ck('#gbtn,header .gbtn')}]];
+ var n=function(){for(var c=0,i=0;i<L.length;i++)if(L[i][0]())c++;return c},top=function(){for(var i=0;i<L.length;i++)if(L[i][0]())return L[i]},
+  d=function(){try{return (history.state&&history.state.capas)||0}catch(e){return 0}};
+ // cada capa abierta añade un paso al historial; al cerrarla con su botón, se deshace
+ var sync=function(){var c=n(),h=d();if(c>h){try{history.pushState({capas:c},'')}catch(e){}}else if(c<h)history.go(c-h)};
+ new MutationObserver(sync).observe(B,{attributes:true,attributeFilter:['class','hidden'],subtree:true});
+ addEventListener('popstate',function(e){var h=d(),k=0,t;while(n()>h&&k<8&&(t=top())){t[1]();k++}if(k)e.stopImmediatePropagation()});
+ if(bk)bk.addEventListener('click',function(e){var t=top();if(t){e.preventDefault();t[1]()}else if(B.classList.contains('mfocus')&&q('#mfBack')){e.preventDefault();ck('#mfBack')}});
 })();
 </script>
 <script id="sesjs">

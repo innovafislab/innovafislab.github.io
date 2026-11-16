@@ -130,7 +130,7 @@ html body .left input[type=checkbox],html body .panel input[type=checkbox]{accen
 <table><tr><th><i>d</i></th><th><i>ε</i><sub>d</sub></th><th><i>C</i><sub>m</sub></th><th><i>ε</i><sub>Cm</sub></th><th>ln(<i>C</i><sub>m</sub>−<i>C</i><sub>0</sub>)</th><th><i>ε</i><sub>ln C</sub></th><th>ln <i>d</i></th><th><i>ε</i><sub>ln d</sub></th></tr><tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table>
 <h2>Datos y errores</h2>
 <p><i>C</i><sub>m</sub> y <i>C</i><sub>0</sub> se leen en el polímetro, en nanofaradios; su error es una unidad de la última cifra, 0,001 nF.</p>
-<p>El lado <i>L</i> se lee en la regla; su error es la división más pequeña de la regla.</p>
+<p>El lado <i>L</i> se lee en la regla; su error es la mitad de la división más pequeña de la regla.</p>
 <p>El grosor de cada plancha se lee en el nonio del calibre, que lleva grabada su apreciación. Cada plancha lleva su número en una esquina y se meten siempre por orden.</p>
 <p>La distancia <i>d</i> es la suma de los grosores de las planchas puestas, y su error, el que resulta de esa suma.</p>
 <h2>Cómo se usa</h2>
@@ -1123,12 +1123,24 @@ b.querySelector('button').onclick=off;b.querySelector('a').addEventListener('cli
 document.addEventListener('pointerdown',function(ev){if(b.classList.contains('on')&&!b.contains(ev.target)&&!e.contains(ev.target))off()},true);
 addEventListener('resize',function(){if(b.classList.contains('on'))place()})})();</script>
 <script id="navjs">
-// Con la guía abierta a pantalla completa (móvil), «atrás» la cierra y no se sale de la práctica: vale la flecha de la cabecera, el botón de atrás del teléfono y el propio botón de la guía.
-(function(){var B=document.body,g=document.querySelector('#gbtn,header .gbtn'),bk=document.querySelector('header a.back,header a[href^="laboratorios"]');if(!g)return;
- var on=function(){return B.classList.contains('guide')},st=function(){try{return !!(history.state&&history.state.guia)}catch(e){return false}};
- new MutationObserver(function(){if(on()){if(!st())try{history.pushState({guia:1},'')}catch(e){}}else if(st())history.back()}).observe(B,{attributes:true,attributeFilter:['class']});
- addEventListener('popstate',function(e){if(on()){e.stopImmediatePropagation();g.click()}});
- if(bk)bk.addEventListener('click',function(e){if(on()){e.preventDefault();g.click()}});
+// «Atrás» vuelve primero al experimento: si hay algo abierto encima (la guía a pantalla completa, el panel del calibre o de la regla, un aparato ampliado, un diálogo),
+// la flecha de la cabecera y el botón de atrás del teléfono lo cierran; solo con el experimento a la vista se sale de la práctica.
+(function(){var B=document.body,bk=document.querySelector('header a.back,header a[href^="laboratorios"]');
+ var q=function(s){return document.querySelector(s)},ck=function(s){var e=q(s);if(e)e.click()};
+ // capas, de la de más arriba a la de más abajo: [¿está abierta?, cerrarla]
+ var L=[[function(){return q('.vlb.on')},function(){ck('.vlb.on .x')}],
+  [function(){return q('.gate.on')},function(){ck('.gate.on')}],
+  [function(){var e=q('#dlg');return e&&!e.hidden},function(){ck('#dlgNo')}],
+  [function(){return q('.calov.on')},function(){ck('.calov.on .x')}],
+  [function(){var e=q('#nwDetail');return e&&!e.hidden},function(){ck('#nwClose')}],
+  [function(){return B.classList.contains('guide')},function(){ck('#gbtn,header .gbtn')}]];
+ var n=function(){for(var c=0,i=0;i<L.length;i++)if(L[i][0]())c++;return c},top=function(){for(var i=0;i<L.length;i++)if(L[i][0]())return L[i]},
+  d=function(){try{return (history.state&&history.state.capas)||0}catch(e){return 0}};
+ // cada capa abierta añade un paso al historial; al cerrarla con su botón, se deshace
+ var sync=function(){var c=n(),h=d();if(c>h){try{history.pushState({capas:c},'')}catch(e){}}else if(c<h)history.go(c-h)};
+ new MutationObserver(sync).observe(B,{attributes:true,attributeFilter:['class','hidden'],subtree:true});
+ addEventListener('popstate',function(e){var h=d(),k=0,t;while(n()>h&&k<8&&(t=top())){t[1]();k++}if(k)e.stopImmediatePropagation()});
+ if(bk)bk.addEventListener('click',function(e){var t=top();if(t){e.preventDefault();t[1]()}else if(B.classList.contains('mfocus')&&q('#mfBack')){e.preventDefault();ck('#mfBack')}});
 })();
 </script>
 </body></html>
