@@ -902,4 +902,18 @@ apply();
  if(document.readyState==='complete')setTimeout(ini,0);else addEventListener('load',function(){setTimeout(ini,0)});
 })();
 </script>
+<script id="fsjs">
+(function(){var d=document,el=d.documentElement,so=screen.orientation,K='ifl:nofs',mine=false,req=el.requestFullscreen||el.webkitRequestFullscreen;if(!req)return;
+ var phone=function(){return Math.min(screen.width,screen.height)<=520&&matchMedia('(pointer:coarse)').matches};
+ var land=function(){return so&&so.type?so.type.indexOf('landscape')===0:matchMedia('(orientation:landscape)').matches};
+ var fs=function(){return d.fullscreenElement||d.webkitFullscreenElement};
+ var no=function(){try{return sessionStorage.getItem(K)==='1'}catch(e){return false}},setNo=function(v){try{if(v)sessionStorage.setItem(K,'1');else sessionStorage.removeItem(K)}catch(e){}};
+ var go=function(){if(fs()||!phone()||!land())return;try{var p=req.call(el,{navigationUI:'hide'});mine=true;if(p&&p.catch)p.catch(function(){})}catch(e){}};
+ var out=function(){if(fs()&&mine){mine=false;try{(d.exitFullscreen||d.webkitExitFullscreen).call(d)}catch(e){}}};
+ var turn=function(){if(land()){setNo(false);go()}else out()};
+ if(so&&so.addEventListener)so.addEventListener('change',turn);else addEventListener('orientationchange',turn);
+ var chg=function(){if(!fs()){if(mine&&land())setNo(true);mine=false}};d.addEventListener('fullscreenchange',chg);d.addEventListener('webkitfullscreenchange',chg);
+ addEventListener('pointerup',function(){if(!no())go()},true);
+})();
+</script>
 </body></html>
