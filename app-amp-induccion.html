@@ -110,6 +110,36 @@ html body .mctl .mst{background:none!important;border-color:transparent!importan
 html body .left .acts .go:not([data-st=reset]),html body .mgo:not(:disabled),html body .left .btn.on{background:linear-gradient(var(--fk-p1),var(--fk-p2))!important;border-color:var(--fk-p2)!important;color:var(--fk-pi)!important;box-shadow:0 1px 2px rgba(20,30,45,.24),inset 0 1px 0 rgba(255,255,255,.16)!important}
 html body .left .acts .go:not([data-st=reset]):hover,html body .mgo:not(:disabled):hover,html body .left .btn.on:hover{filter:brightness(1.1)}html body .left .acts .go:not([data-st=reset]):active,html body .mgo:not(:disabled):active,html body .left .btn.on:active{filter:brightness(.93)}
 html body .left input[type=checkbox],html body .panel input[type=checkbox]{accent-color:var(--fk-p2)}
+</style><style id="landcss">
+@media (orientation:landscape) and (max-height:520px){
+html body:not(#_){display:grid!important;grid-template-columns:minmax(0,1fr) 160px;grid-template-rows:auto minmax(0,1fr);gap:4px 5px;padding:4px!important;box-sizing:border-box;height:100vh;height:100dvh}
+html body:not(#_) main,html body:not(#_) .left{display:contents!important}
+html body:not(#_) .left .card{grid-column:1;grid-row:1/3;min-width:0;min-height:0;height:auto!important}
+html body:not(#_) header{grid-column:2;grid-row:1;display:flex!important;flex-wrap:wrap!important;align-items:center;gap:4px!important;padding:0!important;min-height:0;height:auto!important;border:0!important;background:none!important;box-shadow:none!important;position:static!important;white-space:normal!important}
+html body:not(#_) header h1,html body:not(#_) header .sp{display:none!important}
+html body:not(#_) header .back{order:0;width:30px!important;height:30px!important}
+html body:not(#_) header .encb{order:1;margin:0!important}
+html body:not(#_) header #gbtn{order:2;margin-left:auto!important;padding:4px 9px!important}
+html body:not(#_) header #ptabs{order:3;flex:1 0 100%!important;display:flex!important;flex-direction:column;align-self:stretch}
+html body:not(#_) header #sub{order:4;flex:1 0 100%!important;display:flex!important;flex-direction:column;align-items:stretch!important;gap:4px!important;margin:0!important}
+html body:not(#_) header #sub .tabs{display:flex!important;flex-wrap:wrap}
+html body:not(#_) header .tabs .tab{flex:1 1 auto;padding:4px 6px!important;font-size:12.5px!important;line-height:1.15;white-space:normal!important;text-align:center}
+html body:not(#_) header #ptabs .tab{width:100%}
+html body:not(#_) header #ntabs{flex-wrap:nowrap!important}
+html body:not(#_) header #ntabs .tab{flex:1 1 0;min-width:0;padding:4px 0!important}
+html body:not(#_) .mctl{grid-column:2;grid-row:2;width:auto!important;min-height:0;overflow-y:auto;padding:2px 0 0!important;align-self:stretch}
+html body:not(#_) .mctl .mrow{gap:5px!important;margin-bottom:6px!important;min-height:0!important;flex-wrap:wrap}
+html body:not(#_) .mctl .msl{flex-wrap:wrap;gap:0 1px!important;font-size:12.5px!important}
+html body:not(#_) .mctl .msl span{flex:1 0 100%;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body:not(#_) .mctl .msl input[type=range]{flex:1 1 0;min-width:0;width:auto}
+html body:not(#_) .mctl .mst{flex:none;width:20px!important;min-width:0!important;padding:0!important}
+html body:not(#_) .mctl .msel{flex:1 0 100%!important;gap:4px!important;justify-content:space-between;font-size:12px!important}
+html body:not(#_) .mctl .mmbtn{padding:4px 7px!important;font-size:12.5px!important;min-width:0!important}
+html body:not(#_) .mctl .mval{white-space:nowrap;overflow:visible!important}
+html body:not(#_) .card #sch{top:46px!important;left:10px!important;right:auto!important}
+html body:not(#_) .card:has(#sch) .ctls .ctl:last-child{position:absolute!important;left:var(--vbl,150px)!important;top:var(--vbt,46px)!important;flex-direction:row!important}
+html body.guide:not(#_) .side{left:4px!important;top:4px!important;bottom:4px!important;right:169px!important;border:1px solid var(--line)!important;border-radius:10px!important}
+}
 </style></head><body data-part="1">
 <header><a class="back" href="laboratorios.html#ampliacion" aria-label="Volver al Laboratorio de Ampliación de Física">←</a><h1>Inducción electromagnética</h1>
 <div class="tabs" role="tablist" id="ptabs"><button class="tab on" data-p="1" type="button">Parte I: intensidad</button><button class="tab" data-p="2" type="button">Parte II: frecuencia</button></div>
@@ -1425,8 +1455,9 @@ function fitDesk(v){const br=box.getBoundingClientRect(),W=br.width,H=br.height;
  const c=new THREE.Vector3(bu*ca-bw*se*sa,bw*ce,-bu*sa-bw*se*ca),s=se>.15?(.10-c.y)/se:0;c.x+=s*ce*sa;c.y+=s*se;c.z+=s*ce*ca;d-=s;if(!(d>.2))return null;
  DESK.key=key;DESK.res={dist:d,tg:c.clone()};return {az:v.az,el:v.el,dist:d,tg:c}}
 function deskLayout(){const c=document.querySelector('.ctls');if(c)c.style.setProperty('--mcw',(PM()?0:mcBox.offsetWidth+50)+'px')}
-function deskReady(){DESK.ready=true;DESK.pts=null;DESK.res=null;const go=()=>{deskLayout();DESK.res=null;if(!PM()&&!touched){camReset();invalidate()}};go();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(go);addEventListener('resize',deskLayout)}
-function fitV0(){if(!PM()){const r=fitDesk(V0());if(r)return r}else{DESK.pts=null;} // distancia mínima para que quepa todo el montaje con la orientación de partida
+const LAND=()=>matchMedia('(orientation:landscape) and (max-height:520px)').matches; // móvil tumbado: se encuadra como en pantalla grande, que es apaisada
+function deskReady(){DESK.ready=true;DESK.pts=null;DESK.res=null;const go=()=>{deskLayout();DESK.res=null;if((!PM()||LAND())&&!touched){camReset();invalidate()}};go();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(go);addEventListener('resize',deskLayout)}
+function fitV0(){if(!PM()||LAND()){const r=fitDesk(V0());if(r)return r}else{DESK.pts=null;} // distancia mínima para que quepa todo el montaje con la orientación de partida
  const v=V0(),c=V3(-.04,.05,-.188),top=topLim(.82);let lo=.5,hi=5;const ok=d=>{const p=V3(c.x+d*Math.cos(v.el)*Math.sin(v.az),c.y+d*Math.sin(v.el),c.z+d*Math.cos(v.el)*Math.cos(v.az));CAM.position.copy(p);CAM.lookAt(c);CAM.updateMatrixWorld();
   return BB.every(q=>{const n=q.clone().project(CAM);return Math.abs(n.x)<.97&&n.y<top&&n.y>-.95})};
  for(let i=0;i<30;i++){const m=(lo+hi)/2;ok(m)?hi=m:lo=m}return PM()?balance({az:v.az,el:v.el,dist:hi,tg:c},v,top,BB):{az:v.az,el:v.el,dist:hi*.97,tg:c}} /* los botones nunca tapan el montaje: el límite superior del encuadre sale de la altura real del botón de visualización, en cualquier pantalla; en el móvil, el hueco que sobra se reparte entre los botones y el borde inferior */ function topLim(base){const r=box.getBoundingClientRect(),b=document.querySelector('.fbtn.tog').getBoundingClientRect();return r.height?Math.min(base,1-2*(b.bottom-r.top+9)/r.height):.77} function balance(best,v,top,pts){let bm=-9,bs=0;const c=V3(),d=best.dist,up=V3(-Math.sin(v.el)*Math.sin(v.az),Math.cos(v.el),-Math.sin(v.el)*Math.cos(v.az)); for(let k=-80;k<=80;k++){c.copy(best.tg).addScaledVector(up,k*.004);CAM.position.set(c.x+d*Math.cos(v.el)*Math.sin(v.az),c.y+d*Math.sin(v.el),c.z+d*Math.cos(v.el)*Math.cos(v.az));CAM.lookAt(c);CAM.updateMatrixWorld(); let hi=-9,lo=9,wide=0;for(const q of pts){const n=q.clone().project(CAM);hi=Math.max(hi,n.y);lo=Math.min(lo,n.y);wide=Math.max(wide,Math.abs(n.x))} const m=Math.min(top-hi,lo+.95);if(wide<.985&&m>bm){bm=m;bs=k*.004}} best.tg=best.tg.clone().addScaledVector(up,bs);return best}
@@ -1579,7 +1610,7 @@ let MF=null;
 /*fino:meter*/let MD=null;
 function meterAim(m,k){const p=m.fr.getWorldPosition(V3()),nv=V3(0,0,1).applyQuaternion(m.fr.getWorldQuaternion(new THREE.Quaternion())),t=Math.tan(CAM.fov*Math.PI/360),d=m.root.scale.x*Math.max(m.hM*k,m.wM*1.06/CAM.aspect)/(2*t)+.01;zb=null;flyTo(p,d,Math.atan2(nv.x,nv.z),Math.max(.15,Math.asin(Math.min(1,nv.y))));return {p,d}}
 function meterFocus(m,title){
- if(!PM()){const cT=fly?fly.b.tg:TG,cD=fly?fly.b.dist:dist,en=MD&&cT.distanceTo(MD.p)<1e-3&&Math.abs(cD-MD.d)<1e-3; // pantalla grande: la vista se acerca al polímetro sin cambiar de pantalla; con otro toque en su botón, vuelve
+ if(!PM()||matchMedia('(orientation:landscape) and (max-height:520px)').matches){const cT=fly?fly.b.tg:TG,cD=fly?fly.b.dist:dist,en=MD&&cT.distanceTo(MD.p)<1e-3&&Math.abs(cD-MD.d)<1e-3; // pantalla grande y móvil tumbado: la vista se acerca al polímetro sin cambiar de pantalla; con otro toque en su botón, vuelve
   if(en&&MD.m===m){const v=MD.prev;MD=null;zb=null;flyTo(v.tg,v.dist,v.az,v.el);touched=v.touched;return}
   const prev=en?MD.prev:{az,el,dist,tg:TG.clone(),touched};MD=Object.assign(meterAim(m,1.22),{m,prev});return}
  if(MF)return;MF={m,prev:{az,el,dist,tg:TG.clone(),touched}};try{history.pushState({mfocus:1},'')}catch(e){} // la flecha de «atrás» del móvil vuelve al montaje, sin salir de la app

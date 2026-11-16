@@ -353,6 +353,41 @@ html body .mctl .mst{background:none!important;border-color:transparent!importan
 html body .left .acts .go:not([data-st=reset]),html body .mgo:not(:disabled),html body .left .btn.on{background:linear-gradient(var(--fk-p1),var(--fk-p2))!important;border-color:var(--fk-p2)!important;color:var(--fk-pi)!important;box-shadow:0 1px 2px rgba(20,30,45,.24),inset 0 1px 0 rgba(255,255,255,.16)!important}
 html body .left .acts .go:not([data-st=reset]):hover,html body .mgo:not(:disabled):hover,html body .left .btn.on:hover{filter:brightness(1.1)}html body .left .acts .go:not([data-st=reset]):active,html body .mgo:not(:disabled):active,html body .left .btn.on:active{filter:brightness(.93)}
 html body .left input[type=checkbox],html body .panel input[type=checkbox]{accent-color:var(--fk-p2)}
+</style><style id="landcss">
+@media (orientation:landscape) and (max-height:520px){
+html body:not(#_){display:grid!important;grid-template-columns:minmax(0,1fr) 166px;grid-template-rows:auto auto minmax(0,1fr);gap:4px 5px;padding:4px!important;box-sizing:border-box;height:100vh;height:100dvh}
+html body:not(#_) main,html body:not(#_) .left,html body:not(#_) .left .card{display:contents!important}
+html body:not(#_) .left .card>.sim3,html body:not(#_) .left .card>svg.sim,html body:not(#_) .left .card>.incline-stage{grid-column:1;grid-row:1/4;min-width:0;min-height:0;height:100%!important;width:100%!important;box-sizing:border-box;border:1px solid var(--line);border-radius:10px;background:var(--paper,#fff)}
+html body:not(#_) header{grid-column:2;grid-row:1;display:flex!important;flex-wrap:wrap!important;align-items:center;gap:4px!important;padding:0!important;height:auto!important;min-height:0;border:0!important;background:none!important;box-shadow:none!important;position:static!important}
+html body:not(#_) header h1{display:none!important}
+html body:not(#_) header a{order:0;width:30px!important;height:30px!important}
+html body:not(#_) header .encb{order:1;margin:0!important}
+html body:not(#_) header .code{order:3;margin:0!important}
+html body:not(#_) header .gbtn{order:2;margin-left:auto!important;padding:4px 9px!important}
+html body:not(#_) .left .card>.tabs{grid-column:2;grid-row:2;margin:0!important;font-size:12px!important;display:flex!important;align-self:stretch}
+html body:not(#_) .left .card>.tabs .tab{flex:1 1 0;padding:4px 3px!important;line-height:1.15;white-space:normal}
+html body:not(#_) .left .card>.bar{grid-column:2;grid-row:3;min-height:0;overflow-y:auto;margin:0!important;font-size:12.5px!important;gap:5px!important;display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;align-items:stretch!important;justify-content:flex-start}
+html body:not(#_) .bar .ctrl{gap:5px!important}
+html body:not(#_) .bar .params{flex-direction:column!important;align-items:stretch!important;flex-wrap:nowrap!important;gap:5px!important;flex:none!important}
+html body:not(#_) .bar .params label{display:flex!important;flex-wrap:wrap;align-items:baseline;gap:1px 5px!important;white-space:nowrap;width:100%;margin:0!important;flex:none!important}
+html body:not(#_) .bar .params label input[type=range]{order:9;flex:1 0 100%;width:100%;min-width:0;margin:0}
+html body:not(#_) .bar .params label b{margin-left:auto;text-align:right}
+html body:not(#_) .bar .params label select{flex:1 1 0;min-width:0;max-width:100%}
+html body:not(#_) .bar .acts{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(74px,1fr));gap:5px!important;margin:0!important;flex:none!important}
+html body:not(#_) .bar .acts button{min-width:0!important;width:auto!important;padding:6px 2px!important;white-space:nowrap}
+html body:not(#_) .bar .read{display:flex!important;flex-wrap:wrap!important;align-items:stretch;gap:4px!important;margin:0!important;flex:none!important}
+html body:not(#_) .bar .read>*{flex:1 1 auto!important;min-width:0!important;max-width:100%}
+html body:not(#_) .bar .read>div{flex-direction:row!important;flex-wrap:wrap!important;align-items:center!important;gap:1px 6px!important;padding:3px 7px!important;overflow:visible!important;white-space:normal!important}
+html body:not(#_) .bar .read>div.sw{flex:1 0 100%!important}
+html body:not(#_) .bar .read>.calb{order:1!important;flex:1 1 0!important;padding:0!important;border:0!important;background:none!important}
+html body:not(#_) .bar .read>.calb button{width:100%;min-width:0!important}
+html body:not(#_) .bar .read>#slo{order:1!important;flex:0 0 auto!important}
+html body:not(#_) .bar .read>div.sw{order:2!important}
+html body:not(#_) .bar .read>div>span{white-space:normal!important;overflow:visible!important;max-width:none!important}
+html body:not(#_) .left .calov{position:fixed!important;left:4px!important;top:4px!important;bottom:4px!important;right:175px!important;inset:auto}
+html body.guide:not(#_) header .gbtn{font-size:12px!important;padding:4px 6px!important}
+html body.guide:not(#_) .side{left:4px!important;top:4px!important;bottom:4px!important;right:175px!important;border:1px solid var(--line)!important;border-radius:10px!important}
+}
 </style></head><body>
 <header><h1>Plano inclinado</h1><button class="code" type="button" data-tip="Si tu profesor te ha dado un código, introdúcelo" aria-label="Usar código"><span>Código</span><b class="codev"></b></button><button class="gbtn" type="button">Guía</button><a href="laboratorios.html#fisica" aria-label="Volver">← Laboratorio de Física · INNOVA-FIS-LAB</a></header>
 <main><section class="left"><div class="card"><div class="incline-stage"><canvas id="incline-canvas" tabindex="-1" aria-label="Plano inclinado en 3D. Arrastra para girar. Usa dos dedos o la rueda para acercar."></canvas><svg class="sim" viewBox="20 10 686 455"></svg><div class="camera-tools" role="group" aria-label="Vista 3D"><button type="button" data-camera="home" aria-label="Vista inicial" title="Vista inicial">↺</button></div><span class="orbit-hint" aria-hidden="true">Arrastra para girar</span></div>
