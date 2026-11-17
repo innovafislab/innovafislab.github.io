@@ -1113,6 +1113,8 @@ apply();
 // la flecha de la cabecera y el botón de atrás del teléfono lo cierran; solo con el experimento a la vista se sale de la práctica.
 (function(){var B=document.body,bk=document.querySelector('header a.back,header a[href^="laboratorios"]');
  var q=function(s){return document.querySelector(s)},ck=function(s){var e=q(s);if(e)e.click()};
+ // una práctica enlazada desde otro bloque de laboratorios vuelve al bloque desde el que se abrió
+ try{var ls=JSON.parse(sessionStorage.getItem('labScroll')||'null'),hf=bk&&bk.getAttribute('href');if(ls&&/^[a-z]+$/.test(ls.lab||'')&&/^laboratorios\.html#/.test(hf||'')&&Date.now()-ls.t<36e5)bk.setAttribute('href','laboratorios.html#'+ls.lab)}catch(e){}
  // capas, de la de más arriba a la de más abajo: [¿está abierta?, cerrarla]
  var L=[[function(){return q('.vlb.on')},function(){ck('.vlb.on .x')}],
   [function(){return q('.gate.on')},function(){ck('.gate.on')}],
@@ -1135,8 +1137,11 @@ apply();
  function all(){return [].slice.call(document.querySelectorAll(Q))}
  function put(){try{var o={v:1,p:null,c:{}},t=document.querySelector('.pt.on');if(t)o.p=t.dataset.p;all().forEach(function(e){o.c[e.id]=e.type==='checkbox'?e.checked:e.value});sessionStorage.setItem(K,JSON.stringify(o))}catch(e){}}
  function fire(e){e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}))}
- function get(){var o=null;try{o=JSON.parse(sessionStorage.getItem(K)||'null')}catch(e){}if(!o||o.v!==1||!o.c)return;
-  try{if(o.p){var b=document.querySelector('.pt[data-p="'+o.p+'"]');if(b&&!b.classList.contains('on'))b.click()}
+ // un enlace con #parte1 o #parte2 abre la práctica directamente en esa parte
+ function get(){var o=null,h=(location.hash.match(/^#parte(\d)$/)||[])[1];try{o=JSON.parse(sessionStorage.getItem(K)||'null')}catch(e){}
+  if(h){try{var hb=document.querySelector('.pt[data-p="'+h+'"]');if(hb&&!hb.classList.contains('on'))hb.click();history.replaceState(history.state,'',location.pathname+location.search)}catch(e){}}
+  if(!o||o.v!==1||!o.c)return;
+  try{if(o.p&&!h){var b=document.querySelector('.pt[data-p="'+o.p+'"]');if(b&&!b.classList.contains('on'))b.click()}
    all().forEach(function(e){if(!(e.id in o.c))return;var v=o.c[e.id];if(e.type==='checkbox'){if(e.checked!==!!v){e.checked=!!v;fire(e)}}else if(e.value!==String(v)){e.value=v;if(e.value===String(v)||e.type==='range')fire(e)}})}catch(e){}}
  var hecho=false;function ini(){if(hecho)return;hecho=true;get();addEventListener('pagehide',put);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')put()})}
  if(document.readyState==='complete')setTimeout(ini,0);else addEventListener('load',function(){setTimeout(ini,0)});
