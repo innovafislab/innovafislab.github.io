@@ -1143,6 +1143,8 @@ apply();
   if(!o||o.v!==1||!o.c)return;
   try{if(o.p&&!h){var b=document.querySelector('.pt[data-p="'+o.p+'"]');if(b&&!b.classList.contains('on'))b.click()}
    all().forEach(function(e){if(!(e.id in o.c))return;var v=o.c[e.id];if(e.type==='checkbox'){if(e.checked!==!!v){e.checked=!!v;fire(e)}}else if(e.value!==String(v)){e.value=v;if(e.value===String(v)||e.type==='range')fire(e)}})}catch(e){}}
+ // y si la práctica ya está abierta, el mismo enlace cambia de parte
+ addEventListener('hashchange',function(){var h=(location.hash.match(/^#parte(\d)$/)||[])[1];if(!h)return;try{var b=document.querySelector('.pt[data-p="'+h+'"]');if(b&&!b.classList.contains('on'))b.click();history.replaceState(history.state,'',location.pathname+location.search)}catch(e){}});
  var hecho=false;function ini(){if(hecho)return;hecho=true;get();addEventListener('pagehide',put);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')put()})}
  if(document.readyState==='complete')setTimeout(ini,0);else addEventListener('load',function(){setTimeout(ini,0)});
 })();
