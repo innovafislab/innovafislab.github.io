@@ -9,7 +9,7 @@
   html, body { margin:0; height:100%; background:#fff; color:var(--fg);
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
   body { display:flex; flex-direction:column; }
-  header { display:flex; align-items:center; gap:10px 14px; flex-wrap:wrap;
+  header { display:flex; align-items:center; gap:10px 16px; flex-wrap:wrap;
     padding:8px 16px; border-bottom:1px solid var(--line); font-size:17px; }
   h1 { font-size:20px; font-weight:600; margin:0 6px 0 0; }
   button { font:inherit; font-size:16px; padding:6px 14px; border:1px solid #b5b5b5;
@@ -21,14 +21,27 @@
   label { display:flex; align-items:center; gap:6px; color:var(--mut); }
   input[type=number] { font:inherit; font-size:16px; width:3.8em; padding:3px 6px;
     border:1px solid #bbb; border-radius:5px; }
-  #fname { font-weight:600; max-width:16em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  #fname { font-weight:600; max-width:18em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .sep { flex:1; }
-  #info { color:var(--mut); font-size:15px; padding:4px 16px; border-bottom:1px solid #eee; min-height:20px; }
-  main { flex:1; display:grid; grid-template-rows:45fr 55fr; min-height:0; }
+  #res { display:flex; align-items:baseline; gap:8px 36px; flex-wrap:wrap; padding:8px 16px;
+    border-bottom:1px solid #eee; font-size:21px; min-height:30px; }
+  #res b { font-weight:600; }
+  #res .sub { font-size:16px; color:var(--mut); }
+  #res .warn { font-size:16px; color:#b3261e; }
+  .body { flex:1; display:flex; min-height:0; }
+  main { flex:1; display:grid; grid-template-rows:42fr 58fr; min-height:0; min-width:0; }
+  #guide { width:420px; flex:none; overflow-y:auto; border-left:1px solid var(--line);
+    padding:6px 22px 24px; font-size:16.5px; line-height:1.5; color:#222; box-sizing:border-box; }
+  #guide.hide { display:none; }
+  #guide h2 { font-size:20px; font-weight:600; margin:10px 0 6px; }
+  #guide h3 { font-size:17px; font-weight:600; margin:22px 0 4px; }
+  #guide p { margin:6px 0; }
+  #guide math { font-family:"Latin Modern Math","STIX Two Math","Cambria Math",math; font-size:1.18em; }
+  #guide math[display=block] { margin:12px 0; }
   .row2 { display:grid; grid-template-columns:1fr 1fr; min-height:0; }
   .plot { position:relative; min-height:0; min-width:0; }
   canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
-  #cvTop { cursor:crosshair; touch-action:none; }
+  #cvTop, #cvB { cursor:pointer; touch-action:none; }
   #drop { position:fixed; inset:0; background:rgba(31,95,191,.08); border:3px dashed var(--acc);
     display:none; align-items:center; justify-content:center; font-size:26px; color:var(--acc); pointer-events:none; }
 </style>
@@ -39,130 +52,209 @@
   <button class="prim" id="bOpen">Abrir archivo .txt</button>
   <input type="file" id="file" accept=".txt,.dat,.csv,text/plain" hidden>
   <span id="fname">ningún archivo</span>
-  <button class="prim" id="bCalc" disabled>Calcular área (Enter)</button>
-  <button id="bClr" disabled>Borrar selección</button>
   <button id="bAll" disabled>Ver todo</button>
   <span class="sep"></span>
+  <button id="bGuide">Ocultar método</button>
   <label>Columna V <input type="number" id="colV" value="3" min="1" step="1"></label>
   <label>Columna P <input type="number" id="colP" value="5" min="1" step="1"></label>
-  <label>Suavizado <input type="number" id="span" value="100" min="1" step="1"></label>
 </header>
-<div id="info">Abre el archivo de datos del motor (texto separado por tabuladores, 9 líneas de cabecera).</div>
+<div id="res"><span class="sub">Abre el archivo del osciloscopio (texto separado por tabuladores, 9 líneas de cabecera). Los ciclos se detectan solos.</span></div>
+<div class="body">
 <main>
-  <div class="plot" id="top"><canvas id="cvTop"></canvas></div>
+  <div class="plot"><canvas id="cvTop"></canvas></div>
   <div class="row2">
     <div class="plot"><canvas id="cvA"></canvas></div>
     <div class="plot"><canvas id="cvB"></canvas></div>
   </div>
 </main>
+<aside id="guide">
+  <h2>Qué hace el programa</h2>
+
+  <h3>1. Lectura de los datos</h3>
+  <p>Salta las 9 líneas de cabecera del archivo del osciloscopio y toma la columna 3 (señal del sensor de volumen, <i>U</i><sub>V</sub>) y la 5 (señal del sensor de presión, <i>U</i><sub>P</sub>), ambas en mV. Las pasa a unidades SI con la calibración de los sensores (1 V = 2.4 cm³ y 1 V = 329 hPa):</p>
+  <math display="block"><mi>V</mi><mo>=</mo><mn>2.4</mn><mo>·</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>9</mn></mrow></msup><mtext>&#x2009;m³/mV</mtext><mo>·</mo><msub><mi>U</mi><mi mathvariant="normal">V</mi></msub></math>
+  <math display="block"><mi>P</mi><mo>=</mo><mn>32.9</mn><mtext>&#x2009;Pa/mV</mtext><mo>·</mo><msub><mi>U</mi><mi mathvariant="normal">P</mi></msub></math>
+  <p>El intervalo de muestreo Δ<i>t</i> se lee de la línea «Time interval» de la cabecera.</p>
+
+  <h3>2. Separación en ciclos</h3>
+  <p>Un ciclo empieza cada vez que el volumen cruza su valor medio subiendo. Es el punto de mayor pendiente de la señal, donde el corte es más preciso, y el instante del cruce se interpola entre dos muestras. Solo para localizar los cruces se usa el volumen suavizado con una media móvil de 11 puntos; los trabajos se calculan siempre con los datos originales.</p>
+  <p>Se usan únicamente ciclos completos. Un ciclo cuyo periodo se aparta más de un 20 % de la mediana se descarta y aparece sombreado en gris.</p>
+
+  <h3>3. Trabajo de cada ciclo</h3>
+  <p>El trabajo del ciclo <i>k</i> es el área que encierra en el diagrama P‑V:</p>
+  <math display="block"><msub><mi>W</mi><mi>k</mi></msub><mo>=</mo><mo>∮</mo><mi>P</mi><mspace width="0.17em"/><mi>d</mi><mi>V</mi></math>
+  <p>Con las <i>N</i><sub>k</sub> muestras (<i>V</i><sub>i</sub>, <i>P</i><sub>i</sub>) del ciclo se calcula como el área de un polígono (la función polyarea de MATLAB):</p>
+  <math display="block"><msub><mi>W</mi><mi>k</mi></msub><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mrow><mo fence="true" stretchy="true" symmetric="true">|</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>N</mi><mi>k</mi></msub></munderover><mrow><mo>(</mo><msub><mi>V</mi><mi>i</mi></msub><msub><mi>P</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>−</mo><msub><mi>V</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><msub><mi>P</mi><mi>i</mi></msub><mo>)</mo></mrow><mo fence="true" stretchy="true" symmetric="true">|</mo></mrow></math>
+  <p>donde la muestra <i>N</i><sub>k</sub>+1 es la primera, de modo que el polígono queda cerrado.</p>
+
+  <h3>4. Resultado y error</h3>
+  <p>Cada ciclo es una repetición independiente de la medida. Con los <i>K</i> ciclos válidos, el trabajo por ciclo es la media</p>
+  <math display="block"><mover><mi>W</mi><mo>‾</mo></mover><mo>=</mo><mfrac><mn>1</mn><mi>K</mi></mfrac><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><msub><mi>W</mi><mi>k</mi></msub></math>
+  <p>y la variación de un ciclo a otro se mide con la desviación típica</p>
+  <math display="block"><mi>s</mi><mo>=</mo><msqrt><mfrac><mrow><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><msup><mrow><mo>(</mo><msub><mi>W</mi><mi>k</mi></msub><mo>−</mo><mover><mi>W</mi><mo>‾</mo></mover><mo>)</mo></mrow><mn>2</mn></msup></mrow><mrow><mi>K</mi><mo>−</mo><mn>1</mn></mrow></mfrac></msqrt></math>
+  <p>El error del resultado es el error de la media:</p>
+  <math display="block"><mi>Δ</mi><mi>W</mi><mo>=</mo><mfrac><mi>s</mi><msqrt><mi>K</mi></msqrt></mfrac></math>
+  <p>Con los sensores bien calibrados es la única fuente de error, y recoge a la vez el ruido de las señales, la resolución del osciloscopio y las variaciones reales del motor entre ciclos. El resultado se da como <i>W</i> = <i>W̄</i> ± Δ<i>W</i>, con el error redondeado a una cifra significativa (dos si empieza por 1) y la media redondeada a la misma cifra decimal.</p>
+
+  <h3>5. Potencia</h3>
+  <p>El periodo <i>T</i> es la media de las duraciones de los <i>K</i> ciclos, y su error Δ<i>T</i> se obtiene igual que Δ<i>W</i>. La potencia y su error son</p>
+  <math display="block"><mi>𝒫</mi><mo>=</mo><mfrac><mover><mi>W</mi><mo>‾</mo></mover><mi>T</mi></mfrac></math>
+  <math display="block"><mfrac><mrow><mi>Δ</mi><mi>𝒫</mi></mrow><mi>𝒫</mi></mfrac><mo>=</mo><msqrt><msup><mrow><mo>(</mo><mfrac><mrow><mi>Δ</mi><mi>W</mi></mrow><mover><mi>W</mi><mo>‾</mo></mover></mfrac><mo>)</mo></mrow><mn>2</mn></msup><mo>+</mo><msup><mrow><mo>(</mo><mfrac><mrow><mi>Δ</mi><mi>T</mi></mrow><mi>T</mi></mfrac><mo>)</mo></mrow><mn>2</mn></msup></msqrt></math>
+
+  <h3>6. Saturación</h3>
+  <p>Si el volumen o la presión se quedan planos en su valor máximo o mínimo durante más de un 5 % del periodo, la señal se ha recortado en el osciloscopio y aparece un aviso en rojo: los ciclos están incompletos y su trabajo sale por defecto.</p>
+
+  <h3>Gráficos</h3>
+  <p>Arriba, el volumen frente al tiempo con los límites y el número de cada ciclo. Abajo a la izquierda, el diagrama P‑V de todos los ciclos válidos. Abajo a la derecha, el trabajo <i>W</i><sub>k</sub> de cada ciclo, con la media <i>W̄</i> (línea) y la banda <i>W̄</i> ± <i>s</i>. Al pinchar en un ciclo, en el gráfico de arriba o en su punto, se resalta en azul en los tres gráficos.</p>
+</aside>
+</div>
 <div id="drop">Suelta aquí el archivo .txt</div>
 
 <script>
 "use strict";
-// ---------------- Parámetros del programa original ----------------
-const HEADER_LINES = 9;          // headerlinesIn = 9
+// ---------------- Parámetros ----------------
+const HEADER_LINES = 9;          // líneas de cabecera del archivo
 const FACT_V = 2.4 * 1e-9;       // mV -> m^3   (1 V = 2.4 cm^3)
 const FACT_P = 329 * 0.1;        // mV -> Pa    (1 V = 329 hPa)
 const FONT = 'system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif';
 
 // ---------------- Estado ----------------
-let cols = null;        // columnas numéricas del archivo (equivalente a A.data)
-let V = null, P = null, N = 0;   // datos convertidos (m^3, Pa)
-let picks = [];         // coordenadas x pinchadas (como ginput)
-let view = { x0: 1, x1: 1 };
+let cols = null, dt = null, fileName = '';
+let V = null, P = null, N = 0;
+let an = null;                   // resultado del análisis
+let sel = -1;                    // ciclo resaltado
+let view = { x0: 0, x1: 1 };     // ventana visible del gráfico superior (en unidades de tiempo)
 let hoverX = null;
-let topLay = null;      // geometría del último dibujo del gráfico superior
-let result = null;
+let layTop = null, layB = null;
 
 const $ = id => document.getElementById(id);
 const cvTop = $('cvTop'), cvA = $('cvA'), cvB = $('cvB');
 
-// ---------------- Lectura del archivo (equivalente a importdata) ----------------
+// ---------------- Lectura del archivo ----------------
 function parseNum(s) {
   s = s.trim();
   if (s === '') return NaN;
   if (/^[+-]?\d*,\d+([eE][+-]?\d+)?$/.test(s)) s = s.replace(',', '.');
-  if (!/^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$/.test(s) && !/^[+-]?(Inf|NaN)$/i.test(s)) return NaN;
-  return s.toLowerCase().includes('inf') ? (s[0] === '-' ? -Infinity : Infinity) : Number(s);
+  if (!/^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$/.test(s)) return NaN;
+  return Number(s);
 }
 
 function parseFile(text) {
   const lines = text.split(/\r\n|\n|\r/);
-  const rows = [];
-  for (let i = HEADER_LINES; i < lines.length; i++) {
-    if (lines[i].trim() !== '') rows.push(lines[i].split('\t'));
+  // intervalo de muestreo de la cabecera ("Time interval : 100.00000uS")
+  let dtv = null;
+  for (let i = 0; i < Math.min(HEADER_LINES, lines.length); i++) {
+    const m = lines[i].match(/time\s*interval[^0-9]*([0-9.]+(?:e[+-]?\d+)?)\s*([munµ]?)s/i);
+    if (m) { const f = { m: 1e-3, u: 1e-6, 'µ': 1e-6, n: 1e-9, '': 1 }[m[2].toLowerCase()]; dtv = parseFloat(m[1]) * f; break; }
   }
+  const rows = [];
+  for (let i = HEADER_LINES; i < lines.length; i++) if (lines[i].trim() !== '') rows.push(lines[i].split('\t'));
   if (!rows.length) throw new Error('No hay datos después de las ' + HEADER_LINES + ' líneas de cabecera.');
-  // como importdata: las columnas de texto iniciales van a textdata, no a data
+  // como importdata: las columnas de texto iniciales no cuentan; dos tabuladores seguidos dan una columna vacía
   let lead = 0;
   while (lead < rows[0].length && isNaN(parseNum(rows[0][lead]))) lead++;
   let nc = 0;
-  for (const r of rows) {
-    let k = r.length;
-    while (k > lead && r[k - 1].trim() === '') k--;
-    nc = Math.max(nc, k - lead);
-  }
+  for (const r of rows) { let k = r.length; while (k > lead && r[k - 1].trim() === '') k--; nc = Math.max(nc, k - lead); }
   if (nc <= 0) throw new Error('No se encontraron columnas numéricas tras la cabecera.');
   const out = Array.from({ length: nc }, () => new Float64Array(rows.length));
-  rows.forEach((r, j) => {
-    for (let c = 0; c < nc; c++) {
-      const s = r[lead + c];
-      out[c][j] = s === undefined ? NaN : parseNum(s);
-    }
-  });
-  return out;
+  rows.forEach((r, j) => { for (let c = 0; c < nc; c++) { const s = r[lead + c]; out[c][j] = s === undefined ? NaN : parseNum(s); } });
+  return { cols: out, dt: dtv && dtv > 0 ? dtv : null };
 }
 
 // ---------------- Funciones numéricas ----------------
-// smooth(y, span) de MATLAB, método 'moving': media móvil centrada; span par -> span-1;
-// en los extremos la ventana se reduce de forma simétrica (yy(1)=y(1), yy(2)=(y1+y2+y3)/3, ...)
+// media móvil centrada (como smooth de MATLAB); solo se usa para detectar los ciclos
 function smoothMA(y, span) {
   const n = y.length;
-  span = Math.floor(span);
   if (span > n) span = n;
   if (span % 2 === 0) span--;
-  if (span < 1) span = 1;
-  const h = (span - 1) / 2;
-  const cs = new Float64Array(n + 1);
+  const h = (span - 1) / 2, cs = new Float64Array(n + 1);
   for (let i = 0; i < n; i++) cs[i + 1] = cs[i] + y[i];
   const out = new Float64Array(n);
-  for (let i = 0; i < n; i++) {
-    const k = Math.min(h, i, n - 1 - i);
-    out[i] = (cs[i + k + 1] - cs[i - k]) / (2 * k + 1);
-  }
+  for (let i = 0; i < n; i++) { const k = Math.min(h, i, n - 1 - i); out[i] = (cs[i + k + 1] - cs[i - k]) / (2 * k + 1); }
   return out;
 }
 
-// polyarea de MATLAB (fórmula del área de Gauss, polígono cerrado automáticamente)
+// área del polígono cerrado (polyarea de MATLAB)
 function polyarea(x, y) {
   const n = x.length;
   if (n < 3) return 0;
   let mx = 0, my = 0;
   for (let i = 0; i < n; i++) { mx += x[i]; my += y[i]; }
-  mx /= n; my /= n;                     // centrado: mismo área, menos error de redondeo
+  mx /= n; my /= n;
   let s = 0;
-  for (let i = 0; i < n; i++) {
-    const j = (i + 1) % n;
-    s += (x[i] - mx) * (y[j] - my) - (x[j] - mx) * (y[i] - my);
-  }
+  for (let i = 0; i < n; i++) { const j = (i + 1) % n; s += (x[i] - mx) * (y[j] - my) - (x[j] - mx) * (y[i] - my); }
   return Math.abs(s) / 2;
 }
 
-// num2str(x, 4)  ->  formato '%.4g'
-function num2str4(v) {
-  if (!isFinite(v)) return isNaN(v) ? 'NaN' : (v > 0 ? 'Inf' : '-Inf');
-  if (v === 0) return '0';
-  let s = v.toExponential(3);
-  let [m, ex] = s.split('e');
-  const e = parseInt(ex, 10);
-  if (e < -4 || e >= 4) {
-    m = m.replace(/\.?0+$/, '');
-    return m + 'e' + (e < 0 ? '-' : '+') + String(Math.abs(e)).padStart(2, '0');
+const median = a => { const s = [...a].sort((p, q) => p - q), n = s.length; return n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2; };
+
+function maxRunAt(y, v) { let best = 0, k = 0; for (const x of y) { k = x === v ? k + 1 : 0; if (k > best) best = k; } return best; }
+
+// ---------------- Análisis automático de todos los ciclos ----------------
+function analyze() {
+  const n = N;
+  const s = smoothMA(V, 11);
+  const srt = Float64Array.from(s).sort();
+  const lo = srt[Math.floor(0.01 * (n - 1))], hi = srt[Math.floor(0.99 * (n - 1))];
+  const m = (lo + hi) / 2, h = 0.15 * (hi - lo);
+  // cada ciclo empieza cuando el volumen cruza su valor medio subiendo (instante interpolado)
+  const cr = [];
+  let st = s[0] < m ? 'low' : 'high';
+  for (let i = 1; i < n; i++) {
+    if (st === 'low' && s[i] >= m + h) {
+      let j = i;
+      while (j > 0 && s[j - 1] >= m) j--;
+      j--;
+      if (j >= 0 && s[j + 1] !== s[j]) cr.push(j + (m - s[j]) / (s[j + 1] - s[j]));
+      st = 'high';
+    } else if (st === 'high' && s[i] <= m - h) st = 'low';
   }
-  s = v.toFixed(Math.max(0, 3 - e));
-  if (s.includes('.')) s = s.replace(/\.?0+$/, '');
-  return s;
+  if (cr.length < 2) return { error: 'No se detecta ningún ciclo completo en la señal del volumen.' };
+
+  const T = cr.slice(1).map((c, k) => c - cr[k]);
+  const Tm = median(T);
+  const cycles = [];
+  for (let k = 0; k < T.length; k++) {
+    const a = cr[k], b = cr[k + 1];
+    const ok = Math.abs(T[k] / Tm - 1) < 0.2;          // descarta ciclos con periodo anómalo
+    const i0 = Math.ceil(a), i1 = Math.floor(b);
+    const area = polyarea(V.subarray(i0, i1 + 1), P.subarray(i0, i1 + 1));
+    cycles.push({ a, b, i0, i1, ok, area: isFinite(area) ? area : NaN });
+  }
+  const good = cycles.filter(c => c.ok && isFinite(c.area));
+  if (!good.length) return { error: 'No hay ciclos válidos.' };
+
+  const A = good.map(c => c.area), K = A.length;
+  const mean = A.reduce((p, q) => p + q, 0) / K;
+  const sd = K > 1 ? Math.sqrt(A.reduce((p, q) => p + (q - mean) ** 2, 0) / (K - 1)) : NaN;
+  const Tgood = good.map(c => c.b - c.a), Tmean = Tgood.reduce((p, q) => p + q, 0) / K;
+  const sT = K > 1 ? Math.sqrt(Tgood.reduce((p, q) => p + (q - Tmean) ** 2, 0) / (K - 1)) : 0;
+
+  // aviso de saturación: la señal se queda plana en su máximo o mínimo
+  const warn = [];
+  const chk = (y, name) => {
+    let mn = Infinity, mx = -Infinity; for (const v of y) { if (v < mn) mn = v; if (v > mx) mx = v; }
+    for (const [v, w] of [[mx, 'máximo'], [mn, 'mínimo']]) {
+      if (maxRunAt(y, v) > 0.05 * Tm) {
+        let c = 0; for (const x of y) if (x === v) c++;
+        warn.push(`${name} saturado en su ${w} (${Math.round(100 * c / y.length)} % del tiempo): el trabajo sale por defecto`);
+      }
+    }
+  };
+  chk(V, 'Volumen'); chk(P, 'Presión');
+
+  return { cycles, good, mean, sd, se: sd / Math.sqrt(K), K, Tmean, seT: sT / Math.sqrt(K), warn };
 }
+
+// ---------------- Formato de números ----------------
+function withErr(v, e) {
+  if (!(e > 0)) return v.toPrecision(4);
+  let d = -Math.floor(Math.log10(e));
+  if (e * Math.pow(10, d) < 1.95) d++;               // dos cifras si el error empieza por 1
+  d = Math.max(0, d);
+  return v.toFixed(d) + ' ± ' + e.toFixed(d);
+}
+const sig = (v, n) => { const s = v.toPrecision(n); return s.includes('e') ? s : s.replace(/(\.\d*?)0+$/, '$1').replace(/\.$/, ''); };
 
 // ---------------- Dibujo de gráficos ----------------
 function setupCanvas(cv) {
@@ -175,21 +267,22 @@ function setupCanvas(cv) {
   return { ctx, w: r.width, h: r.height };
 }
 
-function niceTicks(a, b, maxT) {
+function niceTicks(a, b, maxT, minStep) {
   if (!(b > a)) return { ticks: [a], step: 1 };
   const raw = (b - a) / maxT, p = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / p;
-  const step = (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p;
-  const k0 = Math.ceil(a / step - 1e-9), k1 = Math.floor(b / step + 1e-9);
-  const t = [];
+  let step = (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p;
+  if (minStep && step < minStep) step = minStep;
+  if (minStep && step % 1) step = Math.ceil(step);
+  const k0 = Math.ceil(a / step - 1e-9), k1 = Math.floor(b / step + 1e-9), t = [];
   for (let k = k0; k <= k1; k++) t.push(k * step);
   return { ticks: t, step };
 }
 
-function niceLimits(min, max) {
+function niceLimits(min, max, pad = 0.04) {
   if (!isFinite(min) || !isFinite(max)) return [0, 1];
   if (min === max) { const d = Math.abs(min) || 1; return [min - d * 0.05, max + d * 0.05]; }
-  const pad = (max - min) * 0.04;
-  return [min - pad, max + pad];
+  const p = (max - min) * pad;
+  return [min - p, max + p];
 }
 
 function tickFormat(ticks, step) {
@@ -204,7 +297,6 @@ function tickFormat(ticks, step) {
 }
 
 function drawExp(ctx, x, y, e, fs, align) {
-  // dibuja  ×10^e  (con superíndice)
   const base = '×10', sup = String(e).replace('-', '−');
   ctx.font = `${fs}px ${FONT}`;
   const wb = ctx.measureText(base).width;
@@ -216,39 +308,33 @@ function drawExp(ctx, x, y, e, fs, align) {
   ctx.font = `${Math.round(fs * 0.72)}px ${FONT}`; ctx.fillText(sup, x0 + wb + 1, y - fs * 0.42);
 }
 
-// Marco de ejes al estilo MATLAB; devuelve la geometría y las funciones de escala
 function plotFrame(cv, o) {
   const { ctx, w, h } = setupCanvas(cv);
-  const fs = w > 1100 ? 18 : w > 600 ? 17 : 15;          // rótulos grandes
-  const fsT = fs + 3;
-  ctx.font = `${fs}px ${FONT}`;
+  const fs = w > 1100 ? 18 : w > 600 ? 17 : 15, fsT = fs + 3;
   const plotH = h - fs * 7, plotW = w - fs * 9;
   const yt = o.noTicks ? { ticks: [], step: 1 } : niceTicks(o.ylim[0], o.ylim[1], Math.max(3, Math.floor(plotH / 55)));
-  const xt = o.noTicks ? { ticks: [], step: 1 } : niceTicks(o.xlim[0], o.xlim[1], Math.max(3, Math.floor(plotW / 105)));
-  const yf = tickFormat(yt.ticks, yt.step), xf = o.xInt ? { labels: xt.ticks.map(v => String(Math.round(v))), e: 0 } : tickFormat(xt.ticks, xt.step);
+  const xt = o.noTicks ? { ticks: [], step: 1 } : niceTicks(o.xlim[0], o.xlim[1], Math.max(3, Math.floor(plotW / 105)), o.xInt ? 1 : 0);
+  const yf = tickFormat(yt.ticks, yt.step);
+  const xf = o.xInt ? { labels: xt.ticks.map(v => String(Math.round(v))), e: 0 } : tickFormat(xt.ticks, xt.step);
   ctx.font = `${fs}px ${FONT}`;
   const ylw = Math.max(0, ...yf.labels.map(s => ctx.measureText(s).width));
-  const L = 14 + (o.ylabel ? fs * 1.5 : 0) + ylw + 10;
-  const R = fs * 1.6;
+  const L = 14 + (o.ylabel ? fs * 1.5 : 0) + ylw + 10, R = fs * 1.6;
   const T = (o.title ? fsT * 1.9 : fs) + (yf.e ? fs * 0.9 : 0);
-  const B = fs * 1.9 + (o.xlabel ? fs * 1.7 : 0) + (xf.e && !o.xlabel ? fs * 1.3 : 0) + 6;
+  const B = o.xlabel || xf.e ? fs * 3.6 : fs * 1.9 + 6;
   const x0 = L, x1 = w - R, y0 = T, y1 = h - B;
   const X = v => x0 + (v - o.xlim[0]) / (o.xlim[1] - o.xlim[0]) * (x1 - x0);
   const Y = v => y1 - (v - o.ylim[0]) / (o.ylim[1] - o.ylim[0]) * (y1 - y0);
 
-  // título
   if (o.title) {
     ctx.fillStyle = '#111'; ctx.font = `600 ${fsT}px ${FONT}`;
     ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
     ctx.fillText(o.title, (x0 + x1) / 2, fsT * 1.25, w - 20);
   }
-  // datos (recortados al recuadro)
   if (o.draw) {
     ctx.save(); ctx.beginPath(); ctx.rect(x0, y0, x1 - x0, y1 - y0); ctx.clip();
-    o.draw(ctx, X, Y, { x0, x1, y0, y1 });
+    o.draw(ctx, X, Y, { x0, x1, y0, y1, fs });
     ctx.restore();
   }
-  // recuadro y marcas
   ctx.strokeStyle = '#262626'; ctx.lineWidth = 1;
   ctx.strokeRect(Math.round(x0) + 0.5, Math.round(y0) + 0.5, Math.round(x1 - x0), Math.round(y1 - y0));
   ctx.fillStyle = '#262626'; ctx.font = `${fs}px ${FONT}`;
@@ -267,45 +353,58 @@ function plotFrame(cv, o) {
     ctx.fillText(yf.labels[i], x0 - 8, py);
   });
   ctx.stroke();
-  // exponentes comunes
   if (yf.e) drawExp(ctx, x0, y0 - 7, yf.e, fs, 'left');
-  if (xf.e) drawExp(ctx, x1, o.xlabel ? h - 10 : y1 + fs * 2.9, xf.e, fs, 'right');
-  // rótulos de ejes
+  if (xf.e) drawExp(ctx, x1, y1 + fs * 3.0, xf.e, fs, 'right');
   ctx.font = `${fs + 1}px ${FONT}`; ctx.fillStyle = '#111';
-  if (o.xlabel) { ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; ctx.fillText(o.xlabel, (x0 + x1) / 2, h - 10); }
+  if (o.xlabel) { ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; ctx.fillText(o.xlabel, (x0 + x1) / 2, y1 + fs * 3.0); }
   if (o.ylabel) {
     ctx.save(); ctx.translate(14 + fs * 0.6, (y0 + y1) / 2); ctx.rotate(-Math.PI / 2);
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(o.ylabel, 0, 0); ctx.restore();
   }
-  return { ctx, w, h, X, Y, x0, x1, y0, y1, xlim: o.xlim };
+  return { X, Y, x0, x1, y0, y1, xlim: o.xlim, ylim: o.ylim };
 }
 
 function emptyPlot(cv, title, msg) {
   const lay = plotFrame(cv, { title, xlim: [0, 1], ylim: [0, 1], noTicks: true });
-  const { ctx, x0, x1, y0, y1 } = lay;
+  const ctx = cv.getContext('2d');
   ctx.fillStyle = '#888'; ctx.font = `17px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText(msg, (x0 + x1) / 2, (y0 + y1) / 2, x1 - x0 - 20);
+  ctx.fillText(msg, (lay.x0 + lay.x1) / 2, (lay.y0 + lay.y1) / 2, lay.x1 - lay.x0 - 20);
   return lay;
 }
 
-// ---------------- Gráfico superior: plot(datos(:,1)) + ginput ----------------
-const TOP_TITLE = 'Pincha en un máximo, luego en el máximo siguiente y finalmente pulsa la tecla Enter';
+const tOf = i => i * (dt || 1);              // tiempo de la muestra i (0, dt, 2dt…)
 
+// ---------------- Gráfico superior: volumen frente al tiempo ----------------
 function drawTop() {
-  if (!V) { topLay = emptyPlot(cvTop, TOP_TITLE, 'Abre un archivo .txt (botón de arriba o arrastrándolo a la ventana)'); return; }
-  const i0 = Math.max(0, Math.floor(view.x0) - 2), i1 = Math.min(N - 1, Math.ceil(view.x1));
+  if (!V) { layTop = emptyPlot(cvTop, 'Volumen frente al tiempo', 'Abre un archivo .txt (botón de arriba o arrastrándolo a la ventana)'); return; }
+  const u = dt || 1;
+  const i0 = Math.max(0, Math.floor(view.x0 / u) - 2), i1 = Math.min(N - 1, Math.ceil(view.x1 / u) + 1);
   let mn = Infinity, mx = -Infinity;
   for (let i = i0; i <= i1; i++) { const v = V[i]; if (v < mn) mn = v; if (v > mx) mx = v; }
-  const ylim = niceLimits(mn, mx);
-  topLay = plotFrame(cvTop, {
-    title: TOP_TITLE, xlim: [view.x0, view.x1], ylim, xInt: true,
+  const title = an && !an.error
+    ? `Volumen: ${an.K} ciclos completos detectados${an.cycles.length > an.K ? ` (${an.cycles.length - an.K} descartados, en gris)` : ''}`
+    : 'Volumen frente al tiempo';
+  layTop = plotFrame(cvTop, {
+    title, xlim: [view.x0, view.x1], ylim: niceLimits(mn, mx), xInt: !dt,
+    xlabel: dt ? 't (s)' : 'índice', ylabel: 'V (m³)',
     draw(ctx, X, Y, b) {
-      // curva
+      if (an && !an.error) {
+        an.cycles.forEach((c, k) => {
+          if (!c.ok) { ctx.fillStyle = 'rgba(0,0,0,0.08)'; ctx.fillRect(X(tOf(c.a)), b.y0, X(tOf(c.b)) - X(tOf(c.a)), b.y1 - b.y0); }
+          if (k === sel) { ctx.fillStyle = 'rgba(31,95,191,0.12)'; ctx.fillRect(X(tOf(c.a)), b.y0, X(tOf(c.b)) - X(tOf(c.a)), b.y1 - b.y0); }
+        });
+        ctx.strokeStyle = 'rgba(31,95,191,0.75)'; ctx.lineWidth = 1;
+        ctx.beginPath();
+        const edges = an.cycles.map(c => c.a).concat([an.cycles[an.cycles.length - 1].b]);
+        for (const e of edges) { const px = Math.round(X(tOf(e))) + 0.5; ctx.moveTo(px, b.y0); ctx.lineTo(px, b.y1); }
+        ctx.stroke();
+      }
+      // curva (con reducción por columnas de píxel si hay muchos puntos)
       ctx.strokeStyle = '#000'; ctx.lineWidth = 1.2; ctx.lineJoin = 'round';
       const n = i1 - i0 + 1, pxw = b.x1 - b.x0;
       ctx.beginPath();
       if (n <= pxw * 3) {
-        for (let i = i0; i <= i1; i++) { const px = X(i + 1), py = Y(V[i]); i === i0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py); }
+        for (let i = i0; i <= i1; i++) { const px = X(tOf(i)), py = Y(V[i]); i === i0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py); }
       } else {
         const nc = Math.ceil(pxw); let first = true;
         for (let c = 0; c < nc; c++) {
@@ -313,210 +412,193 @@ function drawTop() {
           if (e < a) continue;
           let lo = Infinity, hi = -Infinity;
           for (let i = a; i <= e; i++) { const v = V[i]; if (v < lo) lo = v; if (v > hi) hi = v; }
-          const px = X(a + 1);
+          const px = X(tOf(a));
           if (first) { ctx.moveTo(px, Y(V[a])); first = false; }
-          ctx.lineTo(px, Y(lo)); ctx.lineTo(px, Y(hi)); ctx.lineTo(X(e + 1), Y(V[e]));
+          ctx.lineTo(px, Y(lo)); ctx.lineTo(px, Y(hi)); ctx.lineTo(X(tOf(e)), Y(V[e]));
         }
       }
       ctx.stroke();
-      // ciclo seleccionado
-      if (picks.length >= 2) {
-        const [a, c] = selRange();
-        ctx.fillStyle = 'rgba(31,95,191,0.07)';
-        ctx.fillRect(X(a), b.y0, X(c) - X(a), b.y1 - b.y0);
+      // número de cada ciclo, sobre la curva y con borde blanco
+      if (an && !an.error) {
+        ctx.font = `600 15px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 4; ctx.lineJoin = 'round';
+        an.cycles.forEach((c, k) => {
+          const px = (X(tOf(c.a)) + X(tOf(c.b))) / 2, py = (b.y0 + b.y1) / 2;
+          ctx.fillStyle = k === sel ? '#1f5fbf' : c.ok ? '#444' : '#999';
+          ctx.strokeText(String(k + 1), px, py); ctx.fillText(String(k + 1), px, py);
+        });
       }
-      // puntos pinchados
-      picks.forEach((p, k) => {
-        const idx = Math.min(N, Math.max(1, Math.round(p))), px = Math.round(X(idx)) + 0.5;
-        ctx.strokeStyle = '#1f5fbf'; ctx.lineWidth = 1.5;
-        ctx.beginPath(); ctx.moveTo(px, b.y0); ctx.lineTo(px, b.y1); ctx.stroke();
-        ctx.fillStyle = '#1f5fbf'; ctx.beginPath(); ctx.arc(px, Y(V[idx - 1]), 4.5, 0, 2 * Math.PI); ctx.fill();
-        ctx.font = `600 16px ${FONT}`; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
-        ctx.fillText('i' + (k + 1) + ' = ' + idx, px + 6, b.y1 - 6);
-      });
-      // cursor
       if (hoverX !== null) {
-        const idx = Math.min(N, Math.max(1, Math.round(hoverX))), px = Math.round(X(idx)) + 0.5;
-        ctx.strokeStyle = 'rgba(0,0,0,0.28)'; ctx.lineWidth = 1;
+        const px = Math.round(X(hoverX)) + 0.5;
+        ctx.strokeStyle = 'rgba(0,0,0,0.25)'; ctx.lineWidth = 1;
         ctx.beginPath(); ctx.moveTo(px, b.y0); ctx.lineTo(px, b.y1); ctx.stroke();
-        ctx.fillStyle = '#555'; ctx.font = `16px ${FONT}`; ctx.textAlign = 'right'; ctx.textBaseline = 'top';
-        ctx.fillText('índice ' + idx, b.x1 - 8, b.y0 + 6);
       }
     }
   });
 }
 
-function selRange() {
-  let a = Math.round(picks[0]), c = Math.round(picks[1]);
-  if (a > c) [a, c] = [c, a];
-  return [Math.max(1, a), Math.min(N, c)];
-}
-
-// ---------------- Gráficos inferiores: P-V original y suavizado ----------------
-function drawBottom() {
-  if (!result) {
-    const msg = V ? 'Selecciona un ciclo arriba y pulsa Enter' : '';
-    emptyPlot(cvA, 'Área datos originales', msg);
-    emptyPlot(cvB, 'Área datos suavizados', msg);
-    return;
+// ---------------- Abajo a la izquierda: ciclos P-V y ciclo medio ----------------
+function drawPV() {
+  if (!an || an.error) { emptyPlot(cvA, 'Diagrama P-V', an ? an.error : ''); return; }
+  let vx = [Infinity, -Infinity], py = [Infinity, -Infinity];
+  for (const c of an.good) for (let i = c.i0; i <= c.i1; i++) {
+    vx[0] = Math.min(vx[0], V[i]); vx[1] = Math.max(vx[1], V[i]); py[0] = Math.min(py[0], P[i]); py[1] = Math.max(py[1], P[i]);
   }
-  const r = result;
-  const lim = arr => { let a = Infinity, b = -Infinity; for (const v of arr) { if (v < a) a = v; if (v > b) b = v; } return niceLimits(a, b); };
-  const pv = (cv, x, y, area, title) => plotFrame(cv, {
-    title: title + ' = ' + num2str4(area) + ' J',
-    xlabel: 'V (m³)', ylabel: 'P (Pa)', xlim: lim(x), ylim: lim(y),
+  const line = (ctx, X, Y, xs, ys, i0, i1, close) => {
+    ctx.beginPath();
+    for (let i = i0; i <= i1; i++) { const px = X(xs[i]), q = Y(ys[i]); i === i0 ? ctx.moveTo(px, q) : ctx.lineTo(px, q); }
+    if (close) ctx.closePath();
+    ctx.stroke();
+  };
+  plotFrame(cvA, {
+    title: `Diagrama P-V de los ${an.K} ciclos`,
+    xlabel: 'V (m³)', ylabel: 'P (Pa)', xlim: niceLimits(...vx), ylim: niceLimits(...py),
     draw(ctx, X, Y) {
-      ctx.strokeStyle = '#000'; ctx.lineWidth = 1.2; ctx.lineJoin = 'round';
-      ctx.beginPath();
-      for (let i = 0; i < x.length; i++) { const px = X(x[i]), py = Y(y[i]); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }
-      ctx.stroke();
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = sel >= 0 ? '#b9b9b9' : '#555'; ctx.lineWidth = 1;
+      for (const c of an.good) line(ctx, X, Y, V, P, c.i0, c.i1, true);
+      if (sel >= 0) { const c = an.cycles[sel]; ctx.strokeStyle = '#1f5fbf'; ctx.lineWidth = 2; line(ctx, X, Y, V, P, c.i0, c.i1, true); }
     }
   });
-  pv(cvA, r.v, r.p, r.area, 'Área datos originales');
-  pv(cvB, r.vs, r.ps, r.areaS, 'Área datos suavizados');
 }
 
-// ---------------- Cálculo (lo que hace el script tras ginput) ----------------
-function calcular() {
-  if (!V || picks.length < 2) return;
-  const [a, c] = selRange();                     // datos_ciclo = datos(i1:i2,:)
-  const v = V.slice(a - 1, c), p = P.slice(a - 1, c);
-  const span = Math.max(1, parseInt($('span').value, 10) || 100);
-  const vs = smoothMA(v, span), ps = smoothMA(p, span);
-  result = { a, c, v, p, vs, ps, area: polyarea(v, p), areaS: polyarea(vs, ps) };
-  drawBottom();
-  setInfo();
+// ---------------- Abajo a la derecha: área de cada ciclo ----------------
+function drawAreas() {
+  if (!an || an.error) { layB = emptyPlot(cvB, 'Área de cada ciclo', ''); return; }
+  const K = an.cycles.length;
+  let lo = an.mean - (an.sd || 0), hi = an.mean + (an.sd || 0);
+  for (const c of an.cycles) if (isFinite(c.area)) { lo = Math.min(lo, c.area); hi = Math.max(hi, c.area); }
+  layB = plotFrame(cvB, {
+    title: `Trabajo de cada ciclo: W\u0304 = ${sig(an.mean, 4)} J, s = ${sig(an.sd, 2)} J`,
+    xlabel: 'ciclo k', ylabel: 'W (J)', xlim: [0.4, K + 0.6], ylim: niceLimits(lo, hi, 0.12), xInt: true,
+    draw(ctx, X, Y, b) {
+      if (an.sd > 0) { ctx.fillStyle = 'rgba(0,0,0,0.06)'; ctx.fillRect(b.x0, Y(an.mean + an.sd), b.x1 - b.x0, Y(an.mean - an.sd) - Y(an.mean + an.sd)); }
+      ctx.strokeStyle = '#000'; ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.moveTo(b.x0, Y(an.mean)); ctx.lineTo(b.x1, Y(an.mean)); ctx.stroke();
+      an.cycles.forEach((c, k) => {
+        if (!isFinite(c.area)) return;
+        const px = X(k + 1), q = Y(c.area), r = k === sel ? 7 : 5;
+        ctx.beginPath(); ctx.arc(px, q, r, 0, 2 * Math.PI);
+        if (c.ok) { ctx.fillStyle = k === sel ? '#1f5fbf' : '#111'; ctx.fill(); }
+        else { ctx.strokeStyle = '#999'; ctx.lineWidth = 1.4; ctx.stroke(); }
+      });
+    }
+  });
 }
 
-// ---------------- Carga de datos y columnas ----------------
+// ---------------- Resultado ----------------
+function showResult() {
+  const el = $('res');
+  if (!V) return;
+  if (an.error) { el.innerHTML = `<span class="warn">${an.error}</span>`; return; }
+  let h = `<span>Trabajo por ciclo &nbsp;<b>W = ${withErr(an.mean, an.se)} J</b></span>`;
+  if (dt) {
+    const T = an.Tmean * dt, dT = an.seT * dt, f = 1 / T;
+    const pot = an.mean / T, dpot = pot * Math.hypot(an.se / an.mean, dT / T);
+    h += `<span>Potencia &nbsp;<b>\u{1D4AB} = W/T = ${withErr(pot, dpot)} W</b></span>`;
+    h += `<span class="sub">K = ${an.K} ciclos &nbsp; T = ${withErr(T * 1e3, dT * 1e3)} ms &nbsp; f = ${f.toPrecision(4)} Hz</span>`;
+  } else {
+    h += `<span class="sub">K = ${an.K} ciclos &nbsp; T = ${withErr(an.Tmean, an.seT)} muestras</span>`;
+  }
+  for (const w of an.warn) h += `<span class="warn">${w}</span>`;
+  el.innerHTML = h;
+}
+
+function redraw() { drawTop(); drawPV(); drawAreas(); }
+
+// ---------------- Carga ----------------
 function applyColumns() {
   if (!cols) return;
-  const nc = cols.length;
-  const cv = parseInt($('colV').value, 10), cp = parseInt($('colP').value, 10);
+  const nc = cols.length, cv = parseInt($('colV').value, 10), cp = parseInt($('colP').value, 10);
+  sel = -1;
   if (!(cv >= 1 && cv <= nc) || !(cp >= 1 && cp <= nc)) {
-    V = P = null; N = 0; result = null;
-    $('info').textContent = `El archivo tiene ${nc} columnas numéricas: elige columnas entre 1 y ${nc}.`;
+    V = P = null; an = null;
+    $('res').innerHTML = `<span class="warn">El archivo tiene ${nc} columnas numéricas: elige columnas entre 1 y ${nc}.</span>`;
     redraw(); return;
   }
   N = cols[0].length;
   V = new Float64Array(N); P = new Float64Array(N);
   for (let i = 0; i < N; i++) { V[i] = cols[cv - 1][i] * FACT_V; P[i] = cols[cp - 1][i] * FACT_P; }
-  if (picks.length >= 2) calcular(); else result = null;
-  setInfo(); redraw();
+  an = analyze();
+  showResult(); redraw();
 }
 
 function loadText(text, name) {
-  try {
-    cols = parseFile(text);
-  } catch (err) {
-    cols = null; V = P = null; N = 0; result = null;
-    $('fname').textContent = name;
-    $('info').textContent = 'No se pudo leer el archivo: ' + err.message;
-    redraw(); return;
-  }
-  $('fname').textContent = name; $('fname').title = name;
-  picks = []; result = null;
-  N = cols[0].length; view = { x0: 1, x1: Math.max(2, N) };
-  ['bAll', 'bClr'].forEach(id => $(id).disabled = false);
+  fileName = name; $('fname').textContent = name; $('fname').title = name;
+  try { ({ cols, dt } = parseFile(text)); }
+  catch (err) { cols = null; V = P = null; an = null; $('res').innerHTML = `<span class="warn">No se pudo leer el archivo: ${err.message}</span>`; redraw(); return; }
+  view = { x0: 0, x1: tOf(cols[0].length - 1) };
+  $('bAll').disabled = false;
   applyColumns();
 }
-
-function setInfo() {
-  if (!V) return;
-  let s = `${N} puntos, ${cols.length} columnas numéricas. V = col. ${$('colV').value} × 2.4·10⁻⁹ m³/mV, P = col. ${$('colP').value} × 32.9 Pa/mV.`;
-  if (picks.length === 1) s += '   Pincha en el máximo siguiente.';
-  if (picks.length >= 2) {
-    const [a, c] = selRange();
-    s += `   Ciclo: índices ${a} a ${c} (${c - a + 1} puntos).`;
-    if (!result || result.a !== a || result.c !== c) s += ' Pulsa Enter para calcular.';
-  }
-  $('info').textContent = s;
-  $('bCalc').disabled = picks.length < 2;
-}
-
-function redraw() { drawTop(); drawBottom(); }
 
 // ---------------- Interacción ----------------
 $('bOpen').onclick = () => $('file').click();
 $('file').onchange = e => { const f = e.target.files[0]; if (f) readFile(f); e.target.value = ''; };
 function readFile(f) { const rd = new FileReader(); rd.onload = () => loadText(rd.result, f.name); rd.readAsText(f); }
-
 $('colV').onchange = $('colP').onchange = applyColumns;
-$('span').onchange = () => { if (result) calcular(); };
-$('bCalc').onclick = calcular;
-$('bClr').onclick = () => { picks = []; result = null; setInfo(); redraw(); };
-$('bAll').onclick = () => { if (V) { view = { x0: 1, x1: Math.max(2, N) }; drawTop(); } };
+$('bGuide').onclick = () => { const g = $('guide'); g.classList.toggle('hide'); $('bGuide').textContent = g.classList.contains('hide') ? 'Ver método' : 'Ocultar método'; };
+$('bAll').onclick = () => { if (V) { view = { x0: 0, x1: tOf(N - 1) }; drawTop(); } };
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && sel >= 0) { sel = -1; redraw(); } });
 
-document.addEventListener('keydown', e => {
-  const inInput = e.target.tagName === 'INPUT';
-  if (e.key === 'Enter') { if (inInput) e.target.blur(); e.preventDefault(); calcular(); }
-  else if ((e.key === 'Backspace' || e.key === 'Delete') && !inInput && picks.length) {
-    e.preventDefault(); picks.pop(); result = null; setInfo(); redraw();   // como en ginput
-  }
-  else if (e.key === 'Escape' && picks.length) { picks = []; result = null; setInfo(); redraw(); }
-});
-
-// arrastrar archivo a la ventana
 let dragN = 0;
 window.addEventListener('dragenter', e => { e.preventDefault(); dragN++; $('drop').style.display = 'flex'; });
 window.addEventListener('dragleave', () => { if (--dragN <= 0) { dragN = 0; $('drop').style.display = 'none'; } });
 window.addEventListener('dragover', e => e.preventDefault());
-window.addEventListener('drop', e => {
-  e.preventDefault(); dragN = 0; $('drop').style.display = 'none';
-  const f = e.dataTransfer.files[0]; if (f) readFile(f);
-});
+window.addEventListener('drop', e => { e.preventDefault(); dragN = 0; $('drop').style.display = 'none'; const f = e.dataTransfer.files[0]; if (f) readFile(f); });
 
-// gráfico superior: clic = punto de ginput; arrastrar = desplazar; rueda / dos dedos = zoom en el puntero
-function dataX(ev) {
+function selectCycle(k) { sel = (k === sel) ? -1 : k; redraw(); }
+
+// gráfico superior: clic en un ciclo lo resalta; arrastrar desplaza; rueda o dos dedos amplían en el puntero
+function topX(ev) {
   const r = cvTop.getBoundingClientRect(), px = ev.clientX - r.left;
-  if (!topLay || px < topLay.x0 || px > topLay.x1) return null;
-  return view.x0 + (px - topLay.x0) / (topLay.x1 - topLay.x0) * (view.x1 - view.x0);
+  if (!layTop || px < layTop.x0 || px > layTop.x1) return null;
+  return view.x0 + (px - layTop.x0) / (layTop.x1 - layTop.x0) * (view.x1 - view.x0);
 }
 let drag = null;
-cvTop.addEventListener('pointerdown', e => {
-  if (!V) return;
-  drag = { sx: e.clientX, v0: { ...view }, moved: false };
-  cvTop.setPointerCapture(e.pointerId);
-});
+cvTop.addEventListener('pointerdown', e => { if (!V) return; drag = { sx: e.clientX, v0: { ...view }, moved: false }; cvTop.setPointerCapture(e.pointerId); });
 cvTop.addEventListener('pointermove', e => {
   if (!V) return;
   if (drag) {
     const dx = e.clientX - drag.sx;
     if (Math.abs(dx) > 4) drag.moved = true;
-    if (drag.moved && topLay) {
-      const w = drag.v0.x1 - drag.v0.x0;
-      let x0 = drag.v0.x0 - dx / (topLay.x1 - topLay.x0) * w;
-      x0 = Math.max(1, Math.min(Math.max(2, N) - w, x0));
-      view = { x0, x1: x0 + w };
-      cvTop.style.cursor = 'grabbing';
+    if (drag.moved && layTop) {
+      const w = drag.v0.x1 - drag.v0.x0, full = tOf(N - 1);
+      let x0 = drag.v0.x0 - dx / (layTop.x1 - layTop.x0) * w;
+      x0 = Math.max(0, Math.min(full - w, x0));
+      view = { x0, x1: x0 + w }; cvTop.style.cursor = 'grabbing';
     }
   }
-  hoverX = dataX(e);
-  drawTop();
+  hoverX = topX(e); drawTop();
 });
 cvTop.addEventListener('pointerup', e => {
   if (!V || !drag) return;
-  const moved = drag.moved; drag = null; cvTop.style.cursor = 'crosshair';
-  if (moved) return;
-  const x = dataX(e); if (x === null) return;
-  if (picks.length >= 2) { picks = []; result = null; }
-  picks.push(x);
-  setInfo(); redraw();
+  const moved = drag.moved; drag = null; cvTop.style.cursor = 'pointer';
+  if (moved || !an || an.error) return;
+  const x = topX(e); if (x === null) return;
+  const i = x / (dt || 1), k = an.cycles.findIndex(c => i >= c.a && i < c.b);
+  if (k >= 0) selectCycle(k);
 });
 cvTop.addEventListener('pointerleave', () => { hoverX = null; if (!drag) drawTop(); });
 cvTop.addEventListener('wheel', e => {
   if (!V) return;
   e.preventDefault();
-  const x = dataX(e); if (x === null) return;
-  const f = Math.exp(e.deltaY * (e.ctrlKey ? 0.01 : 0.0015));
-  const full = Math.max(2, N) - 1;
-  let w = Math.min(full, Math.max(10, (view.x1 - view.x0) * f));
-  const t = (x - view.x0) / (view.x1 - view.x0);
-  let x0 = x - t * w;
-  x0 = Math.max(1, Math.min(1 + full - w, x0));
-  view = { x0, x1: x0 + w };
-  hoverX = x; drawTop();
+  const x = topX(e); if (x === null) return;
+  const f = Math.exp(e.deltaY * (e.ctrlKey ? 0.01 : 0.0015)), full = tOf(N - 1);
+  const w = Math.min(full, Math.max(tOf(10), (view.x1 - view.x0) * f));
+  let x0 = x - (x - view.x0) / (view.x1 - view.x0) * w;
+  x0 = Math.max(0, Math.min(full - w, x0));
+  view = { x0, x1: x0 + w }; hoverX = x; drawTop();
 }, { passive: false });
+
+// gráfico de áreas: clic en un punto resalta ese ciclo
+cvB.addEventListener('click', e => {
+  if (!an || an.error || !layB) return;
+  const r = cvB.getBoundingClientRect(), px = e.clientX - r.left, py = e.clientY - r.top;
+  let best = -1, bd = 400;
+  an.cycles.forEach((c, k) => { if (!isFinite(c.area)) return; const d = (layB.X(k + 1) - px) ** 2 + (layB.Y(c.area) - py) ** 2; if (d < bd) { bd = d; best = k; } });
+  if (best >= 0) selectCycle(best);
+});
 
 new ResizeObserver(() => redraw()).observe(document.querySelector('main'));
 redraw();
