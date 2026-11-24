@@ -5,67 +5,67 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Área del ciclo Stirling</title>
 <style>
-  :root { --fg:#111; --mut:#5f6368; --line:#d6d6d6; --acc:#1f5fbf; }
-  html, body { margin:0; height:100%; background:#fff; color:var(--fg);
+  :root { --ink:#1b2430; --mut:#5b6676; --line:#e2e6eb; --paper:#f6f7f9; --navy:#17324d;
+    --blue:#1f63b0; --blue-dk:#184f8e; --or:#c46f00; --or-ink:#8f5200; --or-soft:#fdf3e3; }
+  html, body { margin:0; height:100%; background:var(--paper); color:var(--ink);
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
   body { display:flex; flex-direction:column; }
-  header { display:flex; align-items:center; gap:10px 16px; flex-wrap:wrap;
+  header { display:flex; align-items:center; gap:10px 16px; flex-wrap:wrap; background:#fff;
     padding:8px 16px; border-bottom:1px solid var(--line); font-size:17px; }
-  h1 { font-size:20px; font-weight:600; margin:0 6px 0 0; }
-  button { font:inherit; font-size:16px; padding:6px 14px; border:1px solid #b5b5b5;
-    border-radius:6px; background:#fafafa; color:var(--fg); cursor:pointer; }
-  button:hover { background:#f0f0f0; }
-  button.prim { background:var(--acc); border-color:var(--acc); color:#fff; }
-  button.prim:hover { background:#184f9f; }
+  h1 { font-size:21px; font-weight:700; margin:0 6px 0 0; color:var(--navy); }
+  header .back { font-size:24px; font-weight:600; color:var(--navy); text-decoration:none; width:38px; height:38px; display:grid; place-items:center; border-radius:8px; margin-right:-6px; }
+  header .back:hover { background:var(--paper); }
+  button { font:inherit; font-size:16px; padding:6px 14px; border:1px solid #c9d0d8;
+    border-radius:7px; background:#fff; color:var(--navy); cursor:pointer; }
+  button:hover { background:var(--paper); }
+  button.prim { background:var(--blue); border-color:var(--blue); color:#fff; }
+  button.prim:hover { background:var(--blue-dk); }
   button:disabled { opacity:.4; cursor:default; }
   label { display:flex; align-items:center; gap:6px; color:var(--mut); }
-  input[type=number] { font:inherit; font-size:16px; width:3.8em; padding:3px 6px;
-    border:1px solid #bbb; border-radius:5px; }
-  #fname { font-weight:600; max-width:18em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .sep { flex:1; }
-  #res { display:flex; align-items:baseline; gap:8px 36px; flex-wrap:wrap; padding:8px 16px;
-    border-bottom:1px solid #eee; font-size:21px; min-height:30px; }
-  #res b { font-weight:600; }
+  #fname { font-weight:600; color:var(--navy); max-width:18em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  #res { display:flex; align-items:baseline; gap:8px 36px; flex-wrap:wrap; padding:8px 16px 8px 13px;
+    background:var(--or-soft); border-bottom:1px solid #f0dcbb; border-left:3px solid var(--or); font-size:21px; min-height:30px; }
+  #res b { font-weight:700; color:var(--or-ink); }
   #res .sub { font-size:16px; color:var(--mut); }
-  #res .warn { font-size:16px; color:#b3261e; }
+  #res .warn { font-size:16px; color:#b3261e; font-weight:500; }
   .body { flex:1; display:flex; min-height:0; }
-  main { flex:1; display:grid; grid-template-rows:42fr 58fr; min-height:0; min-width:0; }
-  #guide { width:420px; flex:none; overflow-y:auto; border-left:1px solid var(--line);
-    padding:6px 22px 24px; font-size:16.5px; line-height:1.5; color:#222; box-sizing:border-box; }
+  main { flex:1; display:grid; grid-template-rows:42fr 58fr; gap:10px; padding:10px; min-height:0; min-width:0; }
+  #guide { width:420px; flex:none; overflow-y:auto; border-left:1px solid var(--line); background:#fff;
+    padding:6px 22px 24px; font-size:16.5px; line-height:1.5; color:var(--ink); box-sizing:border-box; }
   #tabla { margin:6px 0 4px; }
-  #tabla .bar { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:8px 0; }
-  #tabla select { font:inherit; font-size:15px; padding:2px 4px; border:1px solid #bbb; border-radius:5px; }
-  #tabla table { border-collapse:collapse; font-size:17px; font-variant-numeric:tabular-nums; }
-  #tabla th, #tabla td { padding:3px 18px 3px 6px; text-align:right; border-bottom:1px solid #eee; }
-  #tabla th { font-weight:600; border-bottom:1px solid #999; }
+  #tabla .bar { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:8px 0 10px; }
+  #tabla select { font:inherit; font-size:15px; padding:2px 4px; border:1px solid #c9d0d8; border-radius:6px; color:var(--ink); }
+  #tabla table { border-collapse:separate; border-spacing:0; font-size:17px; font-variant-numeric:tabular-nums;
+    border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+  #tabla th, #tabla td { padding:4px 20px 4px 14px; text-align:right; border-bottom:1px solid var(--line); }
+  #tabla tbody tr:last-child td { border-bottom:0; }
+  #tabla th { font-weight:600; background:var(--or-soft); color:var(--or-ink); border-bottom:1px solid #f0dcbb; }
   #tabla tbody tr { cursor:pointer; }
-  #tabla tbody tr:hover { background:#f4f6fa; }
-  #tabla tbody tr.sel { background:#e3ebf7; color:#1f5fbf; }
+  #tabla tbody tr:hover { background:var(--paper); }
+  #tabla tbody tr.sel { background:var(--or-soft); color:var(--or-ink); font-weight:600; }
   #bCopy { min-width:11.5em; }
-  #guide h2 { font-size:20px; font-weight:600; margin:10px 0 6px; }
-  #guide h3 { font-size:17px; font-weight:600; margin:22px 0 4px; }
+  #guide h2 { font-size:20px; font-weight:700; margin:12px 0 6px; color:var(--navy); }
+  #guide h3 { font-size:17px; font-weight:600; margin:22px 0 4px; color:var(--or-ink); }
   #guide p { margin:6px 0; }
   #guide .hint { color:var(--mut); }
-  #guide math { font-family:"Latin Modern Math","STIX Two Math","Cambria Math",math; font-size:1.18em; }
+  #guide math { font-family:"Latin Modern Math","STIX Two Math","Cambria Math",math; font-size:1.18em; color:var(--navy); }
   #guide math[display=block] { margin:12px 0; }
-  .row2 { display:grid; grid-template-columns:1fr 1fr; min-height:0; }
-  .plot { position:relative; min-height:0; min-width:0; }
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; min-height:0; }
+  .plot { position:relative; min-height:0; min-width:0; background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
   canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
   #cvTop, #cvB { cursor:pointer; touch-action:none; }
-  #drop { position:fixed; inset:0; background:rgba(31,95,191,.08); border:3px dashed var(--acc);
-    display:none; align-items:center; justify-content:center; font-size:26px; color:var(--acc); pointer-events:none; }
+  #drop { position:fixed; inset:0; background:rgba(31,99,176,.08); border:3px dashed var(--blue);
+    display:none; align-items:center; justify-content:center; font-size:26px; color:var(--blue); pointer-events:none; }
 </style>
 </head>
 <body>
 <header>
+  <a class="back" href="laboratorios.html#termo" aria-label="Volver al Laboratorio de Termodinámica y Física Estadística">←</a>
   <h1>Área del ciclo Stirling</h1>
   <button class="prim" id="bOpen">Abrir archivo .txt</button>
   <input type="file" id="file" accept=".txt,.dat,.csv,text/plain" hidden>
   <span id="fname">ningún archivo</span>
   <button id="bAll" disabled>Ver todo</button>
-  <span class="sep"></span>
-  <label>Columna V <input type="number" id="colV" value="3" min="1" step="1"></label>
-  <label>Columna P <input type="number" id="colP" value="5" min="1" step="1"></label>
 </header>
 <div id="res"><span class="sub">Abre el archivo del osciloscopio (texto separado por tabuladores, 9 líneas de cabecera). Los ciclos se detectan solos y su trabajo aparece en la tabla de la derecha.</span></div>
 <div class="body">
@@ -117,8 +117,10 @@
 "use strict";
 // ---------------- Parámetros ----------------
 const HEADER_LINES = 9;          // líneas de cabecera del archivo
+const COL_V = 3, COL_P = 5;      // columnas del volumen (CH1) y de la presión (CH2)
 const FACT_V = 2.4 * 1e-9;       // mV -> m^3   (1 V = 2.4 cm^3)
 const FACT_P = 329 * 0.1;        // mV -> Pa    (1 V = 329 hPa)
+const C = { ink: '#1b2430', mut: '#5b6676', navy: '#17324d', axis: '#b8c1cc', blue: '#1f63b0', or: '#c46f00', orInk: '#8f5200' };
 const FONT = 'system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif';
 
 // ---------------- Estado ----------------
@@ -126,6 +128,7 @@ let cols = null, dt = null, fileName = '';
 let V = null, P = null, N = 0;
 let an = null;                   // resultado del análisis
 let sel = -1;                    // ciclo resaltado
+let hoverK = -1;                 // punto bajo el ratón en el gráfico de trabajos
 let view = { x0: 0, x1: 1 };     // ventana visible del gráfico superior (en unidades de tiempo)
 let hoverX = null;
 let layTop = null, layB = null;
@@ -314,7 +317,7 @@ function plotFrame(cv, o) {
   const Y = v => y1 - (v - o.ylim[0]) / (o.ylim[1] - o.ylim[0]) * (y1 - y0);
 
   if (o.title) {
-    ctx.fillStyle = '#111'; ctx.font = `600 ${fsT}px ${FONT}`;
+    ctx.fillStyle = C.navy; ctx.font = `600 ${fsT}px ${FONT}`;
     ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
     ctx.fillText(o.title, (x0 + x1) / 2, fsT * 1.25, w - 20);
   }
@@ -323,9 +326,9 @@ function plotFrame(cv, o) {
     o.draw(ctx, X, Y, { x0, x1, y0, y1, fs });
     ctx.restore();
   }
-  ctx.strokeStyle = '#262626'; ctx.lineWidth = 1;
+  ctx.strokeStyle = C.axis; ctx.lineWidth = 1;
   ctx.strokeRect(Math.round(x0) + 0.5, Math.round(y0) + 0.5, Math.round(x1 - x0), Math.round(y1 - y0));
-  ctx.fillStyle = '#262626'; ctx.font = `${fs}px ${FONT}`;
+  ctx.fillStyle = C.mut; ctx.font = `${fs}px ${FONT}`;
   const tl = 6;
   ctx.beginPath();
   ctx.textAlign = 'center'; ctx.textBaseline = 'top';
@@ -343,7 +346,7 @@ function plotFrame(cv, o) {
   ctx.stroke();
   if (yf.e) drawExp(ctx, x0, y0 - 7, yf.e, fs, 'left');
   if (xf.e) drawExp(ctx, x1, y1 + fs * 3.0, xf.e, fs, 'right');
-  ctx.font = `${fs + 1}px ${FONT}`; ctx.fillStyle = '#111';
+  ctx.font = `${fs + 1}px ${FONT}`; ctx.fillStyle = C.ink;
   if (o.xlabel) { ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; ctx.fillText(o.xlabel, (x0 + x1) / 2, y1 + fs * 3.0); }
   if (o.ylabel) {
     ctx.save(); ctx.translate(14 + fs * 0.6, (y0 + y1) / 2); ctx.rotate(-Math.PI / 2);
@@ -355,7 +358,7 @@ function plotFrame(cv, o) {
 function emptyPlot(cv, title, msg) {
   const lay = plotFrame(cv, { title, xlim: [0, 1], ylim: [0, 1], noTicks: true });
   const ctx = cv.getContext('2d');
-  ctx.fillStyle = '#888'; ctx.font = `17px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = C.mut; ctx.font = `17px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   ctx.fillText(msg, (lay.x0 + lay.x1) / 2, (lay.y0 + lay.y1) / 2, lay.x1 - lay.x0 - 20);
   return lay;
 }
@@ -378,17 +381,18 @@ function drawTop() {
     draw(ctx, X, Y, b) {
       if (an && !an.error) {
         an.cycles.forEach((c, k) => {
-          if (!c.ok) { ctx.fillStyle = 'rgba(0,0,0,0.08)'; ctx.fillRect(X(tOf(c.a)), b.y0, X(tOf(c.b)) - X(tOf(c.a)), b.y1 - b.y0); }
-          if (k === sel) { ctx.fillStyle = 'rgba(31,95,191,0.12)'; ctx.fillRect(X(tOf(c.a)), b.y0, X(tOf(c.b)) - X(tOf(c.a)), b.y1 - b.y0); }
+          // franjas alternas para distinguir los ciclos; el resaltado y los descartados con su propio tono
+          const fill = !c.ok ? 'rgba(91,102,118,0.10)' : k === sel ? 'rgba(196,111,0,0.20)' : k % 2 === 0 ? 'rgba(196,111,0,0.06)' : null;
+          if (fill) { ctx.fillStyle = fill; ctx.fillRect(X(tOf(c.a)), b.y0, X(tOf(c.b)) - X(tOf(c.a)), b.y1 - b.y0); }
         });
-        ctx.strokeStyle = 'rgba(31,95,191,0.75)'; ctx.lineWidth = 1;
+        ctx.strokeStyle = 'rgba(196,111,0,0.55)'; ctx.lineWidth = 1;
         ctx.beginPath();
         const edges = an.cycles.map(c => c.a).concat([an.cycles[an.cycles.length - 1].b]);
         for (const e of edges) { const px = Math.round(X(tOf(e))) + 0.5; ctx.moveTo(px, b.y0); ctx.lineTo(px, b.y1); }
         ctx.stroke();
       }
       // curva (con reducción por columnas de píxel si hay muchos puntos)
-      ctx.strokeStyle = '#000'; ctx.lineWidth = 1.2; ctx.lineJoin = 'round';
+      ctx.strokeStyle = C.blue; ctx.lineWidth = 1.5; ctx.lineJoin = 'round';
       const n = i1 - i0 + 1, pxw = b.x1 - b.x0;
       ctx.beginPath();
       if (n <= pxw * 3) {
@@ -412,13 +416,13 @@ function drawTop() {
         ctx.strokeStyle = '#fff'; ctx.lineWidth = 4; ctx.lineJoin = 'round';
         an.cycles.forEach((c, k) => {
           const px = (X(tOf(c.a)) + X(tOf(c.b))) / 2, py = (b.y0 + b.y1) / 2;
-          ctx.fillStyle = k === sel ? '#1f5fbf' : c.ok ? '#444' : '#999';
+          ctx.fillStyle = k === sel ? C.or : c.ok ? C.orInk : '#98a2ae';
           ctx.strokeText(String(k + 1), px, py); ctx.fillText(String(k + 1), px, py);
         });
       }
       if (hoverX !== null) {
         const px = Math.round(X(hoverX)) + 0.5;
-        ctx.strokeStyle = 'rgba(0,0,0,0.25)'; ctx.lineWidth = 1;
+        ctx.strokeStyle = 'rgba(23,50,77,0.3)'; ctx.lineWidth = 1;
         ctx.beginPath(); ctx.moveTo(px, b.y0); ctx.lineTo(px, b.y1); ctx.stroke();
       }
     }
@@ -443,9 +447,9 @@ function drawPV() {
     xlabel: 'V (m³)', ylabel: 'P (Pa)', xlim: niceLimits(...vx), ylim: niceLimits(...py),
     draw(ctx, X, Y) {
       ctx.lineJoin = 'round';
-      ctx.strokeStyle = sel >= 0 ? '#b9b9b9' : '#555'; ctx.lineWidth = 1;
+      ctx.strokeStyle = sel >= 0 ? 'rgba(31,99,176,0.22)' : 'rgba(31,99,176,0.55)'; ctx.lineWidth = 1.2;
       for (const c of an.good) line(ctx, X, Y, V, P, c.i0, c.i1, true);
-      if (sel >= 0) { const c = an.cycles[sel]; ctx.strokeStyle = '#1f5fbf'; ctx.lineWidth = 2; line(ctx, X, Y, V, P, c.i0, c.i1, true); }
+      if (sel >= 0) { const c = an.cycles[sel]; ctx.strokeStyle = C.or; ctx.lineWidth = 2.4; line(ctx, X, Y, V, P, c.i0, c.i1, true); }
     }
   });
 }
@@ -459,14 +463,28 @@ function drawAreas() {
   layB = plotFrame(cvB, {
     title: 'Trabajo de cada ciclo',
     xlabel: 'ciclo k', ylabel: 'W (J)', xlim: [0.4, K + 0.6], ylim: niceLimits(lo, hi, 0.12), xInt: true,
-    draw(ctx, X, Y) {
+    draw(ctx, X, Y, b) {
       an.cycles.forEach((c, k) => {
         if (!isFinite(c.area)) return;
-        const px = X(k + 1), q = Y(c.area), r = k === sel ? 7 : 5;
+        const px = X(k + 1), q = Y(c.area), hot = k === sel || k === hoverK, r = hot ? 7.5 : 6;
+        ctx.beginPath(); ctx.arc(px, q, r + 2, 0, 2 * Math.PI); ctx.fillStyle = '#fff'; ctx.fill();   // anillo blanco
         ctx.beginPath(); ctx.arc(px, q, r, 0, 2 * Math.PI);
-        if (c.ok) { ctx.fillStyle = k === sel ? '#1f5fbf' : '#111'; ctx.fill(); }
-        else { ctx.strokeStyle = '#999'; ctx.lineWidth = 1.4; ctx.stroke(); }
+        if (c.ok) { ctx.fillStyle = k === sel ? C.or : C.blue; ctx.fill(); }
+        else { ctx.strokeStyle = '#98a2ae'; ctx.lineWidth = 1.6; ctx.stroke(); }
       });
+      // etiqueta del punto bajo el ratón
+      if (hoverK >= 0 && isFinite(an.cycles[hoverK].area)) {
+        const c = an.cycles[hoverK], px = X(hoverK + 1), q = Y(c.area);
+        const txt = `ciclo ${hoverK + 1}: W = ${fmtW(c.area)} J`;
+        ctx.font = `600 16px ${FONT}`;
+        const w = ctx.measureText(txt).width + 16, h = 28;
+        let x = px + 12, y = q - h - 8;
+        if (x + w > b.x1 - 4) x = px - 12 - w;
+        if (y < b.y0 + 4) y = q + 10;
+        ctx.fillStyle = 'rgba(255,255,255,0.96)'; ctx.strokeStyle = C.axis; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.roundRect(x, y, w, h, 6); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = C.ink; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText(txt, x + 8, y + h / 2);
+      }
     }
   });
 }
@@ -497,7 +515,7 @@ function buildTable() {
     <label>Decimal <select id="dec"><option value="c"${decComma ? ' selected' : ''}>coma (Excel en español)</option><option value="p"${decComma ? '' : ' selected'}>punto</option></select></label></div>
     <table><thead><tr><th>Ciclo k</th><th>W<sub>k</sub> (J)</th></tr></thead><tbody>${rows}</tbody></table>`;
   $('bCopy').onclick = copyTable;
-  $('dec').onchange = e => { decComma = e.target.value === 'c'; buildTable(); };
+  $('dec').onchange = e => { decComma = e.target.value === 'c'; try { sessionStorage.setItem('stirling.dec', decComma ? 'c' : 'p'); } catch (er) {} buildTable(); };
   box.querySelectorAll('tbody tr').forEach(tr => tr.onclick = () => selectCycle(+tr.dataset.k));
 }
 
@@ -515,36 +533,34 @@ function copyTable() {
 function redraw() { drawTop(); drawPV(); drawAreas(); buildTable(); }
 
 // ---------------- Carga ----------------
-function applyColumns() {
-  if (!cols) return;
-  const nc = cols.length, cv = parseInt($('colV').value, 10), cp = parseInt($('colP').value, 10);
-  sel = -1;
-  if (!(cv >= 1 && cv <= nc) || !(cp >= 1 && cp <= nc)) {
+function useData() {
+  sel = -1; hoverK = -1;
+  if (cols.length < 5) {
     V = P = null; an = null;
-    $('res').innerHTML = `<span class="warn">El archivo tiene ${nc} columnas numéricas: elige columnas entre 1 y ${nc}.</span>`;
+    $('res').innerHTML = `<span class="warn">El archivo solo tiene ${cols.length} columnas numéricas: se esperan el volumen en la 3 y la presión en la 5.</span>`;
     redraw(); return;
   }
   N = cols[0].length;
   V = new Float64Array(N); P = new Float64Array(N);
-  for (let i = 0; i < N; i++) { V[i] = cols[cv - 1][i] * FACT_V; P[i] = cols[cp - 1][i] * FACT_P; }
+  for (let i = 0; i < N; i++) { V[i] = cols[COL_V - 1][i] * FACT_V; P[i] = cols[COL_P - 1][i] * FACT_P; }
   an = analyze();
   showResult(); redraw();
 }
 
 function loadText(text, name) {
+  try { sessionStorage.setItem('stirling.file', JSON.stringify({ name, text })); } catch (e) {}
   fileName = name; $('fname').textContent = name; $('fname').title = name;
   try { ({ cols, dt } = parseFile(text)); }
   catch (err) { cols = null; V = P = null; an = null; $('res').innerHTML = `<span class="warn">No se pudo leer el archivo: ${err.message}</span>`; redraw(); return; }
   view = { x0: 0, x1: tOf(cols[0].length - 1) };
   $('bAll').disabled = false;
-  applyColumns();
+  useData();
 }
 
 // ---------------- Interacción ----------------
 $('bOpen').onclick = () => $('file').click();
 $('file').onchange = e => { const f = e.target.files[0]; if (f) readFile(f); e.target.value = ''; };
 function readFile(f) { const rd = new FileReader(); rd.onload = () => loadText(rd.result, f.name); rd.readAsText(f); }
-$('colV').onchange = $('colP').onchange = applyColumns;
 $('bAll').onclick = () => { if (V) { view = { x0: 0, x1: tOf(N - 1) }; drawTop(); } };
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && sel >= 0) { sel = -1; redraw(); } });
 
@@ -599,16 +615,22 @@ cvTop.addEventListener('wheel', e => {
 }, { passive: false });
 
 // gráfico de áreas: clic en un punto resalta ese ciclo
-cvB.addEventListener('click', e => {
-  if (!an || an.error || !layB) return;
+function nearestPoint(e) {
+  if (!an || an.error || !layB) return -1;
   const r = cvB.getBoundingClientRect(), px = e.clientX - r.left, py = e.clientY - r.top;
   let best = -1, bd = 400;
   an.cycles.forEach((c, k) => { if (!isFinite(c.area)) return; const d = (layB.X(k + 1) - px) ** 2 + (layB.Y(c.area) - py) ** 2; if (d < bd) { bd = d; best = k; } });
-  if (best >= 0) selectCycle(best);
-});
+  return best;
+}
+cvB.addEventListener('click', e => { const k = nearestPoint(e); if (k >= 0) selectCycle(k); });
+cvB.addEventListener('pointermove', e => { const k = nearestPoint(e); if (k !== hoverK) { hoverK = k; drawAreas(); } });
+cvB.addEventListener('pointerleave', () => { if (hoverK >= 0) { hoverK = -1; drawAreas(); } });
 
 new ResizeObserver(() => redraw()).observe(document.querySelector('main'));
+// al volver a la app en la misma sesión se recupera lo último: archivo y separador decimal
+try { if (sessionStorage.getItem('stirling.dec') === 'p') decComma = false; } catch (e) {}
 redraw();
+try { const f = JSON.parse(sessionStorage.getItem('stirling.file') || 'null'); if (f) loadText(f.text, f.name); } catch (e) {}
 </script>
 </body>
 </html>
