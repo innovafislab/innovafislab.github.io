@@ -27,6 +27,7 @@
     background:var(--or-soft); border-bottom:1px solid #f0dcbb; border-left:3px solid var(--or); font-size:21px; min-height:30px; }
   #res b { font-weight:700; color:var(--or-ink); }
   #res .sub { font-size:16px; color:var(--mut); }
+  #res .note { font-size:16px; color:var(--or-ink); }
   #res .warn { font-size:16px; color:#b3261e; font-weight:500; }
   .body { flex:1; display:flex; min-height:0; }
   main { flex:1; display:grid; grid-template-rows:42fr 58fr; gap:10px; padding:10px; min-height:0; min-width:0; }
@@ -85,7 +86,7 @@
   <h2>Qué hace el programa</h2>
 
   <h3>1. Lectura de los datos</h3>
-  <p>Salta las 9 líneas de cabecera del archivo del osciloscopio y toma la columna 3 (señal del sensor de volumen, <i>U</i><sub>V</sub>) y la 5 (señal del sensor de presión, <i>U</i><sub>P</sub>), ambas en mV. Las pasa a unidades SI con la calibración de los sensores (1 V = 2.4 cm³ y 1 V = 329 hPa):</p>
+  <p>Salta las 9 líneas de cabecera del archivo del osciloscopio y toma la columna 3 (señal del sensor de volumen, <i>U</i><sub>V</sub>) y la 5 (señal del sensor de presión, <i>U</i><sub>P</sub>), y las expresa en mV según la unidad que indica la cabecera de cada columna. Si el osciloscopio tiene un canal en modo corriente lo exporta en mA, con 10 mA por cada mV, y el programa lo divide entre 10 (lo indica en la franja de arriba). Después pasa las señales a unidades SI con la calibración de los sensores (1 V = 2.4 cm³ y 1 V = 329 hPa):</p>
   <math display="block"><mi>V</mi><mo>=</mo><mn>2.4</mn><mo>·</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>9</mn></mrow></msup><mtext>&#x2009;m³/mV</mtext><mo>·</mo><msub><mi>U</mi><mi mathvariant="normal">V</mi></msub></math>
   <math display="block"><mi>P</mi><mo>=</mo><mn>32.9</mn><mtext>&#x2009;Pa/mV</mtext><mo>·</mo><msub><mi>U</mi><mi mathvariant="normal">P</mi></msub></math>
   <p>El intervalo de muestreo Δ<i>t</i> se lee de la línea «Time interval» de la cabecera.</p>
@@ -101,8 +102,9 @@
   <math display="block"><msub><mi>W</mi><mi>k</mi></msub><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mrow><mo fence="true" stretchy="true" symmetric="true">|</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>N</mi><mi>k</mi></msub></munderover><mrow><mo>(</mo><msub><mi>V</mi><mi>i</mi></msub><msub><mi>P</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>−</mo><msub><mi>V</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><msub><mi>P</mi><mi>i</mi></msub><mo>)</mo></mrow><mo fence="true" stretchy="true" symmetric="true">|</mo></mrow></math>
   <p>donde la muestra <i>N</i><sub>k</sub>+1 es la primera, de modo que el polígono queda cerrado.</p>
 
-  <h3>4. Saturación</h3>
+  <h3>4. Avisos</h3>
   <p>Si el volumen o la presión se quedan planos en su valor máximo o mínimo durante más de un 5 % del periodo, la señal se ha recortado en el osciloscopio y aparece un aviso en rojo: los ciclos están incompletos y su trabajo sale por defecto.</p>
+  <p>El volumen del motor varía entre 32 y 44 cm³, es decir, 12 cm³ (5 V en la salida del medidor). Si la variación medida se aparta más de un 20 % de ese valor, el programa avisa de que la escala del canal del volumen está mal.</p>
 
   <h3>Gráficos</h3>
   <p>Arriba, el volumen frente al tiempo con los límites y el número de cada ciclo. Abajo a la izquierda, el diagrama P‑V de todos los ciclos válidos. Abajo a la derecha, el trabajo <i>W</i><sub>k</sub> de cada ciclo. Al pinchar en un ciclo, en el gráfico de arriba, en su punto o en su fila de la tabla, se resalta en azul.</p>
@@ -117,17 +119,22 @@
 "use strict";
 // ---------------- Parámetros ----------------
 const HEADER_LINES = 9;          // líneas de cabecera del archivo
+const SWEPT_CM3 = 12;            // volumen barrido del motor PHYWE (32 a 44 cm³)
 const COL_V = 3, COL_P = 5;      // columnas del volumen (CH1) y de la presión (CH2)
 const FACT_V = 2.4 * 1e-9;       // mV -> m^3   (1 V = 2.4 cm^3)
 const FACT_P = 329 * 0.1;        // mV -> Pa    (1 V = 329 hPa)
+// Paso a mV de cada columna según la unidad con que la exporta el osciloscopio.
+// En modo corriente el osciloscopio escribe el canal en mA (o A) con 10 mA por cada mV de entrada.
+const TO_MV = { 'mV': 1, 'V': 1000, 'mA': 0.1, 'A': 100 };
 const C = { ink: '#1b2430', mut: '#5b6676', navy: '#17324d', axis: '#b8c1cc', blue: '#1f63b0', or: '#c46f00', orInk: '#8f5200' };
 const FONT = 'system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif';
 
 // ---------------- Estado ----------------
-let cols = null, dt = null, fileName = '';
+let cols = null, units = [], dt = null, fileName = '';
 let V = null, P = null, N = 0;
 let an = null;                   // resultado del análisis
 let sel = -1;                    // ciclo resaltado
+let notes = [];                  // avisos de conversión de unidades
 let hoverK = -1;                 // punto bajo el ratón en el gráfico de trabajos
 let view = { x0: 0, x1: 1 };     // ventana visible del gráfico superior (en unidades de tiempo)
 let hoverX = null;
@@ -164,7 +171,11 @@ function parseFile(text) {
   if (nc <= 0) throw new Error('No se encontraron columnas numéricas tras la cabecera.');
   const out = Array.from({ length: nc }, () => new Float64Array(rows.length));
   rows.forEach((r, j) => { for (let c = 0; c < nc; c++) { const s = r[lead + c]; out[c][j] = s === undefined ? NaN : parseNum(s); } });
-  return { cols: out, dt: dtv && dtv > 0 ? dtv : null };
+  // unidad de cada columna, de la línea de títulos (p. ej. "CH1_Voltage(mA)"), alineada con los datos
+  const units = [];
+  const hdr = (lines[HEADER_LINES - 1] || '').split('\t');
+  for (let c = 0; c < nc; c++) { const m = (hdr[lead + c] || '').match(/\(([^)]*)\)\s*$/); units.push(m ? m[1].trim() : ''); }
+  return { cols: out, dt: dtv && dtv > 0 ? dtv : null, units };
 }
 
 // ---------------- Funciones numéricas ----------------
@@ -242,6 +253,12 @@ function analyze() {
     }
   };
   chk(V, 'Volumen'); chk(P, 'Presión');
+
+  // comprobación física: el volumen del motor varía 12 cm³ (de 32 a 44 cm³)
+  const seg = Float64Array.from(V.subarray(good[0].i0, good[good.length - 1].i1 + 1)).sort();
+  const dV = (seg[Math.floor(0.995 * (seg.length - 1))] - seg[Math.floor(0.005 * (seg.length - 1))]) * 1e6;
+  if (!warn.length && Math.abs(dV / SWEPT_CM3 - 1) > 0.2)
+    warn.push(`La variación de volumen es de ${dV.toPrecision(3)} cm³ y debería ser de unos ${SWEPT_CM3} cm³ (volumen barrido del motor): revisa la escala del canal CH1`);
 
   return { cycles, good, K: good.length, warn };
 }
@@ -497,6 +514,7 @@ function showResult() {
   const nd = an.cycles.length - an.K;
   let h = `<span><b>${an.K} ciclos completos</b>${nd ? ` <span class="sub">(${nd} descartado${nd > 1 ? 's' : ''} por periodo anómalo)</span>` : ''}</span>`;
   h += `<span class="sub">Copia la tabla de la derecha a Excel y calcula allí el trabajo medio por ciclo y su error.</span>`;
+  for (const n of notes) h += `<span class="note">${n}</span>`;
   for (const w of an.warn) h += `<span class="warn">${w}</span>`;
   el.innerHTML = h;
 }
@@ -541,8 +559,17 @@ function useData() {
     redraw(); return;
   }
   N = cols[0].length;
+  const uV = units[COL_V - 1] || 'mV', uP = units[COL_P - 1] || 'mV';
+  const kV = TO_MV[uV] ?? 1, kP = TO_MV[uP] ?? 1;
+  notes = [];
+  for (const [u, k, ch] of [[uV, kV, 'CH1 (volumen)'], [uP, kP, 'CH2 (presión)']]) {
+    if (k === 1) continue;
+    notes.push(TO_MV[u] === undefined ? `${ch} viene en una unidad desconocida (${u}); se ha tomado como mV`
+      : /A$/.test(u) ? `${ch} viene en ${u} (osciloscopio en modo corriente): se ha pasado a mV ${k < 1 ? 'dividiendo entre ' + (1 / k) : 'multiplicando por ' + k}`
+      : `${ch} viene en ${u}: se ha pasado a mV multiplicando por ${k}`);
+  }
   V = new Float64Array(N); P = new Float64Array(N);
-  for (let i = 0; i < N; i++) { V[i] = cols[COL_V - 1][i] * FACT_V; P[i] = cols[COL_P - 1][i] * FACT_P; }
+  for (let i = 0; i < N; i++) { V[i] = cols[COL_V - 1][i] * kV * FACT_V; P[i] = cols[COL_P - 1][i] * kP * FACT_P; }
   an = analyze();
   showResult(); redraw();
 }
@@ -550,7 +577,7 @@ function useData() {
 function loadText(text, name) {
   try { sessionStorage.setItem('stirling.file', JSON.stringify({ name, text })); } catch (e) {}
   fileName = name; $('fname').textContent = name; $('fname').title = name;
-  try { ({ cols, dt } = parseFile(text)); }
+  try { ({ cols, dt, units } = parseFile(text)); }
   catch (err) { cols = null; V = P = null; an = null; $('res').innerHTML = `<span class="warn">No se pudo leer el archivo: ${err.message}</span>`; redraw(); return; }
   view = { x0: 0, x1: tOf(cols[0].length - 1) };
   $('bAll').disabled = false;
