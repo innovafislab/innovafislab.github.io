@@ -32,10 +32,20 @@
   main { flex:1; display:grid; grid-template-rows:42fr 58fr; min-height:0; min-width:0; }
   #guide { width:420px; flex:none; overflow-y:auto; border-left:1px solid var(--line);
     padding:6px 22px 24px; font-size:16.5px; line-height:1.5; color:#222; box-sizing:border-box; }
-  #guide.hide { display:none; }
+  #tabla { margin:6px 0 4px; }
+  #tabla .bar { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:8px 0; }
+  #tabla select { font:inherit; font-size:15px; padding:2px 4px; border:1px solid #bbb; border-radius:5px; }
+  #tabla table { border-collapse:collapse; font-size:17px; font-variant-numeric:tabular-nums; }
+  #tabla th, #tabla td { padding:3px 18px 3px 6px; text-align:right; border-bottom:1px solid #eee; }
+  #tabla th { font-weight:600; border-bottom:1px solid #999; }
+  #tabla tbody tr { cursor:pointer; }
+  #tabla tbody tr:hover { background:#f4f6fa; }
+  #tabla tbody tr.sel { background:#e3ebf7; color:#1f5fbf; }
+  #bCopy { min-width:11.5em; }
   #guide h2 { font-size:20px; font-weight:600; margin:10px 0 6px; }
   #guide h3 { font-size:17px; font-weight:600; margin:22px 0 4px; }
   #guide p { margin:6px 0; }
+  #guide .hint { color:var(--mut); }
   #guide math { font-family:"Latin Modern Math","STIX Two Math","Cambria Math",math; font-size:1.18em; }
   #guide math[display=block] { margin:12px 0; }
   .row2 { display:grid; grid-template-columns:1fr 1fr; min-height:0; }
@@ -54,11 +64,10 @@
   <span id="fname">ningún archivo</span>
   <button id="bAll" disabled>Ver todo</button>
   <span class="sep"></span>
-  <button id="bGuide">Ocultar método</button>
   <label>Columna V <input type="number" id="colV" value="3" min="1" step="1"></label>
   <label>Columna P <input type="number" id="colP" value="5" min="1" step="1"></label>
 </header>
-<div id="res"><span class="sub">Abre el archivo del osciloscopio (texto separado por tabuladores, 9 líneas de cabecera). Los ciclos se detectan solos.</span></div>
+<div id="res"><span class="sub">Abre el archivo del osciloscopio (texto separado por tabuladores, 9 líneas de cabecera). Los ciclos se detectan solos y su trabajo aparece en la tabla de la derecha.</span></div>
 <div class="body">
 <main>
   <div class="plot"><canvas id="cvTop"></canvas></div>
@@ -68,6 +77,11 @@
   </div>
 </main>
 <aside id="guide">
+  <div id="tabla">
+    <h2>Trabajo de cada ciclo</h2>
+    <p class="hint">Abre un archivo para obtener la tabla.</p>
+  </div>
+
   <h2>Qué hace el programa</h2>
 
   <h3>1. Lectura de los datos</h3>
@@ -87,25 +101,14 @@
   <math display="block"><msub><mi>W</mi><mi>k</mi></msub><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mrow><mo fence="true" stretchy="true" symmetric="true">|</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>N</mi><mi>k</mi></msub></munderover><mrow><mo>(</mo><msub><mi>V</mi><mi>i</mi></msub><msub><mi>P</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>−</mo><msub><mi>V</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><msub><mi>P</mi><mi>i</mi></msub><mo>)</mo></mrow><mo fence="true" stretchy="true" symmetric="true">|</mo></mrow></math>
   <p>donde la muestra <i>N</i><sub>k</sub>+1 es la primera, de modo que el polígono queda cerrado.</p>
 
-  <h3>4. Resultado y error</h3>
-  <p>Cada ciclo es una repetición independiente de la medida. Con los <i>K</i> ciclos válidos, el trabajo por ciclo es la media</p>
-  <math display="block"><mover><mi>W</mi><mo>‾</mo></mover><mo>=</mo><mfrac><mn>1</mn><mi>K</mi></mfrac><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><msub><mi>W</mi><mi>k</mi></msub></math>
-  <p>y la variación de un ciclo a otro se mide con la desviación típica</p>
-  <math display="block"><mi>s</mi><mo>=</mo><msqrt><mfrac><mrow><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><msup><mrow><mo>(</mo><msub><mi>W</mi><mi>k</mi></msub><mo>−</mo><mover><mi>W</mi><mo>‾</mo></mover><mo>)</mo></mrow><mn>2</mn></msup></mrow><mrow><mi>K</mi><mo>−</mo><mn>1</mn></mrow></mfrac></msqrt></math>
-  <p>El error del resultado es el error de la media:</p>
-  <math display="block"><mi>Δ</mi><mi>W</mi><mo>=</mo><mfrac><mi>s</mi><msqrt><mi>K</mi></msqrt></mfrac></math>
-  <p>Con los sensores bien calibrados es la única fuente de error, y recoge a la vez el ruido de las señales, la resolución del osciloscopio y las variaciones reales del motor entre ciclos. El resultado se da como <i>W</i> = <i>W̄</i> ± Δ<i>W</i>, con el error redondeado a una cifra significativa (dos si empieza por 1) y la media redondeada a la misma cifra decimal.</p>
-
-  <h3>5. Potencia</h3>
-  <p>El periodo <i>T</i> es la media de las duraciones de los <i>K</i> ciclos, y su error Δ<i>T</i> se obtiene igual que Δ<i>W</i>. La potencia y su error son</p>
-  <math display="block"><mi>𝒫</mi><mo>=</mo><mfrac><mover><mi>W</mi><mo>‾</mo></mover><mi>T</mi></mfrac></math>
-  <math display="block"><mfrac><mrow><mi>Δ</mi><mi>𝒫</mi></mrow><mi>𝒫</mi></mfrac><mo>=</mo><msqrt><msup><mrow><mo>(</mo><mfrac><mrow><mi>Δ</mi><mi>W</mi></mrow><mover><mi>W</mi><mo>‾</mo></mover></mfrac><mo>)</mo></mrow><mn>2</mn></msup><mo>+</mo><msup><mrow><mo>(</mo><mfrac><mrow><mi>Δ</mi><mi>T</mi></mrow><mi>T</mi></mfrac><mo>)</mo></mrow><mn>2</mn></msup></msqrt></math>
-
-  <h3>6. Saturación</h3>
+  <h3>4. Saturación</h3>
   <p>Si el volumen o la presión se quedan planos en su valor máximo o mínimo durante más de un 5 % del periodo, la señal se ha recortado en el osciloscopio y aparece un aviso en rojo: los ciclos están incompletos y su trabajo sale por defecto.</p>
 
   <h3>Gráficos</h3>
-  <p>Arriba, el volumen frente al tiempo con los límites y el número de cada ciclo. Abajo a la izquierda, el diagrama P‑V de todos los ciclos válidos. Abajo a la derecha, el trabajo <i>W</i><sub>k</sub> de cada ciclo, con la media <i>W̄</i> (línea) y la banda <i>W̄</i> ± <i>s</i>. Al pinchar en un ciclo, en el gráfico de arriba o en su punto, se resalta en azul en los tres gráficos.</p>
+  <p>Arriba, el volumen frente al tiempo con los límites y el número de cada ciclo. Abajo a la izquierda, el diagrama P‑V de todos los ciclos válidos. Abajo a la derecha, el trabajo <i>W</i><sub>k</sub> de cada ciclo. Al pinchar en un ciclo, en el gráfico de arriba, en su punto o en su fila de la tabla, se resalta en azul.</p>
+
+  <h3>La tabla</h3>
+  <p>Contiene el trabajo <i>W</i><sub>k</sub> de cada ciclo válido, con cuatro cifras significativas. El botón «Copiar tabla» la copia con su encabezado, lista para pegarla en Excel con Ctrl+V: cada dato queda en su celda. Con Excel en español hay que dejar la coma como separador decimal; si Excel está en inglés, elegir el punto.</p>
 </aside>
 </div>
 <div id="drop">Suelta aquí el archivo .txt</div>
@@ -224,12 +227,6 @@ function analyze() {
   const good = cycles.filter(c => c.ok && isFinite(c.area));
   if (!good.length) return { error: 'No hay ciclos válidos.' };
 
-  const A = good.map(c => c.area), K = A.length;
-  const mean = A.reduce((p, q) => p + q, 0) / K;
-  const sd = K > 1 ? Math.sqrt(A.reduce((p, q) => p + (q - mean) ** 2, 0) / (K - 1)) : NaN;
-  const Tgood = good.map(c => c.b - c.a), Tmean = Tgood.reduce((p, q) => p + q, 0) / K;
-  const sT = K > 1 ? Math.sqrt(Tgood.reduce((p, q) => p + (q - Tmean) ** 2, 0) / (K - 1)) : 0;
-
   // aviso de saturación: la señal se queda plana en su máximo o mínimo
   const warn = [];
   const chk = (y, name) => {
@@ -243,18 +240,9 @@ function analyze() {
   };
   chk(V, 'Volumen'); chk(P, 'Presión');
 
-  return { cycles, good, mean, sd, se: sd / Math.sqrt(K), K, Tmean, seT: sT / Math.sqrt(K), warn };
+  return { cycles, good, K: good.length, warn };
 }
 
-// ---------------- Formato de números ----------------
-function withErr(v, e) {
-  if (!(e > 0)) return v.toPrecision(4);
-  let d = -Math.floor(Math.log10(e));
-  if (e * Math.pow(10, d) < 1.95) d++;               // dos cifras si el error empieza por 1
-  d = Math.max(0, d);
-  return v.toFixed(d) + ' ± ' + e.toFixed(d);
-}
-const sig = (v, n) => { const s = v.toPrecision(n); return s.includes('e') ? s : s.replace(/(\.\d*?)0+$/, '$1').replace(/\.$/, ''); };
 
 // ---------------- Dibujo de gráficos ----------------
 function setupCanvas(cv) {
@@ -464,17 +452,14 @@ function drawPV() {
 
 // ---------------- Abajo a la derecha: área de cada ciclo ----------------
 function drawAreas() {
-  if (!an || an.error) { layB = emptyPlot(cvB, 'Área de cada ciclo', ''); return; }
+  if (!an || an.error) { layB = emptyPlot(cvB, 'Trabajo de cada ciclo', ''); return; }
   const K = an.cycles.length;
-  let lo = an.mean - (an.sd || 0), hi = an.mean + (an.sd || 0);
+  let lo = Infinity, hi = -Infinity;
   for (const c of an.cycles) if (isFinite(c.area)) { lo = Math.min(lo, c.area); hi = Math.max(hi, c.area); }
   layB = plotFrame(cvB, {
-    title: `Trabajo de cada ciclo: W\u0304 = ${sig(an.mean, 4)} J, s = ${sig(an.sd, 2)} J`,
+    title: 'Trabajo de cada ciclo',
     xlabel: 'ciclo k', ylabel: 'W (J)', xlim: [0.4, K + 0.6], ylim: niceLimits(lo, hi, 0.12), xInt: true,
-    draw(ctx, X, Y, b) {
-      if (an.sd > 0) { ctx.fillStyle = 'rgba(0,0,0,0.06)'; ctx.fillRect(b.x0, Y(an.mean + an.sd), b.x1 - b.x0, Y(an.mean - an.sd) - Y(an.mean + an.sd)); }
-      ctx.strokeStyle = '#000'; ctx.lineWidth = 1.4;
-      ctx.beginPath(); ctx.moveTo(b.x0, Y(an.mean)); ctx.lineTo(b.x1, Y(an.mean)); ctx.stroke();
+    draw(ctx, X, Y) {
       an.cycles.forEach((c, k) => {
         if (!isFinite(c.area)) return;
         const px = X(k + 1), q = Y(c.area), r = k === sel ? 7 : 5;
@@ -491,20 +476,43 @@ function showResult() {
   const el = $('res');
   if (!V) return;
   if (an.error) { el.innerHTML = `<span class="warn">${an.error}</span>`; return; }
-  let h = `<span>Trabajo por ciclo &nbsp;<b>W = ${withErr(an.mean, an.se)} J</b></span>`;
-  if (dt) {
-    const T = an.Tmean * dt, dT = an.seT * dt, f = 1 / T;
-    const pot = an.mean / T, dpot = pot * Math.hypot(an.se / an.mean, dT / T);
-    h += `<span>Potencia &nbsp;<b>\u{1D4AB} = W/T = ${withErr(pot, dpot)} W</b></span>`;
-    h += `<span class="sub">K = ${an.K} ciclos &nbsp; T = ${withErr(T * 1e3, dT * 1e3)} ms &nbsp; f = ${f.toPrecision(4)} Hz</span>`;
-  } else {
-    h += `<span class="sub">K = ${an.K} ciclos &nbsp; T = ${withErr(an.Tmean, an.seT)} muestras</span>`;
-  }
+  const nd = an.cycles.length - an.K;
+  let h = `<span><b>${an.K} ciclos completos</b>${nd ? ` <span class="sub">(${nd} descartado${nd > 1 ? 's' : ''} por periodo anómalo)</span>` : ''}</span>`;
+  h += `<span class="sub">Copia la tabla de la derecha a Excel y calcula allí el trabajo medio por ciclo y su error.</span>`;
   for (const w of an.warn) h += `<span class="warn">${w}</span>`;
   el.innerHTML = h;
 }
 
-function redraw() { drawTop(); drawPV(); drawAreas(); }
+// ---------------- Tabla de trabajos ----------------
+let decComma = true;
+const fmtW = v => { const s = v.toPrecision(4); return decComma ? s.replace('.', ',') : s; };
+
+function buildTable() {
+  const box = $('tabla');
+  if (!an || an.error) { box.innerHTML = '<h2>Trabajo de cada ciclo</h2><p class="hint">' + (an ? 'Sin ciclos válidos.' : 'Abre un archivo para obtener la tabla.') + '</p>'; return; }
+  let rows = '';
+  an.cycles.forEach((c, k) => { if (c.ok) rows += `<tr data-k="${k}"${k === sel ? ' class="sel"' : ''}><td>${k + 1}</td><td>${fmtW(c.area)}</td></tr>`; });
+  box.innerHTML = `<h2>Trabajo de cada ciclo</h2>
+    <div class="bar"><button class="prim" id="bCopy">Copiar tabla</button>
+    <label>Decimal <select id="dec"><option value="c"${decComma ? ' selected' : ''}>coma (Excel en español)</option><option value="p"${decComma ? '' : ' selected'}>punto</option></select></label></div>
+    <table><thead><tr><th>Ciclo k</th><th>W<sub>k</sub> (J)</th></tr></thead><tbody>${rows}</tbody></table>`;
+  $('bCopy').onclick = copyTable;
+  $('dec').onchange = e => { decComma = e.target.value === 'c'; buildTable(); };
+  box.querySelectorAll('tbody tr').forEach(tr => tr.onclick = () => selectCycle(+tr.dataset.k));
+}
+
+function copyTable() {
+  let txt = 'Ciclo k\tW_k (J)\r\n';
+  an.cycles.forEach((c, k) => { if (c.ok) txt += `${k + 1}\t${fmtW(c.area)}\r\n`; });
+  const done = () => { const b = $('bCopy'); b.textContent = 'Copiada ✓'; setTimeout(() => { if ($('bCopy')) $('bCopy').textContent = 'Copiar tabla'; }, 1500); };
+  const fallback = () => {
+    const ta = document.createElement('textarea'); ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); done();
+  };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(txt).then(done, fallback); else fallback();
+}
+
+function redraw() { drawTop(); drawPV(); drawAreas(); buildTable(); }
 
 // ---------------- Carga ----------------
 function applyColumns() {
@@ -537,7 +545,6 @@ $('bOpen').onclick = () => $('file').click();
 $('file').onchange = e => { const f = e.target.files[0]; if (f) readFile(f); e.target.value = ''; };
 function readFile(f) { const rd = new FileReader(); rd.onload = () => loadText(rd.result, f.name); rd.readAsText(f); }
 $('colV').onchange = $('colP').onchange = applyColumns;
-$('bGuide').onclick = () => { const g = $('guide'); g.classList.toggle('hide'); $('bGuide').textContent = g.classList.contains('hide') ? 'Ver método' : 'Ocultar método'; };
 $('bAll').onclick = () => { if (V) { view = { x0: 0, x1: tOf(N - 1) }; drawTop(); } };
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && sel >= 0) { sel = -1; redraw(); } });
 
