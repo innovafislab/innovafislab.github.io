@@ -343,10 +343,13 @@ const FIN=(()=>{
 // osciloscopio la presión oscila unos 1,7 V (≈ 570 hPa) y va unos 130° por delante del volumen, lo que da WpV ≈ 0,40 J por ciclo. Al frenar sigue las
 // tendencias de la tabla del fabricante: T1 sube, T2 baja, WpV crece algo, el rozamiento por ciclo baja linealmente con n y el motor se para con unos 22·10⁻³ N·m.
 const PH={VD:24,Vhd:2,Vcd:2,Vr:4,om:.25,kap:.15,eps:3.72,nL:230,q:3,patm:945,c:.157,k:2.57e-4,I:4e-4,NP:120,Tamb:22,push:40};
-const T1SS=n=>146+64*Math.exp(-n/330),T2SS=n=>38+20*(1-Math.exp(-n/600));
+// temperaturas de régimen frente al giro: al frenar, el motor saca menos calor del foco caliente y T1 sube (unos 7 °C por cada 100 min⁻¹ menos,
+// como en la tabla del fabricante), T2 baja algo, y el ciclo se ensancha
+const T1SS=n=>150+.07*(945-n)-4*Math.exp(-n/120),T2SS=n=>38+20*(1-Math.exp(-n/600));
 // ciclo a régimen n (min⁻¹) con temperaturas T1, T2 (°C): presión en hPa en NP puntos del giro; p = p0 + a·dp, donde p0 depende solo de V (no encierra área).
-// El aire del extremo caliente está bastante más caliente que el termopar T1 (eps); a poco régimen las fugas y el poco intercambio de calor achican el ciclo (nL, q).
-function cycle(T1,T2,n,out){const N=PH.NP,p0=out.p0,dp=out.dp,Tc=T2+273.15,Th=Tc+PH.eps*Math.max(0,T1-T2),Tm=(Th+Tc)/2,Tw=Tc+PH.om*(Th-Tc),s=n>0?1/(1+Math.pow(PH.nL/n,PH.q)):0;
+// El aire del extremo caliente está bastante más caliente que el termopar T1 (eps), y más cuanto más despacio gira, porque tiene más tiempo
+// para tomar calor de la pared; a poco régimen las fugas y el poco intercambio de calor achican el ciclo (nL, q).
+function cycle(T1,T2,n,out){const N=PH.NP,p0=out.p0,dp=out.dp,Tc=T2+273.15,Th=Tc+PH.eps*(1+.3*(1-n/945))*Math.max(0,T1-T2),Tm=(Th+Tc)/2,Tw=Tc+PH.om*(Th-Tc),s=n>0?1/(1+Math.pow(PH.nL/n,PH.q)):0;
  let m=0,m0=0;for(let i=0;i<N;i++){const th=2*Math.PI*i/N,sn=Math.sin(th),Vw=6*(1-Math.cos(th)),V=32+Vw,f=Math.pow(38/V,PH.kap),
    a=f/((PH.VD*(1+sn)/2+PH.Vhd)/Th+(PH.VD*(1-sn)/2+PH.Vcd)/Tc+Vw/Tw+PH.Vr/Tm),b=f/(V/Tm);dp[i]=a;p0[i]=b;m+=a;m0+=b}
  m/=N;m0/=N;let W=0;for(let i=0;i<N;i++){const b=p0[i]*m/m0,d=(dp[i]-b)*s;p0[i]=b;dp[i]=d}
@@ -467,7 +470,7 @@ const TQ=grp(ENG),ZS=.052,SR0=.076,SR1=.107,SA0=-9*Math.PI/180,SA1=119*Math.PI/1
   c.font='500 '+Math.round(.0043*K)+'px Arial,sans-serif';c.textAlign='center';c.fillText('×10⁻³ Nm',X(.0915),Y(-.0052));
   c.save();c.translate(X(.093*Math.cos(1.865)),Y(.093*Math.sin(1.865)));c.rotate(-(1.865-Math.PI/2)*.55);c.textAlign='center';c.font='900 '+Math.round(.0058*K)+'px Arial Black,Arial,sans-serif';c.font='800 '+Math.round(.0040*K)+'px Arial,sans-serif';c.fillText('MEDIDOR',0,-.0026*K);c.fillText('DE PAR',0,.0036*K);c.restore();FIN.wear(c,w,h,410,{n:10,w:1.2})});
  const fg=new THREE.ShapeGeometry(sh,64),U=fg.attributes.uv,Pp=fg.attributes.position;for(let i=0;i<U.count;i++)U.setXY(i,(Pp.getX(i)-X0)/W,(Pp.getY(i)-Y0)/H);
- const face=mesh(fg,new THREE.MeshStandardMaterial({map:t,roughness:.5}),TQ,AX,AY,ZS+.0002);
+ const face=mesh(fg,new THREE.MeshStandardMaterial({map:t,roughness:.5}),TQ,AX,AY,ZS+.0002);TQ.userData.face=face;
 }
 const BRK=grp(ENG,AX,AY,.040);
 // pinza blanca de dos piezas sobre el eje, varilla de acero y pesa de aluminio de eje vertical, como el medidor de par del laboratorio. En reposo la pesa
@@ -503,7 +506,7 @@ const HOTP=new THREE.Color(0xff5a1f),COLDP=new THREE.Color(0x1f86ff);
 let airK=-1;function airTint(force){if(!AIR.visible)return;const k=Math.max(0,Math.min(1,(DY.T1-DY.T2)/85));if(!force&&Math.abs(k-airK)<.02)return;airK=k;const h=AH.material.color.copy(COLDC).lerp(HOTC,k),g=AIR.userData.gap.geometry,P=g.attributes.position,C=g.attributes.color,t=new THREE.Color();
  for(let i=0;i<P.count;i++){t.copy(COLDC).lerp(h,P.getY(i)/DL+.5);C.setXYZ(i,t.r,t.g,t.b)}C.needsUpdate=true}
 const apM=new THREE.Matrix4(),apC=new THREE.Color(),apH=new THREE.Color();
-function airPts(xl,xr,y0,y1){const R=.0100,b=TX0+.1005,cap=.0092,a=TX0+.002,Tc=DY.T2+273.15,Th=Tc+PH.eps*Math.max(0,DY.T1-DY.T2),Tw=Tc+PH.om*(Th-Tc),t=performance.now()/1000,
+function airPts(xl,xr,y0,y1){const R=.0100,b=TX0+.1005,cap=.0092,a=TX0+.002,Tc=DY.T2+273.15,Th=Tc+PH.eps*Math.max(0,DY.T1-DY.T2),Tw=Tc+PH.om*(Th-Tc),t=VT,
   k=Math.max(0,Math.min(1,(DY.T1-DY.T2)/85)),xt=b+cap,cf=xr>b?Math.max(0,1-(xr-b)/cap):1,
   m=[(Math.PI*R*R*Math.max(0,b-xr)+2/3*Math.PI*R*R*R*cf)/Th,Math.PI*(.0099*.0099-.0089*.0089)*(xr-xl)/((Th+Tc)/2),Math.PI*R*R*Math.max(0,xl-a)/Tc,Math.PI*R*R*.014/Tc,Math.PI*.0138*.0138*Math.max(0,y1-y0)/Tw],
   c=[0];let M=0;for(const q of m)M+=q;for(let i=0;i<5;i++)c.push(c[i]+m[i]/M);apH.copy(COLDP).lerp(HOTP,k);
@@ -527,17 +530,24 @@ function pose(th){const ps=-Math.PI/2-th,px=CR*Math.cos(ps),py=CR*Math.sin(ps);C
 /* ================= medidor pVnT ================= */
 // siete segmentos de LED rojo; ch: dígito, '-', ' ' o letras de «cal» y «ot»
 const SEG={'0':'abcdef','1':'bc','2':'abdeg','3':'abcdg','4':'bcfg','5':'acdfg','6':'acdefg','7':'abc','8':'abcdefg','9':'abcdfg','-':'g',' ':'','c':'deg','a':'abcefg','l':'def','o':'cdeg','t':'defg'};
-function led7(x,X,Y,H,ch,dot,on,off){const W=H*.52,t=H*.105,sk=-.09,s=SEG[ch]||'',g=t*.14;x.save();x.transform(1,0,sk,1,X-sk*H,Y);
- const hz=(y,k)=>{x.beginPath();x.moveTo(t*.62+g,y);x.lineTo(t+g,y-t/2);x.lineTo(W-t-g,y-t/2);x.lineTo(W-t*.62-g,y);x.lineTo(W-t-g,y+t/2);x.lineTo(t+g,y+t/2);x.closePath();x.fillStyle=s.includes(k)?on:off;x.fill()},
-  vt=(X0,y0,y1,k)=>{x.beginPath();x.moveTo(X0,y0+t*.62+g);x.lineTo(X0+t/2,y0+t+g);x.lineTo(X0+t/2,y1-t-g);x.lineTo(X0,y1-t*.62-g);x.lineTo(X0-t/2,y1-t-g);x.lineTo(X0-t/2,y0+t+g);x.closePath();x.fillStyle=s.includes(k)?on:off;x.fill()};
- hz(t/2,'a');hz(H/2,'g');hz(H-t/2,'d');vt(t/2,0,H/2,'f');vt(W-t/2,0,H/2,'b');vt(t/2,H/2,H,'e');vt(W-t/2,H/2,H,'c');
- x.beginPath();x.arc(W+t*.95,H-t*.55,t*.6,0,7);x.fillStyle=dot?on:off;x.fill();x.restore()}
+// Dígito de siete segmentos como los de los displays reales: los segmentos se tocan en las esquinas por un corte a 45° y entre ellos queda la misma
+// rendija fina en todas partes. Cada segmento se encoge hacia dentro una distancia fija (inglete), así que la junta no se abre en los vértices.
+const LED7=(()=>{const P={},H=1,t=.15,W=.56,m=H/2,h=t/2;
+ const raw={a:[[h,h],[t,0],[W-t,0],[W-h,h],[W-t,t],[t,t]],d:[[h,H-h],[t,H-t],[W-t,H-t],[W-h,H-h],[W-t,H],[t,H]],g:[[h,m],[t,m-h],[W-t,m-h],[W-h,m],[W-t,m+h],[t,m+h]],
+  f:[[h,h],[t,t],[t,m-h],[h,m],[0,m-h],[0,t]],b:[[W-h,h],[W,t],[W,m-h],[W-h,m],[W-t,m-h],[W-t,t]],e:[[h,m],[t,m+h],[t,H-t],[h,H-h],[0,H-t],[0,m+h]],c:[[W-h,m],[W,m+h],[W,H-t],[W-h,H-h],[W-t,H-t],[W-t,m+h]]};
+ const gap=.022;for(const k in raw){const q=raw[k],n=q.length;let A=0;for(let i=0;i<n;i++){const [x0,y0]=q[i],[x1,y1]=q[(i+1)%n];A+=x0*y1-x1*y0}const sg=A>0?1:-1;
+  const N=q.map(([x,y],i)=>{const [x1,y1]=q[(i+1)%n],dx=x1-x,dy=y1-y,l=Math.hypot(dx,dy);return [-dy/l*sg,dx/l*sg]});
+  P[k]=q.map(([x,y],i)=>{const a=N[(i+n-1)%n],c=N[i],kk=gap/2/(1+a[0]*c[0]+a[1]*c[1]);return [x+kk*(a[0]+c[0]),y+kk*(a[1]+c[1])]})}
+ return {P,W,t}})();
+function led7(x,X,Y,H,ch,dot,on,off){const sk=-.09,s=SEG[ch]||'',{P,W,t}=LED7,gl=x.shadowBlur;x.save();x.transform(H,0,sk*H,H,X-sk*H,Y);
+ for(const k in P){const q=P[k];x.beginPath();x.moveTo(q[0][0],q[0][1]);for(let i=1;i<q.length;i++)x.lineTo(q[i][0],q[i][1]);x.closePath();const L=s.includes(k);x.shadowBlur=L?gl:0;x.fillStyle=L?on:off;x.fill()}
+ x.beginPath();x.arc(W+t*.85,1-t*.5,t*.55,0,7);x.shadowBlur=dot?gl:0;x.fillStyle=dot?on:off;x.fill();x.restore()}
 const PVN={W:1024,H:1070,wM:.209,hM:.2185,D:.170,BW:.225,BH:.235,tilt:.14,win:[[176,124,438,170],[166,338,438,170],[158,552,438,170]]};
 PVN.root=grp(SC,-.165,0,-.30);PVN.root.rotation.y=.07;PVN.body=grp(PVN.root);PVN.body.rotation.x=-PVN.tilt;PVN.body.position.y=PVN.BH/2*Math.cos(PVN.tilt)+PVN.D/2*Math.sin(PVN.tilt)+.004;
 PVN.L=(u,v)=>[(u/PVN.W-.5)*PVN.wM,(.5-v/PVN.H)*PVN.hM];
 {const B=PVN.body,P=PVN;rbox(B,P.BW,P.BH,P.D,navy,0,0,0,.010,.003);
  P.fr=grp(B,0,0,P.D/2+.0006);
- const art=canvasTex(P.W,P.H,(x,w,h)=>{x.fillStyle='#ebe9df';x.fillRect(0,0,w,h);const ink='#1b2340',teal='#3fa3ad';
+ const art=canvasTex(P.W,P.H,(x,w,h)=>{x.fillStyle='#f3f2ec';x.fillRect(0,0,w,h);const ink='#1b2340',teal='#3fa3ad';
   x.fillStyle=ink;x.font='600 35px Arial,sans-serif';x.fillText('Medidor p-V-n-T',70,74);
   for(const [X,Y,W2,H2] of P.win){x.fillStyle=teal;x.fillRect(X-9,Y-9,W2+18,H2+18);x.fillStyle='#120708';x.fillRect(X,Y,W2,H2)}
   x.fillStyle=ink;x.font='600 46px Arial,sans-serif';x.fillText('n',112,228);x.fillText('T',92,400);x.font='600 27px Arial,sans-serif';x.fillText('1',120,412);x.font='600 46px Arial,sans-serif';x.fillText('ΔT',72,486);x.fillText('T',92,654);x.font='600 27px Arial,sans-serif';x.fillText('2',120,666);
@@ -561,8 +571,8 @@ PVN.L=(u,v)=>[(u/PVN.W-.5)*PVN.wM,(.5-v/PVN.H)*PVN.hM];
  for(const k of['p','v']){const [a,b]=P.sock[k];cyl(P.fr,.0062,.010,nickelM,a,b,.005,'z',20)}{const [a,b]=P.sock.pvn;cyl(P.fr,.0088,.004,darkP,a,b,.002,'z',24)}
 }
 PVN.shown='';
-function drawPVN(n,T1,T2,dT){const P=PVN,key=n+'|'+T1+'|'+T2+'|'+dT;if(key===P.shown)return false;P.shown=key;const x=P.ctx,on='#ff3b2f',off='rgba(120,20,16,.22)';x.clearRect(0,0,P.W,P.H);
- const row=(k,txt,dp)=>{const [X,Y,W2,H2]=P.win[k],hh=H2*.74,st=W2/4.25;x.shadowColor='rgba(255,60,40,.9)';x.shadowBlur=14;for(let i=0;i<4;i++)led7(x,X+st*(i+.22),Y+(H2-hh)/2,hh,txt[i]||' ',dp===i,on,off)};
+function drawPVN(n,T1,T2,dT){const P=PVN,key=n+'|'+T1+'|'+T2+'|'+dT;if(key===P.shown)return false;P.shown=key;const x=P.ctx,on='#ff3b2f',off='rgba(120,24,18,.2)';x.clearRect(0,0,P.W,P.H);
+ const row=(k,txt,dp)=>{const [X,Y,W2,H2]=P.win[k],hh=H2*.74,st=W2/4.25;x.shadowColor='rgba(255,60,40,.55)';x.shadowBlur=6;for(let i=0;i<4;i++)led7(x,X+st*(i+.22),Y+(H2-hh)/2,hh,txt[i]||' ',dp===i,on,off)};
  const f=(v,w)=>String(v).padStart(w,' ').slice(-w);
  row(0,f(n,4),-1);row(1,f(dT?Math.round(T1-T2):Math.round(T1),4),-1);{const v=Math.round(T2*10);row(2,f(v,4),2)}
  x.shadowBlur=10;for(const [yy,lit] of[[392,!dT],[470,dT]]){x.beginPath();x.arc(152,yy,8,0,7);x.fillStyle=lit?'#ff3b2f':'rgba(90,10,10,.55)';x.shadowColor=lit?'rgba(255,60,40,.9)':'transparent';x.fill()}
@@ -658,7 +668,7 @@ const LAY={
  // Apaisado. Los cinco cables del medidor salen hacia delante, giran hacia el motor y pasan en haz, sin cruzarse, entre el medidor y la placa base y
  // por detrás de ella: el del sensor sube a la unidad sensora, los termopares suben a sus mangos sobre el tubo (pasando por encima del cable del sensor) y
  // los dos coaxiales siguen hasta el costado del osciloscopio y entran por delante en CH1 y CH2.
- wide:{pvn:[-.375,.000,.36],osc:[.445,.010,-.36],lab:{p:[-.360,.232],o:[.450,.218]},c0:[.04,.08,.05],els:[.46,.40,.35],
+ wide:{pvn:[-.375,-.010,.48],osc:[.410,.000,-.50],lab:{p:[-.360,.222],o:[.420,.210]},c0:[.04,.08,.05],els:[.62,.54,.46,.40],
   v:E=>U(E,0).concat([[.170,0,-.085],[.219,0,-.063],[.219,0,E.c1.p.z+.018],[.242,0,E.c1.p.z+.044],[E.c1.p.x-.050,0,E.c1.p.z+.046]]),
   p:E=>U(E,1).concat([[.160,0,-.074],[.208,0,-.052],[.208,0,E.c1.p.z+.030],[.232,0,E.c1.p.z+.058],[E.c2.p.x-.050,0,E.c2.p.z+.060]]),
   s:E=>U(E,2).concat([[-.100,0,-.063],[-.074,.050,-.058]]),
@@ -696,7 +706,7 @@ function floorLabel(x,z,l1,l2,W=.36,H=.060){const t=canvasTex(1024,Math.round(10
 const FLP=floorLabel(-.165,-.158,'MEDIDOR pVnT','régimen n y temperaturas T_1_ y T_2_',.21,.052),FLO=floorLabel(.170,-.180,'OSCILOSCOPIO','CH1: volumen · CH2: presión',.23,.052);const FLN=floorLabel(.02,.278,'MOTOR DE STIRLING','giro a cámara lenta, 12 veces más despacio',.25,.052),FLS=floorLabel(.02,.278,'MOTOR DE STIRLING','cámara superlenta, 200 veces más despacio',.25,.052);FLS.visible=false;
 
 /* ================= estado ================= */
-const MMAX=.025,SLOW=12,SLOW2=200,WIDE_AT=1.55;
+const MMAX=.025,SLOW=12,SLOW2=200,WIDE_AT=1.0;
 /*ses*/const SESK='ifl:ses:'+location.pathname,SESV=1; // al salir y volver a entrar en la misma sesión, la práctica sigue como se dejó
 function sesPut(){try{sessionStorage.setItem(SESK,JSON.stringify({v:SESV,S:S,x:{w:DY.w,T1:DY.T1,T2:DY.T2}}))}catch(e){}}
 function sesIni(){addEventListener('pagehide',sesPut);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')sesPut()});
@@ -800,14 +810,17 @@ box.addEventListener('dblclick',e=>{const h=pick(e);if(!h)return;const u=h.objec
 function hover(e){const h=pick(e);box.classList.toggle('ptr',!!(h&&h.object.userData.act))}
 
 /* ================= bucle ================= */
+// VT: tiempo de lo que se dibuja; con la cámara superlenta avanza 200/12 veces más despacio, así que el temblor de la pesa, la llama y el aire
+// van al mismo ritmo que el volante
+let VT=0;
 let dirty=true,frame=0,tPrev=0,thV=0,tLed=0,tScr=0,phi=0,phiSh=0,lastN=-1;
 function invalidate(){dirty=true;if(!frame&&!document.hidden)frame=requestAnimationFrame(loop)}
 function loop(now){frame=0;if(document.hidden)return;const dt=Math.min(.05,(now-(tPrev||now))/1000);tPrev=now;
  if(fly){const u=ease(Math.min(1,(now-fly.t0)/fly.dur));az=fly.a.az+(((fly.b.az-fly.a.az)%(2*Math.PI)+3*Math.PI)%(2*Math.PI)-Math.PI)*u;el=fly.a.el+(fly.b.el-fly.a.el)*u;dist=fly.a.dist+(fly.b.dist-fly.a.dist)*u;TG.copy(fly.a.tg).lerp(fly.b.tg,u);if(u>=1)fly=null}
- const r=stepPhys(dt,S.fire,Mset());thV+=DY.w*dt/(S.slow?SLOW2:SLOW);pose(thV);
+ const r=stepPhys(dt,S.fire,Mset());thV+=DY.w*dt/(S.slow?SLOW2:SLOW);VT+=dt*(S.slow?SLOW/SLOW2:1);pose(thV);
  // la aguja del freno sigue al par de rozamiento, con un ligero temblor mientras el volante gira
- const pT=Math.asin(Math.min(1,r.Mb/.025));phi+=(pT-phi)*Math.min(1,dt*7);if(BRK.visible){SCV.position.set(AX+.094*Math.sin(phi),AY+.094*Math.cos(phi),ZS);BRK.rotation.z=-(phi+(DY.w>1&&phi>.004?.0035*Math.sin(now*.031)+.0025*Math.sin(now*.047):0));if(Math.abs(phi-phiSh)>.01){phiSh=phi;R3.shadowMap.needsUpdate=true}}
- if(S.fire){const t=now/1000;FLM.scale.set(1+.05*Math.sin(t*17)+.03*Math.sin(t*29),1+.09*Math.sin(t*23)+.06*Math.sin(t*37+1)+.04*Math.sin(t*11+2),1+.05*Math.sin(t*19+1));FLM.rotation.z=.05*Math.sin(t*9)+.03*Math.sin(t*21);FLM.rotation.x=.04*Math.sin(t*7+2)}
+ const pT=Math.asin(Math.min(1,r.Mb/.025));phi+=(pT-phi)*Math.min(1,dt*7);if(BRK.visible){SCV.position.set(AX+.094*Math.sin(phi),AY+.094*Math.cos(phi),ZS);BRK.rotation.z=-(phi+(DY.w>1&&phi>.004?.0035*Math.sin(VT*31)+.0025*Math.sin(VT*47):0));if(Math.abs(phi-phiSh)>.01){phiSh=phi;R3.shadowMap.needsUpdate=true}}
+ if(S.fire){const t=VT;FLM.scale.set(1+.05*Math.sin(t*17)+.03*Math.sin(t*29),1+.09*Math.sin(t*23)+.06*Math.sin(t*37+1)+.04*Math.sin(t*11+2),1+.05*Math.sin(t*19+1));FLM.rotation.z=.05*Math.sin(t*9)+.03*Math.sin(t*21);FLM.rotation.x=.04*Math.sin(t*7+2)}
  if(now-tLed>480||!tLed){tLed=now;airTint();const n=Math.round(r.n+(r.n>5?(Math.random()-.5)*2:0));drawPVN(n,DY.T1,DY.T2,S.dT)}
  if(now-tScr>(S.slow?50:140)||!tScr){tScr=now;scopeStats();drawScope(now,S.slow?thV:null)}
  camSet();CAM.updateMatrixWorld();R3.render(SC,CAM);lupaDraw();dirty=false;
@@ -873,6 +886,10 @@ $('#gbtn').onclick=()=>{if(PM()){document.documentElement.style.setProperty('--g
 mcSlider(mcRow('p2only'),'Freno',0,1,.001,.004,()=>S.u,setBrake,SCV);
 {const r=mcRow('btns');mcBtn(r,['Guardar en USB','Guardar USB'],saveFile);mcBtn(r,()=>S.fire?['Apagar llama','Apagar']:['Encender llama','Encender'],()=>setFire(!S.fire));mcBtn(r,'Impulsar',push);}
 FIN.apply([ENG,PVN.root,OSC.root],{skip:[...Object.values(cabMat),nickelM]});
+// frontal del medidor y escala del medidor de par en blanco de verdad, no gris apagado: el dibujo se ilumina por sí mismo, lo justo para que su fondo quede casi blanco
+function blancoFrontal(o){const m=o&&o.material;if(!m||!m.map||!m.map.image||!m.map.image.getContext)return;const c=m.map.image,L=[];try{const d=c.getContext('2d').getImageData(0,0,c.width,c.height).data;for(let i=0;i<d.length;i+=4*61)if(d[i+3]>127)L.push(.2126*d[i]+.7152*d[i+1]+.0722*d[i+2])}catch(e){return}
+ L.sort((a,b)=>a-b);const bg=Math.pow((L[Math.floor(L.length*.75)]||230)/255,2.2);m.emissive=new THREE.Color(0xffffff);m.emissiveMap=m.map;m.emissiveIntensity=Math.max(.3,Math.min(1.1,.955/bg-.67));m.toneMapped=false;m.needsUpdate=true}
+for(const o of[PVN.face,TQ.userData.face])blancoFrontal(o);
 settle(0);plugs();size();setLayout(wantLay());deskLayout();camReset();applyState();invalidate();sesIni();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{PVN.shown='';invalidate()});
 requestAnimationFrame(()=>{deskLayout();if(!touched)camReset();invalidate()});
