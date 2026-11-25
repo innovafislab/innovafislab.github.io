@@ -757,7 +757,7 @@ function fitV0(){const A=CAM.aspect||1,els=LAY[LK].els||(A<.9?[.66]:[.62,.58]),Z
  return best}
 function camReset(){const v=fitV0();az=v.az;el=v.el;dist=v.dist;TG.copy(v.tg)}
 function camSet(){CAM.position.set(TG.x+dist*Math.cos(el)*Math.sin(az),TG.y+dist*Math.sin(el),TG.z+dist*Math.cos(el)*Math.cos(az));CAM.lookAt(TG)}
-function size(){const w=box.clientWidth,h=box.clientHeight;if(!w||!h)return;const ratio=Math.min(window.devicePixelRatio||1,2,Math.sqrt(1750000/(w*h)));if(R3.getPixelRatio()!==ratio)R3.setPixelRatio(ratio);R3.setSize(w,h,false);CAM.aspect=w/h;CAM.fov=Math.max(34,Math.min(58,2*Math.atan(Math.tan(19*Math.PI/180)*h/w)*180/Math.PI));CAM.updateProjectionMatrix();invalidate()}
+function size(){const w=box.clientWidth,h=box.clientHeight;if(!w||!h)return;const ratio=Math.min(window.devicePixelRatio||1,2,Math.sqrt(3200000/(w*h)));if(R3.getPixelRatio()!==ratio)R3.setPixelRatio(ratio);R3.setSize(w,h,false);CAM.aspect=w/h;CAM.fov=Math.max(34,Math.min(58,2*Math.atan(Math.tan(19*Math.PI/180)*h/w)*180/Math.PI));CAM.updateProjectionMatrix();invalidate()}
 function deskLayout(){const c=document.querySelector('.ctls');if(c)c.style.setProperty('--mcw',(PM()?0:mcBox.offsetWidth+26)+'px')}
 // apaisado: el medidor y el osciloscopio a los lados del motor; en vertical, detrás. Al girar el móvil o cambiar la ventana, la mesa se recoloca.
 const wantLay=()=>(box.clientWidth/Math.max(1,box.clientHeight))>=WIDE_AT?'wide':'tall';
@@ -890,6 +890,11 @@ FIN.apply([ENG,PVN.root,OSC.root],{skip:[...Object.values(cabMat),nickelM]});
 function blancoFrontal(o){const m=o&&o.material;if(!m||!m.map||!m.map.image||!m.map.image.getContext)return;const c=m.map.image,L=[];try{const d=c.getContext('2d').getImageData(0,0,c.width,c.height).data;for(let i=0;i<d.length;i+=4*61)if(d[i+3]>127)L.push(.2126*d[i]+.7152*d[i+1]+.0722*d[i+2])}catch(e){return}
  L.sort((a,b)=>a-b);const bg=Math.pow((L[Math.floor(L.length*.75)]||230)/255,2.2);m.emissive=new THREE.Color(0xffffff);m.emissiveMap=m.map;m.emissiveIntensity=Math.max(.3,Math.min(1.1,.955/bg-.67));m.toneMapped=false;m.needsUpdate=true}
 for(const o of[PVN.face,TQ.userData.face])blancoFrontal(o);
+// Letras y cifras nítidas desde lejos: en la vista de conjunto las pantallas y rótulos dibujados se ven más pequeños que su textura y la tarjeta
+// gráfica la promedia de más (se ve borrosa). Se le pide un nivel de detalle algo mayor solo en esos dibujos, sin tocar el resto de la escena.
+{const B='-0.65',done=new Set();SC.traverse(o=>{const ms=o.material?(Array.isArray(o.material)?o.material:[o.material]):[];for(const m of ms){if(done.has(m)||!m.map||!m.map.isCanvasTexture)continue;done.add(m);
+ const prev=m.onBeforeCompile,key=m.customProgramCacheKey?m.customProgramCacheKey():'';m.onBeforeCompile=(sh,r)=>{if(prev)prev.call(m,sh,r);sh.fragmentShader=sh.fragmentShader.replace('texture2D( map, vUv )','texture2D( map, vUv, '+B+' )').replace('texture2D( emissiveMap, vUv )','texture2D( emissiveMap, vUv, '+B+' )')};
+ m.customProgramCacheKey=()=>key+'|nit';m.map.anisotropy=R3.capabilities.getMaxAnisotropy();m.map.needsUpdate=true;m.needsUpdate=true}})}
 settle(0);plugs();size();setLayout(wantLay());deskLayout();camReset();applyState();invalidate();sesIni();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{PVN.shown='';invalidate()});
 requestAnimationFrame(()=>{deskLayout();if(!touched)camReset();invalidate()});
