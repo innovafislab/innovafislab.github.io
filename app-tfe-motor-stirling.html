@@ -645,32 +645,56 @@ function wpos(obj,x,y,z){return obj.localToWorld(V3(x,y,z))}function wdir(obj,x,
 // cada cable se describe por sus puntos de paso: sale recto de su clavija, descansa en la mesa (y = 0) y entra recto en la otra
 function route(m,r,A,mid,B,ka=.03,kb=.03){const pts=[A.p.clone(),A.p.clone().addScaledVector(A.n,ka)];for(const q of mid)pts.push(V3(q[0],q[1]||r,q[2]));pts.push(B.p.clone().addScaledVector(B.n,kb),B.p.clone());m.userData.pts=pts;m.userData.r=r;
  const path=new SupportedCord(pts,r);m.geometry.dispose();m.geometry=new THREE.TubeGeometry(path,Math.min(720,Math.max(120,Math.round(path.getLength()/.0022))),r,10,false);m.userData.rib=cordContact(path,r)}
-function fixedCables(){SC.updateMatrixWorld(true);
- const coax=(fr,L)=>{const [a,b]=L,g=grp(fr,a,b,0);if(fr===OSC.fr)g.scale.setScalar(1/OSC.K);cyl(g,.0072,.013,nickelM,0,0,.0125,'z',20);cyl(g,.0058,.024,blackP,0,0,.031,'z',16,.004);g.updateMatrixWorld(true);return {p:wpos(g,0,0,.043),n:wdir(g,0,0,1)}};
- const eV=coax(PVN.fr,PVN.sock.v),eP=coax(PVN.fr,PVN.sock.p),e1=coax(OSC.fr,OSC.sock.ch1),e2=coax(OSC.fr,OSC.sock.ch2);
- // coaxiales en dos arcos, uno dentro del otro: V a CH1 y p a CH2
- route(CB.v,.0026,eV,[[-.066,0,-.128],[.030,0,-.106],[e1.p.x-.014,0,-.140]],e1,.028,.028);route(CB.p,.0026,eP,[[-.098,0,-.108],[.040,0,-.072],[e2.p.x-.001,0,-.112]],e2,.03,.03);
- // unidad sensora pVn → toma p-V-n: baja pegada a la trasera del motor y cruza la mesa en diagonal
- {const [a,b]=PVN.sock.pvn,g=grp(PVN.fr,a,b,0);cyl(g,.0085,.030,blackP,0,0,.017,'z',20);cyl(g,.0052,.012,blackP,0,0,.037,'z',14,.0036);g.updateMatrixWorld(true);
-  route(CB.s,.0026,{p:wpos(g,0,0,.043),n:wdir(g,0,0,1)},[[-.152,0,-.136],[-.124,0,-.098],[-.096,0,-.066],[-.073,.040,-.047]],{p:wpos(ENG,AX-.012,AY+.004,ZT-.092),n:V3(-.3,-.22,-.93).normalize()},.028,.032)}
- // termopares: clavija verde en el medidor, cable verde hasta un mango de latón que queda en el aire y, de él, el hilo fino que baja a la toma del tubo.
- // Los cables verdes se levantan de la mesa y pasan por encima del cable de la unidad sensora. T1 va al extremo caliente y T2, al frío.
- const thin=finish(0x8d9093,.35,.9);
- const tc=(key,sock,port,H,d,mid)=>{const [a,b]=sock,g=grp(PVN.fr,a,b,0);rbox(g,.013,.017,.016,finish(0x2f8f3a,.5),0,0,.008,.002);cyl(g,.0032,.008,brassM,0,-.003,.0165,'z',10);g.updateMatrixWorld(true);
-  d.normalize();const Pw=wpos(ENG,port.x,port.y+.007,port.z),R=H.clone().addScaledVector(d,-.034),hd=new THREE.Mesh(new THREE.CylinderGeometry(.0024,.0031,.034,14),brassM);hd.position.copy(H).addScaledVector(d,-.017);hd.quaternion.setFromUnitVectors(V3(0,1,0),d);hd.castShadow=true;SC.add(hd);
+// Dos disposiciones de la mesa. En vertical (móvil) el medidor y el osciloscopio van detrás del motor; en apaisado (ordenador, móvil girado) van a sus
+// lados, el medidor a la izquierda y el osciloscopio a la derecha, algo girados hacia el centro. Los cables se rehacen para cada una.
+const LAY={
+ tall:{pvn:[-.165,-.30,.07],osc:[.170,-.290,-.07],lab:{p:[-.165,-.158],o:[.170,-.180]},c0:[.01,.09,-.06],els:null,
+  v:E=>[[-.066,0,-.128],[.030,0,-.106],[E.c1.p.x-.014,0,-.140]],p:E=>[[-.098,0,-.108],[.040,0,-.072],[E.c2.p.x-.001,0,-.112]],
+  s:()=>[[-.152,0,-.136],[-.124,0,-.098],[-.096,0,-.066],[-.073,.040,-.047]],
+  t1:{H:[.190,.138,.086],d:[-.85,.35,.12],mid:()=>[[-.226,0,-.140],[-.222,0,-.070],[-.190,0,-.038],[-.060,0,-.034],[.110,0,-.034],[.222,0,-.035],[.258,0,-.014],[.268,.028,.022],[.258,.072,.058]]},
+  t2:{H:[.022,.150,.040],d:[.45,.05,.89],mid:()=>[[-.205,0,-.142],[-.196,0,-.104],[-.176,.006,-.092],[-.140,.024,-.088],[-.095,.052,-.078],[-.042,.100,-.046]]}},
+ // Apaisado. Los cinco cables del medidor salen hacia delante, giran hacia el motor y pasan en haz, sin cruzarse, entre el medidor y la placa base y
+ // por detrás de ella: el del sensor sube a la unidad sensora, los termopares suben a sus mangos sobre el tubo (pasando por encima del cable del sensor) y
+ // los dos coaxiales siguen hasta el costado del osciloscopio y entran por delante en CH1 y CH2.
+ wide:{pvn:[-.345,.000,.36],osc:[.415,.010,-.36],lab:{p:[-.330,.232],o:[.420,.218]},c0:[.04,.08,.05],els:[.46,.40,.35],
+  v:E=>U(E,0).concat([[.150,0,-.060],[.189,0,-.038],[.189,0,E.c1.p.z+.018],[.212,0,E.c1.p.z+.044],[E.c1.p.x-.050,0,E.c1.p.z+.046]]),
+  p:E=>U(E,1).concat([[.140,0,-.049],[.178,0,-.027],[.178,0,E.c1.p.z+.030],[.202,0,E.c1.p.z+.058],[E.c2.p.x-.050,0,E.c2.p.z+.060]]),
+  s:E=>U(E,2).concat([[-.084,0,-.038],[-.062,.040,-.036]]),
+  t1:{H:[.112,.196,.036],d:[.80,.06,.60],mid:E=>U(E,4).concat([[-.105,.004,-.016],[-.050,.070,-.022],[.020,.150,-.008]])},
+  t2:{H:[.022,.150,.040],d:[.45,.05,.89],mid:E=>U(E,3).concat([[-.110,.004,-.027],[-.066,.092,-.020]])}}};
+// haz en U desde la cara del medidor: k = 0 (V) va por dentro y k = 4 (T1) por fuera
+function U(E,k){const key=['v','p','s','t2','t1'][k],a=E[key],g=.011,z0=Math.max(E.v.p.z,E.p.p.z,E.s.p.z,E.t1.p.z,E.t2.p.z)+.026,zF=z0+k*g,xG=-.186+k*g,zB=-.060+k*g,ci=.016+k*g,co=.016+(4-k)*g;
+ return [[a.p.x+.004,0,zF-.012],[a.p.x+.024,0,zF],[xG-ci,0,zF],[xG,0,zF-ci],[xG,0,zB+co],[xG+co,0,zB]]}
+let LK='tall';
+const CBX=grp(SC),PL={},thinM=finish(0x8d9093,.35,.9);
+const endAt=(g,y,z)=>({p:wpos(g,0,y||0,z),n:wdir(g,0,y?-.45:0,1).normalize()});
+// clavijas: van con su aparato y se hacen una sola vez
+function plugs(){const coax=(fr,L)=>{const [a,b]=L,g=grp(fr,a,b,0);if(fr===OSC.fr)g.scale.setScalar(1/OSC.K);cyl(g,.0072,.013,nickelM,0,0,.0125,'z',20);cyl(g,.0058,.024,blackP,0,0,.031,'z',16,.004);return g};
+ PL.v=coax(PVN.fr,PVN.sock.v);PL.p=coax(PVN.fr,PVN.sock.p);PL.c1=coax(OSC.fr,OSC.sock.ch1);PL.c2=coax(OSC.fr,OSC.sock.ch2);
+ {const [a,b]=PVN.sock.pvn,g=grp(PVN.fr,a,b,0);cyl(g,.0085,.030,blackP,0,0,.017,'z',20);cyl(g,.0052,.012,blackP,0,0,.037,'z',14,.0036);PL.s=g}
+ for(const k of['t1','t2']){const [a,b]=PVN.sock[k],g=grp(PVN.fr,a,b,0);rbox(g,.013,.017,.016,finish(0x2f8f3a,.5),0,0,.008,.002);cyl(g,.0032,.008,brassM,0,-.003,.0165,'z',10);PL[k]=g}}
+function setLayout(k){LK=k;const L=LAY[k];PVN.root.position.set(L.pvn[0],0,L.pvn[1]);PVN.root.rotation.y=L.pvn[2];OSC.root.position.set(L.osc[0],0,L.osc[1]);OSC.root.rotation.y=L.osc[2];
+ FLP.position.set(L.lab.p[0],.0007,L.lab.p[1]);FLO.position.set(L.lab.o[0],.0007,L.lab.o[1]);cables();BB=null;R3.shadowMap.needsUpdate=true;invalidate()}
+function cables(){SC.updateMatrixWorld(true);const L=LAY[LK];
+ for(const q of[...CBX.children]){CBX.remove(q);q.geometry.dispose()}
+ // coaxiales: V a CH1 y p a CH2; cable de la unidad sensora pVn a la toma p-V-n, pegado a la trasera del motor
+ const E={v:endAt(PL.v,0,.043),p:endAt(PL.p,0,.043),c1:endAt(PL.c1,0,.043),c2:endAt(PL.c2,0,.043),s:endAt(PL.s,0,.043),t1:endAt(PL.t1,-.003,.022),t2:endAt(PL.t2,-.003,.022)};
+ route(CB.v,.0026,E.v,L.v(E),E.c1,.028,.028);route(CB.p,.0026,E.p,L.p(E),E.c2,.03,.03);
+ route(CB.s,.0026,E.s,L.s(E),{p:wpos(ENG,AX-.012,AY+.004,ZT-.092),n:V3(-.3,-.22,-.93).normalize()},.028,.032);
+ // termopares: cable verde hasta un mango de latón en el aire y, de él, el hilo fino que baja a la toma del tubo (T1 al extremo caliente, T2 al frío).
+ // Los cables verdes se levantan de la mesa y pasan por encima del cable de la unidad sensora.
+ for(const [key,port] of[['t1',PORT.h],['t2',PORT.c]]){const T=L[key],H=V3(...T.H),d=V3(...T.d).normalize(),a=E[key],Pw=wpos(ENG,port.x,port.y+.007,port.z),R=H.clone().addScaledVector(d,-.034);
+  const hd=new THREE.Mesh(new THREE.CylinderGeometry(.0024,.0031,.034,14),brassM);hd.position.copy(H).addScaledVector(d,-.017);hd.quaternion.setFromUnitVectors(V3(0,1,0),d);hd.castShadow=true;CBX.add(hd);
   const top=H.clone().lerp(Pw,.55);top.y=Math.max(H.y,Pw.y)+.030;top.addScaledVector(d,.006);
   const cu=new THREE.CatmullRomCurve3([H.clone(),H.clone().addScaledVector(d,.018),top,Pw.clone().add(V3(0,.026,0)),Pw.clone()],false,'centripetal');
-  const w=new THREE.Mesh(new THREE.TubeGeometry(cu,56,.0005,6,false),thin);w.castShadow=true;SC.add(w);
-  route(CB[key],.0022,{p:wpos(g,0,-.003,.022),n:wdir(g,0,-.45,1).normalize()},mid,{p:R,n:d.clone().negate()},.022,.028)};
- // el del extremo caliente cuelga a la derecha del mechero, como en el laboratorio; su cable vuelve por detrás de la placa base, sobre la mesa
- tc('t1',PVN.sock.t1,PORT.h,V3(.190,.138,.086),V3(-.85,.35,.12),[[-.226,0,-.140],[-.222,0,-.070],[-.190,0,-.038],[-.060,0,-.034],[.110,0,-.034],[.222,0,-.035],[.258,0,-.014],[.268,.028,.022],[.258,.072,.058]]);
- tc('t2',PVN.sock.t2,PORT.c,V3(.022,.150,.040),V3(.45,.05,.89),[[-.205,0,-.142],[-.196,0,-.104],[-.176,.006,-.092],[-.140,.024,-.088],[-.095,.052,-.078],[-.042,.100,-.046]]);
+  const w=new THREE.Mesh(new THREE.TubeGeometry(cu,56,.0005,6,false),thinM);w.castShadow=true;CBX.add(w);
+  route(CB[key],.0022,a,T.mid(E),{p:R,n:d.clone().negate()},.022,.028)}
  R3.shadowMap.needsUpdate=true}
 function floorLabel(x,z,l1,l2,W=.36,H=.060){const t=canvasTex(1024,Math.round(1024*H/W),(c,w,h)=>{c.clearRect(0,0,w,h);c.fillStyle='#8a939d';const put=(tx,wt,px,y)=>{const P=tx.split('_'),f=s=>wt+Math.round(px*s)+'px Arial, sans-serif';let m=0;P.forEach((s,i)=>{c.font=f(i%2?.68:1);m+=c.measureText(s).width});c.save();c.translate(w/2,y);c.scale(Math.min(1,(w-16)/m),1);let q=-m/2;c.textAlign='left';P.forEach((s,i)=>{c.font=f(i%2?.68:1);c.fillText(s,q,i%2?px*.22:0);q+=c.measureText(s).width});c.restore()};put(l1,'bold ',h*.40,h*.42);put(l2,'',h*.33,h*.86)});const m=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false,toneMapped:false,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-8}));m.rotation.x=-Math.PI/2;m.position.set(x,.0007,z);m.renderOrder=2;SC.add(m);(SC.userData.flb=SC.userData.flb||[]).push(m);m.userData.x0=x;return m} // rótulo en la mesa, como grabado en ella; _x_ escribe x como subíndice
-floorLabel(-.165,-.158,'MEDIDOR pVnT','régimen n y temperaturas T_1_ y T_2_',.21,.052);floorLabel(.170,-.180,'OSCILOSCOPIO','CH1: volumen · CH2: presión',.23,.052);const FLN=floorLabel(.02,.252,'MOTOR DE STIRLING','giro a cámara lenta, 12 veces más despacio',.25,.052),FLS=floorLabel(.02,.252,'MOTOR DE STIRLING','cámara superlenta, 200 veces más despacio',.25,.052);FLS.visible=false;
+const FLP=floorLabel(-.165,-.158,'MEDIDOR pVnT','régimen n y temperaturas T_1_ y T_2_',.21,.052),FLO=floorLabel(.170,-.180,'OSCILOSCOPIO','CH1: volumen · CH2: presión',.23,.052);const FLN=floorLabel(.02,.252,'MOTOR DE STIRLING','giro a cámara lenta, 12 veces más despacio',.25,.052),FLS=floorLabel(.02,.252,'MOTOR DE STIRLING','cámara superlenta, 200 veces más despacio',.25,.052);FLS.visible=false;
 
 /* ================= estado ================= */
-const MMAX=.025,SLOW=12,SLOW2=200;
+const MMAX=.025,SLOW=12,SLOW2=200,WIDE_AT=1.55;
 /*ses*/const SESK='ifl:ses:'+location.pathname,SESV=1; // al salir y volver a entrar en la misma sesión, la práctica sigue como se dejó
 function sesPut(){try{sessionStorage.setItem(SESK,JSON.stringify({v:SESV,S:S,x:{w:DY.w,T1:DY.T1,T2:DY.T2}}))}catch(e){}}
 function sesIni(){addEventListener('pagehide',sesPut);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')sesPut()});
@@ -702,16 +726,17 @@ let az,el,dist;const TG=V3();
 // puntos que el encuadre de partida no puede recortar: los tres aparatos (con la escala del medidor de par puesta) y sus rótulos
 let BB=null;function bbPts(){const out=[],was=[TQ.visible,BRK.visible];TQ.visible=BRK.visible=true;SC.updateMatrixWorld(true);
  for(const o of[ENG,PVN.root,OSC.root]){const b=new THREE.Box3(),t=new THREE.Box3(),skip=q=>{for(let k=q;k;k=k.parent)if(k===AIR||k===AIR.userData.gap)return true;return false};o.traverse(q=>{if(q.isMesh&&!skip(q)){if(!q.geometry.boundingBox)q.geometry.computeBoundingBox();b.union(t.copy(q.geometry.boundingBox).applyMatrix4(q.matrixWorld))}});for(let i=0;i<=3;i++)for(let j=0;j<=3;j++)for(let k=0;k<=3;k++)if(i%3===0||j%3===0||k%3===0)out.push(V3(b.min.x+(b.max.x-b.min.x)*i/3,b.min.y+(b.max.y-b.min.y)*j/3,b.min.z+(b.max.z-b.min.z)*k/3))}
- for(const [x,z,w] of[[-.165,-.158,.21],[.135,-.196,.23],[.02,.252,.25]])for(const s of[-1,0,1])for(const t of[-1,1])out.push(V3(x+s*w/2,0,z+t*.026));
- for(const q of[[.272,.03,.02],[.262,.08,.06],[.225,.14,.085],[.16,.172,.098],[.04,.172,.07]])out.push(V3(q[0],q[1],q[2])); // el termopar que cuelga a la derecha y los hilos finos
+ for(const m of[FLP,FLO,FLN]){const w=m.geometry.parameters.width/2,h=m.geometry.parameters.height/2;for(const s of[-1,0,1])for(const t of[-1,1])out.push(V3(m.position.x+s*w,0,m.position.z+t*h))}
+ for(const k in CB)for(const q of CB[k].userData.pts||[])out.push(q.clone());
+ for(const q of CBX.children){q.geometry.computeBoundingBox();const b=q.geometry.boundingBox.clone().applyMatrix4(q.matrixWorld);out.push(b.min.clone(),b.max.clone())}
 TQ.visible=was[0];BRK.visible=was[1];return out}
 // los botones y el panel de mandos nunca tapan el montaje: sus rectángulos son zonas vedadas del encuadre
 function zones(){const br=box.getBoundingClientRect(),Z=[];for(const e of[...document.querySelectorAll('.ctls .ctl'),PM()?null:mcBox]){if(!e)continue;const r=e.getBoundingClientRect();if(r.width&&r.height)Z.push([(r.left-br.left-8)/br.width*2-1,(r.right-br.left+8)/br.width*2-1,1-(r.bottom-br.top+8)/br.height*2])}return Z}
 // Encuadre de partida: el más cercano en el que caben los tres aparatos y sus rótulos sin que los tape ningún botón. En pantallas anchas la cámara baja
 // algo para aprovechar el ancho; en las altas (móvil en vertical) sube y abre el ángulo, y el motor, que está delante, se ve más grande.
-function fitV0(){const A=CAM.aspect||1,els=A<.9?[.62]:[.52,.47,.42],Z=zones(),P=BB||(BB=bbPts()),q=V3();let best=null;
- for(const e of els){const ce=Math.cos(e),se=Math.sin(e),c0=V3(.01,.09,-.06),at=(i,j)=>V3(c0.x+i*.012,c0.y+j*.012*ce,c0.z-j*.012*se);
-  const ok=(c,d)=>{CAM.position.set(c.x,c.y+d*se,c.z+d*ce);CAM.lookAt(c);CAM.updateMatrixWorld();for(const p of P){q.copy(p).project(CAM);if(Math.abs(q.x)>.972||q.y>.965||q.y<-.955)return false;for(const z of Z)if(q.x>z[0]&&q.x<z[1]&&q.y>z[2])return false}return true};
+function fitV0(){const A=CAM.aspect||1,els=LAY[LK].els||(A<.9?[.62]:[.52,.47,.42]),Z=zones(),P=BB||(BB=bbPts()),q=V3();let best=null;
+ for(const e of els){const ce=Math.cos(e),se=Math.sin(e),c0=V3(...LAY[LK].c0),at=(i,j)=>V3(c0.x+i*.012,c0.y+j*.012*ce,c0.z-j*.012*se);
+  const ok=(c,d)=>{CAM.position.set(c.x,c.y+d*se,c.z+d*ce);CAM.lookAt(c);CAM.updateMatrixWorld();for(const p of P){q.copy(p).project(CAM);if(Math.abs(q.x)>(LK==='wide'?.95:.972)||q.y>.965||q.y<-.955)return false;for(const z of Z)if(q.x>z[0]&&q.x<z[1]&&q.y>z[2])return false}return true};
   let b=null;for(let i=-7;i<=7;i++)for(let j=-14;j<=14;j++){const c=at(i,j);if(b&&!ok(c,b.dist))continue;let lo=.25,hi=6;for(let k=0;k<22;k++){const m=(lo+hi)/2;ok(c,m)?hi=m:lo=m}if(!b||hi<b.dist)b={az:0,el:e,dist:hi,i,j}}
   // si sobra sitio a lo alto o a lo ancho, el montaje queda centrado en él
   b.dist*=1.004;const mid=(f,k0)=>{let lo=k0,hi=k0;while(lo>-16&&f(lo-1))lo--;while(hi<16&&f(hi+1))hi++;return Math.round((lo+hi)/2)};
@@ -722,7 +747,9 @@ function camReset(){const v=fitV0();az=v.az;el=v.el;dist=v.dist;TG.copy(v.tg)}
 function camSet(){CAM.position.set(TG.x+dist*Math.cos(el)*Math.sin(az),TG.y+dist*Math.sin(el),TG.z+dist*Math.cos(el)*Math.cos(az));CAM.lookAt(TG)}
 function size(){const w=box.clientWidth,h=box.clientHeight;if(!w||!h)return;const ratio=Math.min(window.devicePixelRatio||1,2,Math.sqrt(1750000/(w*h)));if(R3.getPixelRatio()!==ratio)R3.setPixelRatio(ratio);R3.setSize(w,h,false);CAM.aspect=w/h;CAM.fov=Math.max(34,Math.min(58,2*Math.atan(Math.tan(19*Math.PI/180)*h/w)*180/Math.PI));CAM.updateProjectionMatrix();invalidate()}
 function deskLayout(){const c=document.querySelector('.ctls');if(c)c.style.setProperty('--mcw',(PM()?0:mcBox.offsetWidth+26)+'px')}
-let touched=false;new ResizeObserver(()=>{size();deskLayout();if(!touched&&CAM.aspect)camReset()}).observe(box);
+// apaisado: el medidor y el osciloscopio a los lados del motor; en vertical, detrás. Al girar el móvil o cambiar la ventana, la mesa se recoloca.
+const wantLay=()=>(box.clientWidth/Math.max(1,box.clientHeight))>=WIDE_AT?'wide':'tall';
+let touched=false;new ResizeObserver(()=>{size();deskLayout();if(!CAM.aspect)return;const k=wantLay();if(k!==LK){setLayout(k);zb=null;fly=null;touched=false}if(!touched)camReset()}).observe(box);
 function pan(dx,dy){const k=2*dist*Math.tan(CAM.fov*Math.PI/360)/box.clientHeight,ca=Math.cos(az),sa=Math.sin(az),ce=Math.cos(el),se=Math.sin(el);
  TG.x+=k*(-dx*ca-dy*se*sa);TG.y+=k*dy*ce;TG.z+=k*(dx*sa-dy*se*ca);TG.x=Math.max(-1.1,Math.min(1.1,TG.x));TG.y=Math.max(-.2,Math.min(.7,TG.y));TG.z=Math.max(-1.1,Math.min(.9,TG.z));invalidate()}
 function zAt(cx,cy,f){const b=box.getBoundingClientRect();camSet();CAM.updateMatrixWorld();const v=TG.clone().project(CAM);const sx=cx-b.left-(v.x+1)/2*box.clientWidth,sy=cy-b.top-(1-v.y)/2*box.clientHeight;pan(-(1-f)*sx,-(1-f)*sy)}
@@ -844,7 +871,7 @@ $('#gbtn').onclick=()=>{if(PM()){document.documentElement.style.setProperty('--g
 mcSlider(mcRow('p2only'),'Freno',0,1,.001,.004,()=>S.u,setBrake,SCV);
 {const r=mcRow('btns');mcBtn(r,['Guardar en USB','Guardar USB'],saveFile);mcBtn(r,()=>S.fire?['Apagar llama','Apagar']:['Encender llama','Encender'],()=>setFire(!S.fire));mcBtn(r,'Impulsar',push);}
 FIN.apply([ENG,PVN.root,OSC.root],{skip:[...Object.values(cabMat),nickelM]});
-settle(0);fixedCables();size();deskLayout();camReset();applyState();invalidate();sesIni();
+settle(0);plugs();size();setLayout(wantLay());deskLayout();camReset();applyState();invalidate();sesIni();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{PVN.shown='';invalidate()});
 requestAnimationFrame(()=>{deskLayout();if(!touched)camReset();invalidate()});
 
